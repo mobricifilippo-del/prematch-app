@@ -1,285 +1,348 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PreMatch — Demo completa</title>
-<meta name="description" content="PreMatch: esplora società e partite per sport, regione, genere e campionato. Semplice. Pulita. Gratuita."/>
-<link rel="preconnect" href="https://images.unsplash.com">
-<style>
-  :root{
-    --bg:#0b1420; --panel:#111c2b; --panel2:#0f1a28;
-    --text:#e9eef6; --muted:#9fb0c6; --accent:#1f8aee;
-    --ok:#22c55e; --chip:#0b7bdd; --shadow:0 10px 30px rgba(0,0,0,.35);
-    --card:#0f1b2d;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial; color:var(--text);
-       background:radial-gradient(1200px 600px at 50% -200px,#0f2340 20%,#0b1420 60%) fixed;}
-  a{color:var(--text); text-decoration:none}
-  .wrap{max-width:1100px; margin:0 auto; padding:16px}
-  header{position:sticky; top:0; z-index:20; backdrop-filter:saturate(140%) blur(6px);
-         background:linear-gradient( to bottom, #0b1420dd 30%, #0b142000 );}
-  .topbar{display:flex; align-items:center; gap:12px; padding:10px 6px}
-  .logo{display:flex; align-items:center; gap:10px; font-weight:700; font-size:20px}
-  .ball{width:34px; height:34px; border-radius:50%; background:#0f375f; display:grid; place-items:center; box-shadow: inset 0 0 0 2px #2a9d8f;}
-  .ball::after{content:"⚽"}
-  .actions{margin-left:auto; display:flex; gap:10px}
-  .btn{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; background:#0e1b2c; color:#dfe7f2; border:1px solid #28405e; box-shadow:var(--shadow); transition:.2s}
-  .btn:hover{transform:translateY(-1px); border-color:#3a5a84}
-  .btn.primary{background:#1a7ce6; border-color:#1a7ce6; color:white}
-  .hero{margin-top:14px; padding:18px; border-radius:16px; background:linear-gradient(180deg,#0f1d31,#0b1420); border:1px solid #1a2a42; box-shadow:var(--shadow)}
-  h1{margin:0 0 8px; font-size:36px}
-  .muted{color:var(--muted)}
-  /* sport list */
-  .sports{margin-top:18px; display:grid; gap:16px}
-  .card{display:flex; align-items:center; gap:14px; padding:16px; border-radius:18px; background:linear-gradient(180deg,var(--panel),var(--panel2)); border:1px solid #1c2b41; box-shadow:var(--shadow); cursor:pointer}
-  .thumb{flex:0 0 auto; width:64px; height:64px; border-radius:50%; background:#0d2238 center/cover no-repeat; box-shadow:0 0 0 4px #0f1d31, 0 0 0 6px #3b5172, inset 0 0 0 2px #0007}
-  .card h3{margin:0; font-size:22px}
-  .pill{margin-left:auto; display:flex; gap:10px}
-  .chip{padding:8px 12px; border-radius:999px; background:#0d1b2e; border:1px solid #274161; color:#bfd3ea; font-weight:600}
-  .btn.small{padding:8px 12px; border-radius:999px}
-  @media(min-width:720px){ .sports{grid-template-columns:1fr 1fr} }
-  /* step panels */
-  .panel{margin-top:18px; padding:18px; border-radius:16px; background:linear-gradient(180deg,var(--panel),var(--panel2)); border:1px solid #1b2a40; box-shadow:var(--shadow)}
-  .grid{display:grid; gap:10px}
-  .grid.cols-3{grid-template-columns: repeat(3,1fr)}
-  .grid.cols-2{grid-template-columns: repeat(2,1fr)}
-  .option{padding:12px; background:#0e1b2c; border:1px solid #253b59; color:#dfe7f2; border-radius:12px; text-align:center; font-weight:600; cursor:pointer}
-  .option:hover{border-color:#3c5990; transform:translateY(-1px)}
-  .h2{margin:0 0 12px; font-size:24px}
-  .crumbs{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px}
-  .crumb{padding:6px 10px; border:1px dashed #33527d; border-radius:999px; font-size:12px; color:#cde; cursor:pointer}
-  .list{display:grid; gap:10px}
-  .row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px; background:#0e1b2c; border:1px solid #263b58; border-radius:12px}
-  footer{padding:28px 12px 44px; text-align:center; color:#b9c8da}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PreMatch — Demo</title>
+  <meta name="description" content="PreMatch demo" />
+  <style>
+    :root{
+      --bg:#0c1522;--panel:#0f1f32;--panel2:#11243a;
+      --text:#e8eef7;--muted:#a9b6c8;--brand:#17b169;
+      --chip:#0b7bdd;--accent:#6688ff;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:16px
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;background:radial-gradient(1200px 800px at 80% -200px,#18314f00,#18314f40),linear-gradient(180deg,#0b1626,#0a1320);
+      color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,"Helvetica Neue",Arial,sans-serif
+    }
+    a{color:var(--text);text-decoration:none}
+    .max{max-width:980px;margin:0 auto;padding:18px}
+    header{
+      position:sticky;top:0;z-index:5;backdrop-filter:saturate(150%) blur(10px);
+      background:rgba(10,19,32,.55);border-bottom:1px solid rgba(255,255,255,.06)
+    }
+    .bar{display:flex;align-items:center;gap:12px;padding:12px 0}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+    .logo-ico{width:28px;height:28px;border-radius:50%;background:
+      radial-gradient(circle at 60% 40%,#fff 0 22%,#e4ecff 23% 40%,#b8c9ff 41% 100%);
+      box-shadow:inset 0 0 0 2px #0a1320, 0 2px 6px rgba(0,0,0,.35);
+      position:relative}
+    .logo-ico:after{ /* cuciture pallone */
+      content:"";position:absolute;inset:0;
+      background:
+        radial-gradient(circle at 50% 28%,transparent 0 18%,#0a1320 19% 19.6%,transparent 19.7% 100%),
+        radial-gradient(circle at 28% 58%,transparent 0 18%,#0a1320 19% 19.6%,transparent 19.7% 100%),
+        radial-gradient(circle at 72% 58%,transparent 0 18%,#0a1320 19% 19.6%,transparent 19.7% 100%)
+    }
+    .btn{background:#0e2845;border:1px solid #21456c;color:#dce7ff;padding:10px 14px;border-radius:12px}
+    .btn.primary{background:var(--brand);border-color:#129158;color:#04130c}
+    h1{font-size:28px;margin:8px 0 2px}
+    .muted{color:var(--muted)}
+    /* cards sport elenco */
+    .list{display:grid;gap:14px;margin-top:16px}
+    .card{
+      background:linear-gradient(145deg,#0f2034,#0f1d31);border:1px solid #1e3550;border-radius:var(--radius);
+      padding:16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px;justify-content:space-between
+    }
+    .row{display:flex;align-items:center;gap:14px}
+    .ball{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 2px rgba(0,0,0,.5)}
+    .ball svg{width:40px;height:40px;display:block}
+    .pill{background:#102a47;border:1px solid #264d78;color:#cfe1ff;padding:8px 14px;border-radius:12px}
+    .go{background:#2d7ef6;border-color:#1d64c6}
+    /* stepper contenitore */
+    .panel{margin-top:22px;background:linear-gradient(180deg,#0f1f32,#0e1a2a);border:1px solid #1e3550;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .panel .hd{padding:14px 16px;border-bottom:1px solid #1e3550;font-weight:600}
+    .panel .bd{padding:14px 16px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px}
+    .chip{
+      background:#0f2846;border:1px dashed #2e517a;border-radius:999px;color:#cfe1ff;font-size:13px;padding:6px 10px
+    }
+    label{display:block;margin:10px 0 6px;color:#cfe1ff}
+    select{width:100%;background:#0d2440;color:#eaf2ff;border:1px solid #2c4d78;border-radius:10px;padding:10px}
+    .grid{display:grid;gap:10px}
+    .grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media (min-width:760px){ .list{gap:16px}.grid.two{grid-template-columns:repeat(3,minmax(0,1fr))} }
+    .card.soc{align-items:flex-start;flex-direction:column}
+    .soc .badge{display:inline-block;background:#0f2e18;color:#9ff0c5;border:1px solid #1f6340;padding:4px 8px;border-radius:999px;font-size:12px}
+    .footer{padding:36px 0;color:#99a8bd;text-align:center}
+  </style>
 </head>
 <body>
-<header>
-  <div class="wrap topbar">
-    <div class="logo"><span class="ball"></span> PreMatch</div>
-    <div class="actions">
-      <a class="btn" href="#" id="sponsor-btn">Crea account sponsor</a>
-      <a class="btn primary" href="#" id="login-btn">Login</a>
+  <header>
+    <div class="max bar">
+      <div class="logo"><span class="logo-ico"></span> PreMatch</div>
+      <div style="margin-left:auto;display:flex;gap:10px">
+        <a class="btn" href="#" onclick="openSponsor()">Crea account sponsor</a>
+        <a class="btn primary" href="#" onclick="fakeLogin()">Login</a>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="wrap">
-  <!-- HERO -->
-  <section class="hero" id="home-hero">
+  <main class="max">
     <h1>Scegli lo sport</h1>
-    <div class="muted">Naviga le società e scopri le prossime partite.<br/>Nessuna registrazione richiesta per esplorare.</div>
-  </section>
+    <div class="muted">Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</div>
 
-  <!-- SPORT LIST -->
-  <section class="sports" id="sport-list"></section>
+    <!-- Elenco sport -->
+    <section id="sport-list" class="list"></section>
 
-  <!-- STEP PANEL -->
-  <section class="panel" id="step-panel" hidden>
-    <div class="crumbs" id="crumbs"></div>
-    <div id="step-content"></div>
-  </section>
-</main>
+    <!-- Stepper filtro -->
+    <section id="flow" class="panel" style="display:none">
+      <div class="hd">Filtri</div>
+      <div class="bd">
+        <div class="chips" id="crumbs"></div>
 
-<footer>
-  <div class="wrap">
-    <div>© 2025 PreMatch — Semplice. Pulita. Gratuita. · <a href="#">Privacy</a> · <a href="#">Supporto</a></div>
+        <div id="step-region">
+          <label for="regionSel">Regione</label>
+          <select id="regionSel"></select>
+        </div>
+
+        <div id="step-gender" style="display:none">
+          <label for="genderSel">Genere</label>
+          <select id="genderSel">
+            <option value="">— Seleziona —</option>
+            <option value="Maschile">Maschile</option>
+            <option value="Femminile">Femminile</option>
+          </select>
+        </div>
+
+        <div id="step-league" style="display:none">
+          <label for="leagueSel">Campionato di riferimento</label>
+          <select id="leagueSel"></select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Società -->
+    <section id="clubs" class="panel" style="display:none">
+      <div class="hd">Società</div>
+      <div class="bd grid two" id="clubGrid"></div>
+    </section>
+
+  </main>
+
+  <div class="footer">
+    © 2025 PreMatch — Semplice. Pulita. Gratuita. ·
+    <a href="#">Privacy</a> · <a href="#">Supporto</a>
   </div>
-</footer>
 
-<script>
-/* -------------------------
-   DATA
---------------------------*/
-const sports = [
-  { key:'calcio', name:'Calcio',  img:'https://images.unsplash.com/photo-1543326727-cf6c39e8f84f?q=80&w=600&auto=format&fit=crop' },
-  { key:'futsal', name:'Futsal',  img:'https://images.unsplash.com/photo-1522771930-78848d9293e8?q=80&w=600&auto=format&fit=crop' },
-  { key:'basket', name:'Basket',  img:'https://images.unsplash.com/photo-1505666287802-931dc83948e9?q=80&w=600&auto=format&fit=crop' },
-  { key:'volley', name:'Volley',  img:'https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=600&auto=format&fit=crop' },
-  { key:'rugby',  name:'Rugby',   img:'https://images.unsplash.com/photo-1459865264687-595d652de67e?q=80&w=600&auto=format&fit=crop' },
-];
+  <script>
+    /* ---------- dati demo ---------- */
+    const SPORTS = [
+      { id:'calcio',  name:'Calcio',  icon: ballSVG('soccer') },
+      { id:'futsal',  name:'Futsal',  icon: ballSVG('futsal') },
+      { id:'basket',  name:'Basket',  icon: ballSVG('basket') },
+      { id:'volley',  name:'Volley',  icon: ballSVG('volley') },
+      { id:'rugby',   name:'Rugby',   icon: ballSVG('rugby') },
+    ];
 
-const regions = [
-  'Piemonte','Valle d\'Aosta','Lombardia','Trentino-Alto Adige','Veneto','Friuli Venezia Giulia','Liguria','Emilia-Romagna','Toscana','Umbria','Marche','Lazio','Abruzzo','Molise','Campania','Puglia','Basilicata','Calabria','Sicilia','Sardegna'
-];
+    const REGIONS = ['Piemonte','Lombardia','Veneto','Emilia-Romagna','Toscana','Lazio','Campania','Puglia','Sicilia','Sardegna'];
 
-// Campionati demo (estendibili)
-const championships = {
-  calcio: {
-    M: ['Serie A','Serie B','Serie C','Serie D','Eccellenza','Promozione','Prima Categoria','Juniores','Allievi U17','Giovanissimi U15','Pulcini','Scuola Calcio'],
-    F: ['Serie A Femminile','Serie B Femminile','Eccellenza F','Promozione F','Juniores F','Under 17 F','Under 15 F','Scuola Calcio Femminile']
-  },
-  futsal: {
-    M: ['Serie A','Serie A2','Serie B','C1','C2','Under 19','Scuola Calcio a 5'],
-    F: ['Serie A F','Serie A2 F','C1 F','Under 19 F','Scuola Calcio a 5 F']
-  },
-  basket: {
-    M: ['Serie A','A2','B Nazionale','C Unica','Under 19','Under 17','MiniBasket'],
-    F: ['Serie A1 F','A2 F','B F','Under 19 F','Under 17 F','MiniBasket F']
-  },
-  volley: {
-    M: ['SuperLega','A2','A3','Serie B','C','Under 19','Under 17','MiniVolley'],
-    F: ['Serie A1 F','A2 F','B1 F','B2 F','C F','Under 19 F','Under 17 F','MiniVolley F']
-  },
-  rugby: {
-    M: ['Top10','Serie A','Serie B','Under 19','Under 17','Propaganda'],
-    F: ['Serie A F','Coppa Italia 7s F','Under 17 F','Propaganda F']
-  }
-};
+    // campionati demo per sport + genere
+    const LEAGUES = {
+      calcio: {
+        Maschile:['Serie A','Serie B','Serie C','Dilettanti','Scuola Calcio'],
+        Femminile:['Serie A Femminile','Serie B Femminile','Giovanili','Scuola Calcio']
+      },
+      futsal: {
+        Maschile:['Serie A','Serie A2','Serie B','Under 19'],
+        Femminile:['Serie A Femminile','Serie A2 Femminile','Giovanili']
+      },
+      basket: {
+        Maschile:['Serie A','Serie A2','Serie B','U19'],
+        Femminile:['Serie A1','Serie A2','Giovanili']
+      },
+      volley: {
+        Maschile:['SuperLega','Serie A2','Serie B','Settore Giovanile'],
+        Femminile:['Serie A1','Serie A2','Serie B1','Settore Giovanile']
+      },
+      rugby: {
+        Maschile:['Top10','Serie A','Serie B','U19'],
+        Femminile:['Serie A Femminile','Giovanili']
+      }
+    };
 
-// Società demo (puoi popolare davvero in seguito)
-const demoClubs = [
-  {sport:'calcio', regione:'Lazio', genere:'M', camp:'Serie A', nome:'AS Roma'},
-  {sport:'calcio', regione:'Lazio', genere:'F', camp:'Serie A Femminile', nome:'Lazio Women'},
-  {sport:'calcio', regione:'Veneto', genere:'M', camp:'Scuola Calcio', nome:'Scuola Calcio Mestre'},
-  {sport:'basket', regione:'Lombardia', genere:'M', camp:'A1' , nome:'Olimpia Milano'},
-  {sport:'volley', regione:'Veneto', genere:'F', camp:'Serie A1 F', nome:'Imoco Conegliano'},
-  {sport:'futsal', regione:'Abruzzo', genere:'M', camp:'Serie A', nome:'Acqua&Sapone'},
-  {sport:'rugby',  regione:'Veneto', genere:'M', camp:'Top10', nome:'Benetton Rugby'}
-];
+    // società demo (chiave composta)
+    const CLUBS = [
+      { sport:'calcio', region:'Lazio', gender:'Maschile', league:'Serie A', name:'S.S. Lazio', verified:true, next:'Dom 20:45' },
+      { sport:'calcio', region:'Lazio', gender:'Femminile', league:'Serie B Femminile', name:'Roma Women Academy', verified:false, next:'Sab 15:00' },
+      { sport:'basket', region:'Lombardia', gender:'Maschile', league:'Serie A', name:'Olimpia Milano', verified:true, next:'Ven 20:30' },
+      { sport:'volley', region:'Veneto', gender:'Femminile', league:'Serie A1', name:'Imoco Conegliano', verified:true, next:'Sab 17:00' },
+      { sport:'futsal', region:'Campania', gender:'Maschile', league:'Serie A', name:'Feldi Eboli', verified:true, next:'Sab 18:30' },
+      { sport:'rugby', region:'Veneto', gender:'Maschile', league:'Top10', name:'Petrarca Padova', verified:false, next:'Dom 16:00' }
+    ];
 
-/* -------------------------
-   STATE
---------------------------*/
-const state = {
-  sport:null,
-  regione:null,
-  genere:null,   // 'M' | 'F'
-  campionato:null
-};
+    /* ---------- stato UI ---------- */
+    const state = { sport:null, region:null, gender:null, league:null };
 
-/* -------------------------
-   RENDER: HOME (SPORT)
---------------------------*/
-const listEl = document.getElementById('sport-list');
-function renderSports(){
-  listEl.innerHTML='';
-  sports.forEach(s=>{
-    const card=document.createElement('div');
-    card.className='card';
-    const thumb=document.createElement('div');
-    thumb.className='thumb';
-    thumb.style.backgroundImage=`url('${s.img}')`;
+    const sportList = document.getElementById('sport-list');
+    const flow      = document.getElementById('flow');
+    const crumbs    = document.getElementById('crumbs');
+    const regionSel = document.getElementById('regionSel');
+    const genderSel = document.getElementById('genderSel');
+    const leagueSel = document.getElementById('leagueSel');
+    const stepGender= document.getElementById('step-gender');
+    const stepLeague= document.getElementById('step-league');
 
-    const title=document.createElement('div');
-    title.innerHTML=`<h3>${s.name}</h3><div class="muted">Esplora società</div>`;
+    const clubsWrap = document.getElementById('clubs');
+    const clubGrid  = document.getElementById('clubGrid');
 
-    const pill=document.createElement('div');
-    pill.className='pill';
-    const chip=document.createElement('span'); chip.className='chip'; chip.textContent='Società';
-    const open=document.createElement('a'); open.href='#'; open.className='btn small'; open.textContent='Apri';
-    pill.append(chip, open);
+    /* ---------- render sport list ---------- */
+    function renderSports(){
+      sportList.innerHTML = '';
+      SPORTS.forEach(s=>{
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="row">
+            <div class="ball">${s.icon}</div>
+            <div>
+              <div style="font-weight:700;font-size:20px">${s.name}</div>
+              <div class="muted">Esplora società</div>
+            </div>
+          </div>
+          <div class="row">
+            <a class="pill" href="#" onclick="openClubs('${s.id}')">Società</a>
+            <a class="pill go" href="#" onclick="startFlow('${s.id}')">Apri</a>
+          </div>
+        `;
+        sportList.appendChild(card);
+      });
+    }
 
-    card.append(thumb,title,pill);
-    card.addEventListener('click', (e)=>{ if(e.target===open||e.currentTarget===card) goRegion(s.key); });
-    listEl.append(card);
-  });
-}
-renderSports();
+    /* ---------- flusso ---------- */
+    function startFlow(sportId){
+      resetFlow();
+      state.sport = sportId;
+      flow.style.display = 'block';
+      clubsWrap.style.display = 'none';
 
-/* -------------------------
-   STEPS (Region → Gender → Championship → Clubs)
---------------------------*/
-const panel=document.getElementById('step-panel');
-const crumbsEl=document.getElementById('crumbs');
-const contentEl=document.getElementById('step-content');
+      // crumb sport
+      updateCrumbs();
 
-function setCrumbs(){
-  crumbsEl.innerHTML='';
-  if(state.sport) addCrumb('Sport', sports.find(x=>x.key===state.sport)?.name, ()=>resetTo('sport'));
-  if(state.regione) addCrumb('Regione', state.regione, ()=>resetTo('regione'));
-  if(state.genere) addCrumb('Genere', state.genere==='M'?'Maschile':'Femminile', ()=>resetTo('genere'));
-  if(state.campionato) addCrumb('Campionato', state.campionato, ()=>resetTo('campionato'));
-  function addCrumb(label,value,cb){
-    const c=document.createElement('span');
-    c.className='crumb'; c.textContent=`${label}: ${value}`;
-    c.onclick=cb;
-    crumbsEl.append(c);
-  }
-}
-function resetTo(level){
-  if(level==='sport'){ state.regione=null; state.genere=null; state.campionato=null; renderRegion(); }
-  else if(level==='regione'){ state.genere=null; state.campionato=null; renderGender(); }
-  else if(level==='genere'){ state.campionato=null; renderChampionship(); }
-  else if(level==='campionato'){ renderChampionship(); }
-}
+      // regioni
+      regionSel.innerHTML = `<option value="">— Seleziona —</option>` + REGIONS.map(r=>`<option>${r}</option>`).join('');
+      regionSel.onchange = ()=>{
+        state.region = regionSel.value || null;
+        state.gender = null; state.league=null;
+        genderSel.value = '';
+        leagueSel.innerHTML = '';
+        stepGender.style.display = state.region ? 'block':'none';
+        stepLeague.style.display = 'none';
+        clubsWrap.style.display = 'none';
+        updateCrumbs();
+      };
 
-function goRegion(sportKey){
-  state.sport=sportKey;
-  panel.hidden=false;
-  renderRegion();
-  window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
-}
-function renderRegion(){
-  setCrumbs();
-  contentEl.innerHTML=`<h2 class="h2">Scegli la regione</h2>
-    <div class="grid cols-3" id="regions"></div>`;
-  const grid=document.getElementById('regions');
-  regions.forEach(r=>{
-    const b=document.createElement('button');
-    b.className='option'; b.textContent=r;
-    b.onclick=()=>{ state.regione=r; renderGender(); };
-    grid.append(b);
-  });
-}
+      // genere
+      genderSel.onchange = ()=>{
+        state.gender = genderSel.value || null;
+        state.league = null;
+        updateLeagues();
+        updateCrumbs();
+      };
 
-function renderGender(){
-  setCrumbs();
-  contentEl.innerHTML=`<h2 class="h2">Categoria</h2>
-    <div class="grid cols-2">
-      <button class="option" id="gM">Maschile</button>
-      <button class="option" id="gF">Femminile</button>
-    </div>`;
-  document.getElementById('gM').onclick=()=>{ state.genere='M'; renderChampionship(); };
-  document.getElementById('gF').onclick=()=>{ state.genere='F'; renderChampionship(); };
-}
+      // campionato
+      leagueSel.onchange = ()=>{
+        state.league = leagueSel.value || null;
+        updateCrumbs();
+        renderClubs();
+      };
 
-function renderChampionship(){
-  setCrumbs();
-  const sport=state.sport, gen=state.genere;
-  const list = (championships[sport] && championships[sport][gen]) || [];
-  contentEl.innerHTML=`<h2 class="h2">Campionato di riferimento</h2>
-    <div class="grid cols-3" id="camp-grid"></div>`;
-  const g=document.getElementById('camp-grid');
-  list.forEach(c=>{
-    const b=document.createElement('button');
-    b.className='option'; b.textContent=c;
-    b.onclick=()=>{ state.campionato=c; renderClubs(); };
-    g.append(b);
-  });
-}
+      window.scrollTo({top:flow.offsetTop-10,behavior:'smooth'});
+    }
 
-function renderClubs(){
-  setCrumbs();
-  const {sport,regione,genere,campionato}=state;
-  const list = demoClubs.filter(c=>c.sport===sport && c.regione===regione && c.genere===genere && c.camp===campionato);
+    function updateLeagues(){
+      if(!state.sport || !state.gender){ stepLeague.style.display='none'; return; }
+      const arr = (LEAGUES[state.sport]||{})[state.gender]||[];
+      leagueSel.innerHTML = `<option value="">— Seleziona —</option>` + arr.map(x=>`<option>${x}</option>`).join('');
+      stepLeague.style.display = arr.length ? 'block':'none';
+      clubsWrap.style.display = 'none';
+    }
 
-  const niceSport = sports.find(s=>s.key===sport)?.name || 'Sport';
-  contentEl.innerHTML=`<h2 class="h2">${niceSport} — ${regione} — ${genere==='M'?'Maschile':'Femminile'} — ${campionato}</h2>
-    <div class="list" id="club-list"></div>`;
-  const listEl=document.getElementById('club-list');
+    function resetFlow(){
+      Object.assign(state,{ sport:null,region:null,gender:null,league:null });
+      regionSel.innerHTML = ''; genderSel.value=''; leagueSel.innerHTML='';
+      stepGender.style.display='none'; stepLeague.style.display='none';
+      crumbs.innerHTML=''; clubsWrap.style.display='none';
+    }
 
-  if(!list.length){
-    const empty=document.createElement('div');
-    empty.className='row';
-    empty.innerHTML=`<div class="muted">Nessuna società ancora in questa categoria.</div>
-                     <a class="btn small" href="#" onclick="alert('Qui andrà la richiesta di aggiunta società')">Segnala società</a>`;
-    listEl.append(empty);
-  } else {
-    list.forEach(c=>{
-      const row=document.createElement('div'); row.className='row';
-      row.innerHTML=`<strong>${c.nome}</strong><a class="btn small" href="#">Visita</a>`;
-      listEl.append(row);
-    });
-  }
-}
+    function updateCrumbs(){
+      const items = [];
+      if(state.sport){
+        const s = SPORTS.find(x=>x.id===state.sport);
+        items.push(`<span class="chip">Sport: ${s?.name||state.sport}</span>`);
+      }
+      if(state.region) items.push(`<span class="chip">Regione: ${state.region}</span>`);
+      if(state.gender) items.push(`<span class="chip">Genere: ${state.gender}</span>`);
+      if(state.league) items.push(`<span class="chip">Campionato: ${state.league}</span>`);
+      crumbs.innerHTML = items.join(' ');
+    }
 
-/* Demo actions header */
-document.getElementById('sponsor-btn').onclick=(e)=>{e.preventDefault(); alert('Flusso sponsor (registrazione) — placeholder.')};
-document.getElementById('login-btn').onclick=(e)=>{e.preventDefault(); alert('Login / Registrazione — placeholder.')}
-</script>
+    /* ---------- società ---------- */
+    function renderClubs(){
+      const { sport, region, gender, league } = state;
+      if(!sport || !region || !gender || !league){ clubsWrap.style.display='none'; return; }
+
+      const list = CLUBS.filter(c =>
+        c.sport===sport && c.region===region && c.gender===gender && c.league===league
+      );
+
+      clubGrid.innerHTML = list.length ? '' : `<div class="muted">Nessuna società trovata per questi filtri (demo).</div>`;
+
+      list.forEach(c=>{
+        const el = document.createElement('div');
+        el.className = 'card soc';
+        el.innerHTML = `
+          <div style="display:flex;align-items:center;gap:10px;justify-content:space-between;width:100%">
+            <div>
+              <div style="font-weight:700">${c.name}</div>
+              <div class="muted" style="font-size:13px">${c.region} · ${c.league}</div>
+            </div>
+            ${c.verified ? `<span class="badge">Verificata</span>` : ``}
+          </div>
+          <div class="muted" style="margin-top:8px">Prossima partita: ${c.next}</div>
+        `;
+        clubGrid.appendChild(el);
+      });
+
+      clubsWrap.style.display = 'block';
+      window.scrollTo({top:clubsWrap.offsetTop-10,behavior:'smooth'});
+    }
+
+    function openClubs(sportId){
+      startFlow(sportId);
+      // scelta rapida: precompilo Regione/GGenere/Campionato (solo per mostrare)
+      regionSel.value = 'Lazio'; regionSel.dispatchEvent(new Event('change'));
+      genderSel.value = 'Maschile'; genderSel.dispatchEvent(new Event('change'));
+      const first = leagueSel.options[1]?.value;
+      if(first){ leagueSel.value = first; leagueSel.dispatchEvent(new Event('change')); }
+    }
+
+    /* ---------- sponsor/login demo ---------- */
+    function openSponsor(){ alert('Area sponsor: demo (creazione account non attiva).'); }
+    function fakeLogin(){ alert('Login demo: qui in produzione aprirebbe il form.\nNessuna modifica non richiesta è stata fatta.'); }
+
+    /* ---------- utilità: SVG palloni ---------- */
+    function ballSVG(kind){
+      const K = {
+        soccer:{bg:'#38d36f',fg:'#0a1320',path:`M20 2a18 18 0 1 0 0 36a18 18 0 1 0 0-36Zm0 6l6 3l2 6l-4 5h-8l-4-5l2-6l6-3Zm-10 12l4 5l-2 7m8-12h8m-8 0l-4 5m4-5l4 5m4 7l-2-7m-8 0l-2 7`},
+        futsal:{bg:'#f7b02d',fg:'#1a1200',path:`M20 2a18 18 0 1 0 0 36a18 18 0 1 0 0-36Zm0 5c8 0 13 6 13 13s-5 13-13 13S7 27 7 20 12 7 20 7Zm-8 13h16m-12-8l8 16m8-8H12m12-8l-8 16`},
+        basket:{bg:'#ff8a33',fg:'#251300',path:`M20 2a18 18 0 1 0 0 36a18 18 0 1 0 0-36Zm0 0v36M2 20h36M6 8c6 6 6 18 0 24m28-24c-6 6-6 18 0 24`},
+        volley:{bg:'#bdb7ff',fg:'#1e1347',path:`M20 2a18 18 0 1 0 0 36a18 18 0 1 0 0-36Zm-16 12c10 6 22 6 32 0M6 26c10-6 22-6 32 0M12 6c6 10 6 22 0 32m16-32c-6 10-6 22 0 32`},
+        rugby:{bg:'#ffb357',fg:'#361800',path:`M7 20c0-10 13-16 24-12c4 1 4 11 0 18c-11 4-24-1-24-6Zm5-2c6-5 16-6 18-4m-20 8c6 5 16 6 18 4`},
+      }[kind] || K.soccer;
+      return `
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <circle cx="20" cy="20" r="19" fill="${K.bg}"/>
+          <path d="${K.path}" fill="none" stroke="${K.fg}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`;
+    }
+
+    // avvio
+    renderSports();
+  </script>
 </body>
 </html>
