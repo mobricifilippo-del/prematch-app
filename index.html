@@ -1,77 +1,68 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PreMatch — Demo Interattiva</title>
-<meta name="description" content="PreMatch: organizza il pre-partita in pochi secondi. Demo interattiva." />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PreMatch — Demo</title>
+<meta name="description" content="PreMatch: organizza il pre-partita in pochi secondi. Demo interattiva.">
 <style>
 :root{
-  --bg:#0b1220; --panel:#111827ee; --text:#e5e7eb; --muted:#94a3b8;
-  --brand:#16a34a; --accent:#22c55e; --chip:#38bdf8; --shadow:0 10px 30px rgba(0,0,0,.35)
+  --bg:#0b1220; --bg2:#0a1326; --panel:#0f1828; --line:#ffffff12;
+  --text:#e5e7eb; --muted:#94a3b8;
+  --brand:#16a34a; --brand2:#22c55e; --chip:#38bdf8;
 }
 *{box-sizing:border-box} html,body{height:100%}
 body{
   margin:0; color:var(--text);
-  font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
-  background:radial-gradient(90% 60% at 50% 0%,#0d1b31 0%,#0b1220 60%,#090f1a 100%);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:radial-gradient(80% 60% at 50% 0%,#0d1b31 0%,var(--bg) 60%,#090f1a 100%);
 }
 a{color:inherit;text-decoration:none}
-
-/* Topbar */
-.topbar{position:sticky; top:0; z-index:10; display:flex; align-items:center; justify-content:space-between;
-  gap:12px; padding:12px 14px; background:linear-gradient(180deg,rgba(11,18,32,.85),rgba(11,18,32,.45));
-  border-bottom:1px solid rgba(255,255,255,.06); backdrop-filter: blur(8px)}
-.brand{display:flex; align-items:center; gap:10px; font-weight:800}
-.brand-logo{width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:#16a34a;color:#0b1220;font-weight:900;box-shadow:0 6px 18px rgba(22,163,74,.45)}
-.actions{display:flex;gap:8px}
-.btn{padding:9px 14px;border-radius:12px;font-weight:700;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:.18s transform,.18s box-shadow}
-.btn:active{transform:scale(.98)}
-.btn.primary{background:var(--brand);color:#0b1220;box-shadow:0 10px 24px rgba(22,163,74,.35)}
-.btn.ghost{background:rgba(255,255,255,.06)}
-
-/* Container */
 .wrap{max-width:1100px;margin:0 auto;padding:18px 14px 40px}
 
-/* HERO */
-.hero{padding:10px 0 18px}
-.hero h1{margin:6px 0 4px;font-size:2rem}
-.hero p{margin:0;color:var(--muted)}
+/* topbar */
+.topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:12px 14px;background:linear-gradient(180deg,#0b1220ee,#0b122066);border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800}
+.brand-logo{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#0b1220;font-weight:900;box-shadow:0 6px 18px rgba(22,163,74,.45)}
+.actions{display:flex;gap:8px}
+.btn{padding:9px 14px;border-radius:12px;font-weight:700;border:1px solid var(--line);cursor:pointer;transition:.18s transform,.18s box-shadow}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--brand);color:#0b1220;box-shadow:0 10px 24px rgba(22,163,74,.35)}
+.btn.ghost{background:#ffffff0f}
 
-/* Tiles grid */
-.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:18px}
-.tile{display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:20px;
-  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
-  border:1px solid rgba(255,255,255,.06); position:relative;transition:.18s transform,.18s box-shadow}
-.tile:hover{box-shadow:0 8px 24px rgba(0,0,0,.35)} .tile:active{transform:scale(.985)}
-.label{font-weight:800} .sub{font-size:.92rem;color:var(--muted);margin-top:2px}
-.chip{position:absolute;right:14px;top:14px;padding:8px 12px;border-radius:12px;background:#0ea5e9;color:#fff;
-  font-weight:800;font-size:.9rem;box-shadow:0 4px 12px rgba(14,165,233,.4)}
+/* titolo */
+h1{margin:6px 0 6px;font-size:2rem}
+.sub{color:var(--muted);font-size:.98rem}
 
-/* Round sport icon */
+/* griglia sport in home */
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:16px}
+.tile{display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:20px;background:linear-gradient(180deg,#ffffff08,#ffffff05);border:1px solid var(--line);position:relative;transition:.18s transform,.18s box-shadow}
+.tile:hover{box-shadow:0 8px 24px #0006}
+.tile:active{transform:scale(.985)}
+.label{font-weight:800}
+.small{color:var(--muted);font-size:.92rem;margin-top:2px}
+.chip{position:absolute;right:14px;top:14px;padding:8px 12px;border-radius:12px;background:#0ea5e9;color:#fff;font-weight:800;font-size:.9rem;box-shadow:0 4px 12px rgba(14,165,233,.4)}
+
+/* icone rotonde */
 .icon{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;
   background:radial-gradient(120% 120% at 30% 20%,var(--g1) 0%,var(--g2) 70%);
-  box-shadow:inset 0 0 0 2px rgba(255,255,255,.06),0 8px 18px rgba(0,0,0,.35)}
-.icon svg{width:30px;height:30px;filter:drop-shadow(0 1px 0 rgba(0,0,0,.4))}
+  box-shadow:inset 0 0 0 2px #ffffff14,0 8px 18px #0006}
+.icon svg{width:30px;height:30px;filter:drop-shadow(0 1px 0 #0006)}
 
-/* Lists / cards */
-.card{background:var(--panel);border:1px solid rgba(255,255,255,.06);border-radius:22px;padding:22px;box-shadow:var(--shadow);backdrop-filter: blur(6px)}
+/* liste e card */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 10px 30px #0006}
 .list{display:grid;gap:14px}
-.item{padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.06);
-  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
-  display:flex;align-items:center;justify-content:space-between;gap:12px}
-.item .left{display:flex;align-items:center;gap:12px}
-.logo{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.08);display:grid;place-items:center;font-weight:900}
-
-/* Badges */
+.item{padding:16px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(180deg,#ffffff08,#ffffff05);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.left{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;border-radius:12px;background:#ffffff12;display:grid;place-items:center;font-weight:900}
 .badge{font-weight:800;font-size:.85rem;padding:6px 10px;border-radius:10px}
-.ok{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
-.wait{background:rgba(251,146,60,.12);color:#fb923c;border:1px solid rgba(251,146,60,.25)}
+.ok{background:#22c55e20;color:#22c55e;border:1px solid #22c55e40}
+.wait{background:#fb923c20;color:#fb923c;border:1px solid #fb923c40}
 
-/* Footer */
 .footer{margin-top:18px;text-align:center;color:var(--muted);font-size:.9rem}
 .footer a{color:#9dd2ff}
-hr.sep{border:none;border-top:1px solid rgba(255,255,255,.06);margin:14px 0}
+hr.sep{border:none;border-top:1px solid var(--line);margin:14px 0}
 @media (max-width:480px){.icon{width:56px;height:56px}.chip{top:10px;right:10px}}
 </style>
 </head>
@@ -90,7 +81,7 @@ hr.sep{border:none;border-top:1px solid rgba(255,255,255,.06);margin:14px 0}
 </main>
 
 <script>
-/* ===== ICONS (SVG) ===== */
+/* === SVG icone === */
 const SVG={
   calcio:`<svg viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="1.8">
     <circle cx="12" cy="12" r="9" fill="#ffffff22"/>
@@ -110,7 +101,7 @@ const SVG={
   </svg>`
 };
 
-/* ===== DATA (DEMO) ===== */
+/* === dati demo === */
 const SPORTS=[
   {id:'calcio', name:'Calcio',  g1:'#22c55e', g2:'#16a34a', icon:SVG.calcio},
   {id:'futsal', name:'Futsal',  g1:'#facc15', g2:'#f59e0b', icon:SVG.futsal},
@@ -133,143 +124,11 @@ const CLUBS={
   rugby:[ {id:'benetton',name:'Benetton Treviso',  next:'Domenica ore 16:00', status:'ok'}]
 };
 
-/* ===== ROUTER ===== */
-const app = document.getElementById('app');
-window.addEventListener('hashchange', route);
-window.addEventListener('load', route);
+/* === router minimale === */
+const app=document.getElementById('app');
+addEventListener('hashchange',route);
+addEventListener('load',route);
 
 function route(){
-  const hash = location.hash.slice(2);
-  // HOME IMPATTO: mostra subito hero + griglia sport
-  if(!hash) return ViewHome();
-  const p = hash.split('/');
-  if(p[0]==='sport' && p[1]) return ViewSport(p[1]);
-  if(p[0]==='club'  && p[1] && p[2]) return ViewClub(p[1], p[2]);
-  if(p[0]==='login') return ViewLogin();
-  if(p[0]==='sponsor') return ViewSponsor();
-  if(p[0]==='privacy') return ViewStatic('Privacy','Questa è una demo senza raccolta dati.');
-  if(p[0]==='supporto') return ViewStatic('Supporto','Scrivici per domande e assistenza.');
-  return ViewHome();
-}
-
-/* ===== VIEWS ===== */
-function ViewHome(){
-  app.innerHTML = `
-    <section class="hero">
-      <h1>Scegli lo sport</h1>
-      <p>Naviga le società e scopri le prossime partite. Nessuna registrazione per esplorare.</p>
-      <div class="grid">
-        ${SPORTS.map(s=>`
-          <a class="tile" href="#/sport/${s.id}" style="--g1:${s.g1}; --g2:${s.g2}">
-            <div class="icon">${s.icon}</div>
-            <div>
-              <div class="label">${s.name}</div>
-              <div class="sub">Apri elenco società</div>
-            </div>
-            <span class="chip">Apri</span>
-          </a>
-        `).join('')}
-      </div>
-    </section>
-  `;
-}
-
-function ViewSport(sportId){
-  const sport = SPORTS.find(s=>s.id===sportId);
-  if(!sport){ return ViewHome(); }
-  const list = (CLUBS[sportId]||[]);
-  app.innerHTML = `
-    <div class="card">
-      <a href="#/" style="color:#9dd2ff">← Torna agli sport</a>
-      <h2 style="margin:10px 0 8px">Società di ${sport.name}</h2>
-      <div class="list">
-        ${list.map(c=>`
-          <a class="item" href="#/club/${sportId}/${c.id}">
-            <div class="left">
-              <div class="logo">${sport.name[0]}</div>
-              <div>
-                <div class="label">${c.name}</div>
-                <div class="sub">Prossima partita: ${c.next}</div>
-              </div>
-            </div>
-            <span class="badge ${c.status==='ok'?'ok':'wait'}">
-              ${c.status==='ok' ? 'PreMatch confermato' : 'PreMatch in verifica'}
-            </span>
-          </a>
-        `).join('')}
-      </div>
-    </div>
-  `;
-}
-
-function ViewClub(sportId, clubId){
-  const sport = SPORTS.find(s=>s.id===sportId);
-  const club = (CLUBS[sportId]||[]).find(c=>c.id===clubId);
-  if(!sport || !club){ return ViewSport(sportId); }
-  app.innerHTML = `
-    <div class="card">
-      <a href="#/sport/${sportId}" style="color:#9dd2ff">← Torna a ${sport.name}</a>
-      <h2 style="margin:10px 0 4px">${club.name}</h2>
-      <div class="sub" style="margin-bottom:12px">Prossima partita: ${club.next}</div>
-
-      <div class="item" style="margin-bottom:12px">
-        <div class="left">
-          <div class="logo">PM</div>
-          <div>
-            <div class="label">PreMatch</div>
-            <div class="sub">Note, convocazioni, disponibilità, sponsor</div>
-          </div>
-        </div>
-        <span class="badge ${club.status==='ok'?'ok':'wait'}">
-          ${club.status==='ok' ? 'Confermato' : 'In verifica'}
-        </span>
-      </div>
-
-      <button class="btn primary" onclick="alert('Per creare/modificare serve l’accesso società (demo).')">
-        Crea/Modifica PreMatch
-      </button>
-      <hr class="sep">
-      <div class="sub">Se sei questa società: <a href="#/login">accedi</a> o <a href="#/sponsor">contattaci</a> per la verifica.</div>
-    </div>
-  `;
-}
-
-function ViewLogin(){
-  app.innerHTML = `
-    <div class="card">
-      <a href="#/" style="color:#9dd2ff">← Torna</a>
-      <h2>Login società</h2>
-      <p class="sub" style="margin:0 0 10px">Demo: accesso non reale. Qui, nella versione completa, entrano le società verificate.</p>
-      <button class="btn primary" onclick="alert('Demo: nessun backend. Qui andrebbe l’autenticazione.')">Accedi</button>
-    </div>
-  `;
-}
-
-function ViewSponsor(){
-  app.innerHTML = `
-    <div class="card">
-      <a href="#/" style="color:#9dd2ff">← Torna</a>
-      <h2>Crea account Sponsor</h2>
-      <p class="sub">Gli sponsor sono gestiti come <b>società</b> (non sportive) con ruolo “Sponsor”.</p>
-      <ul class="sub" style="margin-left:18px">
-        <li>Profilo con logo e descrizione</li>
-        <li>Sponsorizzazioni abbinate alle società</li>
-        <li>Badge sponsor visibile nel PreMatch</li>
-      </ul>
-      <button class="btn primary" onclick="alert('Demo: invio candidatura sponsor. Nella versione reale, modulo + verifica.')">Richiedi verifica</button>
-    </div>
-  `;
-}
-
-function ViewStatic(title, text){
-  app.innerHTML = `
-    <div class="card">
-      <a href="#/" style="color:#9dd2ff">← Torna</a>
-      <h2>${title}</h2>
-      <p class="sub">${text}</p>
-    </div>
-  `;
-}
-</script>
-</body>
-</html>
+  const h=location.hash.slice(2);
+  if(!h) return
