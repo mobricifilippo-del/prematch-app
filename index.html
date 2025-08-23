@@ -15,7 +15,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-appl
 a{color:inherit;text-decoration:none}
 .wrap{max-width:980px;margin:0 auto;padding:20px}
 
-/* NAV stile screenshot */
+/* NAV */
 .topbar{position:sticky;top:0;z-index:40;background:#0b1422cc;backdrop-filter:blur(6px);border-bottom:1px solid #0f2239}
 .nav{display:flex;align-items:center;gap:18px;padding:14px 16px}
 .logoRing{width:28px;height:28px;border-radius:50%;border:2px solid #23b46f;display:grid;place-items:center}
@@ -48,7 +48,7 @@ h2{margin:0 0 10px}
 @media(min-width:700px){.grid.cols-3{grid-template-columns:repeat(3,1fr)}}
 .region{padding:10px;border-radius:12px;background:#0b1727;border:1px solid var(--line);cursor:pointer}
 .region.active{outline:2px solid #2b6dd8}
-.sel{width:100%;padding:12px;border-radius:12px;background:#0b1727;color:#e7edf6;border:1px solid var(--line)}
+.sel{width:100%;padding:12px;border-radius:12px;background:#0b1727;color:var(--text);border:1px solid var(--line)}
 .clubs{margin-top:14px;display:grid;gap:12px}
 @media(min-width:700px){.clubs{grid-template-columns:1fr 1fr}}
 .club{background:#0c1b2d;border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:8px}
@@ -82,14 +82,14 @@ footer{margin:26px 0;color:#b8c6dc} footer a{text-decoration:underline}
   </div>
 
   <main class="wrap">
-    <!-- ====== VIEW 1: HOME (NON SI TOCCA) ====== -->
+    <!-- ====== VIEW 1: HOME ====== -->
     <section id="view-home" class="view active">
       <div class="hero">
         <h1>Scegli lo sport</h1>
         <p>Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</p>
         <div class="cards" id="sportCards"></div>
       </div>
-      <footer>PreMatch © 2025 — <em>Gratuita, senza pubblicità invadente</em></footer>
+      <footer>PreMatch © 2025 — <em>Semplice. Pulita. Gratuita.</em> · <a href="#">Privacy</a> · <a href="#">Supporto</a></footer>
     </section>
 
     <!-- ====== VIEW 2: SPORT → REGIONE → GENERE → CAMPIONATO ====== -->
@@ -124,32 +124,69 @@ footer{margin:26px 0;color:#b8c6dc} footer a{text-decoration:underline}
   </main>
 
 <script>
-/* ============ ICONE “come nello screenshot” ============ */
+/* ====== ICONE “PALLONI” come nello screenshot ====== */
 function ballIcon(kind){
-  if(kind==='calcio') return `<svg width="44" height="44" viewBox="0 0 44 44">
-    <circle cx="22" cy="22" r="18" fill="#0b1727" stroke="#23b46f" stroke-width="2"/>
-    <circle cx="22" cy="22" r="10" fill="#0e1b14" stroke="#23b46f" stroke-width="2"/>
-    <circle cx="22" cy="22" r="3.5" fill="#23b46f"/></svg>`;
-  if(kind==='futsal') return `<svg width="44" height="44" viewBox="0 0 44 44">
-    <circle cx="22" cy="22" r="18" fill="#0b1727" stroke="#ffa21e" stroke-width="2"/>
-    <rect x="15" y="17" width="14" height="10" rx="1.8" fill="none" stroke="#ffa21e" stroke-width="2"/>
-    <line x1="15" y1="21" x2="29" y2="21" stroke="#ffa21e" stroke-width="2"/></svg>`;
-  if(kind==='basket') return `<svg width="44" height="44" viewBox="0 0 44 44">
-    <circle cx="22" cy="22" r="18" fill="#0b1727" stroke="#ff7a21" stroke-width="2"/>
-    <circle cx="22" cy="22" r="10" fill="#241108" stroke="#ff7a21" stroke-width="2"/>
-    <path d="M22 12v20M12 22h20M16 16c4 4 8 4 12 0M28 28c-4-4-8-4-12 0" stroke="#ff7a21" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
-  if(kind==='volley') return `<svg width="44" height="44" viewBox="0 0 44 44">
-    <circle cx="22" cy="22" r="18" fill="#0b1727" stroke="#9b8cff" stroke-width="2"/>
-    <circle cx="22" cy="22" r="10" fill="#1a1830" stroke="#9b8cff" stroke-width="2"/>
-    <path d="M15 21c6-6 12-4 14-1M15 24c6 6 12 4 14 1M18 15c-2 7 1 12 6 15" stroke="#9b8cff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
-  if(kind==='rugby') return `<svg width="44" height="44" viewBox="0 0 44 44">
-    <circle cx="22" cy="22" r="18" fill="#0b1727" stroke="#f4a933" stroke-width="2"/>
-    <ellipse cx="22" cy="22" rx="11" ry="7" fill="#1f1608" stroke="#f4a933" stroke-width="2"/>
-    <path d="M16 22h12M19 20l6 4M19 24l6-4" stroke="#f4a933" stroke-width="2" stroke-linecap="round"/></svg>`;
-  return '';
+  // palette per sport
+  const pal = {
+    calcio:"#28d17c",  // verde
+    futsal:"#ffb22e",  // giallo/arancio
+    basket:"#ff7a21",  // arancio
+    volley:"#9b8cff",  // lilla
+    rugby:"#f4a933"    // oro
+  }[kind] || "#58c";
+  // cerchio base + pallone interno per ogni sport
+  const base = (inner)=>`
+  <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
+    <circle cx="22" cy="22" r="18" fill="#0b1727" stroke="${pal}" stroke-width="2"/>
+    ${inner}
+  </svg>`;
+
+  // 1) Calcio: pallone semplice b/n
+  if(kind==='calcio'){
+    const inner = `
+      <circle cx="22" cy="22" r="12" fill="#0f1a27" stroke="${pal}" stroke-width="2"/>
+      <circle cx="22" cy="22" r="7" fill="#e8eef6"/>
+      <path d="M22 16l3 2-1 3h-4l-1-3 3-2Z" fill="#0b1422"/>
+      <path d="M22 28l-3-2 1-3h4l1 3-3 2Z" fill="#0b1422"/>
+      <path d="M16 22l2-3 3 1v4l-3 1-2-3Zm12 0l-2-3-3 1v4l3 1 2-3Z" fill="#0b1422"/>`;
+    return base(inner);
+  }
+  // 2) Futsal: stella/pallone
+  if(kind==='futsal'){
+    const inner = `
+      <circle cx="22" cy="22" r="12" fill="#0f1a27" stroke="${pal}" stroke-width="2"/>
+      <g fill="${pal}">
+        <path d="M22 14l2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.3-4.5 2.3.9-5-3.6-3.5 5-.7L22 14Z"/>
+      </g>`;
+    return base(inner);
+  }
+  // 3) Basket: linee classiche
+  if(kind==='basket'){
+    const inner = `
+      <circle cx="22" cy="22" r="12" fill="#241108" stroke="${pal}" stroke-width="2"/>
+      <path d="M22 10v24M10 22h24M15 15c4 4 10 4 14 0M29 29c-4-4-10-4-14 0"
+            stroke="${pal}" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+    return base(inner);
+  }
+  // 4) Volley: spicchi curvi
+  if(kind==='volley'){
+    const inner = `
+      <circle cx="22" cy="22" r="12" fill="#1a1830" stroke="${pal}" stroke-width="2"/>
+      <path d="M14 21c6-6 14-4 16-1M14 24c6 6 14 4 16 1M18 14c-2 8 1 14 7 17"
+            stroke="${pal}" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+    return base(inner);
+  }
+  // 5) Rugby: ovale + cuciture
+  if(kind==='rugby'){
+    const inner = `
+      <ellipse cx="22" cy="22" rx="12" ry="8" fill="#1f1608" stroke="${pal}" stroke-width="2"/>
+      <path d="M16 22h12M19 20l6 4M19 24l6-4" stroke="${pal}" stroke-width="2" stroke-linecap="round"/>`;
+    return base(inner);
+  }
+  return base('');
 }
 
-/* ============ DATI ============ */
+/* ====== DATI ====== */
 const SPORTS = [
   {id:'calcio',name:'Calcio'},{id:'futsal',name:'Futsal'},
   {id:'basket',name:'Basket'},{id:'volley',name:'Volley'},{id:'rugby',name:'Rugby'},
@@ -178,7 +215,7 @@ const CLUBS = [
   {name:"Aurora Girls",       sport:"volley", region:"Toscana",  gender:"femminile",  league:"U16",              verified:false},
 ];
 
-/* ============ DOM ============ */
+/* ====== DOM ====== */
 const $=s=>document.querySelector(s);
 const sportCards=$("#sportCards");
 const vHome=$("#view-home"), vSport=$("#view-sport");
@@ -187,7 +224,7 @@ const clubList=$("#clubList"), backBtn=$("#backBtn"), sportTitle=$("#sportTitle"
 
 let CURRENT={sport:null,region:null,gender:'maschile',league:null};
 
-/* ============ HOME (immutabile) ============ */
+/* ====== HOME (immutabile) ====== */
 function drawSports(){
   sportCards.innerHTML = SPORTS.map(s=>`
     <div class="card">
@@ -202,16 +239,14 @@ function drawSports(){
   });
 }
 
-/* ============ VIEW 2 ============ */
+/* ====== VIEW 2 ====== */
 function openSport(id){
   CURRENT={sport:id,region:null,gender:'maschile',league:null};
   sportTitle.textContent = `Seleziona la regione — ${cap(id)}`;
-  // regioni
   regionGrid.innerHTML = IT_REGIONS.map(r=>`<div class="region" data-r="${r}">${r}</div>`).join('');
   regionGrid.querySelectorAll(".region").forEach(el=>{
     el.onclick=()=>{ CURRENT.region=el.dataset.r; regionGrid.querySelectorAll(".region").forEach(x=>x.classList.remove('active')); el.classList.add('active'); step2(); };
   });
-  // switch view
   vHome.classList.remove('active'); vSport.classList.add('active');
   window.scrollTo({top:0,behavior:'instant'});
 }
