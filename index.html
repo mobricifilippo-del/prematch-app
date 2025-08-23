@@ -35,11 +35,11 @@
   h1{font-size:28px; margin:16px 4px 8px}
   p.lead{color:var(--muted); margin:0 4px 20px}
 
-  /* cards lista sport */
   .list{display:flex; flex-direction:column; gap:14px}
   .card{
     background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.02)), var(--panel);
     border:1px solid var(--border); border-radius:18px; padding:14px 14px; box-shadow:var(--shadow);
+    cursor:pointer;
   }
   .sport-row{display:flex; align-items:center; justify-content:space-between; gap:14px}
   .left{display:flex; align-items:center; gap:14px}
@@ -55,21 +55,20 @@
        padding:9px 14px; border-radius:12px; font-weight:700}
   .cta:active{transform:translateY(1px)}
 
-  /* stepper e griglie */
   .step{display:flex; gap:8px; flex-wrap:wrap; margin:6px 4px 18px}
   .step span{padding:7px 10px; border:1px dashed #2a4065; border-radius:10px; color:#b9cbec; background:#0f2139}
   .grid{display:grid; gap:12px; grid-template-columns:repeat(2,1fr)}
   @media(min-width:700px){ .grid{grid-template-columns:repeat(3,1fr)} }
-  .tile{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px 14px}
+  .tile{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px 14px; cursor:pointer}
   .tile strong{display:block; margin-bottom:6px}
   .tile small{color:var(--muted)}
 
-  /* footer */
   footer{border-top:1px solid var(--border); padding:28px 16px; text-align:center; color:var(--muted)}
   footer a{color:#b9cbec; text-decoration:underline; text-decoration-color:#335a93}
   .hidden{display:none !important}
   .back{margin:8px 4px 16px; display:inline-flex; gap:8px; align-items:center;
         color:#b9cbec; background:#0f223b; border:1px solid var(--border); padding:8px 10px; border-radius:10px}
+  noscript{display:block; background:#3a1f0f; color:#fff; padding:10px 14px; border-left:4px solid #ff9647; margin:10px 0; border-radius:8px}
 </style>
 </head>
 <body>
@@ -83,6 +82,8 @@
 </header>
 
 <main class="wrap">
+  <noscript>JavaScript è disabilitato: l’esplorazione interattiva non funzionerà.</noscript>
+
   <section id="view-home">
     <h1>Scegli lo sport</h1>
     <p class="lead">Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</p>
@@ -114,15 +115,15 @@
     <button class="back" onclick="goBack()">⟵ Indietro</button>
     <h1 id="clubName">Società</h1>
     <div class="step" id="crumbDetail"></div>
-    <div class="card">
-      <div class="sport-row" style="align-items:flex-start">
+    <div class="card" style="cursor:auto">
+      <div class="sport-row" style="align-items:flex-start; cursor:auto">
         <div>
           <div id="clubStatus" class="chip">Stato: —</div>
           <p class="lead" id="clubAbout" style="margin-top:10px">Informazioni società.</p>
           <div class="grid">
-            <div class="tile"><strong>Prossima partita</strong><small id="clubNext">—</small></div>
-            <div class="tile"><strong>Stadio</strong><small id="clubVenue">—</small></div>
-            <div class="tile"><strong>Contatti</strong><small id="clubContact">—</small></div>
+            <div class="tile" style="cursor:auto"><strong>Prossima partita</strong><small id="clubNext">—</small></div>
+            <div class="tile" style="cursor:auto"><strong>Stadio</strong><small id="clubVenue">—</small></div>
+            <div class="tile" style="cursor:auto"><strong>Contatti</strong><small id="clubContact">—</small></div>
           </div>
         </div>
         <button class="cta" onclick="alert('Funzione demo')">Vedi Pre-Match</button>
@@ -189,7 +190,8 @@ function show(id, doPush=true){
   const el = document.getElementById(id);
   el.classList.remove('hidden');
   if(doPush) stack.push(id);
-  window.scrollTo({top:0, behavior:'instant'});
+  // FIX: 'instant' su alcuni browser blocca. Usiamo 'auto'.
+  try{ window.scrollTo({top:0, behavior:'auto'}); }catch(_){ window.scrollTo(0,0); }
 }
 
 /* ---------- RENDER ---------- */
@@ -199,6 +201,8 @@ function renderHome(){
   SPORTS.forEach(s=>{
     const div = document.createElement('div');
     div.className = 'card';
+    div.setAttribute('role','button');
+    div.setAttribute('aria-label',`Apri ${s.name}`);
     div.innerHTML = `
       <div class="sport-row">
         <div class="left">
@@ -213,7 +217,12 @@ function renderHome(){
           <button class="cta" aria-label="Apri ${s.name}">Apri</button>
         </div>
       </div>`;
-    div.querySelector('.cta').onclick = ()=>openSport(s.id);
+    // click sia sul bottone che sulla card
+    div.onclick = (e)=> {
+      // evita doppio click se preme il chip
+      if(e.target.classList.contains('chip')) return;
+      openSport(s.id);
+    };
     list.appendChild(div);
   });
 }
@@ -279,7 +288,7 @@ function openLeague(league){
           </div>
           <button class="cta">Apri</button>
         </div>`;
-      div.querySelector('.cta').onclick = ()=>openClub(c);
+      div.onclick = ()=>openClub(c);
       list.appendChild(div);
     });
   }
