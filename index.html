@@ -1,279 +1,312 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>PreMatch</title><style>
-:root{--bg:#0f172a;--panel:#111827;--panel2:#0b1220;--text:#e5e7eb;--muted:#9aa3b1;--brand:#16a34a;--accent:#3b82f6;--ok:#22c55e;--warn:#ef4444;--card:#0f1b2d;--border:#1f2a44}
-*{box-sizing:border-box}html,body{height:100%}body{margin:0;background:linear-gradient(180deg,#0b1120,#0f172a);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Arial}
-header{position:sticky;top:0;z-index:10;background:rgba(11,17,32,.7);backdrop-filter:blur(8px);border-bottom:1px solid #0f1a2a}
-.topbar{max-width:1100px;margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:12px 16px}
-.brand{display:flex;gap:10px;align-items:center;font-weight:800}
-.brand i{width:28px;height:28px;display:grid;place-items:center;border:1px solid #20304a;border-radius:8px;background:#0b1220}
-.nav a{color:var(--text);text-decoration:none;padding:6px 10px;border-radius:8px}
-.nav a.active{background:#ffffff12}
-.container{max-width:1100px;margin:0 auto;padding:16px}
-.grid{display:grid;gap:12px}
-@media(min-width:720px){.grid{grid-template-columns:repeat(4,1fr)}}
-.card{background:linear-gradient(180deg,#0f1b2d,#0b1220);border:1px solid var(--border);border-radius:14px;padding:14px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid #20304a;background:#0b1220;color:var(--text);text-decoration:none;cursor:pointer}
-.btn.primary{background:linear-gradient(180deg,#1d8f4f,#0f6a3b);border-color:#1a6a46}
-.badge{font-size:12px;border:1px solid #2a3a58;border-radius:999px;padding:2px 8px}
-.ok{color:var(--ok);border-color:#22c55e45;background:#22c55e18}.wait{color:#f87171;border-color:#ef444445;background:#ef444418}
-.input{width:100%;padding:10px;border-radius:10px;border:1px solid #223146;background:#0b1322;color:var(--text)}
-.row{display:grid;gap:10px}@media(min-width:720px){.row{grid-template-columns:1fr 1fr}}
-.small{color:var(--muted);font-size:12px}
-h1{margin:6px 0 12px;font-size:24px}h2{margin:6px 0 10px;font-size:18px}
-footer{padding:22px 16px;color:#8da2c8;text-align:center;border-top:1px solid #10203a;margin-top:24px}
-.hidden{display:none}
-.tile{display:flex;align-items:center;gap:10px;cursor:pointer}
-.ball{width:40px;height:40px;border-radius:50%;background:#16a34a;display:grid;place-items:center;border:1px solid #264;box-shadow:inset 0 0 0 6px #0b1220}
-</style></head><body>
-<header><div class="topbar">
-  <div class="brand"><i>⚽</i><span>PreMatch</span></div>
-  <nav class="nav" id="nav"></nav>
-</div></header>
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PreMatch — Demo Interattiva</title>
+<meta name="description" content="PreMatch: organizza il pre-partita in pochi secondi. Demo interattiva." />
 
-<main class="container" id="app"></main>
-<footer>PreMatch © 2025 — Gratuita, senza pubblicità invadente</footer>
+<style>
+/* ===== THEME GLASS / LAYOUT ===== */
+:root{
+  --bg:#0b1220;
+  --panel:#111827ee;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+  --brand:#16a34a;
+  --accent:#22c55e;
+  --chip:#38bdf8;
+  --danger:#ef4444;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  color:var(--text);
+  background:radial-gradient(90% 60% at 50% 0%,#0d1b31 0%,#0b1220 60%,#090f1a 100%);
+}
+a{color:inherit;text-decoration:none}
+
+/* Topbar */
+.topbar{
+  position:sticky; top:0; z-index:10;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding:12px 14px;
+  background:linear-gradient(180deg,rgba(11,18,32,.85),rgba(11,18,32,.45));
+  border-bottom:1px solid rgba(255,255,255,.06);
+  backdrop-filter: blur(8px);
+}
+.brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px}
+.brand-logo{width:26px; height:26px; display:grid; place-items:center; border-radius:50%;
+  background:#16a34a; color:#0b1220; font-weight:900; box-shadow:0 6px 18px rgba(22,163,74,.45)}
+.actions{display:flex; gap:8px}
+.btn{padding:9px 14px; border-radius:12px; font-weight:700; border:1px solid rgba(255,255,255,.08); cursor:pointer; transition:.18s transform,.18s box-shadow}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--brand); color:#0b1220; box-shadow:0 10px 24px rgba(22,163,74,.35)}
+.btn.ghost{background:rgba(255,255,255,.06)}
+
+/* Container */
+.wrap{max-width:1100px; margin:0 auto; padding:18px 14px 40px}
+
+/* Cards / Tiles */
+.card{background:var(--panel); border:1px solid rgba(255,255,255,.06);
+  border-radius:22px; padding:22px; box-shadow:var(--shadow); backdrop-filter: blur(6px);}
+h1{margin:8px 0 10px; font-size:1.6rem}
+.lead{color:var(--muted); margin:0 0 14px}
+
+.grid{display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+.tile{display:flex; align-items:center; gap:16px; padding:18px 20px; border-radius:20px;
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
+  border:1px solid rgba(255,255,255,.06); position:relative; transition:.18s transform, .18s box-shadow;}
+.tile:hover{box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.tile:active{transform:scale(.985)}
+.label{font-weight:800}
+.sub{font-size:.92rem; color:var(--muted); margin-top:2px}
+.chip{position:absolute; right:14px; top:14px; padding:8px 12px; border-radius:12px;
+  background:#0ea5e9; color:white; font-weight:800; font-size:.9rem; box-shadow:0 4px 12px rgba(14,165,233,.4);}
+
+/* Round sport icon */
+.icon{width:64px; height:64px; border-radius:50%; display:grid; place-items:center;
+  background: radial-gradient(120% 120% at 30% 20%, var(--g1) 0%, var(--g2) 70%);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.06), 0 8px 18px rgba(0,0,0,.35);}
+.icon svg{width:30px; height:30px; filter:drop-shadow(0 1px 0 rgba(0,0,0,.4));}
+
+/* Lists */
+.list{display:grid; gap:14px}
+.item{padding:16px 16px; border-radius:16px; border:1px solid rgba(255,255,255,.06);
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
+  display:flex; align-items:center; justify-content:space-between; gap:12px}
+.item .left{display:flex; align-items:center; gap:12px}
+.logo{width:44px; height:44px; border-radius:12px; background:rgba(255,255,255,.08); display:grid; place-items:center; font-weight:900}
+
+/* Badges */
+.badge{font-weight:800; font-size:.85rem; padding:6px 10px; border-radius:10px}
+.ok{background:rgba(34,197,94,.12); color:#22c55e; border:1px solid rgba(34,197,94,.25)}
+.wait{background:rgba(251,146,60,.12); color:#fb923c; border:1px solid rgba(251,146,60,.25)}
+
+/* Footer */
+.footer{margin-top:18px; text-align:center; color:var(--muted); font-size:.9rem}
+.footer a{color:#9dd2ff}
+
+/* Misc */
+.back{display:inline-flex; align-items:center; gap:8px; margin-bottom:12px; color:#9dd2ff}
+hr.sep{border:none; border-top:1px solid rgba(255,255,255,.06); margin:14px 0}
+@media (max-width:480px){ .icon{width:56px;height:56px} .chip{top:10px;right:10px} }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-logo">PM</div>
+    <div>PreMatch</div>
+  </div>
+  <div class="actions">
+    <a class="btn ghost" href="#/sponsor">Crea account sponsor</a>
+    <a class="btn primary" href="#/login">Login</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="app"></div>
+  <div class="footer">© 2025 PreMatch — Semplice. Pulita. Gratuita. · <a href="#/privacy">Privacy</a> · <a href="#/supporto">Supporto</a></div>
+</main>
 
 <script>
-// ----------------- DATA (demo) -----------------
-const SPORTS=[{id:'calcio',name:'Calcio',ball:'⚽'},{id:'futsal',name:'Futsal',ball:'🥅'},{id:'basket',name:'Basket',ball:'🏀'},{id:'volley',name:'Volley',ball:'🏐'},{id:'rugby',name:'Rugby',ball:'🏉'}];
-const CLUBS=[{slug:'as-stella-verde',sport:'calcio',name:'AS Stella Verde',city:'Napoli',venue:'Stadio Aurora',status:'ok'},
-{slug:'usd-lupi-mare',sport:'calcio',name:'USD Lupi del Mare',city:'Bari',venue:'Impianto Costiero',status:'wait'},
-{slug:'c5-fulmini',sport:'futsal',name:'C5 Fulmini',city:'Roma',venue:'Palazzetto Fulmini',status:'ok'},
-{slug:'bk-aquila',sport:'basket',name:'BK Aquila',city:'Milano',venue:'PalaAquila',status:'ok'}];
-
-const SPONSOR=[ // profili sponsor
- {id:'hotel-aurora',type:'hotel',name:'Hotel Aurora',city:'Napoli',links:{web:'#'}},
- {id:'ristorante-porto',type:'ristorante',name:'Ristorante Il Porto',city:'Bari',links:{web:'#'}},
-];
-const SPONSOR_LINKS={ // sponsor associati alle società
- 'as-stella-verde':['hotel-aurora'],
- 'usd-lupi-mare':['ristorante-porto']
+/* ===== ICONS (SVG) ===== */
+const SVG={
+  calcio:`<svg viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="1.8">
+    <circle cx="12" cy="12" r="9" fill="#ffffff22"/>
+    <path d="M12 6l3 2-1 3-2 1-2-1-1-3 3-2zM7 10l-2 2 2 3m10-5l2 2-2 3M9 18l3-2 3 2" />
+  </svg>`,
+  futsal:`<svg viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="1.8">
+    <rect x="4" y="8" width="16" height="8" rx="2" fill="#ffffff22"/>
+    <path d="M8 12h8M6 10v4m12-4v4" />
+  </svg>`,
+  basket:`<svg viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="2">
+    <circle cx="12" cy="12" r="9" fill="#ffffff22"/>
+    <path d="M3 12h18M12 3v18M6 6l12 12M18 6L6 18"/>
+  </svg>`,
+  volley:`<svg viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="2">
+    <circle cx="12" cy="12" r="9" fill="#ffffff22"/>
+    <path d="M4 12a8 8 0 0016 0M12 4a8 8 0 010 16M6 6a8 8 0 0112 12"/>
+  </svg>`,
+  rugby:`<svg viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="2">
+    <ellipse cx="12" cy="12" rx="9" ry="5" fill="#ffffff22"/>
+    <path d="M3 12h18M7 9l10 6M7 15l10-6"/>
+  </svg>`
 };
 
-// ----------------- NAV -----------------
-function renderNav(){
-  const n=document.getElementById('nav'); n.innerHTML='';
-  [['#/','Home'],['#/explore','Sport'],['#/login','Accedi/Registra']].forEach(([href,label])=>{
-    const a=document.createElement('a'); a.href=href; a.textContent=label;
-    if(location.hash===href||(location.hash===''&&href==='#/')) a.classList.add('active');
-    n.appendChild(a);
-  });
+/* ===== DATA (DEMO) ===== */
+const SPORTS=[
+  {id:'calcio', name:'Calcio',  g1:'#22c55e', g2:'#16a34a', icon:SVG.calcio},
+  {id:'futsal', name:'Futsal',  g1:'#facc15', g2:'#f59e0b', icon:SVG.futsal},
+  {id:'basket', name:'Basket',  g1:'#fb923c', g2:'#f97316', icon:SVG.basket},
+  {id:'volley', name:'Volley',  g1:'#a78bfa', g2:'#6366f1', icon:SVG.volley},
+  {id:'rugby',  name:'Rugby',   g1:'#34d399', g2:'#10b981', icon:SVG.rugby},
+];
+
+const CLUBS={
+  volley:[
+    {id:'imoco',  name:'Imoco Conegliano',  next:'Sabato ore 17:00', status:'ok'},
+    {id:'lube',   name:'Lube Civitanova',    next:'Domenica ore 19:00', status:'wait'},
+  ],
+  calcio:[
+    {id:'juve',   name:'Juventus',           next:'25 Ago 20:45', status:'ok'},
+    {id:'milan',  name:'Milan',              next:'28 Ago 18:30', status:'wait'},
+  ],
+  futsal:[
+    {id:'pesaro', name:'Italservice Pesaro', next:'Venerdì ore 21:00', status:'wait'}
+  ],
+  basket:[
+    {id:'virtus', name:'Virtus Bologna',     next:'Sabato ore 20:30', status:'ok'}
+  ],
+  rugby:[
+    {id:'benetton',name:'Benetton Treviso',  next:'Domenica ore 16:00', status:'ok'}
+  ]
+};
+
+/* ===== ROUTER ===== */
+const app = document.getElementById('app');
+window.addEventListener('hashchange', route);
+window.addEventListener('load', route);
+
+function route(){
+  const hash = location.hash.slice(2); // remove "#/"
+  if(!hash){ return ViewExplore(); }
+  const parts = hash.split('/');
+  if(parts[0]==='sport' && parts[1]) return ViewSport(parts[1]);
+  if(parts[0]==='club'  && parts[1] && parts[2]) return ViewClub(parts[1], parts[2]);
+  if(parts[0]==='login') return ViewLogin();
+  if(parts[0]==='sponsor') return ViewSponsor();
+  if(parts[0]==='privacy') return ViewStatic('Privacy','Questa è una demo senza raccolta dati.');
+  if(parts[0]==='supporto') return ViewStatic('Supporto','Scrivici per domande e assistenza.');
+  return ViewExplore();
 }
 
-// ----------------- VISTE -----------------
-function ViewLogin(){
-  renderNav();
-  const c=document.getElementById('app');
-  c.innerHTML=`
+/* ===== VIEWS ===== */
+function ViewExplore(){
+  app.innerHTML = `
+    <a class="back" href="#/"><span>🏠</span> Home</a>
     <div class="card">
-      <h1>Accedi o Registrati</h1>
-      <div class="row">
-        <button class="btn primary" onclick="location.hash='#/dashboard?as=club'">Entra come Società (demo)</button>
-        <button class="btn" onclick="location.hash='#/register'">Crea account</button>
-      </div>
-      <p class="small" style="margin-top:8px">La registrazione vera sarà verificata; qui è una demo.</p>
-    </div>
-    <div class="card">
-      <h2>Crea account</h2>
-      <div class="row">
-        <button class="btn" onclick="location.hash='#/register?role=utente'">👤 Utente</button>
-        <button class="btn" onclick="location.hash='#/register?role=societa'">🏟️ Società sportiva</button>
-        <button class="btn" onclick="location.hash='#/register?role=sponsor'">💼 Sponsor (Crea account Sponsor)</button>
+      <h1>Scegli lo sport</h1>
+      <p class="lead">Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</p>
+      <div class="grid">
+        ${SPORTS.map(s=>`
+          <a class="tile" href="#/sport/${s.id}" style="--g1:${s.g1}; --g2:${s.g2}">
+            <div class="icon">${s.icon}</div>
+            <div>
+              <div class="label">${s.name}</div>
+              <div class="sub">Apri elenco società</div>
+            </div>
+            <span class="chip">Apri</span>
+          </a>
+        `).join('')}
       </div>
     </div>
   `;
 }
 
-function ViewRegister(params){
-  renderNav();
-  const role=params.role||'utente';
-  const title = role==='sponsor' ? 'Registrazione Sponsor' : role==='societa' ? 'Registrazione Società' : 'Registrazione Utente';
-  const fields = role==='sponsor'
-    ? `<input class="input" placeholder="Ragione sociale / Nome brand">
-       <input class="input" placeholder="Città">
-       <input class="input" placeholder="Sito web (opzionale)">`
-    : role==='societa'
-    ? `<input class="input" placeholder="Nome società">
-       <input class="input" placeholder="Città">
-       <input class="input" placeholder="Impianto sportivo">`
-    : `<input class="input" placeholder="Nome e Cognome">
-       <input class="input" placeholder="Email">`;
-  const c=document.getElementById('app');
-  c.innerHTML=`
+function ViewSport(sportId){
+  const sport = SPORTS.find(s=>s.id===sportId);
+  if(!sport){ return ViewExplore(); }
+  const list = (CLUBS[sportId]||[]);
+  app.innerHTML = `
+    <a class="back" href="#/"><span>←</span> Torna agli sport</a>
+    <div class="card">
+      <h1>Società di ${sport.name}</h1>
+      <div class="list">
+        ${list.map(c=>`
+          <a class="item" href="#/club/${sportId}/${c.id}">
+            <div class="left">
+              <div class="logo">${sport.name[0]}</div>
+              <div>
+                <div class="label">${c.name}</div>
+                <div class="sub">Prossima partita: ${c.next}</div>
+              </div>
+            </div>
+            <span class="badge ${c.status==='ok'?'ok':'wait'}">
+              ${c.status==='ok' ? 'PreMatch confermato' : 'PreMatch in verifica'}
+            </span>
+          </a>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function ViewClub(sportId, clubId){
+  const sport = SPORTS.find(s=>s.id===sportId);
+  const club = (CLUBS[sportId]||[]).find(c=>c.id===clubId);
+  if(!sport || !club){ return ViewSport(sportId); }
+
+  app.innerHTML = `
+    <a class="back" href="#/sport/${sportId}"><span>←</span> Torna a ${sport.name}</a>
+    <div class="card">
+      <h1>${club.name}</h1>
+      <div class="sub" style="margin-bottom:12px">Prossima partita: ${club.next}</div>
+
+      <div class="item" style="margin-bottom:12px">
+        <div class="left">
+          <div class="logo">PM</div>
+          <div>
+            <div class="label">PreMatch</div>
+            <div class="sub">Note, convocazioni, disponibilità, sponsor</div>
+          </div>
+        </div>
+        <span class="badge ${club.status==='ok'?'ok':'wait'}">
+          ${club.status==='ok' ? 'Confermato' : 'In verifica'}
+        </span>
+      </div>
+
+      <button class="btn primary" onclick="alert('Per creare/modificare serve l’accesso società (demo).')">
+        Crea/Modifica PreMatch
+      </button>
+      <hr class="sep">
+      <div class="sub">Se sei questa società: <a href="#/login">accedi</a> o <a href="#/sponsor">contattaci</a> per la verifica.</div>
+    </div>
+  `;
+}
+
+function ViewLogin(){
+  app.innerHTML = `
+    <a class="back" href="#/"><span>←</span> Torna</a>
+    <div class="card">
+      <h1>Login società</h1>
+      <p class="lead">Demo: accesso non reale. Qui, nella versione completa, entrano le società verificate.</p>
+      <button class="btn primary" onclick="alert('Demo: nessun backend. Qui andrebbe l’autenticazione.')">Accedi</button>
+    </div>
+  `;
+}
+
+function ViewSponsor(){
+  app.innerHTML = `
+    <a class="back" href="#/"><span>←</span> Torna</a>
+    <div class="card">
+      <h1>Crea account Sponsor</h1>
+      <p class="lead">Gli sponsor sono gestiti come <b>società</b> (non sportive) con ruolo “Sponsor”.</p>
+      <ul class="lead" style="margin-left:14px">
+        <li>Profilo con logo e descrizione</li>
+        <li>Sponsorizzazioni abbinate alle società</li>
+        <li>Badge sponsor visibile nel PreMatch</li>
+      </ul>
+      <button class="btn primary" onclick="alert('Demo: invio candidatura sponsor. Nella versione reale, modulo + verifica.')">Richiedi verifica</button>
+    </div>
+  `;
+}
+
+function ViewStatic(title, text){
+  app.innerHTML = `
+    <a class="back" href="#/"><span>←</span> Torna</a>
     <div class="card">
       <h1>${title}</h1>
-      <div class="row">${fields}</div>
-      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn primary" onclick="alert('Demo: dati salvati localmente')">Conferma</button>
-        <a class="btn" href="#/login">Torna al login</a>
-      </div>
-      <p class="small" style="margin-top:8px">Gli sponsor avranno pagine dedicate e compariranno nei profili società collegati.</p>
+      <p class="lead">${text}</p>
     </div>
   `;
 }
-
-function ViewHome(){
-  renderNav();
-  const c=document.getElementById('app');
-  c.innerHTML=`
-    <div class="card"><h1>Benvenuto in PreMatch</h1>
-      <p class="small">Gratuita, semplice, senza pubblicità invadente. Gli utenti possono esplorare, le società verificate possono organizzare.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-        <a class="btn primary" href="#/explore">Scegli uno sport</a>
-        <a class="btn" href="#/login">Accedi/Registra</a>
-      </div>
-    </div>
-  `;
-}
-
-function ViewExplore(){
-  renderNav();
-  const c=document.getElementById('app');
-  c.innerHTML=`
-    <div class="card"><h1>Scegli lo sport</h1>
-      <div class="grid" style="margin-top:8px">
-        ${SPORTS.map(s=>`
-          <div class="card tile" onclick="location.hash='#/sport/${s.id}'">
-            <div class="ball">${s.ball}</div>
-            <div>
-              <div style="font-weight:700">${s.name}</div>
-              <div class="small">Esplora società</div>
-            </div>
-          </div>`).join('')}
-      </div>
-    </div>
-  `;
-}
-
-function ViewSport(id){
-  renderNav();
-  const list=CLUBS.filter(c=>c.sport===id);
-  const sportName=(SPORTS.find(s=>s.id===id)||{}).name||id;
-  const c=document.getElementById('app');
-  c.innerHTML=`
-    <div class="card"><h1>${sportName}</h1>
-      <div class="small">Gli utenti possono visitare i profili società (solo lettura).</div>
-      <div class="grid" style="margin-top:10px">
-        ${list.map(cl=>`
-          <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div>
-                <div style="font-weight:700">${cl.name}</div>
-                <div class="small">${cl.city} — ${cl.venue}</div>
-              </div>
-              <span class="badge ${cl.status==='ok'?'ok':'wait'}">${cl.status==='ok'?'PREMATCH CONFIRMATO':'IN ATTESA'}</span>
-            </div>
-            <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-              <a class="btn" href="#/club/${cl.slug}">Apri società</a>
-            </div>
-          </div>`).join('')}
-      </div>
-    </div>
-  `;
-}
-
-function ViewClub(slug){
-  renderNav();
-  const cl=CLUBS.find(c=>c.slug===slug);
-  const sponsors=(SPONSOR_LINKS[slug]||[]).map(id=>SPONSOR.find(s=>s.id===id)).filter(Boolean);
-  const c=document.getElementById('app');
-  c.innerHTML=`
-    <div class="card">
-      <h1>${cl.name}</h1>
-      <div class="small">${cl.city} — ${cl.venue}</div>
-      <div style="margin:10px 0"><span class="badge ${cl.status==='ok'?'ok':'wait'}">${cl.status==='ok'?'PREMATCH CONFIRMATO':'PREMATCH IN ATTESA'}</span></div>
-      <h2>Sponsor ufficiali</h2>
-      ${sponsors.length?`
-        <div class="grid" style="grid-template-columns:repeat(2,1fr)">
-          ${sponsors.map(s=>`
-            <div class="card">
-              <div style="font-weight:700">${s.name}</div>
-              <div class="small">${s.type.toUpperCase()} — ${s.city}</div>
-              <a class="btn" href="#/sponsor/${s.id}">Apri sponsor</a>
-            </div>`).join('')}
-        </div>`:`<div class="small">Nessuno sponsor collegato.</div>`}
-    </div>
-  `;
-}
-
-function ViewSponsor(id){
-  renderNav();
-  const s=SPONSOR.find(x=>x.id===id);
-  const c=document.getElementById('app');
-  c.innerHTML=`
-    <div class="card">
-      <h1>${s.name}</h1>
-      <div class="small">${s.type.toUpperCase()} — ${s.city}</div>
-      <div style="margin-top:8px"><a class="btn" href="${s.links.web}" target="_blank">Visita sito</a></div>
-      <p class="small" style="margin-top:8px">Profilo sponsor: visibile a utenti e società. Nessun accesso a funzioni sportive.</p>
-    </div>
-  `;
-}
-
-function ViewDashboard(params){
-  renderNav();
-  // demo: accesso società “verificata” finto
-  const as=params.as||'club';
-  const c=document.getElementById('app');
-  c.innerHTML=`
-    <div class="card">
-      <h1>Dashboard Società (demo)</h1>
-      <div class="small">Area riservata a società verificate. Qui potrai creare Pre-Match, gestire liste gara, orari e divise.</div>
-      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-        <a class="btn primary" href="#/nuovo">Crea Pre-Match</a>
-        <a class="btn" href="#/explore">Esplora</a>
-      </div>
-    </div>
-  `;
-}
-
-function ViewNuovo(){
-  renderNav();
-  const c=document.getElementById('app');
-  c.innerHTML=`
-    <div class="card">
-      <h1>Crea Pre-Match (demo)</h1>
-      <div class="row">
-        <input class="input" id="club" placeholder="Società (es. AS Stella Verde)">
-        <input class="input" id="opp" placeholder="Avversario (es. USD Lupi del Mare)">
-      </div>
-      <div class="row" style="margin-top:8px">
-        <input class="input" id="dt" type="datetime-local">
-        <input class="input" id="venue" placeholder="Impianto (es. Stadio Aurora)">
-      </div>
-      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn primary" onclick="saveMatch()">Salva (solo locale)</button>
-        <a class="btn" href="#/dashboard">Torna alla dashboard</a>
-      </div>
-      <p class="small" style="margin-top:8px">Demo: i dati restano nel tuo dispositivo (localStorage). Niente server.</p>
-    </div>
-  `;
-}
-
-// ----------------- DEMO STATE -----------------
-const K='pm-demo-match';
-function saveMatch(){
-  const data={club:val('club'),opp:val('opp'),dt:val('dt'),venue:val('venue')};
-  localStorage.setItem(K,JSON.stringify(data));
-  alert('Salvato (demo). Vai sulla tua società per vedere lo stato.');
-}
-function val(id){return (document.getElementById(id)?.value||'').trim();}
-
-// ----------------- ROUTER -----------------
-function parseParams(){const h=location.hash.split('?'); const q=new URLSearchParams(h[1]||''); return Object.fromEntries(q.entries());}
-function route(){
-  const h=location.hash||'#/'; renderNav();
-  const app=document.getElementById('app');
-  if(h==='#/'||h==='#'){ViewHome();return;}
-  if(h.startsWith('#/login')){ViewLogin();return;}
-  if(h.startsWith('#/register')){ViewRegister(parseParams());return;}
-  if(h.startsWith('#/explore')){ViewExplore();return;}
-  if(h.startsWith('#/sport/')){ViewSport(h.split('/')[2]);return;}
-  if(h.startsWith('#/club/')){ViewClub(h.split('/')[2]);return;}
-  if(h.startsWith('#/sponsor/')){ViewSponsor(h.split('/')[2]);return;}
-  if(h.startsWith('#/dashboard')){ViewDashboard(parseParams());return;}
-  if(h.startsWith('#/nuovo')){ViewNuovo();return;}
-  app.innerHTML='<div class="card"><h1>Pagina non trovata</h1></div>';
-}
-window.addEventListener('hashchange',route); route();
 </script>
-</body></html>
+
+</body>
+</html>
