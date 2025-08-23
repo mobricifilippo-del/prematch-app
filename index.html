@@ -1,303 +1,311 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PreMatch — Demo</title>
-<meta name="description" content="PreMatch — Semplice. Pulita. Gratuita.">
-<style>
-:root{
-  --bg:#0b1422; --panel:#0e1c2f; --panel2:#0b1727; --line:#19314d;
-  --text:#e7edf6; --muted:#a7b6c9; --ok:#19c37d; --primary:#2b6dd8; --radius:16px;
-}
-*{box-sizing:border-box} html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial}
-a{color:inherit;text-decoration:none}
-.wrap{max-width:980px;margin:0 auto;padding:20px}
-
-/* NAV */
-.topbar{position:sticky;top:0;z-index:40;background:#0b1422cc;backdrop-filter:blur(6px);border-bottom:1px solid #0f2239}
-.nav{display:flex;align-items:center;gap:18px;padding:14px 16px}
-.logoRing{width:28px;height:28px;border-radius:50%;border:2px solid #23b46f;display:grid;place-items:center}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800}
-.tabs{display:flex;gap:10px;margin-left:auto}
-.tab{padding:8px 12px;border-radius:10px}
-.tab.active{background:#13243a}
-
-/* HOME */
-.hero{margin-top:16px;padding:20px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius)}
-.hero h1{margin:0 0 8px;font-size:34px}
-.hero p{margin:0;color:var(--muted)}
-.cards{display:grid;gap:14px;margin-top:14px}
-.card{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px}
-.iconRing{width:56px;height:56px;display:grid;place-items:center;border-radius:50%;
-  border:2px solid #2a445f;background:#0b1727;box-shadow:inset 0 0 0 6px #0f1b2b}
-.card h3{margin:0 0 2px;font-size:22px}
-.card small{color:var(--muted)}
-.spacer{flex:1}
-.btn{appearance:none;border:1px solid var(--line);background:#0f1e30;color:#dfe8f5;padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer}
-.btn.primary{background:#1f4272;border-color:#2a558f}
-.btn:hover{filter:brightness(1.06)}
-
-/* VIEW 2 */
-.view{display:none}
-.view.active{display:block}
-.box{margin-top:16px;padding:20px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius)}
-h2{margin:0 0 10px}
-.grid{display:grid;gap:10px}
-.grid.cols-3{grid-template-columns:repeat(1,1fr)}
-@media(min-width:700px){.grid.cols-3{grid-template-columns:repeat(3,1fr)}}
-.region{padding:10px;border-radius:12px;background:#0b1727;border:1px solid var(--line);cursor:pointer}
-.region.active{outline:2px solid #2b6dd8}
-.sel{width:100%;padding:12px;border-radius:12px;background:#0b1727;color:var(--text);border:1px solid var(--line)}
-.clubs{margin-top:14px;display:grid;gap:12px}
-@media(min-width:700px){.clubs{grid-template-columns:1fr 1fr}}
-.club{background:#0c1b2d;border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:8px}
-.row{display:flex;align-items:center;gap:10px}
-.badge{font-weight:700;font-size:13px;border-radius:9px;padding:6px 8px}
-.ok{background:#123727;color:#a8f0cf;border:1px solid #1e6c4f}
-.pending{background:#2c1f08;color:#ffd9a6;border:1px solid #7a5212}
-
-/* FOOTER */
-footer{margin:26px 0;color:#b8c6dc} footer a{text-decoration:underline}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PreMatch — Demo</title>
+  <meta name="description" content="PreMatch: semplice, pulita, gratuita. Esplora società e prossime partite."/>
+  <style>
+    :root{
+      --bg:#0b1321;--panel:#0f1f32;--panel2:#0b182a;
+      --text:#e8eef7;--muted:#9fb6cc;--brand:#20c36a;
+      --chip:#0b7bdd;--accent:#6688ff;--shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:16px; --cardgap:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;background:radial-gradient(1200px 600px at 10% -10%, #13213a 0%, transparent 60%) , var(--bg);
+      color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Helvetica,Arial,sans-serif;
+    }
+    a{color:var(--text);text-decoration:none}
+    .wrap{max-width:980px;margin:0 auto;padding:20px}
+    header{
+      position:sticky;top:0;z-index:5;background:rgba(11,19,33,.86);backdrop-filter:blur(6px);
+      border-bottom:1px solid rgba(255,255,255,.06)
+    }
+    .nav{display:flex;align-items:center;gap:14px;padding:12px 16px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .brand img{width:28px;height:28px;border-radius:50%;display:block}
+    .brand span{font-size:18px;letter-spacing:.2px}
+    .spacer{flex:1}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:var(--text);cursor:pointer}
+    .btn.primary{background:var(--brand);border-color:transparent;color:#0b1510;font-weight:700}
+    .btn.chip{background:#0f233a;border-color:#123; color:#cfe5ff}
+    .section{background:linear-gradient(180deg,var(--panel) 0%, var(--panel2) 100%);border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+    .title{font-size:32px;font-weight:800;margin:6px 0 6px}
+    .subtitle{color:var(--muted);margin:0 0 14px;font-size:16px}
+    .grid{display:grid;grid-template-columns:1fr;gap:var(--cardgap)}
+    @media(min-width:700px){ .grid{grid-template-columns:1fr 1fr} }
+    /* card sport */
+    .sportCard{
+      display:flex;align-items:center;gap:16px;padding:16px;border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;background:rgba(255,255,255,.03);transition:.15s;
+    }
+    .sportCard:hover{transform:translateY(-1px);background:rgba(255,255,255,.05)}
+    .sportImg{
+      flex:0 0 64px;width:64px;height:64px;border-radius:50%;
+      overflow:hidden;border:2px solid rgba(255,255,255,.15);box-shadow:0 6px 16px rgba(0,0,0,.35)
+    }
+    .sportImg img{width:100%;height:100%;object-fit:cover}
+    .sportBody{flex:1 1 auto}
+    .sportName{font-weight:800;font-size:22px}
+    .sportSub{color:var(--muted);font-size:14px}
+    .sportActions{display:flex;gap:10px}
+    .pill{padding:8px 12px;border-radius:12px;background:#14243a;color:#cfe5ff;border:1px solid rgba(255,255,255,.08)}
+    /* pannello filtri & risultati */
+    .row{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+    select{background:#0f2136;border:1px solid rgba(255,255,255,.15);color:var(--text);
+      padding:10px 12px;border-radius:10px}
+    .list{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:640px){ .list{grid-template-columns:1fr 1fr} }
+    .card{
+      border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;background:rgba(255,255,255,.03)
+    }
+    .card h4{margin:0 0 4px}
+    footer{padding:32px 16px;color:var(--muted);text-align:center}
+    .link{color:#bcd6ff}
+    .muted{color:var(--muted)}
+  </style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="wrap nav">
-      <div class="brand">
-        <div class="logoRing">
-          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-            <circle cx="8" cy="8" r="6" fill="#0b1422"/>
-            <path d="M8 3l2 1-1 2H7L6 4l2-1Z" fill="#23b46f"/>
-          </svg>
-        </div>
-        PreMatch
-      </div>
-      <div class="tabs">
-        <div class="tab active">Sport</div>
-        <div class="tab">Home</div>
-        <div class="tab">Accedi/Registra</div>
-      </div>
-    </div>
+<header>
+  <div class="nav wrap">
+    <a class="brand" href="#" data-route="home">
+      <img src="images/logo.png" alt="PreMatch logo">
+      <span>PreMatch</span>
+    </a>
+    <span class="spacer"></span>
+    <a class="btn chip" href="#" data-route="sponsor">Crea account sponsor</a>
+    <a class="btn primary" href="#" data-route="login">Login</a>
   </div>
+</header>
 
-  <main class="wrap">
-    <!-- ====== VIEW 1: HOME ====== -->
-    <section id="view-home" class="view active">
-      <div class="hero">
-        <h1>Scegli lo sport</h1>
-        <p>Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</p>
-        <div class="cards" id="sportCards"></div>
-      </div>
-      <footer>PreMatch © 2025 — <em>Semplice. Pulita. Gratuita.</em> · <a href="#">Privacy</a> · <a href="#">Supporto</a></footer>
-    </section>
+<main class="wrap" id="app"></main>
 
-    <!-- ====== VIEW 2: SPORT → REGIONE → GENERE → CAMPIONATO ====== -->
-    <section id="view-sport" class="view">
-      <button class="btn" id="backBtn">← Torna agli sport</button>
-      <div class="box">
-        <h2 id="sportTitle">Seleziona la regione</h2>
-        <div class="grid cols-3" id="regionGrid"></div>
-      </div>
-      <div class="box" id="step2" style="display:none">
-        <h2>Genere e campionato</h2>
-        <div class="grid cols-3">
-          <div>
-            <label for="genderSel">Genere</label>
-            <select id="genderSel" class="sel">
-              <option value="maschile">Maschile</option>
-              <option value="femminile">Femminile</option>
-            </select>
-          </div>
-          <div>
-            <label for="leagueSel">Campionato</label>
-            <select id="leagueSel" class="sel"></select>
-          </div>
-          <div>
-            <label>&nbsp;</label>
-            <button class="btn primary" id="applyBtn" style="width:100%">Applica</button>
-          </div>
-        </div>
-        <div class="clubs" id="clubList"></div>
-      </div>
-    </section>
-  </main>
+<footer>
+  <div>© 2025 PreMatch — <span class="muted">Semplice. Pulita. Gratuita.</span> ·
+    <a class="link" href="#" data-route="privacy">Privacy</a> ·
+    <a class="link" href="#" data-route="supporto">Supporto</a>
+  </div>
+</footer>
 
 <script>
-/* ====== ICONE “PALLONI” (piene, ben riconoscibili) ====== */
-function ballIcon(kind){
-  const P = {
-    calcio : {ring:"#20d07a"},
-    futsal : {ring:"#ffb22e"},
-    basket : {ring:"#ff7a21"},
-    volley : {ring:"#cfd6ff"},
-    rugby  : {ring:"#f4a933"},
-  }[kind] || {ring:"#58c"};
-
-  const base = (inner)=>`
-  <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
-    <circle cx="22" cy="22" r="19" fill="#0b1727" stroke="${P.ring}" stroke-width="2"/>
-    ${inner}
-  </svg>`;
-
-  // Calcio: pallone bianco/nero
-  if(kind==='calcio'){
-    const inner = `
-      <circle cx="22" cy="22" r="13" fill="#ffffff" stroke="${P.ring}" stroke-width="2"/>
-      <g fill="#0b1422">
-        <path d="M22 16l3 2-1 3h-4l-1-3 3-2z"/>
-        <path d="M22 28l-3-2 1-3h4l1 3-3 2z"/>
-        <path d="M16 22l2-3 3 1v4l-3 1-2-3z"/>
-        <path d="M28 22l-2-3-3 1v4l3 1 2-3z"/>
-      </g>`;
-    return base(inner);
-  }
-
-  // Futsal: porta
-  if(kind==='futsal'){
-    const inner = `
-      <rect x="11" y="16" width="22" height="14" rx="2" fill="#0e1c2f" stroke="${P.ring}" stroke-width="2"/>
-      <path d="M13 18h18v10H13z" fill="none" stroke="${P.ring}" stroke-width="1.6"/>
-      <path d="M13 18l18 10M31 18L13 28" stroke="${P.ring}" stroke-width="1.2" opacity=".9"/>`;
-    return base(inner);
-  }
-
-  // Basket: palla arancione with seams
-  if(kind==='basket'){
-    const inner = `
-      <circle cx="22" cy="22" r="13" fill="#ff8a3a" stroke="${P.ring}" stroke-width="2"/>
-      <path d="M22 9v26M9 22h26M15 15c4 4 10 4 14 0M29 29c-4-4-10-4-14 0"
-            stroke="#2b190c" stroke-width="2" fill="none" stroke-linecap="round"/>`;
-    return base(inner);
-  }
-
-  // Volley: palla bianca con spicchi
-  if(kind==='volley'){
-    const inner = `
-      <circle cx="22" cy="22" r="13" fill="#ffffff" stroke="${P.ring}" stroke-width="2"/>
-      <path d="M14 21c6-6 14-4 16-1M14 24c6 6 14 4 16 1M18 14c-2 8 1 14 7 17"
-            stroke="#8ea3cc" stroke-width="2" fill="none" stroke-linecap="round"/>`;
-    return base(inner);
-  }
-
-  // Rugby: ovale marrone con cuciture
-  if(kind==='rugby'){
-    const inner = `
-      <ellipse cx="22" cy="22" rx="14" ry="9" fill="#b7702b" stroke="${P.ring}" stroke-width="2"/>
-      <path d="M16 22h12M19 20l6 4M19 24l6-4" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>`;
-    return base(inner);
-  }
-
-  return base('');
-}
-
-/* ====== DATI ====== */
+/* --------------------------
+   DATI + IMMAGINI SPORT
+---------------------------*/
 const SPORTS = [
-  {id:'calcio',name:'Calcio'},{id:'futsal',name:'Futsal'},
-  {id:'basket',name:'Basket'},{id:'volley',name:'Volley'},{id:'rugby',name:'Rugby'},
+  { key:'calcio',       name:'Calcio',       img:'images/calcio.jpg' },
+  { key:'futsal',       name:'Futsal',       img:'images/futsal.jpg' },
+  { key:'basket',       name:'Basket',       img:'images/basket.jpg' },
+  { key:'volley',       name:'Volley',       img:'images/volley.jpg' },
+  { key:'beachvolley',  name:'Beach Volley', img:'images/beachvolley.jpg' },
+  { key:'pallanuoto',   name:'Pallanuoto',   img:'images/pallanuoto.jpg' },
+  { key:'rugby',        name:'Rugby',        img:'images/rugby.jpg' },
 ];
-const IT_REGIONS = ["Abruzzo","Basilicata","Calabria","Campania","Emilia-Romagna","Friuli-Venezia Giulia","Lazio","Liguria","Lombardia","Marche","Molise","Piemonte","Puglia","Sardegna","Sicilia","Toscana","Trentino-Alto Adige","Umbria","Valle d'Aosta","Veneto"];
-const LEAGUES = {
-  calcio:{ maschile:["Eccellenza","Promozione","Prima Categoria","Juniores","Allievi U17","Giovanissimi U15","Scuola Calcio"],
-           femminile:["Serie C","Eccellenza","Juniores","Allieve U17","Giovanissime U15","Scuola Calcio"] },
-  futsal:{ maschile:["Serie C1","Serie C2","D Juniores","U17","U15","Scuola Calcio a 5"],
-           femminile:["Serie C","Juniores","U17","U15","Scuola Calcio a 5"] },
-  basket:{ maschile:["Serie C","Promozione","U19","U17","U15","Minibasket"],
-           femminile:["Serie B","U19","U17","U15","Minibasket"] },
-  volley:{ maschile:["Serie C","Serie D","U19","U17","U15","Minivolley"],
-           femminile:["Serie C","Serie D","U18","U16","U14","Minivolley"] },
-  rugby :{ maschile:["Serie C","U19","U17","U15","Propaganda"],
-           femminile:["Serie A7","U17","U15","Propaganda"] }
+
+// regioni minime demo
+const REGIONI = ["Abruzzo","Basilicata","Calabria","Campania","Emilia-Romagna","Friuli-Venezia Giulia","Lazio","Liguria","Lombardia","Marche","Molise","Piemonte","Puglia","Sardegna","Sicilia","Toscana","Trentino-Alto Adige","Umbria","Valle d'Aosta","Veneto"];
+
+// campionati demo per sport/genere (estendibili)
+const CAMPIONATI = {
+  calcio:{
+    maschile:["Serie A","Serie B","Serie C","Eccellenza","Promozione","Allievi U17","Giovanissimi U15","Scuola Calcio"],
+    femminile:["Serie A Fem","Serie B Fem","Primavera Fem","U17 Fem","U15 Fem","Scuola Calcio Fem"]
+  },
+  futsal:{
+    maschile:["Serie A","Serie A2","Serie B","C1","U19","U17"],
+    femminile:["Serie A Fem","A2 Fem","C Fem","U19 Fem"]
+  },
+  basket:{
+    maschile:["Serie A","A2","B Naz.","C Gold","U19","U17","U15"],
+    femminile:["A1 Fem","A2 Fem","B Fem","U19 Fem","U17 Fem"]
+  },
+  volley:{
+    maschile:["SuperLega","A2","A3","B","C","U19","U17","U15"],
+    femminile:["A1 Fem","A2 Fem","B1/B2 Fem","C Fem","U18 Fem","U16 Fem"]
+  },
+  beachvolley:{
+    maschile:["Assoluti","Open","Juniores"],
+    femminile:["Assoluti Fem","Open Fem","Juniores Fem"]
+  },
+  pallanuoto:{
+    maschile:["Serie A1","A2","B","Under20","Under17"],
+    femminile:["A1 Fem","A2 Fem","Under20 Fem","Under17 Fem"]
+  },
+  rugby:{
+    maschile:["Top10","Serie A","Serie B","U19","U17"],
+    femminile:["Serie A Fem","Coppa Italia Fem","U17 Fem"]
+  }
 };
-const CLUBS = [
-  {name:"ASD Roma Nord",      sport:"calcio", region:"Lazio",    gender:"maschile",   league:"Eccellenza",       verified:true},
-  {name:"SSD Latina Women",   sport:"calcio", region:"Lazio",    gender:"femminile",  league:"Serie C",          verified:false},
-  {name:"Futsal Ostia",       sport:"futsal", region:"Lazio",    gender:"maschile",   league:"Serie C1",         verified:true},
-  {name:"Virtus Basket Roma", sport:"basket", region:"Lazio",    gender:"maschile",   league:"Promozione",       verified:false},
-  {name:"Volley Viterbo",     sport:"volley", region:"Lazio",    gender:"femminile",  league:"Serie D",          verified:true},
-  {name:"CUS Milano Rugby",   sport:"rugby",  region:"Lombardia",gender:"maschile",   league:"Serie C",          verified:false},
-  {name:"Giovani Aquile",     sport:"calcio", region:"Lazio",    gender:"maschile",   league:"Scuola Calcio",    verified:true},
-  {name:"Aurora Girls",       sport:"volley", region:"Toscana",  gender:"femminile",  league:"U16",              verified:false},
+
+// società demo (in reale verrà da DB)
+const SOCIETA = [
+  { id:1, name:"ASD Roma Calcio", sport:"calcio", regione:"Lazio", genere:"maschile", campionato:"Eccellenza" },
+  { id:2, name:"SS Lazio Women",  sport:"calcio", regione:"Lazio", genere:"femminile", campionato:"Serie B Fem" },
+  { id:3, name:"Città di Fiumicino Futsal", sport:"futsal", regione:"Lazio", genere:"maschile", campionato:"C1" },
+  { id:4, name:"Virtus Basket Milano", sport:"basket", regione:"Lombardia", genere:"maschile", campionato:"B Naz." },
+  { id:5, name:"Volley Firenze Fem", sport:"volley", regione:"Toscana", genere:"femminile", campionato:"B2 Fem" },
 ];
 
-/* ====== DOM ====== */
-const $=s=>document.querySelector(s);
-const sportCards=$("#sportCards");
-const vHome=$("#view-home"), vSport=$("#view-sport");
-const regionGrid=$("#regionGrid"), genderSel=$("#genderSel"), leagueSel=$("#leagueSel");
-const clubList=$("#clubList"), backBtn=$("#backBtn"), sportTitle=$("#sportTitle");
+const qs = new URLSearchParams(location.search);
+const IS_CLUB = qs.get("club")==="1"; // ?club=1 per far vedere "Crea PreMatch"
 
-let CURRENT={sport:null,region:null,gender:'maschile',league:null};
+/* --------------------------
+   ROUTER SEMPLICE
+---------------------------*/
+const $app = document.getElementById("app");
 
-/* ====== HOME (immutabile) ====== */
-function drawSports(){
-  sportCards.innerHTML = SPORTS.map(s=>`
-    <div class="card">
-      <div class="iconRing">${ballIcon(s.id)}</div>
-      <div><h3>${s.name}</h3><small>Esplora società</small></div>
-      <div class="spacer"></div>
-      <button class="btn" data-action="soc" data-id="${s.id}">Società</button>
-      <button class="btn primary" data-action="open" data-id="${s.id}">Apri</button>
-    </div>`).join('');
-  sportCards.querySelectorAll("button").forEach(b=>{
-    b.addEventListener("click",()=>openSport(b.dataset.id));
-  });
-}
-
-/* ====== VIEW 2 ====== */
-function openSport(id){
-  CURRENT={sport:id,region:null,gender:'maschile',league:null};
-  sportTitle.textContent = `Seleziona la regione — ${cap(id)}`;
-  regionGrid.innerHTML = IT_REGIONS.map(r=>`<div class="region" data-r="${r}">${r}</div>`).join('');
-  regionGrid.querySelectorAll(".region").forEach(el=>{
-    el.onclick=()=>{ CURRENT.region=el.dataset.r; regionGrid.querySelectorAll(".region").forEach(x=>x.classList.remove('active')); el.classList.add('active'); step2(); };
-  });
-  vHome.classList.remove('active'); vSport.classList.add('active');
-  window.scrollTo({top:0,behavior:'instant'});
-}
-function step2(){
-  $("#step2").style.display='';
-  genderSel.value=CURRENT.gender;
-  populateLeagues();
-  renderClubs();
-}
-function populateLeagues(){
-  const arr=(LEAGUES[CURRENT.sport]||{})[CURRENT.gender]||[];
-  leagueSel.innerHTML = arr.map(l=>`<option ${l===CURRENT.league?'selected':''}>${l}</option>`).join('');
-  if(!CURRENT.league) CURRENT.league=leagueSel.value||null;
-}
-function renderClubs(){
-  const out = CLUBS.filter(c =>
-    c.sport===CURRENT.sport &&
-    (!CURRENT.region||c.region===CURRENT.region) &&
-    (!CURRENT.gender||c.gender===CURRENT.gender) &&
-    (!CURRENT.league||c.league===CURRENT.league)
-  );
-  clubList.innerHTML = out.length ? out.map(c=>`
-    <div class="club">
-      <div class="row">
-        <div class="iconRing" style="width:44px;height:44px">${ballIcon(c.sport)}</div>
-        <div class="spacer">
-          <div style="font-weight:800">${c.name}</div>
-          <small style="color:var(--muted)">${cap(c.sport)} · ${c.region} · ${cap(c.gender)} · ${c.league}</small>
-        </div>
-        <span class="badge ${c.verified?'ok':'pending'}">${c.verified?'✅ PreMatch confermato':'⏳ In attesa di verifica'}</span>
+function routeHome(){
+  $app.innerHTML = `
+    <section class="section">
+      <div class="title">Scegli lo sport</div>
+      <p class="subtitle">Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</p>
+      <div class="grid">
+        ${SPORTS.map(s=>sportCard(s)).join("")}
       </div>
-    </div>`).join('')
-  : `<div class="club"><strong>Nessuna società trovata</strong>
-     <small style="color:var(--muted)">Scegli un altro campionato o regione.</small></div>`;
+    </section>
+  `;
+  bindHome();
 }
-const cap=s=>s?s[0].toUpperCase()+s.slice(1):s;
+function sportCard(s){
+  return `
+  <div class="sportCard">
+    <div class="sportImg"><img src="${s.img}" alt="${s.name}"></div>
+    <div class="sportBody">
+      <div class="sportName">${s.name}</div>
+      <div class="sportSub">Esplora società</div>
+    </div>
+    <div class="sportActions">
+      <a class="pill" href="#" data-route="societa" data-sport="${s.key}">Società</a>
+      <a class="btn" href="#" data-route="filtri" data-sport="${s.key}">Apri</a>
+    </div>
+  </div>`;
+}
+function bindHome(){
+  [...document.querySelectorAll('[data-route="filtri"]')].forEach(el=>{
+    el.addEventListener("click",(e)=>{
+      e.preventDefault();
+      const sport=el.dataset.sport; renderFiltri(sport);
+    });
+  });
+  [...document.querySelectorAll('[data-route="societa"]')].forEach(el=>{
+    el.addEventListener("click",(e)=>{
+      e.preventDefault();
+      const sport=el.dataset.sport; renderSocieta({sport});
+    });
+  });
+}
 
-/* Bind */
-backBtn.onclick=()=>{ vSport.classList.remove('active'); vHome.classList.add('active'); window.scrollTo({top:0,behavior:'instant'}); };
-$("#applyBtn").onclick=renderClubs;
-genderSel.onchange=(e)=>{ CURRENT.gender=e.target.value; CURRENT.league=null; populateLeagues(); };
-leagueSel.onchange=(e)=>{ CURRENT.league=e.target.value; };
+function renderFiltri(sport){
+  const sObj = SPORTS.find(x=>x.key===sport);
+  const campMas = CAMPIONATI[sport]?.maschile ?? [];
+  const campFem = CAMPIONATI[sport]?.femminile ?? [];
+  $app.innerHTML = `
+    <section class="section">
+      <div class="title">${sObj?.name ?? "Sport"}</div>
+      <p class="subtitle">Scegli regione, genere e campionato.</p>
+      <div class="row">
+        <select id="regSel">
+          <option value="">Regione</option>
+          ${REGIONI.map(r=>`<option>${r}</option>`).join("")}
+        </select>
+        <select id="genSel">
+          <option value="">Genere</option>
+          <option value="maschile">Maschile</option>
+          <option value="femminile">Femminile</option>
+        </select>
+        <select id="campSel" disabled>
+          <option value="">Campionato</option>
+        </select>
+        ${IS_CLUB?`<a class="btn primary" id="btnPre">Crea PreMatch</a>`:""}
+        <a class="btn" href="#" id="btnBack">← Indietro</a>
+      </div>
+      <div class="list" id="resList"></div>
+    </section>
+  `;
+  const regSel = document.getElementById('regSel');
+  const genSel = document.getElementById('genSel');
+  const campSel = document.getElementById('campSel');
+  const resList = document.getElementById('resList');
 
-/* init */
-drawSports();
+  function apply(){
+    const regione = regSel.value||null;
+    const genere  = genSel.value||null;
+    const camp    = campSel.value||null;
+    const out = SOCIETA.filter(x =>
+      x.sport===sport &&
+      (!regione || x.regione===regione) &&
+      (!genere  || x.genere===genere) &&
+      (!camp    || x.campionato===camp)
+    );
+    resList.innerHTML = out.length ? out.map(x=>socCard(x)).join("") : `<div class="muted">Nessuna società trovata con i filtri selezionati.</div>`;
+  }
+  function socCard(s){
+    return `<div class="card">
+      <h4>${s.name}</h4>
+      <div class="muted">${s.regione} · ${s.genere} · ${s.campionato}</div>
+      <div class="row">
+        <a class="pill" href="#" data-open-soc="${s.id}">Apri società</a>
+        ${IS_CLUB?`<a class="btn primary" href="#" data-pre="${s.id}">Crea PreMatch</a>`:""}
+      </div>
+    </div>`;
+  }
+  genSel.addEventListener("change",()=>{
+    const g = genSel.value;
+    const list = g==="maschile" ? campMas : g==="femminile" ? campFem : [];
+    campSel.innerHTML = `<option value="">Campionato</option>` + list.map(c=>`<option>${c}</option>`).join("");
+    campSel.disabled = list.length===0;
+    apply();
+  });
+  [regSel, campSel].forEach(el=>el.addEventListener("change",apply));
+
+  document.getElementById("btnBack").onclick = (e)=>{ e.preventDefault(); routeHome(); };
+  const btnPre = document.getElementById("btnPre");
+  if(btnPre) btnPre.onclick = ()=>alert("Demo: avvio procedura Crea PreMatch (società autenticata)");
+
+  $app.addEventListener("click",(e)=>{
+    const a=e.target.closest("a[data-open-soc]"); if(a){e.preventDefault(); const id=+a.dataset.openSoc; const s=SOCIETA.find(x=>x.id===id); alert("Demo società: "+s.name); }
+    const p=e.target.closest("a[data-pre]"); if(p){e.preventDefault(); const id=+p.dataset.pre; const s=SOCIETA.find(x=>x.id===id); alert("Demo Crea PreMatch vs "+s.name); }
+  });
+
+  apply();
+}
+
+function renderSocieta({sport}){
+  // semplice elenco società per sport
+  const out = SOCIETA.filter(s=>s.sport===sport);
+  const sObj = SPORTS.find(x=>x.key===sport);
+  $app.innerHTML = `
+    <section class="section">
+      <div class="title">Società — ${sObj?.name||""}</div>
+      <div class="row"><a class="btn" href="#" id="btnBack">← Indietro</a></div>
+      <div class="list">
+        ${out.map(s=>`<div class="card">
+          <h4>${s.name}</h4>
+          <div class="muted">${s.regione} · ${s.genere} · ${s.campionato}</div>
+        </div>`).join("") || `<div class="muted">Nessuna società presente in demo per questo sport.</div>`}
+      </div>
+    </section>
+  `;
+  document.getElementById("btnBack").onclick=(e)=>{e.preventDefault(); routeHome();};
+}
+
+// nav header mock
+document.querySelector('header').addEventListener('click',(e)=>{
+  const a=e.target.closest('[data-route]'); if(!a) return;
+  e.preventDefault();
+  const r=a.dataset.route;
+  if(r==='home') routeHome();
+  else if(r==='login') alert('Demo login');
+  else if(r==='sponsor') alert('Demo: crea account sponsor');
+  else alert(r);
+});
+
+// avvio
+routeHome();
 </script>
 </body>
 </html>
