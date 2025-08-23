@@ -2,318 +2,312 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PreMatch</title>
-  <meta name="description" content="PreMatch — semplice, pulita, veloce.">
+  <meta name="description" content="PreMatch — semplice, pulita, veloce" />
+  <link rel="icon" href="images/logo.png" />
   <style>
-    :root{
-      --bg:#0b1321; --panel:#0f1f32; --panel2:#0d1a2a;
-      --text:#e8eef7; --muted:#9fb6cc; --brand:#19c37d; --chip:#0b7bdd; --accent:#6688ff;
-      --radius:16px; --cardgap:18px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:radial-gradient(1000px 600px at 20% -10%, #0f2540 0%, #0b1321 60%, #0b1321 100%); color:var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif}
-    a{color:var(--text); text-decoration:none}
-    .wrap{max-width:980px;margin:0 auto;padding:16px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 8px}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:22px}
-    .brand img{width:34px;height:34px;border-radius:8px}
-    nav a{opacity:.85;margin-left:16px}
-    .hero{background:linear-gradient(180deg, #0f1f32, #0b1321); border:1px solid #1b2b45; border-radius:20px; padding:22px;margin:12px 0 22px}
-    h1{margin:6px 0 10px 0;font-size:36px}
-    .muted{color:var(--muted)}
-    .grid{display:grid;grid-template-columns:1fr;gap:var(--cardgap)}
-    @media (min-width:720px){ .grid{grid-template-columns:1fr} }
-    .card{display:flex;align-items:center;gap:16px;padding:14px;background:linear-gradient(180deg, var(--panel), var(--panel2)); border:1px solid #1a2a45; border-radius:18px}
-    .thumb{width:78px;height:78px;border-radius:16px; overflow:hidden; border:2px solid #223a63; background:#0a1a2e}
-    .thumb img{width:100%;height:100%;object-fit:cover}
-    .card h3{margin:0 0 4px 0;font-size:24px}
-    .row{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
-    .chip{background:#152845;border:1px solid #243c65;padding:8px 12px;border-radius:999px;color:#d7e5f9}
-    .btn{background:#2a55ea;border:none;color:#fff;padding:10px 14px;border-radius:12px;font-weight:700}
-    .btn:disabled{opacity:.5}
-    .section-title{display:flex;align-items:center;justify-content:space-between;margin:22px 0 8px}
-    .list{display:grid;grid-template-columns:1fr;gap:var(--cardgap)}
-    .divider{height:1px;background:#1b2b45;margin:24px 0}
-    .selects{display:grid;gap:10px;grid-template-columns:1fr 1fr}
-    @media (max-width:560px){ .selects{grid-template-columns:1fr} }
-    select{appearance:none;width:100%;padding:12px;border-radius:12px;border:1px solid #27405f;background:#0f1f32;color:var(--text)}
-    .footer{color:#94a9c6;font-size:13px;opacity:.8;margin:18px 0 8px}
-    .empty{padding:14px 0;color:#a9bfd8}
-    .error{padding:12px;border:1px solid #633;border-radius:12px;background:#2b1212;color:#ffd6d6}
+    :root{--bg:#0b1321;--panel:#0f1f32;--panel2:#0d1a2b;--text:#e8eef7;--muted:#9fb6cc;--brand:#1fd175;--accent:#6688ff;--shadow:rgba(0,0,0,.25);--radius:16px;--gap:14px}
+    *{box-sizing:border-box}html,body{height:100%}
+    body{margin:0;background:radial-gradient(1000px 600px at 100% -50%,#0e2742 0%,#081420 65%,#050b13 100%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Helvetica Neue,Arial,Noto Sans}
+    header{display:flex;gap:12px;align-items:center;padding:18px 16px;position:sticky;top:0;z-index:10;background:linear-gradient(to bottom,rgba(5,11,19,.9),rgba(5,11,19,.6));backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.06)}
+    header img{width:34px;height:34px;border-radius:8px;object-fit:cover}.brand{font-weight:800;font-size:22px;letter-spacing:.3px}
+    .wrap{max-width:980px;margin:0 auto;padding:18px 14px 90px}
+    .title h1{margin:.2rem 0 1rem;font-size:28px}.subtitle{color:var(--muted);margin-bottom:22px;line-height:1.4}
+    .list{display:flex;flex-direction:column;gap:var(--gap)}
+    .card{display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center;background:linear-gradient(180deg,var(--panel) 0%,var(--panel2) 100%);border:1px solid rgba(255,255,255,.06);box-shadow:0 8px 24px var(--shadow);padding:12px;border-radius:var(--radius)}
+    .avatar{width:64px;height:64px;border-radius:12px;overflow:hidden;background:#13253a;display:flex;align-items:center;justify-content:center}
+    .avatar img{width:100%;height:100%;object-fit:cover}.card h3{margin:0 0 4px;font-size:20px}.muted{color:var(--muted);font-size:14px}
+    .btn{appearance:none;border:0;cursor:pointer;font-weight:700;padding:10px 14px;border-radius:12px}
+    .btn.sec{background:#1c2a42;color:#cfe3ff}.btn.pri{background:#2c5af5;color:#fff}.btn.ghost{background:transparent;color:#cfe3ff;padding:8px 10px}
+    .chip{display:inline-flex;align-items:center;gap:6px;background:#13253a;color:#cfe3ff;border:1px solid rgba(255,255,255,.07);border-radius:999px;padding:6px 10px;font-size:13px}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+    select,input[type="search"],input[type="datetime-local"],input[type="text"],textarea{background:#0f2136;color:#e8eef7;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 12px;outline:0}
+    .divider{height:1px;background:rgba(255,255,255,.06);margin:22px 0}.footer{color:var(--muted);font-size:13px;margin-top:26px}
+    .back{margin:-6px 0 10px}.hidden{display:none}.empty{color:#9fb6cc;text-align:center;padding:18px}
+    .danger{color:#ff9aa5}.success{color:#4be5a2}.loading{opacity:.7}
+    .selectable{border:2px solid transparent}.selectable.active{border:2px solid var(--accent)}
+    .fab{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:#27c27a;color:#082019;border-radius:999px;padding:12px 18px;box-shadow:0 10px 30px rgba(0,0,0,.35);display:flex;gap:8px;align-items:center;font-weight:800}
+    /* modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5);padding:20px}
+    .modal.show{display:flex}
+    .modal .panel{width:min(560px,96vw);background:#0e1c30;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:16px;box-shadow:0 18px 50px rgba(0,0,0,.55)}
+    .modal .panel h3{margin:6px 0 12px}
+    textarea{min-height:90px;resize:vertical}
+    @media(min-width:780px){.title h1{font-size:32px}}
   </style>
+  <script type="module" src="https://esm.sh/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <img src="images/logo.png" alt="PreMatch logo" />
-        <span>PreMatch</span>
-      </div>
-      <nav>
-        <a href="#">Home</a>
-        <a href="#sport">Sport</a>
-        <a href="#login" id="loginBtn">Accedi/Registrati</a>
-      </nav>
-    </header>
+  <header>
+    <img src="images/logo.png" alt="PreMatch logo" />
+    <div class="brand">PreMatch</div>
+    <div style="margin-left:auto;display:flex;gap:6px">
+      <a class="btn ghost" href="#">Home</a>
+      <a class="btn ghost" href="#sport">Sport</a>
+      <a class="btn ghost" href="#login">Accedi/Registrati</a>
+    </div>
+  </header>
 
-    <section class="hero">
-      <h1>Scegli lo sport</h1>
-      <p class="muted">Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</p>
+  <main class="wrap">
+    <!-- Schermata Sport -->
+    <section id="screen-sport">
+      <div class="title"><h1>Scegli lo sport</h1></div>
+      <div class="subtitle">Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</div>
+      <div class="list" id="sport-list"></div>
     </section>
 
-    <!-- SPORT -->
-    <div class="grid" id="sportGrid"></div>
+    <!-- Schermata Società -->
+    <section id="screen-clubs" class="hidden">
+      <button class="btn sec back" id="back-to-sport">⟵ Indietro</button>
+      <div class="toolbar">
+        <span class="chip" id="selected-sport-tag"></span>
+        <select id="filter-regione"><option value="">Tutte le regioni</option></select>
+        <select id="filter-genere">
+          <option value="">Genere: tutti</option>
+          <option value="M">Maschile</option>
+          <option value="F">Femminile</option>
+        </select>
+        <input id="filter-q" type="search" placeholder="Cerca società…" />
+      </div>
+      <div class="title"><h1>Società</h1></div>
+      <div class="list" id="club-list"></div>
+      <div class="empty hidden" id="clubs-empty">Nessuna società trovata per i filtri applicati.</div>
+    </section>
 
     <div class="divider"></div>
+    <div class="footer">© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
+  </main>
 
-    <!-- FILTRI -->
-    <div class="section-title"><h2>Filtri</h2></div>
-    <div class="selects">
-      <select id="selSport"><option value="">Sport…</option></select>
-      <select id="selGenere">
-        <option value="">Genere…</option>
-        <option value="M">Maschile</option>
-        <option value="F">Femminile</option>
-      </select>
-      <select id="selRegione"><option value="">Regione…</option></select>
-      <select id="selCategoria"><option value="">Categoria…</option></select>
-      <select id="selGirone"><option value="">Girone…</option></select>
+  <!-- Barra azione Crea PreMatch -->
+  <button id="fab-prematch" class="fab hidden">🤝 CREA PREMATCH</button>
+
+  <!-- Modal PreMatch -->
+  <div class="modal" id="modal">
+    <div class="panel">
+      <h3>Crea PreMatch</h3>
+      <div id="pm-summary" class="muted" style="margin:6px 0 12px"></div>
+      <div class="toolbar" style="margin:8px 0">
+        <input id="pm-date" type="datetime-local" />
+        <input id="pm-place" type="text" placeholder="Luogo (facoltativo)" style="flex:1" />
+      </div>
+      <textarea id="pm-notes" placeholder="Note (facoltative)"></textarea>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+        <button id="pm-cancel" class="btn sec">Annulla</button>
+        <button id="pm-save" class="btn pri">Salva</button>
+      </div>
+      <div id="pm-msg" class="muted" style="margin-top:8px"></div>
     </div>
-
-    <!-- SOCIETÀ -->
-    <div class="section-title"><h2>Società</h2><span class="muted" id="clubsCount"></span></div>
-    <div class="list" id="clubs"></div>
-
-    <!-- PREMATCH -->
-    <div class="section-title"><h2>PreMatch</h2></div>
-    <div class="list" id="prematch"></div>
-
-    <div class="footer">© PreMatch — semplice, pulita, veloce. Privacy-friendly.</div>
   </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script>
-/* ==============================
-   1) INSERISCI QUI I TUOI VALORI
-   ============================== */
-const SUPABASE_URL       = "PASTE_YOUR_PROJECT_URL_HERE";        // <- incolla qui (es. https://xxxx.supabase.co)
-const SUPABASE_ANON_KEY  = "PASTE_YOUR_ANON_PUBLIC_KEY_HERE";    // <- incolla qui
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-/* ===================================================================================
-   2) CLIENT SUPABASE
-   =================================================================================== */
-if (!SUPABASE_URL.startsWith("http") || SUPABASE_ANON_KEY.length < 20) {
-  document.body.insertAdjacentHTML("afterbegin",
-    '<div class="wrap"><div class="error">Configura Supabase: apri <b>Project Settings → API</b>, copia <b>Project URL</b> e <b>anon public</b> e incollali nelle costanti <code>SUPABASE_URL</code> e <code>SUPABASE_ANON_KEY</code>.</div></div>');
-}
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // -------------------------------
+    // Configurazione Supabase
+    // -------------------------------
+    const SUPABASE_URL  = "https://hzzhypahrzclvfepstro.supabase.co";
+    const SUPABASE_ANON = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6emh5cGFocnpjbHZmZXBzdHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0NDAxNDUsImV4cCI6MjA3MTAxNjE0NX0.7niKgLcuDKQZQZxkQfxMYzz9fPT4Mm5wzWeq6r87TIY // <<<<< INCOLLA LA ANON KEY
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-/* ===================================================================================
-   3) MAPPATURA IMMAGINI SPORT (usa i file che hai in /images)
-   =================================================================================== */
-const sportImagesByName = {
-  "Calcio":        "images/calcio.jpg",
-  "Futsal":        "images/futsal.jpg",
-  "Basket":        "images/basket.jpg",
-  "Volley":        "images/volley.jpg",
-  "Beach Volley":  "images/beachvolley.jpg",
-  "Pallanuoto":    "images/pallanuoto.jpg",
-  "Rugby":         "images/rugby.jpg"
-};
+    // Immagini sport
+    const sportImage = {
+      "Calcio":"images/calcio.jpg",
+      "Futsal":"images/futsal.jpg",
+      "Basket":"images/basket.jpg",
+      "Volley":"images/volley.jpg",
+      "Beach Volley":"images/beachvolley.jpg",
+      "Pallanuoto":"images/pallanuoto.jpg",
+      "Rugby":"images/rugby.jpg"
+    };
 
-/* ===================================================================================
-   4) UI HELPERS
-   =================================================================================== */
-const $ = sel => document.querySelector(sel);
-const $$ = sel => Array.from(document.querySelectorAll(sel));
-const state = {
-  sport: null, sportName: null,
-  regione: null, regioneName: null,
-  genere: null,
-  categoria: null, categoriaLabel: null,
-  girone: null, gironeName: null
-};
-function setText(el, txt){ if(el) el.textContent = txt; }
+    // Stato
+    const state = {
+      sport:null,
+      clubsRaw:[],
+      clubsFiltered:[],
+      filters:{ regione:"", genere:"", q:"" },
+      selCasa:null,
+      selOspite:null
+    };
 
-/* ===================================================================================
-   5) CARICAMENTO SPORT (griglia in alto)
-   =================================================================================== */
-async function loadSports(){
-  const { data, error } = await supabase.from('sports').select('id, nome').order('nome', {ascending:true});
-  if (error){ console.error(error); return; }
-  const grid = $('#sportGrid');
-  grid.innerHTML = '';
-  for (const s of data){
-    // card sport
-    const img = sportImagesByName[s.nome] || 'images/logo.png';
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="thumb"><img src="${img}" alt="${s.nome}"></div>
-      <div style="flex:1">
-        <h3>${s.nome}</h3>
-        <div class="muted">Esplora società</div>
-      </div>
-      <button class="btn" data-open="${s.id}">Apri</button>
-    `;
-    // click su "Apri" → imposta sport e aggiorna filtri
-    card.querySelector('button').addEventListener('click', ()=>{
-      $('#selSport').value = s.id;
-      state.sport = s.id; state.sportName = s.nome;
-      refreshFiltersAndClubs();
-      window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
-    });
-    grid.appendChild(card);
-  }
+    // DOM
+    const elSportList   = document.getElementById("sport-list");
+    const elScreenSport = document.getElementById("screen-sport");
+    const elScreenClubs = document.getElementById("screen-clubs");
+    const elClubList    = document.getElementById("club-list");
+    const elClubsEmpty  = document.getElementById("clubs-empty");
+    const elSportTag    = document.getElementById("selected-sport-tag");
+    const elBackBtn     = document.getElementById("back-to-sport");
+    const elFab         = document.getElementById("fab-prematch");
+    const elRegione     = document.getElementById("filter-regione");
+    const elGenere      = document.getElementById("filter-genere");
+    const elQ           = document.getElementById("filter-q");
 
-  // anche il <select> Sport
-  const sel = $('#selSport');
-  sel.innerHTML = '<option value="">Sport…</option>' + data.map(s => `<option value="${s.id}">${s.nome}</option>`).join('');
-}
+    // Modal
+    const elModal   = document.getElementById("modal");
+    const elPmSum   = document.getElementById("pm-summary");
+    const elPmDate  = document.getElementById("pm-date");
+    const elPmPlace = document.getElementById("pm-place");
+    const elPmNotes = document.getElementById("pm-notes");
+    const elPmMsg   = document.getElementById("pm-msg");
+    document.getElementById("pm-cancel").onclick=()=>elModal.classList.remove("show");
+    document.getElementById("pm-save").onclick=savePreMatch;
 
-/* ===================================================================================
-   6) FILTRI: regioni / categorie / gironi
-   =================================================================================== */
-async function loadRegioni(){
-  const { data, error } = await supabase.from('regioni').select('id, nome').order('nome', {ascending:true});
-  if (error){ console.error(error); return; }
-  $('#selRegione').innerHTML = '<option value="">Regione…</option>' + data.map(r=>`<option value="${r.id}">${r.nome}</option>`).join('');
-}
+    elBackBtn.onclick=()=>showScreen("sport");
+    elFab.onclick= openPreMatch;
 
-async function loadCategorie(){
-  // categorie in base a sport + (opzionale) regione + genere
-  if (!state.sport){ $('#selCategoria').innerHTML = '<option value="">Categoria…</option>'; return; }
-  let q = supabase.from('categorie').select('id, nome').eq('sport_id', state.sport).order('nome', {ascending:true});
-  if (state.regione) q = q.eq('regione_id', state.regione);
-  if (state.genere)  q = q.eq('genere', state.genere);
-  const { data, error } = await q;
-  if (error){ console.error(error); return; }
-  $('#selCategoria').innerHTML = '<option value="">Categoria…</option>' + data.map(c=>`<option value="${c.id}">${c.nome}</option>`).join('');
-  // reset gironi
-  $('#selGirone').innerHTML = '<option value="">Girone…</option>';
-}
+    // -------------------------------
+    // UI helpers
+    // -------------------------------
+    function showScreen(name){
+      if(name==="sport"){ elScreenSport.classList.remove("hidden"); elScreenClubs.classList.add("hidden"); }
+      else{ elScreenSport.classList.add("hidden"); elScreenClubs.classList.remove("hidden"); }
+    }
+    function setFabVisible(v){ elFab.classList.toggle("hidden", !v); }
 
-async function loadGironi(){
-  if (!state.categoria){ $('#selGirone').innerHTML = '<option value="">Girone…</option>'; return; }
-  const { data, error } = await supabase.from('gironi').select('id, nome').eq('categoria_id', state.categoria).order('nome', {ascending:true});
-  if (error){ console.error(error); return; }
-  $('#selGirone').innerHTML = '<option value="">Girone…</option>' + data.map(g=>`<option value="${g.id}">${g.nome}</option>`).join('');
-}
+    // render sport
+    function cardSport(s){
+      const img=sportImage[s.nome]||"images/logo.png";
+      return `
+        <div class="card">
+          <div class="avatar"><img src="${img}" alt="${s.nome}"></div>
+          <div><h3>${s.nome}</h3><div class="muted">Esplora società</div></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn sec" data-act="clubs" data-id="${s.id}">Società</button>
+            <button class="btn pri" data-act="open"  data-id="${s.id}">Apri</button>
+          </div>
+        </div>`;
+    }
+    function renderSports(list){
+      elSportList.innerHTML=list.map(cardSport).join("");
+      elSportList.onclick=async e=>{
+        const t=e.target.closest("[data-act]"); if(!t) return;
+        const id=t.getAttribute("data-id");
+        const s=list.find(x=>String(x.id)===String(id)); if(!s) return;
+        await selectSport(s);
+      }
+    }
 
-/* ===================================================================================
-   7) SOCIETA' (lista in basso)
-   =================================================================================== */
-async function loadClubs(){
-  let q = supabase.from('societa').select('id, nome, sport_id, regione_id, categoria_id, girone_id').order('nome', {ascending:true});
-  if (state.sport)     q = q.eq('sport_id', state.sport);
-  if (state.regione)   q = q.eq('regione_id', state.regione);
-  if (state.categoria) q = q.eq('categoria_id', state.categoria);
-  if (state.girone)    q = q.eq('girone_id', state.girone);
+    // render clubs
+    function cardClub(c){
+      const isCasa = state.selCasa && state.selCasa.id===c.id;
+      const isOsp  = state.selOspite && state.selOspite.id===c.id;
+      const role = isCasa ? " (CASA)" : isOsp ? " (OSPITE)" : "";
+      return `
+        <div class="card selectable ${isCasa||isOsp?'active':''}" data-club="${c.id}">
+          <div class="avatar"><img src="${sportImage[state.sport?.nome]||'images/logo.png'}" alt=""></div>
+          <div>
+            <h3>${c.nome}${role}</h3>
+            <div class="muted">${c.comune||""} ${c.regione_nome?("· "+c.regione_nome):""} ${c.genere?("· "+(c.genere==='M'?'M':'F')):""}</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn sec" data-ruolo="casa"   data-id="${c.id}">Casa</button>
+            <button class="btn pri" data-ruolo="ospite" data-id="${c.id}">Ospite</button>
+          </div>
+        </div>`;
+    }
+    function renderClubs(){
+      const L=state.clubsFiltered;
+      if(!L.length){ elClubList.innerHTML=""; elClubsEmpty.classList.remove("hidden"); }
+      else{ elClubsEmpty.classList.add("hidden"); elClubList.innerHTML=L.map(cardClub).join(""); }
+      setFabVisible(!!(state.selCasa&&state.selOspite));
+    }
 
-  const { data, error } = await q;
-  const list = $('#clubs');
-  list.innerHTML = '';
-  if (error){ console.error(error); list.innerHTML = '<div class="empty">Errore nel caricamento società.</div>'; return; }
-  if (!data || !data.length){ list.innerHTML = '<div class="empty">Nessuna società trovata con i filtri selezionati.</div>'; setText($('#clubsCount'), '0'); return; }
+    // -------------------------------
+    // Data
+    // -------------------------------
+    async function loadSports(){
+      if(!SUPABASE_ANON || SUPABASE_ANON.startsWith("INCOLLA_")){
+        elSportList.innerHTML = `<div class="empty"><div class="danger" style="margin-bottom:6px">Configurazione mancante</div>Incolla la tua <b>ANON KEY</b> Supabase nel codice.</div>`;
+        return;
+      }
+      const {data,error}=await supabase.from("sports").select("id,nome").order("nome");
+      if(error){ console.error(error); elSportList.innerHTML=`<div class="empty danger">Errore nel caricamento sport</div>`; return; }
+      renderSports(data||[]);
+    }
 
-  setText($('#clubsCount'), `${data.length} risultati`);
-  for (const c of data){
-    const sportName = state.sportName || '';
-    const card = document.createElement('div');
-    card.className = 'card';
-    const img = sportImagesByName[sportName] || 'images/logo.png';
-    card.innerHTML = `
-      <div class="thumb"><img src="${img}" alt=""></div>
-      <div style="flex:1">
-        <h3>${c.nome}</h3>
-        <div class="row">
-          ${sportName? `<span class="chip">${sportName}</span>`:``}
-          ${state.regioneName? `<span class="chip">${state.regioneName}</span>`:``}
-          ${state.categoriaLabel? `<span class="chip">${state.categoriaLabel}</span>`:``}
-          ${state.gironeName? `<span class="chip">${state.gironeName}</span>`:``}
-        </div>
-      </div>
-      <button class="btn" data-prematch="${c.id}">Crea PreMatch</button>
-    `;
-    card.querySelector('button').addEventListener('click', ()=> createPrematch(c));
-    list.appendChild(card);
-  }
-}
+    async function selectSport(sport){
+      state.sport=sport; state.selCasa=null; state.selOspite=null;
+      elSportTag.textContent=sport.nome;
+      showScreen("clubs");
 
-/* ===================================================================================
-   8) HANDLERS FILTRI
-   =================================================================================== */
-$('#selSport').addEventListener('change', async (e)=>{
-  state.sport = e.target.value || null;
-  state.sportName = $('#selSport').selectedOptions[0]?.textContent || null;
-  // reset campi cascata
-  state.categoria = state.girone = null;
-  $('#selCategoria').value = ''; $('#selGirone').value = '';
-  await loadCategorie();
-  await loadClubs();
-});
+      // regioni per select
+      const {data:reg}=await supabase.from("regioni").select("id,nome").order("nome");
+      elRegione.innerHTML=`<option value="">Tutte le regioni</option>`+(reg||[]).map(r=>`<option value="${r.id}">${r.nome}</option>`).join("");
 
-$('#selGenere').addEventListener('change', async (e)=>{
-  state.genere = e.target.value || null;
-  await loadCategorie();
-  await loadClubs();
-});
+      // società per sport
+      const {data,error}=await supabase.from("societa")
+        .select("id,nome,comune,regione_id,genere, regioni:regione_id(nome)")
+        .eq("sport_id", sport.id)
+        .order("nome");
+      if(error){ console.error(error); state.clubsRaw=[]; state.clubsFiltered=[]; renderClubs(); return; }
 
-$('#selRegione').addEventListener('change', async (e)=>{
-  state.regione = e.target.value || null;
-  state.regioneName = $('#selRegione').selectedOptions[0]?.textContent || null;
-  await loadCategorie();
-  await loadClubs();
-});
+      state.clubsRaw=(data||[]).map(r=>({ ...r, regione_nome:r.regioni?.nome??null }));
+      applyFilters();
+      // listeners filtri
+      elRegione.onchange=()=>{ state.filters.regione=elRegione.value; applyFilters(); };
+      elGenere.onchange=()=>{ state.filters.genere=elGenere.value; applyFilters(); };
+      elQ.oninput=()=>{ state.filters.q=elQ.value.toLowerCase().trim(); applyFilters(); };
 
-$('#selCategoria').addEventListener('change', async (e)=>{
-  state.categoria = e.target.value || null;
-  state.categoriaLabel = $('#selCategoria').selectedOptions[0]?.textContent || null;
-  await loadGironi();
-  await loadClubs();
-});
+      // gestione click assegnazione casa/ospite
+      elClubList.onclick=e=>{
+        const btn=e.target.closest("[data-ruolo]");
+        if(btn){
+          const id=btn.getAttribute("data-id");
+          const club=state.clubsFiltered.find(x=>String(x.id)===String(id)); if(!club) return;
+          if(btn.dataset.ruolo==="casa"){ state.selCasa = club; if(state.selOspite && state.selOspite.id===club.id) state.selOspite=null; }
+          else                         { state.selOspite= club; if(state.selCasa  && state.selCasa.id===club.id)  state.selCasa=null; }
+          renderClubs(); return;
+        }
+        const box=e.target.closest("[data-club]");
+        if(box){ /* toggle visuale handled via Casa/Ospite */ }
+      };
+    }
 
-$('#selGirone').addEventListener('change', async (e)=>{
-  state.girone = e.target.value || null;
-  state.gironeName = $('#selGirone').selectedOptions[0]?.textContent || null;
-  await loadClubs();
-});
+    function applyFilters(){
+      let L=[...state.clubsRaw];
+      if(state.filters.regione) L=L.filter(c=>String(c.regione_id)===String(state.filters.regione));
+      if(state.filters.genere)  L=L.filter(c=>(c.genere||"")===state.filters.genere);
+      if(state.filters.q)       L=L.filter(c=>c.nome.toLowerCase().includes(state.filters.q) || (c.comune||"").toLowerCase().includes(state.filters.q));
+      state.clubsFiltered=L;
+      renderClubs();
+    }
 
-/* ===================================================================================
-   9) CREAZIONE PREMATCH (placeholder locale + messaggio)
-   =================================================================================== */
-async function createPrematch(club){
-  // Qui potrai agganciare la vera tabella `prematch`.
-  // Per ora mostriamo solo un feedback “mock”.
-  const box = $('#prematch');
-  const el = document.createElement('div');
-  el.className = 'card';
-  el.innerHTML = `
-    <div class="thumb"><img src="${sportImagesByName[state.sportName] || 'images/logo.png'}" alt=""></div>
-    <div style="flex:1">
-      <h3>PreMatch creato (bozza)</h3>
-      <div class="muted">Società: <b>${club.nome}</b>${state.categoriaLabel? ' — ' + state.categoriaLabel:''}${state.gironeName? ' — ' + state.gironeName:''}</div>
-    </div>
-    <button class="btn" disabled>In arrivo</button>
-  `;
-  box.prepend(el);
-}
+    // -------------------------------
+    // PreMatch
+    // -------------------------------
+    function openPreMatch(){
+      if(!(state.selCasa&&state.selOspite)) return;
+      elPmSum.innerHTML = `<b>${state.selCasa.nome}</b> vs <b>${state.selOspite.nome}</b> — <span class="muted">${state.sport.nome}</span>`;
+      elPmDate.value = "";
+      elPmPlace.value = "";
+      elPmNotes.value = "";
+      elPmMsg.textContent="";
+      elModal.classList.add("show");
+    }
 
-/* ===================================================================================
-   10) BOOTSTRAP
-   =================================================================================== */
-async function refreshFiltersAndClubs(){
-  await loadCategorie();
-  await loadGironi();
-  await loadClubs();
-}
-(async function init(){
-  await loadSports();
-  await loadRegioni();
-  await loadClubs();
-})();
-</script>
+    async function savePreMatch(){
+      const when = elPmDate.value || null;
+      const luogo = elPmPlace.value.trim() || null;
+      const note  = elPmNotes.value.trim() || null;
+      elPmMsg.textContent="Salvataggio in corso…";
+
+      const payload = {
+        sport_id: state.sport.id,
+        casa_id:  state.selCasa.id,
+        ospite_id:state.selOspite.id,
+        data: when ? new Date(when).toISOString() : null,
+        luogo, note
+      };
+      const { error } = await supabase.from("prematch").insert(payload);
+      if(error){ console.error(error); elPmMsg.innerHTML=`<span class="danger">Errore: ${error.message}</span>`; return; }
+      elPmMsg.innerHTML=`<span class="success">PreMatch creato!</span>`;
+      setTimeout(()=>elModal.classList.remove("show"), 700);
+    }
+
+    // avvio
+    loadSports();
+  </script>
 </body>
 </html>
