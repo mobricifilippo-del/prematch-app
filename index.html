@@ -5,104 +5,79 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>PreMatch — Demo Interattiva</title>
 <meta name="description" content="PreMatch: organizza il pre-partita in pochi secondi. Demo interattiva." />
-
 <style>
-/* ===== THEME GLASS / LAYOUT ===== */
 :root{
-  --bg:#0b1220;
-  --panel:#111827ee;
-  --text:#e5e7eb;
-  --muted:#94a3b8;
-  --brand:#16a34a;
-  --accent:#22c55e;
-  --chip:#38bdf8;
-  --danger:#ef4444;
-  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --bg:#0b1220; --panel:#111827ee; --text:#e5e7eb; --muted:#94a3b8;
+  --brand:#16a34a; --accent:#22c55e; --chip:#38bdf8; --shadow:0 10px 30px rgba(0,0,0,.35)
 }
-*{box-sizing:border-box}
-html,body{height:100%}
+*{box-sizing:border-box} html,body{height:100%}
 body{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  color:var(--text);
+  margin:0; color:var(--text);
+  font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
   background:radial-gradient(90% 60% at 50% 0%,#0d1b31 0%,#0b1220 60%,#090f1a 100%);
 }
 a{color:inherit;text-decoration:none}
 
 /* Topbar */
-.topbar{
-  position:sticky; top:0; z-index:10;
-  display:flex; align-items:center; justify-content:space-between;
-  gap:12px; padding:12px 14px;
-  background:linear-gradient(180deg,rgba(11,18,32,.85),rgba(11,18,32,.45));
-  border-bottom:1px solid rgba(255,255,255,.06);
-  backdrop-filter: blur(8px);
-}
-.brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px}
-.brand-logo{width:26px; height:26px; display:grid; place-items:center; border-radius:50%;
-  background:#16a34a; color:#0b1220; font-weight:900; box-shadow:0 6px 18px rgba(22,163,74,.45)}
-.actions{display:flex; gap:8px}
-.btn{padding:9px 14px; border-radius:12px; font-weight:700; border:1px solid rgba(255,255,255,.08); cursor:pointer; transition:.18s transform,.18s box-shadow}
+.topbar{position:sticky; top:0; z-index:10; display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding:12px 14px; background:linear-gradient(180deg,rgba(11,18,32,.85),rgba(11,18,32,.45));
+  border-bottom:1px solid rgba(255,255,255,.06); backdrop-filter: blur(8px)}
+.brand{display:flex; align-items:center; gap:10px; font-weight:800}
+.brand-logo{width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:#16a34a;color:#0b1220;font-weight:900;box-shadow:0 6px 18px rgba(22,163,74,.45)}
+.actions{display:flex;gap:8px}
+.btn{padding:9px 14px;border-radius:12px;font-weight:700;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:.18s transform,.18s box-shadow}
 .btn:active{transform:scale(.98)}
-.btn.primary{background:var(--brand); color:#0b1220; box-shadow:0 10px 24px rgba(22,163,74,.35)}
+.btn.primary{background:var(--brand);color:#0b1220;box-shadow:0 10px 24px rgba(22,163,74,.35)}
 .btn.ghost{background:rgba(255,255,255,.06)}
 
 /* Container */
-.wrap{max-width:1100px; margin:0 auto; padding:18px 14px 40px}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 14px 40px}
 
-/* Cards / Tiles */
-.card{background:var(--panel); border:1px solid rgba(255,255,255,.06);
-  border-radius:22px; padding:22px; box-shadow:var(--shadow); backdrop-filter: blur(6px);}
-h1{margin:8px 0 10px; font-size:1.6rem}
-.lead{color:var(--muted); margin:0 0 14px}
+/* HERO */
+.hero{padding:10px 0 18px}
+.hero h1{margin:6px 0 4px;font-size:2rem}
+.hero p{margin:0;color:var(--muted)}
 
-.grid{display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
-.tile{display:flex; align-items:center; gap:16px; padding:18px 20px; border-radius:20px;
+/* Tiles grid */
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:18px}
+.tile{display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:20px;
   background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
-  border:1px solid rgba(255,255,255,.06); position:relative; transition:.18s transform, .18s box-shadow;}
-.tile:hover{box-shadow:0 8px 24px rgba(0,0,0,.35)}
-.tile:active{transform:scale(.985)}
-.label{font-weight:800}
-.sub{font-size:.92rem; color:var(--muted); margin-top:2px}
-.chip{position:absolute; right:14px; top:14px; padding:8px 12px; border-radius:12px;
-  background:#0ea5e9; color:white; font-weight:800; font-size:.9rem; box-shadow:0 4px 12px rgba(14,165,233,.4);}
+  border:1px solid rgba(255,255,255,.06); position:relative;transition:.18s transform,.18s box-shadow}
+.tile:hover{box-shadow:0 8px 24px rgba(0,0,0,.35)} .tile:active{transform:scale(.985)}
+.label{font-weight:800} .sub{font-size:.92rem;color:var(--muted);margin-top:2px}
+.chip{position:absolute;right:14px;top:14px;padding:8px 12px;border-radius:12px;background:#0ea5e9;color:#fff;
+  font-weight:800;font-size:.9rem;box-shadow:0 4px 12px rgba(14,165,233,.4)}
 
 /* Round sport icon */
-.icon{width:64px; height:64px; border-radius:50%; display:grid; place-items:center;
-  background: radial-gradient(120% 120% at 30% 20%, var(--g1) 0%, var(--g2) 70%);
-  box-shadow:inset 0 0 0 2px rgba(255,255,255,.06), 0 8px 18px rgba(0,0,0,.35);}
-.icon svg{width:30px; height:30px; filter:drop-shadow(0 1px 0 rgba(0,0,0,.4));}
+.icon{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(120% 120% at 30% 20%,var(--g1) 0%,var(--g2) 70%);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.06),0 8px 18px rgba(0,0,0,.35)}
+.icon svg{width:30px;height:30px;filter:drop-shadow(0 1px 0 rgba(0,0,0,.4))}
 
-/* Lists */
-.list{display:grid; gap:14px}
-.item{padding:16px 16px; border-radius:16px; border:1px solid rgba(255,255,255,.06);
+/* Lists / cards */
+.card{background:var(--panel);border:1px solid rgba(255,255,255,.06);border-radius:22px;padding:22px;box-shadow:var(--shadow);backdrop-filter: blur(6px)}
+.list{display:grid;gap:14px}
+.item{padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.06);
   background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
-  display:flex; align-items:center; justify-content:space-between; gap:12px}
-.item .left{display:flex; align-items:center; gap:12px}
-.logo{width:44px; height:44px; border-radius:12px; background:rgba(255,255,255,.08); display:grid; place-items:center; font-weight:900}
+  display:flex;align-items:center;justify-content:space-between;gap:12px}
+.item .left{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.08);display:grid;place-items:center;font-weight:900}
 
 /* Badges */
-.badge{font-weight:800; font-size:.85rem; padding:6px 10px; border-radius:10px}
-.ok{background:rgba(34,197,94,.12); color:#22c55e; border:1px solid rgba(34,197,94,.25)}
-.wait{background:rgba(251,146,60,.12); color:#fb923c; border:1px solid rgba(251,146,60,.25)}
+.badge{font-weight:800;font-size:.85rem;padding:6px 10px;border-radius:10px}
+.ok{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
+.wait{background:rgba(251,146,60,.12);color:#fb923c;border:1px solid rgba(251,146,60,.25)}
 
 /* Footer */
-.footer{margin-top:18px; text-align:center; color:var(--muted); font-size:.9rem}
+.footer{margin-top:18px;text-align:center;color:var(--muted);font-size:.9rem}
 .footer a{color:#9dd2ff}
-
-/* Misc */
-.back{display:inline-flex; align-items:center; gap:8px; margin-bottom:12px; color:#9dd2ff}
-hr.sep{border:none; border-top:1px solid rgba(255,255,255,.06); margin:14px 0}
-@media (max-width:480px){ .icon{width:56px;height:56px} .chip{top:10px;right:10px} }
+hr.sep{border:none;border-top:1px solid rgba(255,255,255,.06);margin:14px 0}
+@media (max-width:480px){.icon{width:56px;height:56px}.chip{top:10px;right:10px}}
 </style>
 </head>
 <body>
-
 <header class="topbar">
-  <div class="brand">
-    <div class="brand-logo">PM</div>
-    <div>PreMatch</div>
-  </div>
+  <div class="brand"><div class="brand-logo">PM</div><div>PreMatch</div></div>
   <div class="actions">
     <a class="btn ghost" href="#/sponsor">Crea account sponsor</a>
     <a class="btn primary" href="#/login">Login</a>
@@ -119,23 +94,19 @@ hr.sep{border:none; border-top:1px solid rgba(255,255,255,.06); margin:14px 0}
 const SVG={
   calcio:`<svg viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="1.8">
     <circle cx="12" cy="12" r="9" fill="#ffffff22"/>
-    <path d="M12 6l3 2-1 3-2 1-2-1-1-3 3-2zM7 10l-2 2 2 3m10-5l2 2-2 3M9 18l3-2 3 2" />
+    <path d="M12 6l3 2-1 3-2 1-2-1-1-3 3-2zM7 10l-2 2 2 3m10-5l2 2-2 3M9 18l3-2 3 2"/>
   </svg>`,
   futsal:`<svg viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="1.8">
-    <rect x="4" y="8" width="16" height="8" rx="2" fill="#ffffff22"/>
-    <path d="M8 12h8M6 10v4m12-4v4" />
+    <rect x="4" y="8" width="16" height="8" rx="2" fill="#ffffff22"/><path d="M8 12h8M6 10v4m12-4v4"/>
   </svg>`,
   basket:`<svg viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="2">
-    <circle cx="12" cy="12" r="9" fill="#ffffff22"/>
-    <path d="M3 12h18M12 3v18M6 6l12 12M18 6L6 18"/>
+    <circle cx="12" cy="12" r="9" fill="#ffffff22"/><path d="M3 12h18M12 3v18M6 6l12 12M18 6L6 18"/>
   </svg>`,
   volley:`<svg viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="2">
-    <circle cx="12" cy="12" r="9" fill="#ffffff22"/>
-    <path d="M4 12a8 8 0 0016 0M12 4a8 8 0 010 16M6 6a8 8 0 0112 12"/>
+    <circle cx="12" cy="12" r="9" fill="#ffffff22"/><path d="M4 12a8 8 0 0016 0M12 4a8 8 0 010 16M6 6a8 8 0 0112 12"/>
   </svg>`,
   rugby:`<svg viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="2">
-    <ellipse cx="12" cy="12" rx="9" ry="5" fill="#ffffff22"/>
-    <path d="M3 12h18M7 9l10 6M7 15l10-6"/>
+    <ellipse cx="12" cy="12" rx="9" ry="5" fill="#ffffff22"/><path d="M3 12h18M7 9l10 6M7 15l10-6"/>
   </svg>`
 };
 
@@ -157,15 +128,9 @@ const CLUBS={
     {id:'juve',   name:'Juventus',           next:'25 Ago 20:45', status:'ok'},
     {id:'milan',  name:'Milan',              next:'28 Ago 18:30', status:'wait'},
   ],
-  futsal:[
-    {id:'pesaro', name:'Italservice Pesaro', next:'Venerdì ore 21:00', status:'wait'}
-  ],
-  basket:[
-    {id:'virtus', name:'Virtus Bologna',     next:'Sabato ore 20:30', status:'ok'}
-  ],
-  rugby:[
-    {id:'benetton',name:'Benetton Treviso',  next:'Domenica ore 16:00', status:'ok'}
-  ]
+  futsal:[{id:'pesaro', name:'Italservice Pesaro', next:'Venerdì ore 21:00', status:'wait'}],
+  basket:[{id:'virtus', name:'Virtus Bologna',     next:'Sabato ore 20:30', status:'ok'}],
+  rugby:[ {id:'benetton',name:'Benetton Treviso',  next:'Domenica ore 16:00', status:'ok'}]
 };
 
 /* ===== ROUTER ===== */
@@ -174,25 +139,25 @@ window.addEventListener('hashchange', route);
 window.addEventListener('load', route);
 
 function route(){
-  const hash = location.hash.slice(2); // remove "#/"
-  if(!hash){ return ViewExplore(); }
-  const parts = hash.split('/');
-  if(parts[0]==='sport' && parts[1]) return ViewSport(parts[1]);
-  if(parts[0]==='club'  && parts[1] && parts[2]) return ViewClub(parts[1], parts[2]);
-  if(parts[0]==='login') return ViewLogin();
-  if(parts[0]==='sponsor') return ViewSponsor();
-  if(parts[0]==='privacy') return ViewStatic('Privacy','Questa è una demo senza raccolta dati.');
-  if(parts[0]==='supporto') return ViewStatic('Supporto','Scrivici per domande e assistenza.');
-  return ViewExplore();
+  const hash = location.hash.slice(2);
+  // HOME IMPATTO: mostra subito hero + griglia sport
+  if(!hash) return ViewHome();
+  const p = hash.split('/');
+  if(p[0]==='sport' && p[1]) return ViewSport(p[1]);
+  if(p[0]==='club'  && p[1] && p[2]) return ViewClub(p[1], p[2]);
+  if(p[0]==='login') return ViewLogin();
+  if(p[0]==='sponsor') return ViewSponsor();
+  if(p[0]==='privacy') return ViewStatic('Privacy','Questa è una demo senza raccolta dati.');
+  if(p[0]==='supporto') return ViewStatic('Supporto','Scrivici per domande e assistenza.');
+  return ViewHome();
 }
 
 /* ===== VIEWS ===== */
-function ViewExplore(){
+function ViewHome(){
   app.innerHTML = `
-    <a class="back" href="#/"><span>🏠</span> Home</a>
-    <div class="card">
+    <section class="hero">
       <h1>Scegli lo sport</h1>
-      <p class="lead">Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</p>
+      <p>Naviga le società e scopri le prossime partite. Nessuna registrazione per esplorare.</p>
       <div class="grid">
         ${SPORTS.map(s=>`
           <a class="tile" href="#/sport/${s.id}" style="--g1:${s.g1}; --g2:${s.g2}">
@@ -205,18 +170,18 @@ function ViewExplore(){
           </a>
         `).join('')}
       </div>
-    </div>
+    </section>
   `;
 }
 
 function ViewSport(sportId){
   const sport = SPORTS.find(s=>s.id===sportId);
-  if(!sport){ return ViewExplore(); }
+  if(!sport){ return ViewHome(); }
   const list = (CLUBS[sportId]||[]);
   app.innerHTML = `
-    <a class="back" href="#/"><span>←</span> Torna agli sport</a>
     <div class="card">
-      <h1>Società di ${sport.name}</h1>
+      <a href="#/" style="color:#9dd2ff">← Torna agli sport</a>
+      <h2 style="margin:10px 0 8px">Società di ${sport.name}</h2>
       <div class="list">
         ${list.map(c=>`
           <a class="item" href="#/club/${sportId}/${c.id}">
@@ -241,11 +206,10 @@ function ViewClub(sportId, clubId){
   const sport = SPORTS.find(s=>s.id===sportId);
   const club = (CLUBS[sportId]||[]).find(c=>c.id===clubId);
   if(!sport || !club){ return ViewSport(sportId); }
-
   app.innerHTML = `
-    <a class="back" href="#/sport/${sportId}"><span>←</span> Torna a ${sport.name}</a>
     <div class="card">
-      <h1>${club.name}</h1>
+      <a href="#/sport/${sportId}" style="color:#9dd2ff">← Torna a ${sport.name}</a>
+      <h2 style="margin:10px 0 4px">${club.name}</h2>
       <div class="sub" style="margin-bottom:12px">Prossima partita: ${club.next}</div>
 
       <div class="item" style="margin-bottom:12px">
@@ -272,10 +236,10 @@ function ViewClub(sportId, clubId){
 
 function ViewLogin(){
   app.innerHTML = `
-    <a class="back" href="#/"><span>←</span> Torna</a>
     <div class="card">
-      <h1>Login società</h1>
-      <p class="lead">Demo: accesso non reale. Qui, nella versione completa, entrano le società verificate.</p>
+      <a href="#/" style="color:#9dd2ff">← Torna</a>
+      <h2>Login società</h2>
+      <p class="sub" style="margin:0 0 10px">Demo: accesso non reale. Qui, nella versione completa, entrano le società verificate.</p>
       <button class="btn primary" onclick="alert('Demo: nessun backend. Qui andrebbe l’autenticazione.')">Accedi</button>
     </div>
   `;
@@ -283,11 +247,11 @@ function ViewLogin(){
 
 function ViewSponsor(){
   app.innerHTML = `
-    <a class="back" href="#/"><span>←</span> Torna</a>
     <div class="card">
-      <h1>Crea account Sponsor</h1>
-      <p class="lead">Gli sponsor sono gestiti come <b>società</b> (non sportive) con ruolo “Sponsor”.</p>
-      <ul class="lead" style="margin-left:14px">
+      <a href="#/" style="color:#9dd2ff">← Torna</a>
+      <h2>Crea account Sponsor</h2>
+      <p class="sub">Gli sponsor sono gestiti come <b>società</b> (non sportive) con ruolo “Sponsor”.</p>
+      <ul class="sub" style="margin-left:18px">
         <li>Profilo con logo e descrizione</li>
         <li>Sponsorizzazioni abbinate alle società</li>
         <li>Badge sponsor visibile nel PreMatch</li>
@@ -299,14 +263,13 @@ function ViewSponsor(){
 
 function ViewStatic(title, text){
   app.innerHTML = `
-    <a class="back" href="#/"><span>←</span> Torna</a>
     <div class="card">
-      <h1>${title}</h1>
-      <p class="lead">${text}</p>
+      <a href="#/" style="color:#9dd2ff">← Torna</a>
+      <h2>${title}</h2>
+      <p class="sub">${text}</p>
     </div>
   `;
 }
 </script>
-
 </body>
 </html>
