@@ -29,9 +29,9 @@ a{color:inherit;text-decoration:none}
 .hero h1{margin:0 0 8px;font-size:34px}
 .hero p{margin:0;color:var(--muted)}
 .cards{display:grid;gap:14px;margin-top:14px}
-@media(min-width:700px){.cards{grid-template-columns:1fr}}
 .card{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px}
-.iconRing{width:56px;height:56px;display:grid;place-items:center;border-radius:50%;border:2px solid #2a445f;background:#0b1727}
+.iconRing{width:56px;height:56px;display:grid;place-items:center;border-radius:50%;
+  border:2px solid #2a445f;background:#0b1727;box-shadow:inset 0 0 0 6px #0f1b2b}
 .card h3{margin:0 0 2px;font-size:22px}
 .card small{color:var(--muted)}
 .spacer{flex:1}
@@ -45,6 +45,7 @@ a{color:inherit;text-decoration:none}
 .box{margin-top:16px;padding:20px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius)}
 h2{margin:0 0 10px}
 .grid{display:grid;gap:10px}
+.grid.cols-3{grid-template-columns:repeat(1,1fr)}
 @media(min-width:700px){.grid.cols-3{grid-template-columns:repeat(3,1fr)}}
 .region{padding:10px;border-radius:12px;background:#0b1727;border:1px solid var(--line);cursor:pointer}
 .region.active{outline:2px solid #2b6dd8}
@@ -124,65 +125,70 @@ footer{margin:26px 0;color:#b8c6dc} footer a{text-decoration:underline}
   </main>
 
 <script>
-/* ====== ICONE “PALLONI” come nello screenshot ====== */
+/* ====== ICONE “PALLONI” (piene, ben riconoscibili) ====== */
 function ballIcon(kind){
-  // palette per sport
-  const pal = {
-    calcio:"#28d17c",  // verde
-    futsal:"#ffb22e",  // giallo/arancio
-    basket:"#ff7a21",  // arancio
-    volley:"#9b8cff",  // lilla
-    rugby:"#f4a933"    // oro
-  }[kind] || "#58c";
-  // cerchio base + pallone interno per ogni sport
+  const P = {
+    calcio : {ring:"#20d07a"},
+    futsal : {ring:"#ffb22e"},
+    basket : {ring:"#ff7a21"},
+    volley : {ring:"#cfd6ff"},
+    rugby  : {ring:"#f4a933"},
+  }[kind] || {ring:"#58c"};
+
   const base = (inner)=>`
   <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
-    <circle cx="22" cy="22" r="18" fill="#0b1727" stroke="${pal}" stroke-width="2"/>
+    <circle cx="22" cy="22" r="19" fill="#0b1727" stroke="${P.ring}" stroke-width="2"/>
     ${inner}
   </svg>`;
 
-  // 1) Calcio: pallone semplice b/n
+  // Calcio: pallone bianco/nero
   if(kind==='calcio'){
     const inner = `
-      <circle cx="22" cy="22" r="12" fill="#0f1a27" stroke="${pal}" stroke-width="2"/>
-      <circle cx="22" cy="22" r="7" fill="#e8eef6"/>
-      <path d="M22 16l3 2-1 3h-4l-1-3 3-2Z" fill="#0b1422"/>
-      <path d="M22 28l-3-2 1-3h4l1 3-3 2Z" fill="#0b1422"/>
-      <path d="M16 22l2-3 3 1v4l-3 1-2-3Zm12 0l-2-3-3 1v4l3 1 2-3Z" fill="#0b1422"/>`;
-    return base(inner);
-  }
-  // 2) Futsal: stella/pallone
-  if(kind==='futsal'){
-    const inner = `
-      <circle cx="22" cy="22" r="12" fill="#0f1a27" stroke="${pal}" stroke-width="2"/>
-      <g fill="${pal}">
-        <path d="M22 14l2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.3-4.5 2.3.9-5-3.6-3.5 5-.7L22 14Z"/>
+      <circle cx="22" cy="22" r="13" fill="#ffffff" stroke="${P.ring}" stroke-width="2"/>
+      <g fill="#0b1422">
+        <path d="M22 16l3 2-1 3h-4l-1-3 3-2z"/>
+        <path d="M22 28l-3-2 1-3h4l1 3-3 2z"/>
+        <path d="M16 22l2-3 3 1v4l-3 1-2-3z"/>
+        <path d="M28 22l-2-3-3 1v4l3 1 2-3z"/>
       </g>`;
     return base(inner);
   }
-  // 3) Basket: linee classiche
+
+  // Futsal: porta
+  if(kind==='futsal'){
+    const inner = `
+      <rect x="11" y="16" width="22" height="14" rx="2" fill="#0e1c2f" stroke="${P.ring}" stroke-width="2"/>
+      <path d="M13 18h18v10H13z" fill="none" stroke="${P.ring}" stroke-width="1.6"/>
+      <path d="M13 18l18 10M31 18L13 28" stroke="${P.ring}" stroke-width="1.2" opacity=".9"/>`;
+    return base(inner);
+  }
+
+  // Basket: palla arancione with seams
   if(kind==='basket'){
     const inner = `
-      <circle cx="22" cy="22" r="12" fill="#241108" stroke="${pal}" stroke-width="2"/>
-      <path d="M22 10v24M10 22h24M15 15c4 4 10 4 14 0M29 29c-4-4-10-4-14 0"
-            stroke="${pal}" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+      <circle cx="22" cy="22" r="13" fill="#ff8a3a" stroke="${P.ring}" stroke-width="2"/>
+      <path d="M22 9v26M9 22h26M15 15c4 4 10 4 14 0M29 29c-4-4-10-4-14 0"
+            stroke="#2b190c" stroke-width="2" fill="none" stroke-linecap="round"/>`;
     return base(inner);
   }
-  // 4) Volley: spicchi curvi
+
+  // Volley: palla bianca con spicchi
   if(kind==='volley'){
     const inner = `
-      <circle cx="22" cy="22" r="12" fill="#1a1830" stroke="${pal}" stroke-width="2"/>
+      <circle cx="22" cy="22" r="13" fill="#ffffff" stroke="${P.ring}" stroke-width="2"/>
       <path d="M14 21c6-6 14-4 16-1M14 24c6 6 14 4 16 1M18 14c-2 8 1 14 7 17"
-            stroke="${pal}" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+            stroke="#8ea3cc" stroke-width="2" fill="none" stroke-linecap="round"/>`;
     return base(inner);
   }
-  // 5) Rugby: ovale + cuciture
+
+  // Rugby: ovale marrone con cuciture
   if(kind==='rugby'){
     const inner = `
-      <ellipse cx="22" cy="22" rx="12" ry="8" fill="#1f1608" stroke="${pal}" stroke-width="2"/>
-      <path d="M16 22h12M19 20l6 4M19 24l6-4" stroke="${pal}" stroke-width="2" stroke-linecap="round"/>`;
+      <ellipse cx="22" cy="22" rx="14" ry="9" fill="#b7702b" stroke="${P.ring}" stroke-width="2"/>
+      <path d="M16 22h12M19 20l6 4M19 24l6-4" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>`;
     return base(inner);
   }
+
   return base('');
 }
 
