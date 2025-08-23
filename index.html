@@ -7,26 +7,66 @@
   <meta name="description" content="PreMatch — semplice, pulita, veloce" />
   <link rel="icon" href="images/logo.png" />
   <style>
-    :root{--bg:#0b1321;--panel:#0f1f32;--panel2:#0d1a2b;--text:#e8eef7;--muted:#9fb6cc;--brand:#1fd175;--accent:#6688ff;--shadow:rgba(0,0,0,.25);--radius:16px;--gap:14px}
-    *{box-sizing:border-box}html,body{height:100%}
-    body{margin:0;background:radial-gradient(1000px 600px at 100% -50%,#0e2742 0%,#081420 65%,#050b13 100%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Helvetica Neue,Arial,Noto Sans}
-    header{display:flex;gap:12px;align-items:center;padding:18px 16px;position:sticky;top:0;z-index:10;background:linear-gradient(to bottom,rgba(5,11,19,.9),rgba(5,11,19,.6));backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.06)}
-    header img{width:34px;height:34px;border-radius:8px;object-fit:cover}.brand{font-weight:800;font-size:22px;letter-spacing:.3px}
-    .wrap{max-width:980px;margin:0 auto;padding:18px 14px 90px}
-    .title h1{margin:.2rem 0 1rem;font-size:28px}.subtitle{color:var(--muted);margin-bottom:22px;line-height:1.4}
-    .list{display:flex;flex-direction:column;gap:var(--gap)}
-    .card{display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center;background:linear-gradient(180deg,var(--panel) 0%,var(--panel2) 100%);border:1px solid rgba(255,255,255,.06);box-shadow:0 8px 24px var(--shadow);padding:12px;border-radius:var(--radius)}
-    .avatar{width:64px;height:64px;border-radius:12px;overflow:hidden;background:#13253a;display:flex;align-items:center;justify-content:center}
-    .avatar img{width:100%;height:100%;object-fit:cover}.card h3{margin:0 0 4px;font-size:20px}.muted{color:var(--muted);font-size:14px}
+    :root{
+      --bg:#0b1321; --panel:#0f1f32; --panel2:#0d1a2b;
+      --text:#e8eef7; --muted:#9fb6cc; --brand:#1fd175;
+      --accent:#6688ff; --shadow:rgba(0,0,0,.25);
+      --radius:16px; --gap:14px;
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{
+      margin:0; background:radial-gradient(1000px 600px at 100% -50%, #0e2742 0%, #081420 65%, #050b13 100%);
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
+    }
+    a{color:var(--text); text-decoration:none}
+    header{
+      display:flex; gap:12px; align-items:center; padding:18px 16px; position:sticky; top:0; z-index:10;
+      background:linear-gradient(to bottom, rgba(5,11,19,.9), rgba(5,11,19,.6));
+      backdrop-filter: blur(6px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    header img{width:34px; height:34px; border-radius:8px; object-fit:cover}
+    header .brand{font-weight:800; font-size:22px; letter-spacing:.3px}
+    header nav{margin-left:auto; display:flex; gap:6px}
     .btn{appearance:none;border:0;cursor:pointer;font-weight:700;padding:10px 14px;border-radius:12px}
-    .btn.sec{background:#1c2a42;color:#cfe3ff}.btn.pri{background:#2c5af5;color:#fff}.btn.ghost{background:transparent;color:#cfe3ff;padding:8px 10px}
-    .chip{display:inline-flex;align-items:center;gap:6px;background:#13253a;color:#cfe3ff;border:1px solid rgba(255,255,255,.07);border-radius:999px;padding:6px 10px;font-size:13px}
+    .btn.ghost{background:transparent;color:#cfe3ff;padding:8px 10px}
+    .btn.sec{background:#1c2a42;color:#cfe3ff}
+    .btn.pri{background:#2c5af5;color:#fff}
+    .wrap{max-width:980px;margin:0 auto;padding:18px 14px 90px}
+    .title h1{margin:.2rem 0 1rem;font-size:28px}
+    .subtitle{color:var(--muted);margin-bottom:22px;line-height:1.4}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+    .card{
+      display:flex; flex-direction:column; gap:10px; align-items:center; text-align:center;
+      background:linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%);
+      border:1px solid rgba(255,255,255,.06);
+      box-shadow:0 8px 24px var(--shadow);
+      padding:14px; border-radius:16px; cursor:pointer
+    }
+    .card img{width:100%; height:110px; object-fit:cover; border-radius:12px}
+    .card span{font-weight:700}
     .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
-    select,input[type="search"],input[type="datetime-local"],input[type="text"],textarea{background:#0f2136;color:#e8eef7;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 12px;outline:0}
-    .divider{height:1px;background:rgba(255,255,255,.06);margin:22px 0}.footer{color:var(--muted);font-size:13px;margin-top:26px}
-    .back{margin:-6px 0 10px}.hidden{display:none}.empty{color:#9fb6cc;text-align:center;padding:18px}
-    .danger{color:#ff9aa5}.success{color:#4be5a2}.loading{opacity:.7}
-    .selectable{border:2px solid transparent}.selectable.active{border:2px solid var(--accent)}
+    select,input[type="search"],input[type="datetime-local"],input[type="text"],textarea{
+      background:#0f2136;color:#e8eef7;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 12px;outline:0
+    }
+    .list{display:flex;flex-direction:column;gap:14px}
+    .row{
+      display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center;
+      background:linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%);
+      border:1px solid rgba(255,255,255,.06);
+      box-shadow:0 8px 24px var(--shadow);
+      padding:12px; border-radius:16px;
+    }
+    .avatar{width:64px;height:64px;border-radius:12px;overflow:hidden;background:#13253a;display:flex;align-items:center;justify-content:center}
+    .avatar img{width:100%;height:100%;object-fit:cover}
+    .muted{color:var(--muted);font-size:14px}
+    .selectable{border:2px solid transparent}
+    .selectable.active{border:2px solid var(--accent)}
+    .divider{height:1px;background:rgba(255,255,255,.06);margin:22px 0}
+    .footer{color:var(--muted);font-size:13px;margin-top:26px}
+    .hidden{display:none}
+    .empty{color:#9fb6cc;text-align:center;padding:18px}
     .fab{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:#27c27a;color:#082019;border-radius:999px;padding:12px 18px;box-shadow:0 10px 30px rgba(0,0,0,.35);display:flex;gap:8px;align-items:center;font-weight:800}
     /* modal */
     .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5);padding:20px}
@@ -36,82 +76,19 @@
     textarea{min-height:90px;resize:vertical}
     @media(min-width:780px){.title h1{font-size:32px}}
   </style>
-  <script type="module" src="https://esm.sh/@supabase/supabase-js@2"></script>
-</head>
-<body>
-  <header>
-    <img src="images/logo.png" alt="PreMatch logo" />
-    <div class="brand">PreMatch</div>
-    <div style="margin-left:auto;display:flex;gap:6px">
-      <a class="btn ghost" href="#">Home</a>
-      <a class="btn ghost" href="#sport">Sport</a>
-      <a class="btn ghost" href="#login">Accedi/Registrati</a>
-    </div>
-  </header>
-
-  <main class="wrap">
-    <!-- Schermata Sport -->
-    <section id="screen-sport">
-      <div class="title"><h1>Scegli lo sport</h1></div>
-      <div class="subtitle">Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</div>
-      <div class="list" id="sport-list"></div>
-    </section>
-
-    <!-- Schermata Società -->
-    <section id="screen-clubs" class="hidden">
-      <button class="btn sec back" id="back-to-sport">⟵ Indietro</button>
-      <div class="toolbar">
-        <span class="chip" id="selected-sport-tag"></span>
-        <select id="filter-regione"><option value="">Tutte le regioni</option></select>
-        <select id="filter-genere">
-          <option value="">Genere: tutti</option>
-          <option value="M">Maschile</option>
-          <option value="F">Femminile</option>
-        </select>
-        <input id="filter-q" type="search" placeholder="Cerca società…" />
-      </div>
-      <div class="title"><h1>Società</h1></div>
-      <div class="list" id="club-list"></div>
-      <div class="empty hidden" id="clubs-empty">Nessuna società trovata per i filtri applicati.</div>
-    </section>
-
-    <div class="divider"></div>
-    <div class="footer">© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
-  </main>
-
-  <!-- Barra azione Crea PreMatch -->
-  <button id="fab-prematch" class="fab hidden">🤝 CREA PREMATCH</button>
-
-  <!-- Modal PreMatch -->
-  <div class="modal" id="modal">
-    <div class="panel">
-      <h3>Crea PreMatch</h3>
-      <div id="pm-summary" class="muted" style="margin:6px 0 12px"></div>
-      <div class="toolbar" style="margin:8px 0">
-        <input id="pm-date" type="datetime-local" />
-        <input id="pm-place" type="text" placeholder="Luogo (facoltativo)" style="flex:1" />
-      </div>
-      <textarea id="pm-notes" placeholder="Note (facoltative)"></textarea>
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
-        <button id="pm-cancel" class="btn sec">Annulla</button>
-        <button id="pm-save" class="btn pri">Salva</button>
-      </div>
-      <div id="pm-msg" class="muted" style="margin-top:8px"></div>
-    </div>
-  </div>
-
+  <!-- Supabase client (via jsDelivr, compatibile Brave/Android) -->
   <script type="module">
-    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.3/+esm";
 
-    // -------------------------------
-    // Configurazione Supabase
-    // -------------------------------
+    // =======================
+    // CONFIG SUPABASE (TUO)
+    // =======================
     const SUPABASE_URL  = "https://hzzhypahrzclvfepstro.supabase.co";
-    const SUPABASE_ANON = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6emh5cGFocnpjbHZmZXBzdHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0NDAxNDUsImV4cCI6MjA3MTAxNjE0NX0.7niKgLcuDKQZQZxkQfxMYzz9fPT4Mm5wzWeq6r87TIY // <<<<< INCOLLA LA ANON KEY
+    const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6emh5cGFocnpjbHZmZXBzdHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0NDAxNDUsImV4cCI6MjA3MTAxNjE0NX0.7niKgLcuDKQZQZxkQfxMYzz9fPT4Mm5wzWeq6r87TIY";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-    // Immagini sport
-    const sportImage = {
+    // immagini per sport
+    const SPORT_IMG = {
       "Calcio":"images/calcio.jpg",
       "Futsal":"images/futsal.jpg",
       "Basket":"images/basket.jpg",
@@ -121,193 +98,279 @@
       "Rugby":"images/rugby.jpg"
     };
 
-    // Stato
+    // stato
     const state = {
-      sport:null,
-      clubsRaw:[],
-      clubsFiltered:[],
-      filters:{ regione:"", genere:"", q:"" },
-      selCasa:null,
-      selOspite:null
+      sport: null,            // oggetto sport selezionato
+      clubsAll: [],           // tutte le società dello sport
+      clubs: [],              // filtrate
+      selCasa: null,
+      selOspite: null,
+      filters: { regione:"", genere:"", q:"" }
     };
 
-    // DOM
-    const elSportList   = document.getElementById("sport-list");
-    const elScreenSport = document.getElementById("screen-sport");
-    const elScreenClubs = document.getElementById("screen-clubs");
-    const elClubList    = document.getElementById("club-list");
-    const elClubsEmpty  = document.getElementById("clubs-empty");
-    const elSportTag    = document.getElementById("selected-sport-tag");
-    const elBackBtn     = document.getElementById("back-to-sport");
-    const elFab         = document.getElementById("fab-prematch");
+    // DOM refs
+    const elHome        = document.getElementById("screen-home");
+    const elSportsGrid  = document.getElementById("sports-grid");
+    const elExplore     = document.getElementById("screen-explore");
+    const elSportTag    = document.getElementById("sport-tag");
     const elRegione     = document.getElementById("filter-regione");
     const elGenere      = document.getElementById("filter-genere");
-    const elQ           = document.getElementById("filter-q");
+    const elSearch      = document.getElementById("filter-q");
+    const elClubList    = document.getElementById("club-list");
+    const elClubsEmpty  = document.getElementById("clubs-empty");
+    const elFab         = document.getElementById("fab");
+    const elBack        = document.getElementById("back");
 
-    // Modal
+    // modal
     const elModal   = document.getElementById("modal");
-    const elPmSum   = document.getElementById("pm-summary");
-    const elPmDate  = document.getElementById("pm-date");
-    const elPmPlace = document.getElementById("pm-place");
-    const elPmNotes = document.getElementById("pm-notes");
-    const elPmMsg   = document.getElementById("pm-msg");
-    document.getElementById("pm-cancel").onclick=()=>elModal.classList.remove("show");
-    document.getElementById("pm-save").onclick=savePreMatch;
+    const elSum     = document.getElementById("pm-summary");
+    const elDate    = document.getElementById("pm-date");
+    const elPlace   = document.getElementById("pm-place");
+    const elNotes   = document.getElementById("pm-notes");
+    const elMsg     = document.getElementById("pm-msg");
+    const elCancel  = document.getElementById("pm-cancel");
+    const elSave    = document.getElementById("pm-save");
 
-    elBackBtn.onclick=()=>showScreen("sport");
-    elFab.onclick= openPreMatch;
+    // helpers
+    function showHome(){ elHome.classList.remove("hidden"); elExplore.classList.add("hidden"); elFab.classList.add("hidden"); }
+    function showExplore(){ elHome.classList.add("hidden"); elExplore.classList.remove("hidden"); updateFab(); }
+    function updateFab(){ elFab.classList.toggle("hidden", !(state.selCasa && state.selOspite)); }
 
-    // -------------------------------
-    // UI helpers
-    // -------------------------------
-    function showScreen(name){
-      if(name==="sport"){ elScreenSport.classList.remove("hidden"); elScreenClubs.classList.add("hidden"); }
-      else{ elScreenSport.classList.add("hidden"); elScreenClubs.classList.remove("hidden"); }
+    // NAV
+    document.getElementById("nav-home").onclick = (e)=>{e.preventDefault(); showHome();}
+    document.getElementById("nav-sport").onclick = (e)=>{e.preventDefault(); showHome();}
+    document.getElementById("nav-login").onclick = (e)=>{e.preventDefault(); alert("Accesso/Registrazione arriveranno più avanti. Per ora esplorazione libera.");}
+    elBack.onclick = ()=>{ showHome(); }
+
+    // filtro handlers
+    elRegione.onchange = ()=>{ state.filters.regione = elRegione.value; applyFilters(); }
+    elGenere.onchange  = ()=>{ state.filters.genere  = elGenere.value; applyFilters(); }
+    elSearch.oninput   = ()=>{ state.filters.q       = elSearch.value.toLowerCase().trim(); applyFilters(); }
+
+    // FAB + MODAL
+    elFab.onclick    = ()=>openPreMatch();
+    elCancel.onclick = ()=>elModal.classList.remove("show");
+    elSave.onclick   = ()=>savePreMatch();
+
+    // =======================
+    // CARICAMENTO SPORT
+    // =======================
+    async function loadSports(){
+      try{
+        const { data, error } = await supabase.from("sports").select("id,nome").order("nome");
+        if(error) throw error;
+        renderSports(data && data.length ? data : fallbackSports());
+      }catch(e){
+        console.warn("Sports fallback:", e?.message);
+        renderSports(fallbackSports());
+      }
     }
-    function setFabVisible(v){ elFab.classList.toggle("hidden", !v); }
-
-    // render sport
-    function cardSport(s){
-      const img=sportImage[s.nome]||"images/logo.png";
-      return `
-        <div class="card">
-          <div class="avatar"><img src="${img}" alt="${s.nome}"></div>
-          <div><h3>${s.nome}</h3><div class="muted">Esplora società</div></div>
-          <div style="display:flex;gap:8px">
-            <button class="btn sec" data-act="clubs" data-id="${s.id}">Società</button>
-            <button class="btn pri" data-act="open"  data-id="${s.id}">Apri</button>
-          </div>
-        </div>`;
+    function fallbackSports(){
+      return [
+        {id:1,nome:"Calcio"},
+        {id:2,nome:"Futsal"},
+        {id:3,nome:"Basket"},
+        {id:4,nome:"Volley"},
+        {id:5,nome:"Beach Volley"},
+        {id:6,nome:"Pallanuoto"},
+        {id:7,nome:"Rugby"},
+      ];
     }
     function renderSports(list){
-      elSportList.innerHTML=list.map(cardSport).join("");
-      elSportList.onclick=async e=>{
-        const t=e.target.closest("[data-act]"); if(!t) return;
-        const id=t.getAttribute("data-id");
-        const s=list.find(x=>String(x.id)===String(id)); if(!s) return;
-        await selectSport(s);
-      }
-    }
-
-    // render clubs
-    function cardClub(c){
-      const isCasa = state.selCasa && state.selCasa.id===c.id;
-      const isOsp  = state.selOspite && state.selOspite.id===c.id;
-      const role = isCasa ? " (CASA)" : isOsp ? " (OSPITE)" : "";
-      return `
-        <div class="card selectable ${isCasa||isOsp?'active':''}" data-club="${c.id}">
-          <div class="avatar"><img src="${sportImage[state.sport?.nome]||'images/logo.png'}" alt=""></div>
-          <div>
-            <h3>${c.nome}${role}</h3>
-            <div class="muted">${c.comune||""} ${c.regione_nome?("· "+c.regione_nome):""} ${c.genere?("· "+(c.genere==='M'?'M':'F')):""}</div>
-          </div>
-          <div style="display:flex;gap:8px">
-            <button class="btn sec" data-ruolo="casa"   data-id="${c.id}">Casa</button>
-            <button class="btn pri" data-ruolo="ospite" data-id="${c.id}">Ospite</button>
-          </div>
-        </div>`;
-    }
-    function renderClubs(){
-      const L=state.clubsFiltered;
-      if(!L.length){ elClubList.innerHTML=""; elClubsEmpty.classList.remove("hidden"); }
-      else{ elClubsEmpty.classList.add("hidden"); elClubList.innerHTML=L.map(cardClub).join(""); }
-      setFabVisible(!!(state.selCasa&&state.selOspite));
-    }
-
-    // -------------------------------
-    // Data
-    // -------------------------------
-    async function loadSports(){
-      if(!SUPABASE_ANON || SUPABASE_ANON.startsWith("INCOLLA_")){
-        elSportList.innerHTML = `<div class="empty"><div class="danger" style="margin-bottom:6px">Configurazione mancante</div>Incolla la tua <b>ANON KEY</b> Supabase nel codice.</div>`;
-        return;
-      }
-      const {data,error}=await supabase.from("sports").select("id,nome").order("nome");
-      if(error){ console.error(error); elSportList.innerHTML=`<div class="empty danger">Errore nel caricamento sport</div>`; return; }
-      renderSports(data||[]);
-    }
-
-    async function selectSport(sport){
-      state.sport=sport; state.selCasa=null; state.selOspite=null;
-      elSportTag.textContent=sport.nome;
-      showScreen("clubs");
-
-      // regioni per select
-      const {data:reg}=await supabase.from("regioni").select("id,nome").order("nome");
-      elRegione.innerHTML=`<option value="">Tutte le regioni</option>`+(reg||[]).map(r=>`<option value="${r.id}">${r.nome}</option>`).join("");
-
-      // società per sport
-      const {data,error}=await supabase.from("societa")
-        .select("id,nome,comune,regione_id,genere, regioni:regione_id(nome)")
-        .eq("sport_id", sport.id)
-        .order("nome");
-      if(error){ console.error(error); state.clubsRaw=[]; state.clubsFiltered=[]; renderClubs(); return; }
-
-      state.clubsRaw=(data||[]).map(r=>({ ...r, regione_nome:r.regioni?.nome??null }));
-      applyFilters();
-      // listeners filtri
-      elRegione.onchange=()=>{ state.filters.regione=elRegione.value; applyFilters(); };
-      elGenere.onchange=()=>{ state.filters.genere=elGenere.value; applyFilters(); };
-      elQ.oninput=()=>{ state.filters.q=elQ.value.toLowerCase().trim(); applyFilters(); };
-
-      // gestione click assegnazione casa/ospite
-      elClubList.onclick=e=>{
-        const btn=e.target.closest("[data-ruolo]");
-        if(btn){
-          const id=btn.getAttribute("data-id");
-          const club=state.clubsFiltered.find(x=>String(x.id)===String(id)); if(!club) return;
-          if(btn.dataset.ruolo==="casa"){ state.selCasa = club; if(state.selOspite && state.selOspite.id===club.id) state.selOspite=null; }
-          else                         { state.selOspite= club; if(state.selCasa  && state.selCasa.id===club.id)  state.selCasa=null; }
-          renderClubs(); return;
-        }
-        const box=e.target.closest("[data-club]");
-        if(box){ /* toggle visuale handled via Casa/Ospite */ }
+      elSportsGrid.innerHTML = list.map(s => `
+        <div class="card" data-sid="${s.id}">
+          <img src="${SPORT_IMG[s.nome] || 'images/logo.png'}" alt="${s.nome}" />
+          <span>${s.nome}</span>
+        </div>
+      `).join("");
+      elSportsGrid.onclick = (ev)=>{
+        const card = ev.target.closest(".card");
+        if(!card) return;
+        const sid = String(card.getAttribute("data-sid"));
+        const sport = list.find(x=>String(x.id)===sid) || list.find(x=>String(x.id)===String(sid));
+        if(!sport) return;
+        selectSport(sport);
       };
     }
 
+    // =======================
+    // SOCIETÀ / FILTRI
+    // =======================
+    async function selectSport(sport){
+      state.sport = sport;
+      state.selCasa = null; state.selOspite = null;
+      elSportTag.textContent = sport.nome;
+
+      // regioni
+      const { data: regions } = await supabase.from("regioni").select("id,nome").order("nome");
+      elRegione.innerHTML = `<option value="">Tutte le regioni</option>` + (regions||[]).map(r=>`<option value="${r.id}">${r.nome}</option>`).join("");
+
+      // società
+      const { data, error } = await supabase
+        .from("societa")
+        .select("id,nome,comune,regione_id,genere, regioni:regione_id(nome)")
+        .eq("sport_id", sport.id)
+        .order("nome");
+      if(error){ console.error(error); state.clubsAll=[]; state.clubs=[]; }
+      else{
+        state.clubsAll = (data||[]).map(r=>({ ...r, regione_nome: r.regioni?.nome ?? null }));
+        state.filters = { regione:"", genere:"", q:"" };
+      }
+      elGenere.value = ""; elRegione.value = ""; elSearch.value = "";
+      applyFilters();
+      showExplore();
+    }
+
     function applyFilters(){
-      let L=[...state.clubsRaw];
-      if(state.filters.regione) L=L.filter(c=>String(c.regione_id)===String(state.filters.regione));
-      if(state.filters.genere)  L=L.filter(c=>(c.genere||"")===state.filters.genere);
-      if(state.filters.q)       L=L.filter(c=>c.nome.toLowerCase().includes(state.filters.q) || (c.comune||"").toLowerCase().includes(state.filters.q));
-      state.clubsFiltered=L;
+      let L = [...state.clubsAll];
+      const f = state.filters;
+      if(f.regione) L = L.filter(c=>String(c.regione_id)===String(f.regione));
+      if(f.genere)  L = L.filter(c=>(c.genere||"")===f.genere);
+      if(f.q)       L = L.filter(c => (c.nome||"").toLowerCase().includes(f.q) || (c.comune||"").toLowerCase().includes(f.q));
+      state.clubs = L;
       renderClubs();
     }
 
-    // -------------------------------
-    // PreMatch
-    // -------------------------------
+    function renderClubs(){
+      if(!state.clubs.length){
+        elClubsEmpty.classList.remove("hidden");
+        elClubList.innerHTML = "";
+        updateFab();
+        return;
+      }
+      elClubsEmpty.classList.add("hidden");
+      elClubList.innerHTML = state.clubs.map(c=>{
+        const isCasa = state.selCasa  && state.selCasa.id===c.id;
+        const isOsp  = state.selOspite&& state.selOspite.id===c.id;
+        const role = isCasa ? " (CASA)" : isOsp ? " (OSPITE)" : "";
+        const gLab = c.genere === 'M' ? 'M' : (c.genere === 'F' ? 'F' : '');
+        return `
+          <div class="row selectable ${isCasa||isOsp?'active':''}">
+            <div class="avatar"><img src="${SPORT_IMG[state.sport?.nome] || 'images/logo.png'}" alt=""></div>
+            <div>
+              <div style="font-weight:800">${c.nome}${role}</div>
+              <div class="muted">${c.comune||""} ${c.regione_nome?('· '+c.regione_nome):''} ${gLab?('· '+gLab):''}</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="btn sec" data-ruolo="casa"   data-id="${c.id}">Casa</button>
+              <button class="btn pri" data-ruolo="ospite" data-id="${c.id}">Ospite</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      elClubList.onclick = (e)=>{
+        const btn = e.target.closest("[data-ruolo]");
+        if(!btn) return;
+        const id = btn.getAttribute("data-id");
+        const club = state.clubs.find(x=>String(x.id)===String(id));
+        if(!club) return;
+        if(btn.dataset.ruolo==="casa"){ state.selCasa = club; if(state.selOspite && state.selOspite.id===club.id) state.selOspite=null; }
+        else { state.selOspite = club; if(state.selCasa && state.selCasa.id===club.id) state.selCasa=null; }
+        renderClubs();
+        updateFab();
+      };
+    }
+
+    // =======================
+    // CREA PREMATCH
+    // =======================
     function openPreMatch(){
-      if(!(state.selCasa&&state.selOspite)) return;
-      elPmSum.innerHTML = `<b>${state.selCasa.nome}</b> vs <b>${state.selOspite.nome}</b> — <span class="muted">${state.sport.nome}</span>`;
-      elPmDate.value = "";
-      elPmPlace.value = "";
-      elPmNotes.value = "";
-      elPmMsg.textContent="";
+      if(!(state.selCasa && state.selOspite)) return;
+      elSum.innerHTML = `<b>${state.selCasa.nome}</b> vs <b>${state.selOspite.nome}</b> — <span class="muted">${state.sport.nome}</span>`;
+      elDate.value = "";
+      elPlace.value = "";
+      elNotes.value = "";
+      elMsg.textContent = "";
       elModal.classList.add("show");
     }
 
     async function savePreMatch(){
-      const when = elPmDate.value || null;
-      const luogo = elPmPlace.value.trim() || null;
-      const note  = elPmNotes.value.trim() || null;
-      elPmMsg.textContent="Salvataggio in corso…";
+      const when  = elDate.value ? new Date(elDate.value).toISOString() : null;
+      const luogo = elPlace.value.trim() || null;
+      const note  = elNotes.value.trim() || null;
+      elMsg.textContent = "Salvataggio…";
 
-      const payload = {
-        sport_id: state.sport.id,
-        casa_id:  state.selCasa.id,
-        ospite_id:state.selOspite.id,
-        data: when ? new Date(when).toISOString() : null,
-        luogo, note
-      };
-      const { error } = await supabase.from("prematch").insert(payload);
-      if(error){ console.error(error); elPmMsg.innerHTML=`<span class="danger">Errore: ${error.message}</span>`; return; }
-      elPmMsg.innerHTML=`<span class="success">PreMatch creato!</span>`;
-      setTimeout(()=>elModal.classList.remove("show"), 700);
+      try{
+        const payload = {
+          sport_id: state.sport.id,
+          casa_id:  state.selCasa.id,
+          ospite_id:state.selOspite.id,
+          data:     when,
+          luogo, note
+        };
+        const { error } = await supabase.from("prematch").insert(payload);
+        if(error) throw error;
+        elMsg.innerHTML = `<span style="color:#4be5a2">PreMatch creato ✅</span>`;
+        setTimeout(()=>{ elModal.classList.remove("show"); }, 800);
+      }catch(e){
+        elMsg.innerHTML = `<span style="color:#ff9aa5">Errore: ${e.message || 'Operazione non autorizzata'}</span>`;
+      }
     }
 
-    // avvio
+    // AVVIO
     loadSports();
   </script>
+</head>
+<body>
+  <header>
+    <img src="images/logo.png" alt="PreMatch logo" />
+    <div class="brand">PreMatch</div>
+    <nav>
+      <a id="nav-home"  class="btn ghost" href="#">Home</a>
+      <a id="nav-sport" class="btn ghost" href="#sport">Sport</a>
+      <a id="nav-login" class="btn ghost" href="#login">Accedi/Registrati</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <!-- HOME (SPORT) -->
+    <section id="screen-home">
+      <div class="title"><h1>Scegli lo sport</h1></div>
+      <div class="subtitle">Esplora società e organizza i PreMatch. Nessuna registrazione richiesta per la navigazione.</div>
+      <div id="sports-grid" class="grid"></div>
+    </section>
+
+    <!-- EXPLORA (SOCIETÀ) -->
+    <section id="screen-explore" class="hidden">
+      <button id="back" class="btn sec">⟵ Indietro</button>
+      <div class="toolbar">
+        <span class="btn ghost" id="sport-tag" style="pointer-events:none;opacity:.9;"></span>
+        <select id="filter-regione"><option value="">Tutte le regioni</option></select>
+        <select id="filter-genere">
+          <option value="">Genere: tutti</option>
+          <option value="M">Maschile</option>
+          <option value="F">Femminile</option>
+        </select>
+        <input id="filter-q" type="search" placeholder="Cerca società…" />
+      </div>
+      <div class="list" id="club-list"></div>
+      <div class="empty hidden" id="clubs-empty">Nessuna società trovata per i filtri applicati.</div>
+    </section>
+
+    <div class="divider"></div>
+    <div class="footer">© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
+  </main>
+
+  <!-- FAB CREA PREMATCH -->
+  <button id="fab" class="fab hidden">🤝 CREA PREMATCH</button>
+
+  <!-- MODAL PREMATCH -->
+  <div id="modal" class="modal">
+    <div class="panel">
+      <h3>Crea PreMatch</h3>
+      <div id="pm-summary" class="muted" style="margin:6px 0 12px"></div>
+      <div class="toolbar" style="margin:8px 0">
+        <input id="pm-date"  type="datetime-local" />
+        <input id="pm-place" type="text" placeholder="Luogo (facoltativo)" style="flex:1" />
+      </div>
+      <textarea id="pm-notes" placeholder="Note (facoltative)"></textarea>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+        <button id="pm-cancel" class="btn sec">Annulla</button>
+        <button id="pm-save"   class="btn pri">Salva</button>
+      </div>
+      <div id="pm-msg" class="muted" style="margin-top:8px"></div>
+    </div>
+  </div>
 </body>
 </html>
