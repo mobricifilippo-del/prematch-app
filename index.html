@@ -2,411 +2,335 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PreMatch — Demo</title>
-  <meta name="description" content="PreMatch: semplice, pulita, gratuita. Esplora le società e crea i PreMatch.">
-
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PreMatch</title>
+  <meta name="theme-color" content="#169b62" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root{
-      --bg:#0b1321;         /* sfondo scuro blu */
-      --panel:#101a2c;      /* pannelli */
-      --text:#e8eef7;       /* testo */
-      --muted:#9fb6cc;      /* testo attenuato */
-      --chip:#0b7bdd;       /* pillole */
-      --accent:#66a1ff;     /* accento */
-      --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:18px;
-      --cardgap:18px;
+      --brand:#169b62; /* verde principale */
+      --ink:#101214;
+      --muted:#6b7280;
+      --bg:#ffffff;
+      --bg-soft:#f6f7f8;
+      --ok:#16a34a;
+      --wait:#d97706;
+      --error:#b91c1c;
+      --card: #ffffff;
+      --border:#e5e7eb;
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;
-      background:
-        radial-gradient(1200px 600px at 50% -200px, #162544 0%, transparent 60%),
-        radial-gradient(800px 600px at -200px 100%, #13203a 0%, transparent 60%),
-        linear-gradient(180deg, #0b1321 0%, #0b1321 100%);
-      background-color:var(--bg);
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'}
+    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
+    .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    .nav{
+      position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--border);z-index:10
     }
-    a{color:var(--text);text-decoration:none}
-    .wrap{max-width:980px;margin:0 auto;padding:18px}
-    header{
-      position:sticky;top:0;z-index:5;
-      backdrop-filter:saturate(120%) blur(8px);
-      background:linear-gradient(180deg,rgba(9,14,25,.85),rgba(9,14,25,.55));
-      border-bottom:1px solid rgba(255,255,255,.06);
+    .nav .wrap{display:flex;align-items:center;gap:12px;padding:10px 16px}
+    .logo{width:28px;height:28px;border-radius:6px;background:var(--brand);display:inline-grid;place-items:center;color:#fff;font-weight:800}
+    .brand{font-weight:800;letter-spacing:.3px}
+    .badge-free{margin-left:auto;background:#e8faf0;color:#0f5132;border:1px solid #c6f1d9;padding:4px 8px;border-radius:999px;font-size:12px}
+    .grid{display:grid;gap:12px}
+    .grid.sports{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px}
+    .card:hover{box-shadow:0 2px 14px rgba(0,0,0,.06)}
+    .section-title{display:flex;align-items:center;gap:10px;margin:20px 0 10px}
+    .section-title h2{margin:0;font-size:18px}
+    .soft{color:var(--muted);font-size:14px}
+    .row{display:flex;flex-wrap:wrap;gap:10px}
+    .pill{border:1px solid var(--border);padding:8px 12px;border-radius:999px;cursor:pointer;background:#fff}
+    .pill.active{border-color:var(--brand);outline:2px solid rgba(22,155,98,.15)}
+    .select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:#fff}
+    .list{display:grid;gap:10px}
+    .club{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--border);border-radius:12px;padding:10px 12px;background:#fff}
+    .club h4{margin:0}
+    .label{font-size:12px;color:#555}
+    .kpi{display:inline-block;padding:4px 8px;border-radius:8px;border:1px solid var(--border);font-size:12px;background:#fff}
+    .status{display:inline-flex;align-items:center;gap:6px;font-size:12px;border-radius:8px;padding:4px 8px;border:1px solid var(--border)}
+    .status.ok{color:#0f5132;background:#e8faf0;border-color:#c6f1d9}
+    .status.wait{color:#92400e;background:#fff7ed;border-color:#fed7aa}
+    .footer{margin:40px 0 20px;color:var(--muted);font-size:12px;text-align:center}
+    .breadcrumbs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px;color:#374151}
+    .bc{display:inline-flex;gap:6px;align-items:center}
+    .bc .x{color:#9ca3af;cursor:pointer}
+    .sports-grid button{
+      display:flex;gap:10px;align-items:center;width:100%;background:#fff;border:1px solid var(--border);
+      border-radius:12px;padding:12px;text-align:left;cursor:pointer
     }
-    .bar{display:flex;align-items:center;gap:12px;padding:12px 18px}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px}
-    .brand img{width:28px;height:28px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.08)}
-    .space{flex:1}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      padding:10px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.08);
-      background:#111b2d;color:var(--text);font-weight:600
-    }
-    .btn.primary{background:#17a34a;border-color:#17a34a;color:#06140d}
-    .btn.ghost{background:transparent}
-    .title{font-size:36px;line-height:1.1;margin:8px 0 6px}
-    .lead{color:var(--muted);margin:0 0 18px}
-    .grid{display:grid;grid-template-columns:1fr;gap:18px}
-    @media(min-width:720px){.grid{grid-template-columns:1fr}}
-    .card{
-      background:linear-gradient(180deg,#0f1a2d 0%,#0d1627 100%);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:18px;
-    }
-    .sport-card{
-      display:flex;align-items:center;gap:16px;
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:var(--radius);
-      background:linear-gradient(180deg,#0f1a2d 0%,#0d1627 100%);
-      padding:18px;
-    }
-    .sport-thumb{
-      width:72px;height:72px;border-radius:50%;
-      overflow:hidden;flex:0 0 auto;
-      border:2px solid rgba(255,255,255,.08);
-      box-shadow:0 10px 20px rgba(0,0,0,.35) inset, 0 6px 20px rgba(0,0,0,.25);
-      background:#0c1426;
-    }
-    .sport-thumb img{width:100%;height:100%;object-fit:cover}
-    .sport-body{flex:1}
-    .sport-title{font-size:26px;margin:0 0 4px}
-    .sport-sub{color:var(--muted);font-size:14px}
-    .sport-actions{display:flex;gap:10px}
-    .chip{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 12px;background:#0e233a;border:1px solid rgba(255,255,255,.08);
-      color:#cfe6ff;border-radius:999px;font-size:13px;font-weight:600
-    }
-    .footer{opacity:.85;color:var(--muted);text-align:center;padding:32px 18px}
-    .links a{color:#b3cff7}
-    /* Sezione filtri / demo navigazione */
-    .filters{display:grid;gap:12px;margin-top:8px}
-    .row{display:grid;gap:12px}
-    @media(min-width:640px){.row{grid-template-columns:repeat(3,1fr)}}
-    select{
-      appearance:none;width:100%;
-      padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.08);
-      background:#0f1a2d;color:var(--text);font-weight:600
-    }
-    .list{display:grid;gap:12px;margin-top:12px}
-    .item{
-      padding:14px;border-radius:14px;
-      border:1px solid rgba(255,255,255,.06);
-      background:linear-gradient(180deg,#102037,#0d172a 100%);
-    }
-    .mini{font-size:13px;color:var(--muted)}
+    .sports-grid .icon{font-size:22px}
+    .divider{height:1px;background:var(--border);margin:10px 0}
   </style>
 </head>
 <body>
-
-  <!-- NAV -->
-  <header>
-    <div class="bar">
-      <div class="brand">
-        <img src="images/logo.png" alt="PreMatch logo">
-        <span>PreMatch</span>
-      </div>
-      <div class="space"></div>
-      <a class="btn ghost" href="#" onclick="alert('Area sponsor in arrivo');return false;">Crea account sponsor</a>
-      <a class="btn primary" href="#" onclick="alert('Login demo');return false;">Login</a>
+  <div class="nav">
+    <div class="wrap">
+      <div class="logo">PM</div>
+      <div class="brand">PreMatch</div>
+      <span class="badge-free">Gratuita · senza pubblicità invasive</span>
     </div>
-  </header>
+  </div>
 
-  <main class="wrap">
-    <!-- Hero -->
-    <section class="card">
-      <h1 class="title">Scegli lo sport</h1>
-      <p class="lead">Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</p>
+  <div class="wrap">
+    <!-- Breadcrumbs (stato scelta) -->
+    <div class="breadcrumbs" id="breadcrumbs"></div>
 
-      <!-- Cards sport con IMMAGINI VERE -->
-      <div class="grid" id="sportsGrid">
+    <!-- SPORT -->
+    <div class="section-title"><h2>1) Scegli lo sport</h2><span class="soft">clicca per continuare</span></div>
+    <div class="grid sports sports-grid" id="sports"></div>
 
-        <div class="sport-card">
-          <div class="sport-thumb"><img src="images/calcio.jpg" alt="Calcio"></div>
-          <div class="sport-body">
-            <h3 class="sport-title">Calcio</h3>
-            <div class="sport-sub">Esplora società</div>
-          </div>
-          <div class="sport-actions">
-            <button class="btn" onclick="openClubs('calcio')">Società</button>
-            <button class="btn" onclick="openSport('calcio')">Apri</button>
-          </div>
-        </div>
+    <!-- REGIONE -->
+    <div class="section-title"><h2>2) Scegli la regione</h2><span class="soft">Italia</span></div>
+    <select id="regioni" class="select"><option value="">— Seleziona regione —</option></select>
 
-        <div class="sport-card">
-          <div class="sport-thumb"><img src="images/futsal.jpg" alt="Futsal"></div>
-          <div class="sport-body">
-            <h3 class="sport-title">Futsal</h3>
-            <div class="sport-sub">Esplora società</div>
-          </div>
-          <div class="sport-actions">
-            <button class="btn" onclick="openClubs('futsal')">Società</button>
-            <button class="btn" onclick="openSport('futsal')">Apri</button>
-          </div>
-        </div>
+    <!-- GENERE -->
+    <div class="section-title"><h2>3) Genere</h2></div>
+    <div class="row" id="genere">
+      <div class="pill" data-gen="M">Maschile</div>
+      <div class="pill" data-gen="F">Femminile</div>
+    </div>
 
-        <div class="sport-card">
-          <div class="sport-thumb"><img src="images/basket.jpg" alt="Basket"></div>
-          <div class="sport-body">
-            <h3 class="sport-title">Basket</h3>
-            <div class="sport-sub">Esplora società</div>
-          </div>
-          <div class="sport-actions">
-            <button class="btn" onclick="openClubs('basket')">Società</button>
-            <button class="btn" onclick="openSport('basket')">Apri</button>
-          </div>
-        </div>
+    <!-- CAMPIONATI -->
+    <div class="section-title"><h2>4) Campionato</h2></div>
+    <select id="campionati" class="select"><option value="">— Seleziona campionato —</option></select>
 
-        <div class="sport-card">
-          <div class="sport-thumb"><img src="images/volley.jpg" alt="Volley"></div>
-          <div class="sport-body">
-            <h3 class="sport-title">Volley</h3>
-            <div class="sport-sub">Esplora società</div>
-          </div>
-          <div class="sport-actions">
-            <button class="btn" onclick="openClubs('volley')">Società</button>
-            <button class="btn" onclick="openSport('volley')">Apri</button>
-          </div>
-        </div>
+    <!-- GIRONI -->
+    <div class="section-title"><h2>5) Girone</h2></div>
+    <select id="gironi" class="select"><option value="">— Seleziona girone —</option></select>
 
-        <div class="sport-card">
-          <div class="sport-thumb"><img src="images/beachvolley.jpg" alt="Beach Volley"></div>
-          <div class="sport-body">
-            <h3 class="sport-title">Beach Volley</h3>
-            <div class="sport-sub">Esplora società</div>
-          </div>
-          <div class="sport-actions">
-            <button class="btn" onclick="openClubs('beachvolley')">Società</button>
-            <button class="btn" onclick="openSport('beachvolley')">Apri</button>
-          </div>
-        </div>
+    <!-- SOCIETÀ -->
+    <div class="section-title"><h2>Società</h2><span class="soft">filtrate per sport e regione</span></div>
+    <div class="list" id="clubs"></div>
 
-        <div class="sport-card">
-          <div class="sport-thumb"><img src="images/pallanuoto.jpg" alt="Pallanuoto"></div>
-          <div class="sport-body">
-            <h3 class="sport-title">Pallanuoto</h3>
-            <div class="sport-sub">Esplora società</div>
-          </div>
-          <div class="sport-actions">
-            <button class="btn" onclick="openClubs('pallanuoto')">Società</button>
-            <button class="btn" onclick="openSport('pallanuoto')">Apri</button>
-          </div>
-        </div>
+    <!-- PREMATCH della società selezionata -->
+    <div class="section-title"><h2>PreMatch</h2><span class="soft">esempi demo</span></div>
+    <div class="list" id="prematch"></div>
 
-        <div class="sport-card">
-          <div class="sport-thumb"><img src="images/rugby.jpg" alt="Rugby"></div>
-          <div class="sport-body">
-            <h3 class="sport-title">Rugby</h3>
-            <div class="sport-sub">Esplora società</div>
-          </div>
-          <div class="sport-actions">
-            <button class="btn" onclick="openClubs('rugby')">Società</button>
-            <button class="btn" onclick="openSport('rugby')">Apri</button>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Sezione navigazione (regioni / genere / campionato) -->
-    <section id="navSection" class="card" style="margin-top:18px;display:none;">
-      <h2 id="navTitle" class="title" style="font-size:28px;margin-bottom:6px;">Navigazione</h2>
-      <p class="lead" id="navLead">Seleziona Regione, Genere e Campionato.</p>
-
-      <div class="filters">
-        <div class="row">
-          <div>
-            <label class="mini">Regione</label>
-            <select id="selRegion"></select>
-          </div>
-          <div>
-            <label class="mini">Genere</label>
-            <select id="selGender">
-              <option value="femminile">Femminile</option>
-              <option value="maschile">Maschile</option>
-            </select>
-          </div>
-          <div>
-            <label class="mini">Campionato</label>
-            <select id="selLeague"></select>
-          </div>
-        </div>
-
-        <div class="chip" id="currentChips">Sport: — · Regione: — · Genere: —</div>
-
-        <div class="list" id="clubsList"></div>
-      </div>
-    </section>
-
+    <div class="divider"></div>
     <div class="footer">
-      <div>PreMatch © 2025 — Semplice. Pulita. Gratuita. ·
-        <span class="links"><a href="#" onclick="alert('Privacy demo');return false;">Privacy</a> ·
-        <a href="#" onclick="alert('Supporto demo');return false;">Supporto</a></span>
-      </div>
+      © PreMatch — semplice, pulita, veloce. Privacy prima di tutto.
     </div>
-  </main>
+  </div>
 
-  <script>
-    // --- Dati di demo (regioni, campionati, società) ---
-    const REGIONS = [
-      "Abruzzo","Basilicata","Calabria","Campania","Emilia-Romagna","Friuli Venezia Giulia","Lazio","Liguria",
-      "Lombardia","Marche","Molise","Piemonte","Puglia","Sardegna","Sicilia","Toscana","Trentino-Alto Adige",
-      "Umbria","Valle d'Aosta","Veneto"
-    ];
+<script>
+  // 1) CONFIGURA QUI I TUOI PARAMETRI SUPABASE
+  const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE";         // es. https://xxxx.supabase.co
+  const SUPABASE_ANON = "YOUR_SUPABASE_ANON_KEY_HERE";   // Settings → API → anon public key
 
-    const LEAGUES = {
-      calcio: {
-        femminile:["Eccellenza F","Promozione F","Under 17 F","Under 15 F","Scuola Calcio F"],
-        maschile:["Serie D","Eccellenza","Promozione","Prima Categoria","Juniores","Allievi","Giovanissimi","Scuola Calcio"]
-      },
-      futsal: {
-        femminile:["A2 Élite F","C1 F","U19 F"],
-        maschile:["A2 Élite","B","C1","U19","U17"]
-      },
-      basket: {
-        femminile:["A2 F","B F","U17 F","U14 F"],
-        maschile:["C Gold","C Silver","Promozione","U19","U17","U15","Minibasket"]
-      },
-      volley: {
-        femminile:["B1 F","B2 F","C F","U18 F","U16 F","U14 F"],
-        maschile:["B","C","D","U19","U17","U15"]
-      },
-      beachvolley:{
-        femminile:["Open F","U18 F"],
-        maschile:["Open","U18"]
-      },
-      pallanuoto:{
-        femminile:["A2 F","U17 F","U15 F"],
-        maschile:["A2","B","U17","U15"]
-      },
-      rugby:{
-        femminile:["Serie A F","U18 F"],
-        maschile:["Top10","Serie A","Serie B","U19","U17","U15","Minirugby"]
-      }
-    };
+  // 2) CLIENT
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-    const CLUBS_DEMO = [
-      {name:"ASD Virtus Roma", region:"Lazio"},
-      {name:"Polisportiva Milano", region:"Lombardia"},
-      {name:"Real Napoli", region:"Campania"},
-      {name:"Torino United", region:"Piemonte"},
-      {name:"Firenze Academy", region:"Toscana"},
-      {name:"Bari Calcio Giovani", region:"Puglia"},
-    ];
+  // 3) STATO UI
+  const state = {
+    sport: null,
+    sportName: null,
+    regione: null,
+    regioneName: null,
+    genere: null,
+    campionato: null,
+    campionatoLabel: null,
+    girone: null,
+    gironeName: null,
+    clubSelezionato: null,
+  };
 
-    // --- Stato e helpers ---
-    const selRegion = document.getElementById('selRegion');
-    const selGender = document.getElementById('selGender');
-    const selLeague = document.getElementById('selLeague');
-    const chips = document.getElementById('currentChips');
-    const clubsList = document.getElementById('clubsList');
-    const navSection = document.getElementById('navSection');
-    const navTitle = document.getElementById('navTitle');
-    const navLead = document.getElementById('navLead');
+  // 4) ELEMENTI DOM
+  const elSports = document.getElementById('sports');
+  const elRegioni = document.getElementById('regioni');
+  const elGenere = document.getElementById('genere');
+  const elCampionati = document.getElementById('campionati');
+  const elGironi = document.getElementById('gironi');
+  const elClubs = document.getElementById('clubs');
+  const elPreMatch = document.getElementById('prematch');
+  const elBC = document.getElementById('breadcrumbs');
 
-    let currentSport = null;
+  // 5) UTILS UI
+  function breadcrumbs(){
+    elBC.innerHTML = '';
+    const parts = [];
+    if(state.sportName) parts.push({k:'Sport', v:state.sportName, onclear:()=>{state.sport=null;state.sportName=null;state.campionato=null;state.girone=null;state.genere=null;state.regione=null;state.regioneName=null;renderAll();}});
+    if(state.regioneName) parts.push({k:'Regione', v:state.regioneName, onclear:()=>{state.regione=null;state.regioneName=null;state.campionato=null;state.girone=null;renderAll();}});
+    if(state.genere) parts.push({k:'Genere', v:(state.genere==='M'?'Maschile':'Femminile'), onclear:()=>{state.genere=null;state.campionato=null;state.girone=null;renderAll();}});
+    if(state.campionatoLabel) parts.push({k:'Campionato', v:state.campionatoLabel, onclear:()=>{state.campionato=null;state.girone=null;renderAll();}});
+    if(state.gironeName) parts.push({k:'Girone', v:state.gironeName, onclear:()=>{state.girone=null;renderAll();}});
 
-    REGIONS.forEach(r=>{
-      const o=document.createElement('option');
-      o.value=o.textContent=r;
-      selRegion.appendChild(o);
+    for(const p of parts){
+      const span = document.createElement('span');
+      span.className='bc';
+      span.innerHTML = `<strong>${p.k}:</strong> ${p.v} <span class="x">✕</span>`;
+      span.querySelector('.x').onclick=p.onclear;
+      elBC.appendChild(span);
+    }
+  }
+
+  function opt(el, value, label){
+    const o = document.createElement('option');
+    o.value = value; o.textContent = label;
+    el.appendChild(o);
+  }
+
+  function clearSelect(el, placeholder){
+    el.innerHTML = '';
+    opt(el,'', placeholder || '— Seleziona —');
+  }
+
+  function pillActivate(gen){
+    for(const node of elGenere.querySelectorAll('.pill')){
+      node.classList.toggle('active', node.dataset.gen===gen);
+    }
+  }
+
+  // 6) LOADERS
+  async function loadSports(){
+    const { data, error } = await supabase.from('sports').select('*').order('nome');
+    if(error){ console.error(error); return; }
+    elSports.innerHTML='';
+    data.forEach(s=>{
+      const btn = document.createElement('button');
+      btn.innerHTML = `<span class="icon">🏷️</span><div><div style="font-weight:700">${s.nome}</div><div class="label">Seleziona</div></div>`;
+      btn.onclick = ()=>{ state.sport = s.id; state.sportName = s.nome; state.campionato=null; state.girone=null; renderAll(); };
+      const card = document.createElement('div'); card.className='card';
+      card.appendChild(btn);
+      const cell = document.createElement('div');
+      cell.appendChild(card);
+      elSports.appendChild(cell);
     });
+  }
 
-    function openClubs(sport){
-      openSport(sport);
-      // Scorri direttamente alla lista società
-      setTimeout(()=>document.getElementById('clubsList').scrollIntoView({behavior:'smooth',block:'start'}),150);
-    }
+  async function loadRegioni(){
+    const { data, error } = await supabase.from('regioni').select('*').order('nome');
+    if(error){ console.error(error); return; }
+    clearSelect(elRegioni,'— Seleziona regione —');
+    data.forEach(r => opt(elRegioni, r.id, r.nome));
+    if(state.regione) elRegioni.value = state.regione;
+  }
 
-    function openSport(sport){
-      currentSport = sport;
-      navTitle.textContent = sportLabel(sport);
-      navLead.textContent = "Seleziona Regione, Genere e Campionato.";
-      navSection.style.display='block';
-      populateLeagues();
-      updateChips();
-      renderClubs();
-      // scroll dolce alla sezione
-      navSection.scrollIntoView({behavior:'smooth',block:'start'});
-    }
+  async function loadCampionati(){
+    clearSelect(elCampionati,'— Seleziona campionato —');
+    if(!(state.sport && state.regione && state.genere)) return;
+    const { data, error } = await supabase
+      .from('campionati')
+      .select('id, livello, stagione')
+      .eq('sport_id', state.sport)
+      .eq('regione_id', state.regione)
+      .eq('genere', state.genere)
+      .order('livello');
+    if(error){ console.error(error); return; }
+    data.forEach(c => opt(elCampionati, c.id, `${c.livello} · ${c.stagione}`));
+    if(state.campionato) elCampionati.value = state.campionato;
+  }
 
-    function sportLabel(key){
-      return ({
-        calcio:"Calcio",
-        futsal:"Futsal",
-        basket:"Basket",
-        volley:"Volley",
-        beachvolley:"Beach Volley",
-        pallanuoto:"Pallanuoto",
-        rugby:"Rugby"
-      })[key] || "Sport";
-    }
+  async function loadGironi(){
+    clearSelect(elGironi,'— Seleziona girone —');
+    if(!state.campionato) return;
+    const { data, error } = await supabase
+      .from('gironi')
+      .select('id, nome')
+      .eq('campionato_id', state.campionato)
+      .order('nome');
+    if(error){ console.error(error); return; }
+    data.forEach(g => opt(elGironi, g.id, g.nome));
+    if(state.girone) elGironi.value = state.girone;
+  }
 
-    function populateLeagues(){
-      selLeague.innerHTML="";
-      const g = selGender.value;
-      const list = (LEAGUES[currentSport] && LEAGUES[currentSport][g]) || [];
-      list.forEach(l=>{
-        const o=document.createElement('option');
-        o.value=o.textContent=l;
-        selLeague.appendChild(o);
-      });
-    }
+  async function loadClubs(){
+    elClubs.innerHTML='';
+    if(!(state.sport && state.regione)) return;
+    const { data, error } = await supabase
+      .from('societa')
+      .select('id, nome, verificata')
+      .eq('sport_id', state.sport)
+      .eq('regione_id', state.regione)
+      .order('nome');
+    if(error){ console.error(error); return; }
+    if(!data.length){ elClubs.innerHTML='<div class="soft">Nessuna società trovata per questi filtri.</div>'; return; }
+    data.forEach(cl=>{
+      const row = document.createElement('div'); row.className='club';
+      row.innerHTML = `
+        <div>
+          <h4>${cl.nome}</h4>
+          <div class="label">${cl.verificata ? '✅ Verificata' : '🟡 Non verificata'} · ${state.sportName} · ${state.regioneName||''}</div>
+        </div>
+        <div class="row">
+          <span class="kpi">Profilo</span>
+          <button class="pill" aria-label="Apri prematch">Apri</button>
+        </div>`;
+      row.querySelector('button').onclick = ()=>{ state.clubSelezionato = cl.id; loadPreMatch(); };
+      elClubs.appendChild(row);
+    });
+  }
 
-    function updateChips(){
-      chips.textContent = `Sport: ${sportLabel(currentSport)} · Regione: ${selRegion.value || "—"} · Genere: ${selGender.value || "—"}`;
-    }
+  async function loadPreMatch(){
+    elPreMatch.innerHTML='';
+    if(!state.clubSelezionato){ elPreMatch.innerHTML='<div class="soft">Seleziona una società.</div>'; return; }
+    const { data, error } = await supabase
+      .from('prematch')
+      .select('id, data_partita, luogo, stato, societa_id, avversaria_societa_id')
+      .or(`societa_id.eq.${state.clubSelezionato},avversaria_societa_id.eq.${state.clubSelezionato}`)
+      .order('data_partita', { ascending: true });
+    if(error){ console.error(error); return; }
+    if(!data.length){ elPreMatch.innerHTML='<div class="soft">Nessun PreMatch disponibile.</div>'; return; }
+    data.forEach(pm=>{
+      const d = pm.data_partita ? new Date(pm.data_partita) : null;
+      const statusClass = pm.stato==='confermato' ? 'ok' : (pm.stato==='in_attesa' ? 'wait' : '');
+      const card = document.createElement('div'); card.className='club';
+      card.innerHTML = `
+        <div>
+          <h4>${pm.luogo || 'Luogo da definire'}</h4>
+          <div class="label">${d? d.toLocaleString(): 'data da definire'}</div>
+        </div>
+        <span class="status ${statusClass}">${pm.stato==='confermato'?'● PREMATCH CONFERMATO': (pm.stato==='in_attesa'?'● In attesa di verifica':'● Bozza')}</span>
+      `;
+      elPreMatch.appendChild(card);
+    });
+  }
 
-    function renderClubs(){
-      clubsList.innerHTML="";
-      // demo: mostra tutte le società filtrate per regione
-      const region = selRegion.value;
-      const data = region ? CLUBS_DEMO.filter(c=>c.region===region) : CLUBS_DEMO;
-      if(!data.length){
-        const empty=document.createElement('div');
-        empty.className='item';
-        empty.innerHTML = `<strong>Nessuna società trovata</strong><div class="mini">Prova a cambiare regione o campionato.</div>`;
-        clubsList.appendChild(empty);
-        return;
-      }
-      data.forEach(c=>{
-        const d=document.createElement('div');
-        d.className='item';
-        d.innerHTML = `
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
-            <div>
-              <strong>${c.name}</strong>
-              <div class="mini">${c.region} · ${sportLabel(currentSport)} · ${selGender.value} · ${selLeague.value||""}</div>
-            </div>
-            <button class="btn" onclick="alert('Visita ${c.name} (demo)')">Visita</button>
-          </div>`;
-        clubsList.appendChild(d);
-      });
-    }
+  // 7) EVENTI UI
+  elRegioni.addEventListener('change', ()=>{
+    state.regione = elRegioni.value || null;
+    state.regioneName = elRegioni.options[elRegioni.selectedIndex]?.text || null;
+    state.campionato = null; state.campionatoLabel=null; state.girone=null; state.gironeName=null;
+    renderAll();
+  });
 
-    selRegion.addEventListener('change',()=>{updateChips();renderClubs();});
-    selGender.addEventListener('change',()=>{populateLeagues();updateChips();renderClubs();});
-    selLeague.addEventListener('change',()=>{renderClubs();});
+  elGenere.querySelectorAll('.pill').forEach(p=>{
+    p.addEventListener('click', ()=>{
+      state.genere = p.dataset.gen;
+      pillActivate(state.genere);
+      state.campionato=null; state.campionatoLabel=null; state.girone=null; state.gironeName=null;
+      renderAll();
+    });
+  });
 
-    // cache-buster per GitHub Pages quando ricarichi con ?v=
-    (function(){
-      const url = new URL(location.href);
-      if(url.searchParams.get('v')){
-        const imgs = document.querySelectorAll('img');
-        imgs.forEach(img=>{
-          const u = new URL(img.getAttribute('src'), location.href);
-          u.searchParams.set('v', url.searchParams.get('v'));
-          img.src = u.toString();
-        });
-      }
-    })();
-  </script>
+  elCampionati.addEventListener('change', ()=>{
+    state.campionato = elCampionati.value || null;
+    state.campionatoLabel = elCampionati.options[elCampionati.selectedIndex]?.text || null;
+    state.girone = null; state.gironeName = null;
+    renderAll();
+  });
+
+  elGironi.addEventListener('change', ()=>{
+    state.girone = elGironi.value || null;
+    state.gironeName = elGironi.options[elGironi.selectedIndex]?.text || null;
+    renderAll();
+  });
+
+  // 8) RENDER CICLO
+  async function renderAll(){
+    breadcrumbs();
+    await Promise.all([
+      (!state.sport ? loadSports() : Promise.resolve()),
+      loadRegioni()
+    ]);
+    pillActivate(state.genere);
+    await loadCampionati();
+    await loadGironi();
+    await loadClubs();
+    await loadPreMatch();
+  }
+
+  // 9) AVVIO
+  renderAll();
+</script>
 </body>
 </html>
