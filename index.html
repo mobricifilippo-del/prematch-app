@@ -1,1 +1,141 @@
 
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PreMatch – Demo completa</title>
+  <meta name="description" content="PreMatch - App demo pre-partita sportiva" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel2: #0b1220;
+      --text: #e5e7eb;
+      --brand: #16a34a;
+      --accent: #3b82f6;
+      --ok: #22c55e;
+      --soft: #1f2937;
+      --chip: #0b7bdd;
+      --card: #0f1b2d;
+      --border: #1f2a44;
+      --ads: #0b1220;
+      --shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg), var(--panel));
+      font-family: system-ui, sans-serif;
+      color: var(--text);
+    }
+
+    header {
+      padding: 1rem;
+      background: var(--panel2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+    header h1 {
+      font-size: 1.2rem;
+      color: var(--brand);
+      margin: 0;
+    }
+
+    main {
+      padding: 1rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+    .card h2 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+      color: var(--accent);
+    }
+
+    .team {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0.5rem 0;
+    }
+    .team span {
+      font-weight: bold;
+    }
+    .vs {
+      text-align: center;
+      margin: 1rem 0;
+      font-size: 1.3rem;
+      color: var(--brand);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    button {
+      background: var(--accent);
+      border: none;
+      color: white;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    button:hover {
+      background: var(--brand);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⚽ PreMatch</h1>
+    <button onclick="alert('Demo: funzione non ancora attiva!')">Login</button>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>Prossima partita</h2>
+      <div class="team"><span>Juventus</span> <span>⚪⚫</span></div>
+      <div class="vs">VS</div>
+      <div class="team"><span>Milan</span> <span>🔴⚫</span></div>
+      <p><b>Data:</b> 25 Agosto 2025, ore 20:45</p>
+      <p><b>Stadio:</b> Allianz Stadium</p>
+    </div>
+
+    <div class="card">
+      <h2>Note pre-partita</h2>
+      <ul>
+        <li>Modulo probabile: 4-3-3</li>
+        <li>Giocatore chiave: Vlahovic</li>
+        <li>Attenzione a Leao</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Statistiche</h2>
+      <p>Ultimi 5 incontri: Juventus 2V - 2N - 1P</p>
+      <p>Possesso medio: 56%</p>
+      <p>Tiri in porta: 8.4 a partita</p>
+    </div>
+  </main>
+
+  <footer>
+    Demo PreMatch © 2025
+  </footer>
+</body>
+</html>
