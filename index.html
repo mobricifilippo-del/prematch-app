@@ -1,147 +1,279 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PreMatch</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f9;
-      color: #333;
-      text-align: center;
-    }
-    header {
-      background-color: #2e7d32;
-      color: white;
-      padding: 1rem;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    nav {
-      margin: 1rem;
-    }
-    nav button {
-      margin: 0.5rem;
-      padding: 0.8rem 1.2rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 6px;
-      background-color: #4caf50;
-      color: white;
-      cursor: pointer;
-    }
-    nav button:hover {
-      background-color: #388e3c;
-    }
-    .content {
-      padding: 1rem;
-    }
-    .card {
-      background: white;
-      margin: 1rem auto;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      max-width: 400px;
-    }
-    .status {
-      padding: 0.4rem;
-      border-radius: 4px;
-      font-weight: bold;
-    }
-    .confirmed {
-      background-color: #c8e6c9;
-      color: #2e7d32;
-    }
-    .pending {
-      background-color: #ffccbc;
-      color: #d84315;
-    }
-  </style>
-</head>
-<body>
-  <header>⚽ PreMatch – App Demo</header>
-  <nav>
-    <button onclick="showSport('calcio')">Calcio</button>
-    <button onclick="showSport('basket')">Basket</button>
-    <button onclick="showSport('volley')">Volley</button>
-    <button onclick="showSport('futsal')">Futsal</button>
-    <button onclick="showSport('altri')">Altri sport</button>
-  </nav>
-  <div class="content" id="content">
-    <h2>Benvenuto su PreMatch</h2>
-    <p>Seleziona uno sport per esplorare le società e le prossime partite.</p>
-  </div>
+<!doctype html><html lang="it"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>PreMatch</title><style>
+:root{--bg:#0f172a;--panel:#111827;--panel2:#0b1220;--text:#e5e7eb;--muted:#9aa3b1;--brand:#16a34a;--accent:#3b82f6;--ok:#22c55e;--warn:#ef4444;--card:#0f1b2d;--border:#1f2a44}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;background:linear-gradient(180deg,#0b1120,#0f172a);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Arial}
+header{position:sticky;top:0;z-index:10;background:rgba(11,17,32,.7);backdrop-filter:blur(8px);border-bottom:1px solid #0f1a2a}
+.topbar{max-width:1100px;margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:12px 16px}
+.brand{display:flex;gap:10px;align-items:center;font-weight:800}
+.brand i{width:28px;height:28px;display:grid;place-items:center;border:1px solid #20304a;border-radius:8px;background:#0b1220}
+.nav a{color:var(--text);text-decoration:none;padding:6px 10px;border-radius:8px}
+.nav a.active{background:#ffffff12}
+.container{max-width:1100px;margin:0 auto;padding:16px}
+.grid{display:grid;gap:12px}
+@media(min-width:720px){.grid{grid-template-columns:repeat(4,1fr)}}
+.card{background:linear-gradient(180deg,#0f1b2d,#0b1220);border:1px solid var(--border);border-radius:14px;padding:14px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid #20304a;background:#0b1220;color:var(--text);text-decoration:none;cursor:pointer}
+.btn.primary{background:linear-gradient(180deg,#1d8f4f,#0f6a3b);border-color:#1a6a46}
+.badge{font-size:12px;border:1px solid #2a3a58;border-radius:999px;padding:2px 8px}
+.ok{color:var(--ok);border-color:#22c55e45;background:#22c55e18}.wait{color:#f87171;border-color:#ef444445;background:#ef444418}
+.input{width:100%;padding:10px;border-radius:10px;border:1px solid #223146;background:#0b1322;color:var(--text)}
+.row{display:grid;gap:10px}@media(min-width:720px){.row{grid-template-columns:1fr 1fr}}
+.small{color:var(--muted);font-size:12px}
+h1{margin:6px 0 12px;font-size:24px}h2{margin:6px 0 10px;font-size:18px}
+footer{padding:22px 16px;color:#8da2c8;text-align:center;border-top:1px solid #10203a;margin-top:24px}
+.hidden{display:none}
+.tile{display:flex;align-items:center;gap:10px;cursor:pointer}
+.ball{width:40px;height:40px;border-radius:50%;background:#16a34a;display:grid;place-items:center;border:1px solid #264;box-shadow:inset 0 0 0 6px #0b1220}
+</style></head><body>
+<header><div class="topbar">
+  <div class="brand"><i>⚽</i><span>PreMatch</span></div>
+  <nav class="nav" id="nav"></nav>
+</div></header>
 
-  <script>
-    function showSport(sport) {
-      let content = document.getElementById("content");
-      if (sport === "calcio") {
-        content.innerHTML = `
-          <h2>Società di Calcio</h2>
+<main class="container" id="app"></main>
+<footer>PreMatch © 2025 — Gratuita, senza pubblicità invadente</footer>
+
+<script>
+// ----------------- DATA (demo) -----------------
+const SPORTS=[{id:'calcio',name:'Calcio',ball:'⚽'},{id:'futsal',name:'Futsal',ball:'🥅'},{id:'basket',name:'Basket',ball:'🏀'},{id:'volley',name:'Volley',ball:'🏐'},{id:'rugby',name:'Rugby',ball:'🏉'}];
+const CLUBS=[{slug:'as-stella-verde',sport:'calcio',name:'AS Stella Verde',city:'Napoli',venue:'Stadio Aurora',status:'ok'},
+{slug:'usd-lupi-mare',sport:'calcio',name:'USD Lupi del Mare',city:'Bari',venue:'Impianto Costiero',status:'wait'},
+{slug:'c5-fulmini',sport:'futsal',name:'C5 Fulmini',city:'Roma',venue:'Palazzetto Fulmini',status:'ok'},
+{slug:'bk-aquila',sport:'basket',name:'BK Aquila',city:'Milano',venue:'PalaAquila',status:'ok'}];
+
+const SPONSOR=[ // profili sponsor
+ {id:'hotel-aurora',type:'hotel',name:'Hotel Aurora',city:'Napoli',links:{web:'#'}},
+ {id:'ristorante-porto',type:'ristorante',name:'Ristorante Il Porto',city:'Bari',links:{web:'#'}},
+];
+const SPONSOR_LINKS={ // sponsor associati alle società
+ 'as-stella-verde':['hotel-aurora'],
+ 'usd-lupi-mare':['ristorante-porto']
+};
+
+// ----------------- NAV -----------------
+function renderNav(){
+  const n=document.getElementById('nav'); n.innerHTML='';
+  [['#/','Home'],['#/explore','Sport'],['#/login','Accedi/Registra']].forEach(([href,label])=>{
+    const a=document.createElement('a'); a.href=href; a.textContent=label;
+    if(location.hash===href||(location.hash===''&&href==='#/')) a.classList.add('active');
+    n.appendChild(a);
+  });
+}
+
+// ----------------- VISTE -----------------
+function ViewLogin(){
+  renderNav();
+  const c=document.getElementById('app');
+  c.innerHTML=`
+    <div class="card">
+      <h1>Accedi o Registrati</h1>
+      <div class="row">
+        <button class="btn primary" onclick="location.hash='#/dashboard?as=club'">Entra come Società (demo)</button>
+        <button class="btn" onclick="location.hash='#/register'">Crea account</button>
+      </div>
+      <p class="small" style="margin-top:8px">La registrazione vera sarà verificata; qui è una demo.</p>
+    </div>
+    <div class="card">
+      <h2>Crea account</h2>
+      <div class="row">
+        <button class="btn" onclick="location.hash='#/register?role=utente'">👤 Utente</button>
+        <button class="btn" onclick="location.hash='#/register?role=societa'">🏟️ Società sportiva</button>
+        <button class="btn" onclick="location.hash='#/register?role=sponsor'">💼 Sponsor (Crea account Sponsor)</button>
+      </div>
+    </div>
+  `;
+}
+
+function ViewRegister(params){
+  renderNav();
+  const role=params.role||'utente';
+  const title = role==='sponsor' ? 'Registrazione Sponsor' : role==='societa' ? 'Registrazione Società' : 'Registrazione Utente';
+  const fields = role==='sponsor'
+    ? `<input class="input" placeholder="Ragione sociale / Nome brand">
+       <input class="input" placeholder="Città">
+       <input class="input" placeholder="Sito web (opzionale)">`
+    : role==='societa'
+    ? `<input class="input" placeholder="Nome società">
+       <input class="input" placeholder="Città">
+       <input class="input" placeholder="Impianto sportivo">`
+    : `<input class="input" placeholder="Nome e Cognome">
+       <input class="input" placeholder="Email">`;
+  const c=document.getElementById('app');
+  c.innerHTML=`
+    <div class="card">
+      <h1>${title}</h1>
+      <div class="row">${fields}</div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn primary" onclick="alert('Demo: dati salvati localmente')">Conferma</button>
+        <a class="btn" href="#/login">Torna al login</a>
+      </div>
+      <p class="small" style="margin-top:8px">Gli sponsor avranno pagine dedicate e compariranno nei profili società collegati.</p>
+    </div>
+  `;
+}
+
+function ViewHome(){
+  renderNav();
+  const c=document.getElementById('app');
+  c.innerHTML=`
+    <div class="card"><h1>Benvenuto in PreMatch</h1>
+      <p class="small">Gratuita, semplice, senza pubblicità invadente. Gli utenti possono esplorare, le società verificate possono organizzare.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <a class="btn primary" href="#/explore">Scegli uno sport</a>
+        <a class="btn" href="#/login">Accedi/Registra</a>
+      </div>
+    </div>
+  `;
+}
+
+function ViewExplore(){
+  renderNav();
+  const c=document.getElementById('app');
+  c.innerHTML=`
+    <div class="card"><h1>Scegli lo sport</h1>
+      <div class="grid" style="margin-top:8px">
+        ${SPORTS.map(s=>`
+          <div class="card tile" onclick="location.hash='#/sport/${s.id}'">
+            <div class="ball">${s.ball}</div>
+            <div>
+              <div style="font-weight:700">${s.name}</div>
+              <div class="small">Esplora società</div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function ViewSport(id){
+  renderNav();
+  const list=CLUBS.filter(c=>c.sport===id);
+  const sportName=(SPORTS.find(s=>s.id===id)||{}).name||id;
+  const c=document.getElementById('app');
+  c.innerHTML=`
+    <div class="card"><h1>${sportName}</h1>
+      <div class="small">Gli utenti possono visitare i profili società (solo lettura).</div>
+      <div class="grid" style="margin-top:10px">
+        ${list.map(cl=>`
           <div class="card">
-            <h3>AS Roma</h3>
-            <p>Prossima partita: Domenica ore 15:00</p>
-            <p class="status confirmed">✅ PreMatch Confermato</p>
-          </div>
-          <div class="card">
-            <h3>SS Lazio</h3>
-            <p>Prossima partita: Domenica ore 18:00</p>
-            <p class="status pending">⏳ PreMatch in attesa di verifica</p>
-          </div>
-        `;
-      } else if (sport === "basket") {
-        content.innerHTML = `
-          <h2>Società di Basket</h2>
-          <div class="card">
-            <h3>Olimpia Milano</h3>
-            <p>Prossima partita: Sabato ore 20:30</p>
-            <p class="status confirmed">✅ PreMatch Confermato</p>
-          </div>
-          <div class="card">
-            <h3>Virtus Bologna</h3>
-            <p>Prossima partita: Venerdì ore 21:00</p>
-            <p class="status pending">⏳ PreMatch in attesa di verifica</p>
-          </div>
-        `;
-      } else if (sport === "volley") {
-        content.innerHTML = `
-          <h2>Società di Volley</h2>
-          <div class="card">
-            <h3>Imoco Conegliano</h3>
-            <p>Prossima partita: Sabato ore 17:00</p>
-            <p class="status confirmed">✅ PreMatch Confermato</p>
-          </div>
-          <div class="card">
-            <h3>Lube Civitanova</h3>
-            <p>Prossima partita: Domenica ore 19:00</p>
-            <p class="status pending">⏳ PreMatch in attesa di verifica</p>
-          </div>
-        `;
-      } else if (sport === "futsal") {
-        content.innerHTML = `
-          <h2>Società di Futsal</h2>
-          <div class="card">
-            <h3>Italservice Pesaro</h3>
-            <p>Prossima partita: Sabato ore 16:00</p>
-            <p class="status confirmed">✅ PreMatch Confermato</p>
-          </div>
-          <div class="card">
-            <h3>Feldi Eboli</h3>
-            <p>Prossima partita: Domenica ore 18:30</p>
-            <p class="status pending">⏳ PreMatch in attesa di verifica</p>
-          </div>
-        `;
-      } else {
-        content.innerHTML = `
-          <h2>Altri Sport</h2>
-          <p>Badminton, Tennis tavolo, Hockey prato, ecc.</p>
-        `;
-      }
-    }
-  </script>
-</body>
-</html>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-weight:700">${cl.name}</div>
+                <div class="small">${cl.city} — ${cl.venue}</div>
+              </div>
+              <span class="badge ${cl.status==='ok'?'ok':'wait'}">${cl.status==='ok'?'PREMATCH CONFIRMATO':'IN ATTESA'}</span>
+            </div>
+            <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+              <a class="btn" href="#/club/${cl.slug}">Apri società</a>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function ViewClub(slug){
+  renderNav();
+  const cl=CLUBS.find(c=>c.slug===slug);
+  const sponsors=(SPONSOR_LINKS[slug]||[]).map(id=>SPONSOR.find(s=>s.id===id)).filter(Boolean);
+  const c=document.getElementById('app');
+  c.innerHTML=`
+    <div class="card">
+      <h1>${cl.name}</h1>
+      <div class="small">${cl.city} — ${cl.venue}</div>
+      <div style="margin:10px 0"><span class="badge ${cl.status==='ok'?'ok':'wait'}">${cl.status==='ok'?'PREMATCH CONFIRMATO':'PREMATCH IN ATTESA'}</span></div>
+      <h2>Sponsor ufficiali</h2>
+      ${sponsors.length?`
+        <div class="grid" style="grid-template-columns:repeat(2,1fr)">
+          ${sponsors.map(s=>`
+            <div class="card">
+              <div style="font-weight:700">${s.name}</div>
+              <div class="small">${s.type.toUpperCase()} — ${s.city}</div>
+              <a class="btn" href="#/sponsor/${s.id}">Apri sponsor</a>
+            </div>`).join('')}
+        </div>`:`<div class="small">Nessuno sponsor collegato.</div>`}
+    </div>
+  `;
+}
+
+function ViewSponsor(id){
+  renderNav();
+  const s=SPONSOR.find(x=>x.id===id);
+  const c=document.getElementById('app');
+  c.innerHTML=`
+    <div class="card">
+      <h1>${s.name}</h1>
+      <div class="small">${s.type.toUpperCase()} — ${s.city}</div>
+      <div style="margin-top:8px"><a class="btn" href="${s.links.web}" target="_blank">Visita sito</a></div>
+      <p class="small" style="margin-top:8px">Profilo sponsor: visibile a utenti e società. Nessun accesso a funzioni sportive.</p>
+    </div>
+  `;
+}
+
+function ViewDashboard(params){
+  renderNav();
+  // demo: accesso società “verificata” finto
+  const as=params.as||'club';
+  const c=document.getElementById('app');
+  c.innerHTML=`
+    <div class="card">
+      <h1>Dashboard Società (demo)</h1>
+      <div class="small">Area riservata a società verificate. Qui potrai creare Pre-Match, gestire liste gara, orari e divise.</div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <a class="btn primary" href="#/nuovo">Crea Pre-Match</a>
+        <a class="btn" href="#/explore">Esplora</a>
+      </div>
+    </div>
+  `;
+}
+
+function ViewNuovo(){
+  renderNav();
+  const c=document.getElementById('app');
+  c.innerHTML=`
+    <div class="card">
+      <h1>Crea Pre-Match (demo)</h1>
+      <div class="row">
+        <input class="input" id="club" placeholder="Società (es. AS Stella Verde)">
+        <input class="input" id="opp" placeholder="Avversario (es. USD Lupi del Mare)">
+      </div>
+      <div class="row" style="margin-top:8px">
+        <input class="input" id="dt" type="datetime-local">
+        <input class="input" id="venue" placeholder="Impianto (es. Stadio Aurora)">
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn primary" onclick="saveMatch()">Salva (solo locale)</button>
+        <a class="btn" href="#/dashboard">Torna alla dashboard</a>
+      </div>
+      <p class="small" style="margin-top:8px">Demo: i dati restano nel tuo dispositivo (localStorage). Niente server.</p>
+    </div>
+  `;
+}
+
+// ----------------- DEMO STATE -----------------
+const K='pm-demo-match';
+function saveMatch(){
+  const data={club:val('club'),opp:val('opp'),dt:val('dt'),venue:val('venue')};
+  localStorage.setItem(K,JSON.stringify(data));
+  alert('Salvato (demo). Vai sulla tua società per vedere lo stato.');
+}
+function val(id){return (document.getElementById(id)?.value||'').trim();}
+
+// ----------------- ROUTER -----------------
+function parseParams(){const h=location.hash.split('?'); const q=new URLSearchParams(h[1]||''); return Object.fromEntries(q.entries());}
+function route(){
+  const h=location.hash||'#/'; renderNav();
+  const app=document.getElementById('app');
+  if(h==='#/'||h==='#'){ViewHome();return;}
+  if(h.startsWith('#/login')){ViewLogin();return;}
+  if(h.startsWith('#/register')){ViewRegister(parseParams());return;}
+  if(h.startsWith('#/explore')){ViewExplore();return;}
+  if(h.startsWith('#/sport/')){ViewSport(h.split('/')[2]);return;}
+  if(h.startsWith('#/club/')){ViewClub(h.split('/')[2]);return;}
+  if(h.startsWith('#/sponsor/')){ViewSponsor(h.split('/')[2]);return;}
+  if(h.startsWith('#/dashboard')){ViewDashboard(parseParams());return;}
+  if(h.startsWith('#/nuovo')){ViewNuovo();return;}
+  app.innerHTML='<div class="card"><h1>Pagina non trovata</h1></div>';
+}
+window.addEventListener('hashchange',route); route();
+</script>
+</body></html>
