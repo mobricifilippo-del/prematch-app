@@ -1,41 +1,121 @@
-:root {
-  --bg: #0b1117;
-  --panel: #111826;
-  --card: #0f172a;
-  --card2: #111827;
-  --accent: #22c55e;
-  --text: #f9fafb;
-  --muted: #9ca3af;
+/* ========== PreMatch — Stile scuro elegante ========== */
+:root{
+  --bg:#0b1117;
+  --panel:#0f172a;
+  --panel-2:#0b1324;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+  --brand:#10b981; /* verde PreMatch */
+  --accent:#38bdf8;
+  --card:#111827;
+  --card-2:#0d1628;
+  --shadow: 0 8px 20px rgba(0,0,0,.35);
 }
 
-* { box-sizing: border-box; }
-html, body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; }
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  color:var(--text);
+  background:
+    radial-gradient(1200px circle at 10% -10%, #0d1b2a 0%, transparent 55%),
+    radial-gradient(1000px circle at 110% 0%, #0a2540 0%, transparent 50%),
+    linear-gradient(180deg, var(--panel-2), var(--bg));
+  min-height:100vh;
+}
 
-/* header */
-.topbar { display:flex; align-items:center; background:var(--panel); padding:10px 16px; position:sticky; top:0; z-index:20; }
-.brand { display:flex; align-items:center; font-weight:700; font-size:20px; cursor:pointer; }
-.brand img { width:28px; height:28px; margin-right:8px; }
-.nav { margin-left:auto; }
-.link { background:none; border:none; color:var(--text); font-size:16px; margin-left:12px; cursor:pointer; }
-.link:hover { color:var(--accent); }
+/* -------- Topbar -------- */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:linear-gradient(180deg, var(--panel-2), var(--panel));
+  border-bottom:1px solid rgba(255,255,255,.06);
+  box-shadow: 0 2px 10px rgba(0,0,0,.4);
+}
+.wrap{
+  max-width:1050px;
+  margin:0 auto;
+  padding:14px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px;
+}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700}
+.brand img{width:28px; height:28px}
+.brand span{opacity:.95}
 
-/* hero */
-.hero { padding: 20px; max-width: 1100px; margin: 0 auto; }
-#title { font-size: 32px; margin: 10px 0 18px; }
+.nav{display:flex; gap:10px}
+.link{
+  background:transparent;
+  border:0; color:var(--text);
+  padding:8px 12px; border-radius:10px;
+  font-weight:600; letter-spacing:.2px;
+  opacity:.85; cursor:pointer;
+}
+.link:hover,.link.active{opacity:1; background:rgba(255,255,255,.06)}
 
-/* grid (cards con immagini) */
-.grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap:16px; }
-.card { background:var(--card); border-radius:14px; overflow:hidden; text-align:center; cursor:pointer; transition:transform .2s, background .2s; border:1px solid rgba(255,255,255,.06); }
-.card:hover { transform: translateY(-3px); background:var(--card2); }
-.card img { width:100%; height:120px; object-fit:cover; display:block; }
-.card-title { padding:10px 10px 6px; font-weight:700; }
-.card-sub { padding:0 10px 12px; font-size:14px; color:var(--muted); }
+/* -------- Schermate -------- */
+.screen{display:none; padding:26px 0}
+.screen.active{display:block}
+.container{max-width:1050px; margin:0 auto; padding:0 16px}
 
-/* list (partite, sponsor) */
-.list { display:none; margin-top:8px; }
-.item { display:flex; gap:12px; align-items:center; background:var(--card); border:1px solid rgba(255,255,255,.06); padding:12px; border-radius:12px; margin-bottom:10px; }
-.item .badge { background:var(--accent); color:#0b1117; font-weight:700; padding:2px 8px; border-radius:999px; font-size:12px; }
-.item .title { font-weight:700; }
-.item .meta { color:var(--muted); font-size:13px; }
+/* -------- Hero -------- */
+.hero{margin:18px 0 8px}
+.hero h1{
+  font-size:38px; margin:6px 0 2px;
+}
+.hero p{color:var(--muted); margin:6px 0 0}
 
-footer { text-align:center; font-size:12px; color:#9aa; padding:20px; }
+/* -------- Griglia sport -------- */
+.grid{
+  margin:18px 0 40px;
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap:18px;
+}
+@media(min-width:760px){
+  .grid{grid-template-columns: repeat(3, minmax(0,1fr))}
+}
+
+.card{
+  background: linear-gradient(180deg, var(--card), var(--card-2));
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:18px; overflow:hidden;
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(0,0,0,.45);
+  border-color: rgba(56,189,248,.25);
+}
+.card img{
+  display:block; width:100%; height:190px; object-fit:cover;
+  background:#0a1220;
+}
+.card h3{
+  margin:0; padding:14px 14px 16px;
+  font-size:20px; letter-spacing:.2px;
+}
+
+/* -------- Sezioni lista (società/partite/sponsor) -------- */
+.section-title{
+  font-size:24px; margin:26px 0 10px;
+}
+.list{
+  display:grid; gap:12px;
+}
+.item{
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px; padding:14px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+
+/* -------- Pulsante principale (se dovesse servire) -------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:8px; padding:10px 14px; border-radius:12px;
+  background:var(--brand); color:#031318; font-weight:800;
+  border:0; cursor:pointer; box-shadow:0 6px 16px rgba(16,185,129,.35);
+}
+.btn:active{transform: translateY(1px)}
+/* ========================================================= */
