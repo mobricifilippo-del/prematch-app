@@ -1,38 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="images/logo.png" />
+  <link rel="stylesheet" href="Style.css" />
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
+    <div class="brand" onclick="location.reload()">
       <img src="images/logo.png" alt="logo" />
       <span>PreMatch</span>
     </div>
+    <nav class="nav">
+      <button class="link" id="backBtn" style="display:none">← Indietro</button>
+      <button class="link" onclick="start()">Home</button>
+    </nav>
   </header>
 
   <main id="home" class="screen active">
-    <h1>Scegli lo sport</h1>
-    <div id="sports" class="grid"></div>
+    <section class="hero">
+      <h1 id="title">Scegli lo sport</h1>
+      <div id="grid" class="grid"></div>
+      <div id="list" class="list"></div>
+    </section>
   </main>
 
-  <main id="clubs" class="screen">
-    <h1>Scegli la società</h1>
-    <div id="clubsList" class="grid"></div>
-    <button onclick="show('#home')">⬅ Torna agli sport</button>
-  </main>
+  <footer>
+    <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
+  </footer>
 
-  <main id="clubDetail" class="screen">
-    <h1 id="clubName"></h1>
-    <p id="clubInfo"></p>
-    <h2>Prossime partite</h2>
-    <ul id="clubMatches"></ul>
-    <button onclick="show('#clubs')">⬅ Torna alle società</button>
-  </main>
-
-  <script src="app.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
