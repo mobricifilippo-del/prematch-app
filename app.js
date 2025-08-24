@@ -1,90 +1,92 @@
-/* ===== Stato ===== */
+// Stato selezioni
 const state = { sport: null, region: null, gender: null };
 
-/* ===== Utility schermi ===== */
+// Utility
+const $  = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+
 function show(id){
-  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-}
-function goBackTo(id){
-  if(id==='home'){ state.sport=null; state.region=null; state.gender=null; }
-  else if(id==='regions'){ state.region=null; state.gender=null; }
-  else if(id==='gender'){ state.gender=null; }
-  renderPicked(); show(id);
+  // nasconde tutte le schermate e mostra solo quella richiesta
+  $$('.screen').forEach(s => s.classList.add('hidden'));
+  $(`#${id}`).classList.remove('hidden');
+  window.scrollTo({ top:0, behavior:'smooth' });
 }
 
-/* ===== SPORT: versione sicura con onclick inline ===== */
-function pickSport(s){
-  state.sport = s;
-  state.region = null;
-  state.gender = null;
-  renderPicked();
-  renderRegions();
-  show('regions');
-}
-
-/* (opzionale) listener automatici, non indispensabili ora */
-function initSportClicks(){
-  document.querySelectorAll('.sport-card').forEach(card=>{
-    card.addEventListener('click', ()=>{
-      pickSport(card.getAttribute('data-sport'));
-    });
+// ====== SPORT ======
+$$('.sport-card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    state.sport = card.dataset.sport;
+    $('#selSportName').textContent = state.sport;
+    buildRegions();
+    show('regions');
   });
-}
+});
 
-/* ===== Regioni ===== */
-const IT_REGIONS = [
-  'Abruzzo','Basilicata','Calabria','Campania','Emilia-Romagna',
-  'Friuli-Venezia Giulia','Lazio','Liguria','Lombardia','Marche',
-  'Molise','Piemonte','Puglia','Sardegna','Sicilia','Toscana',
-  'Trentino-Alto Adige','Umbria','Valle d\'Aosta','Veneto'
+// ====== REGIONI ======
+const REGIONS = [
+  'Abruzzo','Basilicata','Calabria','Campania','Emilia-Romagna','Friuli-Venezia Giulia',
+  'Lazio','Liguria','Lombardia','Marche','Molise','Piemonte',
+  'Puglia','Sardegna','Sicilia','Toscana','Trentino-Alto Adige','Umbria','Veneto'
 ];
-function renderRegions(){
-  const grid = document.getElementById('regions-grid');
-  grid.innerHTML = '';
-  IT_REGIONS.forEach(r=>{
-    const btn = document.createElement('button');
-    btn.className = 'btn'; btn.style.width='100%';
-    btn.textContent = r;
-    btn.onclick = ()=>{ state.region=r; state.gender=null; renderPicked(); show('gender'); };
-    grid.appendChild(btn);
+
+function buildRegions(){
+  const box = $('#regionsGrid');
+  box.innerHTML = '';
+  REGIONS.forEach(name=>{
+    const b = document.createElement('button');
+    b.className = 'pill';
+    b.textContent = name;
+    b.addEventListener('click', ()=>{
+      state.region = name;
+      show('gender');
+    });
+    box.appendChild(b);
   });
 }
 
-/* ===== Genere ===== */
-function pickGender(g){
-  state.gender = g;
-  renderPicked();
-  renderClubs();
-  show('clubs');
+// ====== GENERE ======
+$$('#gender .pill').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    state.gender = b.dataset.gender;
+    updateSummary();
+    buildClubs();
+    show('clubs');
+  });
+});
+
+// ====== SOCIETÀ ======
+function updateSummary(){
+  $('#sumSport').textContent  = state.sport ?? '-';
+  $('#sumRegion').textContent = state.region ?? '-';
+  $('#sumGender').textContent = state.gender ?? '-';
 }
 
-/* ===== Società (mock) ===== */
-function renderClubs(){
-  const ul = document.getElementById('clubs-list');
+function buildClubs(){
+  // Placeholder: sostituire con fetch a Supabase quando vuoi
+  const sample = [
+    `${state.sport} Club Roma`,
+    `${state.sport} Club Milano`,
+    `${state.sport} Club Torino`
+  ];
+  const ul = $('#clubList');
   ul.innerHTML = '';
-  const base = `${state.sport} ${state.region.slice(0,3).toUpperCase()} ${state.gender[0]}`;
-  const clubs = Array.from({length:6},(_,i)=>`${base} — Società ${i+1}`);
-  clubs.forEach(name=>{
+  sample.forEach(name=>{
     const li = document.createElement('li');
-    li.className='sport-card';
-    li.style.listStyle='none';
-    li.style.padding='14px 16px';
-    li.textContent=name;
-    li.onclick=()=>alert(`Pagina società:\n${name}`);
+    li.innerHTML = `<span>${name}</span>
+                    <button data-club="${name}">Apri</button>`;
+    li.querySelector('button').addEventListener('click', ()=>{
+      // Qui potrai caricare partite e sponsor reali della società
+      $('#nextMatches').textContent = `Prossime partite di ${name}…`;
+      $('#sponsorBox').textContent  = `Sponsor di ${name} (se presenti)…`;
+    });
     ul.appendChild(li);
   });
 }
 
-/* ===== Riepilogo ===== */
-function renderPicked(){
-  const s=document.getElementById('picked-sport');
-  const r=document.getElementById('picked-region');
-  const g=document.getElementById('picked-gender');
-  if(s) s.textContent = state.sport ? `Sport: ${state.sport}` : '';
-  if(r) r.textContent = state.region ? `Regione: ${state.region}` : '';
-  if(g) g.textContent = state.gender ? `Genere: ${state.gender}` : '';
-}
-
-/* start (facoltativo) */
-document.addEventListener('DOMContentLoaded', initSportClicks);
+// ====== BACK ======
+$$('.back').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    const target = b.dataset.back;
+    show(target);
+  });
+});
