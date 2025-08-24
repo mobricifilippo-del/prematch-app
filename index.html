@@ -20,7 +20,7 @@
   <main id="home" class="screen active">
     <section class="hero">
       <h1>Scegli lo sport</h1>
-      <p>Esplora società e organizza in PreMatch. Navigazione libera, nessuna registrazione richiesta.</p>
+      <p>Esplora le società e organizza il PreMatch. Navigazione libera, semplice e veloce.</p>
     </section>
     <section id="sportsGrid" class="sports-grid"><!-- filled by JS --></section>
   </main>
@@ -108,13 +108,51 @@
     </section>
 
     <section class="card">
-      <h3>Prossime partite</h3>
+      <div class="card-head">
+        <h3>Prossime partite</h3>
+        <span id="prematchStatus" class="badge" hidden>PreMatch in attesa</span>
+      </div>
       <div id="matchesBox" class="matches"><!-- filled by JS --></div>
     </section>
 
     <section class="card">
       <h3>Sponsor della società</h3>
       <div id="sponsorsBox" class="sponsors"><!-- filled by JS --></div>
+    </section>
+
+    <!-- CREA PREMATCH -->
+    <section class="card">
+      <h3>Crea PreMatch</h3>
+      <p class="muted">Compila i dati essenziali e invia la richiesta ufficiale.</p>
+      <div class="form grid2">
+        <div class="field">
+          <label for="pmDate">Data</label>
+          <input id="pmDate" type="date" class="input" />
+        </div>
+        <div class="field">
+          <label for="pmTime">Ora</label>
+          <input id="pmTime" type="time" class="input" />
+        </div>
+        <div class="field">
+          <label for="pmKit">Colore divisa</label>
+          <select id="pmKit" class="select">
+            <option value="">Seleziona…</option>
+            <option>Chiara</option>
+            <option>Scura</option>
+            <option>Seconda</option>
+            <option>Terza</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="pmNote">Note (opzionale)</label>
+          <input id="pmNote" type="text" class="input" placeholder="Es. richiesta anticipo di 30 min" />
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn--ghost" onclick="resetPreMatch()">Annulla</button>
+        <button class="btn btn--green" onclick="submitPreMatch()">Invia richiesta</button>
+      </div>
+      <div id="pmMsg" class="msg" hidden></div>
     </section>
   </main>
 
