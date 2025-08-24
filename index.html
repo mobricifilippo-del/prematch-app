@@ -5,32 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
   <link rel="icon" href="images/logo.png" />
-  <!-- CSS principale (non toccare) -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Top bar -->
   <header class="topbar">
     <div class="brand">
-      <img src="images/logo.png" alt="logo">
+      <img src="images/logo.png" alt="logo" />
       <span>PreMatch</span>
     </div>
   </header>
 
-  <!-- SCHERMATE: non cambiare nulla qui -->
+  <!-- HOME: solo sport -->
   <main id="home" class="screen active">
     <h1>Scegli lo sport</h1>
-    <p>Esplora le società e organizza con PreMatch. Navigazione libera, interazioni riservate alle società verificate.</p>
-    <section class="sports-grid" id="sportsGrid"><!-- popolato da JS --></section>
+    <p>Esplora le società. Interazioni riservate alle società verificate.</p>
+    <section class="sports-grid" id="sportsGrid"><!-- da JS --></section>
   </main>
 
+  <!-- REGIONI -->
   <main id="regioni" class="screen">
     <button class="back" id="backFromRegioni">← Indietro</button>
     <h1>Scegli la regione</h1>
     <p class="path">Sport: <b id="pathSport"></b></p>
-    <section class="pill-grid" id="regioniGrid"><!-- popolato da JS --></section>
+    <section class="pill-grid" id="regioniGrid"><!-- da JS --></section>
   </main>
 
+  <!-- GENERE -->
   <main id="genere" class="screen">
     <button class="back" id="backFromGenere">← Indietro</button>
     <h1>Seleziona il genere</h1>
@@ -41,15 +41,17 @@
     </section>
   </main>
 
+  <!-- SOCIETÀ -->
   <main id="clubs" class="screen">
     <button class="back" id="backFromClubs">← Indietro</button>
     <h1>Scegli la società</h1>
     <p class="path">
       Sport: <b id="pathSport3"></b> • Regione: <b id="pathRegione2"></b> • Genere: <b id="pathGenere"></b>
     </p>
-    <section class="clubs-grid" id="clubsGrid"><!-- popolato da JS --></section>
+    <section class="clubs-grid" id="clubsGrid"><!-- da JS --></section>
   </main>
 
+  <!-- DETTAGLIO SOCIETÀ -->
   <main id="clubDetail" class="screen">
     <button class="back" id="backFromDetail">← Indietro</button>
     <h1 id="clubTitle">Società</h1>
@@ -59,12 +61,12 @@
 
     <section class="panel">
       <h2>Prossime partite</h2>
-      <div id="matchesList" class="list"><!-- popolato da JS --></div>
+      <div id="matchesList" class="list"><!-- da JS --></div>
     </section>
 
     <section class="panel">
       <h2>Sponsor della società</h2>
-      <div id="sponsorList" class="sponsor-strip"><!-- popolato da JS --></div>
+      <div id="sponsorList" class="sponsor-strip"><!-- da JS --></div>
     </section>
   </main>
 
@@ -72,17 +74,12 @@
     © PreMatch — semplice, pulita, veloce. Privacy by design.
   </footer>
 
-  <!-- ===================== -->
-  <!--   SUPABASE (PASSO 1)  -->
-  <!-- ===================== -->
+  <!-- Supabase keys -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Inserisco qui le TUE credenziali (come mi hai dato tu)
     window.SUPABASE_URL = "https://hzzhypahrzclvfepstro.supabase.co";
     window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6emh5cGFocnpjbHZmZXBzdHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0NDAxNDUsImV4cCI6MjA3MTAxNjE0NX0.7niKgLcuDKQZQZxkQfxMYzz9fPT4Mm5wzWeq6r87TIY";
   </script>
-
-  <!-- JS dell’app (non cambia in questo passo) -->
   <script src="app.js"></script>
 </body>
 </html>
