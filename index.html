@@ -4,10 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PreMatch</title>
+
+  <!-- ICONA -->
   <link rel="icon" href="images/logo.png" />
+
+  <!-- STILI (minuscolo!) -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- HEADER -->
   <header class="topbar">
     <div class="brand">
       <img src="images/logo.png" alt="logo" />
@@ -15,97 +20,70 @@
     </div>
   </header>
 
-  <!-- HOME (griglia sport) -->
+  <!-- ================== HOME (SPORT) ================== -->
   <main id="home" class="screen active">
-    <section class="screen-inner">
-      <h1>Scegli lo sport</h1>
-      <p>Esplora società e organizza in PreMatch. Nessuna registrazione richiesta per la navigazione.</p>
+    <h1>Scegli lo sport</h1>
+    <p class="lead">Esplora società e organizza in PreMatch. Nessuna registrazione richiesta per la navigazione.</p>
 
-      <!-- Griglia statica: appare anche se JS non carica -->
-      <div class="sports-grid" id="sportsGrid">
-        <button class="sport-card" data-sport="Calcio">
-          <img src="images/calcio.jpg" alt="Calcio" /><h3>Calcio</h3>
-        </button>
-        <button class="sport-card" data-sport="Futsal">
-          <img src="images/futsal.jpg" alt="Futsal" /><h3>Futsal</h3>
-        </button>
-        <button class="sport-card" data-sport="Basket">
-          <img src="images/basket.jpg" alt="Basket" /><h3>Basket</h3>
-        </button>
-        <button class="sport-card" data-sport="Rugby">
-          <img src="images/rugby.jpg" alt="Rugby" /><h3>Rugby</h3>
-        </button>
-        <button class="sport-card" data-sport="Volley">
-          <img src="images/volley.jpg" alt="Volley" /><h3>Volley</h3>
-        </button>
-        <button class="sport-card" data-sport="Beach Volley">
-          <img src="images/beachvolley.jpg" alt="Beach Volley" /><h3>Beach Volley</h3>
-        </button>
-        <button class="sport-card" data-sport="Pallanuoto">
-          <img src="images/pallanuoto.jpg" alt="Pallanuoto" /><h3>Pallanuoto</h3>
-        </button>
-      </div>
-    </section>
+    <div class="sports-grid">
+      <button class="sport-card" onclick="openRegioni('Calcio')">
+        <img src="images/calcio.jpg" alt="Calcio" />
+        <span class="sport-title">Calcio</span>
+      </button>
+      <button class="sport-card" onclick="openRegioni('Futsal')">
+        <img src="images/futsal.jpg" alt="Futsal" />
+        <span class="sport-title">Futsal</span>
+      </button>
+      <button class="sport-card" onclick="openRegioni('Basket')">
+        <img src="images/basket.jpg" alt="Basket" />
+        <span class="sport-title">Basket</span>
+      </button>
+      <button class="sport-card" onclick="openRegioni('Rugby')">
+        <img src="images/rugby.jpg" alt="Rugby" />
+        <span class="sport-title">Rugby</span>
+      </button>
+      <button class="sport-card" onclick="openRegioni('Volley')">
+        <img src="images/volley.jpg" alt="Volley" />
+        <span class="sport-title">Volley</span>
+      </button>
+      <button class="sport-card" onclick="openRegioni('Beach Volley')">
+        <img src="images/beachvolley.jpg" alt="Beach Volley" />
+        <span class="sport-title">Beach Volley</span>
+      </button>
+      <button class="sport-card" onclick="openRegioni('Pallanuoto')">
+        <img src="images/pallanuoto.jpg" alt="Pallanuoto" />
+        <span class="sport-title">Pallanuoto</span>
+      </button>
+    </div>
   </main>
 
-  <!-- REGIONI -->
+  <!-- ================== REGIONI ================== -->
   <main id="regioni" class="screen">
-    <section class="screen-inner">
-      <button class="back" data-back="#home">← Indietro</button>
-      <h2>Scegli la regione</h2>
-      <p>Sport: <strong id="chosenSport">—</strong></p>
-      <div id="regionButtons" class="chips"></div>
-    </section>
+    <button class="back" onclick="backToHome()">← Indietro</button>
+    <h2>Scegli la regione</h2>
+    <p class="meta">Sport: <strong id="selSport">—</strong></p>
+    <div id="regioniList" class="chips"></div>
   </main>
 
-  <!-- GENERE -->
+  <!-- ================== GENERE ================== -->
   <main id="genere" class="screen">
-    <section class="screen-inner">
-      <button class="back" data-back="#regioni">← Indietro</button>
-      <h2>Seleziona il genere</h2>
-      <div class="chips">
-        <button class="chip" data-gen="Maschile">Maschile</button>
-        <button class="chip" data-gen="Femminile">Femminile</button>
-      </div>
-    </section>
+    <button class="back" onclick="backToRegioni()">← Indietro</button>
+    <h2>Seleziona il genere</h2>
+    <p class="meta">
+      Sport: <strong id="selSport2">—</strong> • Regione: <strong id="selRegione">—</strong>
+    </p>
+    <div class="chips">
+      <button class="chip" onclick="scegliGenere('Maschile')">Maschile</button>
+      <button class="chip" onclick="scegliGenere('Femminile')">Femminile</button>
+    </div>
   </main>
 
-  <!-- SOCIETÀ -->
-  <main id="societa" class="screen">
-    <section class="screen-inner">
-      <button class="back" data-back="#genere">← Indietro</button>
-      <h2>Scegli la società</h2>
-      <div id="clubsList" class="list"></div>
-    </section>
-  </main>
-
-  <!-- DETTAGLIO SOCIETÀ -->
-  <main id="dettaglio" class="screen">
-    <section class="screen-inner">
-      <button class="back" data-back="#societa">← Indietro</button>
-      <h2 id="clubTitle">Società</h2>
-      <p class="meta">
-        Sport: <strong id="metaSport"></strong> •
-        Regione: <strong id="metaRegione"></strong> •
-        Genere: <strong id="metaGenere"></strong>
-      </p>
-
-      <div class="card">
-        <h3>Prossime partite</h3>
-        <div id="matchesBox"></div>
-      </div>
-
-      <div class="card">
-        <h3>Sponsor della società</h3>
-        <div id="sponsorBox"></div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="foot">
+  <!-- FOOTER -->
+  <footer class="footer">
     © PreMatch — semplice, pulita, veloce. Privacy by design.
   </footer>
 
+  <!-- SCRIPT -->
   <script src="app.js"></script>
 </body>
 </html>
