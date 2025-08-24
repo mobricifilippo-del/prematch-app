@@ -25,7 +25,7 @@
     <section id="sportsGrid" class="sports-grid"><!-- filled by JS --></section>
   </main>
 
-  <!-- STEP 2: REGIONE (SELECT) -->
+  <!-- STEP 2: REGIONE -->
   <main id="step-region" class="screen">
     <button class="back" onclick="goBackTo('home')">← Indietro</button>
     <section class="hero">
@@ -35,14 +35,12 @@
     <section class="form">
       <div class="field">
         <label for="regionSelect">Regione</label>
-        <select id="regionSelect" class="select" onchange="onRegionChange(this.value)">
-          <!-- options by JS -->
-        </select>
+        <select id="regionSelect" class="select" onchange="onRegionChange(this.value)"></select>
       </div>
     </section>
   </main>
 
-  <!-- STEP 3: GENERE (CHIP) -->
+  <!-- STEP 3: GENERE -->
   <main id="step-gender" class="screen">
     <button class="back" onclick="goBackTo('step-region')">← Indietro</button>
     <section class="hero">
@@ -58,7 +56,7 @@
     </section>
   </main>
 
-  <!-- STEP 4: CAMPIONATO (SELECT) -->
+  <!-- STEP 4: CAMPIONATO -->
   <main id="step-league" class="screen">
     <button class="back" onclick="goBackTo('step-gender')">← Indietro</button>
     <section class="hero">
@@ -72,9 +70,7 @@
     <section class="form">
       <div class="field">
         <label for="leagueSelect">Campionato</label>
-        <select id="leagueSelect" class="select" onchange="onLeagueChange(this.value)">
-          <!-- options by JS -->
-        </select>
+        <select id="leagueSelect" class="select" onchange="onLeagueChange(this.value)"></select>
       </div>
     </section>
   </main>
@@ -91,7 +87,7 @@
         <b>Campionato:</b> <span id="ctx-league-c"></span>
       </div>
     </section>
-    <section id="clubsWrap" class="list-wrap"><!-- filled by JS --></section>
+    <section id="clubsWrap" class="list-wrap"></section>
   </main>
 
   <!-- DETTAGLIO SOCIETÀ -->
@@ -112,12 +108,12 @@
         <h3>Prossime partite</h3>
         <span id="prematchStatus" class="badge" hidden>PreMatch in attesa</span>
       </div>
-      <div id="matchesBox" class="matches"><!-- filled by JS --></div>
+      <div id="matchesBox" class="matches"></div>
     </section>
 
     <section class="card">
       <h3>Sponsor della società</h3>
-      <div id="sponsorsBox" class="sponsors"><!-- filled by JS --></div>
+      <div id="sponsorsBox" class="sponsors"></div>
     </section>
 
     <!-- CREA PREMATCH -->
