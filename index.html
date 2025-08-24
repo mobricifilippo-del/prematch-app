@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PreMatch</title>
   <link rel="icon" href="images/logo.png" />
   <link rel="stylesheet" href="style.css" />
@@ -15,57 +15,59 @@
     </div>
   </header>
 
-  <main class="container">
-    <!-- STEP 1: SPORT -->
-    <section id="step-sport" class="step active">
+  <!-- Home: scegli lo sport -->
+  <main id="home" class="screen active">
+    <section class="hero">
       <h1>Scegli lo sport</h1>
-      <div id="sport-grid" class="grid"></div>
+      <p>Esplora società e organizza i PreMatch. Nessuna registrazione richiesta.</p>
     </section>
 
-    <!-- STEP 2: REGIONE -->
-    <section id="step-regione" class="step">
-      <h1>Seleziona la regione</h1>
-      <div id="regioni-grid" class="grid small"></div>
-      <div class="actions">
-        <button class="btn ghost" id="back-to-sport">Indietro</button>
-      </div>
-    </section>
-
-    <!-- STEP 3: GENERE -->
-    <section id="step-genere" class="step">
-      <h1>Seleziona il genere</h1>
-      <div class="pill-row">
-        <button class="pill" data-genere="Maschile">Maschile</button>
-        <button class="pill" data-genere="Femminile">Femminile</button>
-      </div>
-      <div class="actions">
-        <button class="btn ghost" id="back-to-regione">Indietro</button>
-      </div>
-    </section>
-
-    <!-- STEP 4: CAMPIONATO -->
-    <section id="step-campionato" class="step">
-      <h1>Seleziona il campionato</h1>
-      <div id="campionati-list" class="list"></div>
-      <div class="actions">
-        <button class="btn ghost" id="back-to-genere">Indietro</button>
-      </div>
-    </section>
-
-    <!-- CTA -->
-    <section id="step-cta" class="step">
-      <h1>Pronto!</h1>
-      <p id="riepilogo"></p>
-      <div class="actions">
-        <button class="btn" id="avvia-prematch">Avvia PreMatch</button>
-        <button class="btn ghost" id="back-to-campionato">Indietro</button>
-      </div>
+    <section class="grid" id="sportsGrid">
+      <!-- Card sport generate da app.js -->
     </section>
   </main>
 
-  <footer class="footer">
-    © PreMatch — semplice, pulita, veloce. Privacy by design.
-  </footer>
+  <!-- Step 2: Regioni -->
+  <main id="regioni" class="screen">
+    <button class="back" onclick="goBack()">← Indietro</button>
+    <h2>Scegli la regione</h2>
+    <section class="grid" id="regioniGrid"></section>
+  </main>
+
+  <!-- Step 3: Genere -->
+  <main id="genere" class="screen">
+    <button class="back" onclick="goBack()">← Indietro</button>
+    <h2>Seleziona il genere</h2>
+    <section class="choices">
+      <button class="pill" onclick="selectGenere('M')">Maschile</button>
+      <button class="pill" onclick="selectGenere('F')">Femminile</button>
+    </section>
+  </main>
+
+  <!-- Step 4: Società -->
+  <main id="societa" class="screen">
+    <button class="back" onclick="goBack()">← Indietro</button>
+    <h2>Scegli la società</h2>
+    <section class="list" id="societaList"></section>
+  </main>
+
+  <!-- Step 5: Dettaglio Società (partite + sponsor della società) -->
+  <main id="club" class="screen">
+    <button class="back" onclick="goBack()">← Indietro</button>
+    <h2 id="clubTitle">Società</h2>
+
+    <section>
+      <h3>Prossime partite</h3>
+      <div id="matchesList" class="cards"></div>
+    </section>
+
+    <section>
+      <h3>Sponsor della società</h3>
+      <div id="sponsorStrip" class="sponsor-strip"></div>
+    </section>
+  </main>
+
+  <footer class="foot">© PreMatch — semplice, pulita, veloce. Privacy by design.</footer>
 
   <script src="app.js"></script>
 </body>
