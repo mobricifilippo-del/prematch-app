@@ -1,97 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PreMatch</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="images/logo.png" />
 </head>
 <body>
-  <!-- HEADER -->
   <header class="topbar">
     <div class="brand">
-      <img src="images/logo.png" alt="PreMatch" />
+      <img src="images/logo.png" alt="logo" />
       <span>PreMatch</span>
     </div>
-    <nav class="nav">
-      <button class="link" onclick="goHome()">Home</button>
-    </nav>
   </header>
 
-  <!-- HOME: SCELTA SPORT -->
-  <main id="screen-home" class="screen active">
-    <section class="hero">
-      <h1>Scegli lo sport</h1>
-      <p class="muted">Navigazione libera. Le società registrate potranno poi interagire.</p>
-    </section>
-
-    <section class="grid" id="sportsGrid">
-      <!-- riempito da app.js -->
-    </section>
+  <main id="home" class="screen active">
+    <h1>Scegli lo sport</h1>
+    <div id="sports" class="grid"></div>
   </main>
 
-  <!-- SPORT: REGIONE • GENERE • CATEGORIA -->
-  <main id="screen-filters" class="screen">
-    <div class="toolbar">
-      <button class="back" onclick="goHome()">← Indietro</button>
-      <h2 id="sportTitle">Sport</h2>
-    </div>
-
-    <section class="filters">
-      <div class="field">
-        <label>Regione</label>
-        <select id="selRegion" onchange="onRegionChange()"></select>
-      </div>
-      <div class="field">
-        <label>Genere</label>
-        <select id="selGender" onchange="onGenderChange()">
-          <option value="Maschile">Maschile</option>
-          <option value="Femminile">Femminile</option>
-          <option value="Entrambi">Entrambi</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Categoria</label>
-        <select id="selCategory" onchange="onCategoryChange()"></select>
-      </div>
-    </section>
-
-    <section class="panel">
-      <h3>Società</h3>
-      <div id="clubsList" class="stack"></div>
-    </section>
+  <main id="clubs" class="screen">
+    <h1>Scegli la società</h1>
+    <div id="clubsList" class="grid"></div>
+    <button onclick="show('#home')">⬅ Torna agli sport</button>
   </main>
 
-  <!-- DETTAGLIO SOCIETÀ -->
-  <main id="screen-club" class="screen">
-    <div class="toolbar">
-      <button class="back" onclick="backToFilters()">← Indietro</button>
-      <h2 id="clubName">Società</h2>
-    </div>
-
-    <section class="panel">
-      <div id="clubMeta" class="meta"></div>
-      <div class="badgeRow">
-        <span class="badge neutral">Profilo pubblico</span>
-      </div>
-      <h3>Prossime partite</h3>
-      <div id="matchesList" class="stack"></div>
-      <div class="legend">
-        <span class="dot ok"></span> PREMATCH CONFERMATO
-        <span class="dot pending"></span> In attesa di verifica
-      </div>
-    </section>
-
-    <section class="panel">
-      <h3>Sponsor (dimostrativi)</h3>
-      <ul id="sponsorList" class="list"></ul>
-    </section>
+  <main id="clubDetail" class="screen">
+    <h1 id="clubName"></h1>
+    <p id="clubInfo"></p>
+    <h2>Prossime partite</h2>
+    <ul id="clubMatches"></ul>
+    <button onclick="show('#clubs')">⬅ Torna alle società</button>
   </main>
-
-  <footer>
-    <p>© 2025 PreMatch — semplice, pulita, veloce. Nessuna pubblicità invasiva.</p>
-  </footer>
 
   <script src="app.js"></script>
 </body>
