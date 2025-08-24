@@ -21,26 +21,26 @@ const REGIONS = [
 
 /* Campionati per sport (demo) */
 const LEAGUES = {
-  calcio: ["Serie A","Serie B"],
-  futsal: ["Serie A Futsal"],
-  basket: ["Serie A","Serie A2"],
-  rugby: ["Top10"],
-  volley: ["Superlega","A2"],
+  calcio: ["Eccellenza", "Promozione", "Under 17", "Under 15"],
+  futsal: ["Eccellenza Futsal", "Serie A Futsal"],
+  basket: ["Serie A", "Serie A2", "U17 Ecc"],
+  rugby: ["Top10", "Serie A"],
+  volley: ["Superlega", "A2", "U18"],
   beachvolley: ["Pro Tour"],
-  pallanuoto: ["Serie A1"]
+  pallanuoto: ["Serie A1", "Serie A2"]
 };
 
 /* Società demo */
 const DEMO_CLUBS = {
-  "calcio|Lazio|Femminile|Serie A": [
+  "calcio|Lazio|Femminile|Eccellenza": [
     {
       name: "AS Roma",
-      matches: [{ team:"Prima Squadra vs —", date:"31/08/2025 14:07", venue:"Roma - Stadio Olimpico" }],
+      matches: [{ team:"Prima Squadra vs —", date:"31/08/2025 14:07", venue:"Roma - Stadio Olimpico", status:"confirm" }],
       sponsors: ["Qatar Airways","DigitalBiscione"]
     },
     {
       name: "SS Lazio Women",
-      matches: [{ team:"Prima Squadra vs —", date:"07/09/2025 20:45", venue:"Roma - Formello" }],
+      matches: [{ team:"Prima Squadra vs —", date:"07/09/2025 20:45", venue:"Roma - Formello", status:"pending" }],
       sponsors: []
     }
   ]
@@ -50,10 +50,10 @@ function clubsFor(sport, region, gender, league){
   if (DEMO_CLUBS[key]) return DEMO_CLUBS[key];
   return [
     { name: `${capitalize(sport)} ${region} ${gender} 1`,
-      matches:[{team:"Prima Squadra vs —", date:"12/09/2025 18:00", venue:region}],
+      matches:[{team:"Prima Squadra vs —", date:"12/09/2025 18:00", venue:region, status:"pending"}],
       sponsors:[] },
     { name: `${capitalize(sport)} ${region} ${gender} 2`,
-      matches:[{team:"Under 18 vs —", date:"19/09/2025 15:30", venue:region}],
+      matches:[{team:"Under 18 vs —", date:"19/09/2025 15:30", venue:region, status:""}],
       sponsors:[] }
   ];
 }
@@ -79,7 +79,7 @@ function renderSports(){
       <img class="sport-card__img" src="${sp.img}" alt="${sp.name}" />
       <div class="sport-card__label">${sp.name}</div>
     </article>
-  `).join("");
+  ).join("");
 }
 
 /* STEP: SPORT → REGIONE */
@@ -154,9 +154,16 @@ window.openClub = function(encodedName){
   // Partite
   const m = $("#matchesBox");
   if (data && data.matches && data.matches.length){
-    m.innerHTML = data.matches.map(x =>
-      `<div class="match"><div class="t">${x.team}</div><div class="d">${x.date} — ${x.venue}</div></div>`
-    ).join("");
+    m.innerHTML = data.matches.map(x => {
+      const badge = x.status==="confirm" ? `<span class="badge" style="background:#22c55e;color:#05210f;border-color:#0a2213">PreMatch confermato</span>` :
+                     x.status==="pending" ? `<span class="badge">PreMatch in attesa</span>` : "";
+      return `<div class="match">
+        <div class="t" style="display:flex;gap:8px;align-items:center">
+          <strong>${x.team}</strong> ${badge}
+        </div>
+        <div class="d">${x.date} — ${x.venue}</div>
+      </div>`;
+    }).join("");
   } else m.innerHTML = `<div class="match">Nessuna partita programmata</div>`;
 
   // Sponsor
@@ -167,7 +174,58 @@ window.openClub = function(encodedName){
     ).join("");
   } else s.innerHTML = `<span class="chip chip--green">Nessuno sponsor</span>`;
 
+  // Stato prematch (reset)
+  $("#prematchStatus").hidden = true;
+  $("#pmMsg").hidden = true;
+  $("#pmDate").value = "";
+  $("#pmTime").value = "";
+  $("#pmKit").value = "";
+  $("#pmNote").value = "";
+
   show("club-detail");
+};
+
+/* ======== CREA PREMATCH (DEMO) ======== */
+window.resetPreMatch = function(){
+  $("#pmMsg").hidden = true;
+  $("#pmDate").value = "";
+  $("#pmTime").value = "";
+  $("#pmKit").value = "";
+  $("#pmNote").value = "";
+};
+
+window.submitPreMatch = function(){
+  const date = $("#pmDate").value;
+  const time = $("#pmTime").value;
+  const kit  = $("#pmKit").value;
+
+  if(!date || !time || !kit){
+    const msg = $("#pmMsg");
+    msg.hidden = false;
+    msg.textContent = "Compila data, ora e colore divisa.";
+    return;
+  }
+
+  // Demo: imposta stato "in attesa"
+  const st = $("#prematchStatus");
+  st.hidden = false;
+  st.textContent = "PreMatch in attesa";
+
+  const msg = $("#pmMsg");
+  msg.hidden = false;
+  msg.textContent = `Richiesta inviata: ${state.club} — ${date} ${time} — Divisa: ${kit}.`;
+
+  // Potremmo anche appendere una "partita in attesa" alla lista
+  const m = $("#matchesBox");
+  const extra = document.createElement("div");
+  extra.className = "match";
+  extra.innerHTML = `
+    <div class="t" style="display:flex;gap:8px;align-items:center">
+      <strong>Nuovo PreMatch</strong> <span class="badge">PreMatch in attesa</span>
+    </div>
+    <div class="d">${date} ${time} — Da concordare</div>
+  `;
+  m.prepend(extra);
 };
 
 /* BOOTSTRAP */
