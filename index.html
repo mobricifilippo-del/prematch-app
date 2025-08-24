@@ -4,11 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
+
+  <!-- favicon/logo -->
   <link rel="icon" href="images/logo.png" />
+
   <!-- ATTENZIONE: minuscolo -->
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <!-- Header estremamente pulito -->
   <header class="topbar">
     <div class="brand">
       <img src="images/logo.png" alt="logo" />
@@ -23,44 +28,49 @@
       <p>Esplora società e organizza in PreMatch. Nessuna registrazione richiesta per la navigazione.</p>
     </section>
 
-    <section class="sports-grid">
-      <div class="card" onclick="selectSport('calcio')">
+    <!-- Griglia sport (statica, sempre visibile) -->
+    <section id="sports" class="sports-grid">
+      <a class="card" href="#" data-sport="Calcio">
         <img src="images/calcio.jpg" alt="Calcio" />
-        <h3>Calcio</h3>
-      </div>
-      <div class="card" onclick="selectSport('futsal')">
+        <div class="title">Calcio</div>
+      </a>
+
+      <a class="card" href="#" data-sport="Futsal">
         <img src="images/futsal.jpg" alt="Futsal" />
-        <h3>Futsal</h3>
-      </div>
-      <div class="card" onclick="selectSport('basket')">
+        <div class="title">Futsal</div>
+      </a>
+
+      <a class="card" href="#" data-sport="Basket">
         <img src="images/basket.jpg" alt="Basket" />
-        <h3>Basket</h3>
-      </div>
-      <div class="card" onclick="selectSport('rugby')">
+        <div class="title">Basket</div>
+      </a>
+
+      <a class="card" href="#" data-sport="Rugby">
         <img src="images/rugby.jpg" alt="Rugby" />
-        <h3>Rugby</h3>
-      </div>
-      <div class="card" onclick="selectSport('volley')">
+        <div class="title">Rugby</div>
+      </a>
+
+      <a class="card" href="#" data-sport="Volley">
         <img src="images/volley.jpg" alt="Volley" />
-        <h3>Volley</h3>
-      </div>
-      <div class="card" onclick="selectSport('beachvolley')">
+        <div class="title">Volley</div>
+      </a>
+
+      <a class="card" href="#" data-sport="Beach Volley">
         <img src="images/beachvolley.jpg" alt="Beach Volley" />
-        <h3>Beach Volley</h3>
-      </div>
-      <div class="card" onclick="selectSport('pallanuoto')">
+        <div class="title">Beach Volley</div>
+      </a>
+
+      <a class="card" href="#" data-sport="Pallanuoto">
         <img src="images/pallanuoto.jpg" alt="Pallanuoto" />
-        <h3>Pallanuoto</h3>
-      </div>
+        <div class="title">Pallanuoto</div>
+      </a>
     </section>
   </main>
 
-  <footer class="foot">
-    © PreMatch — semplice, pulita, veloce. Privacy by design.
+  <footer class="footer">
+    <small>© PreMatch — semplice, pulita, veloce. Privacy by design.</small>
   </footer>
 
-  <!-- Carica la libreria Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js"></script>
+  <!-- In questo passo non serve JS; lo useremo nel passo successivo per Regione/Genere/Campionato -->
 </body>
 </html>
