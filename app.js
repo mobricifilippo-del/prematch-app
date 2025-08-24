@@ -1,135 +1,65 @@
-// ====== DATI DEMO (client-only, nessun Supabase qui) ======
+// Stato selezioni
+const state = { sport: null, regione: null, genere: null };
+
+// Dataset regioni (completo IT)
 const REGIONI = [
   "Abruzzo","Basilicata","Calabria","Campania","Emilia-Romagna","Friuli-Venezia Giulia",
   "Lazio","Liguria","Lombardia","Marche","Molise","Piemonte","Puglia","Sardegna",
   "Sicilia","Toscana","Trentino-Alto Adige","Umbria","Valle d'Aosta","Veneto"
 ];
 
-const DEMO_CLUBS = [
-  { id:"roma", sport:"Calcio", regione:"Lazio", genere:"Femminile", nome:"AS Roma" }
-];
-
-const DEMO_MATCHES = [
-  { clubId:"roma", data:"2025-08-31 14:07", titolo:"Prima Squadra vs —", luogo:"Roma - Stadio Olimpico" }
-];
-
-const DEMO_SPONSOR = [
-  // Se vuoto, mostro "Nessuno sponsor registrato"
-  // { clubId:"roma", nome:"Bar Rossi", livello:"Gold" }
-];
-
-// ====== STATO ======
-const state = {
-  sport: null,
-  regione: null,
-  genere: null,
-  club: null
-};
-
-// ====== UTILI ======
-const $ = s => document.querySelector(s);
-const show = id => {
-  document.querySelectorAll(".screen").forEach(el => el.classList.remove("active"));
-  $(id).classList.add("active");
-  window.scrollTo({ top: 0, behavior: "instant" });
-};
-
-// ====== HOME: click sugli sport (griglia statica in HTML) ======
-function bindSportCards() {
-  document.querySelectorAll(".sport-card").forEach(btn => {
-    btn.addEventListener("click", () => {
-      state.sport = btn.dataset.sport;
-      $("#chosenSport").textContent = state.sport;
-      renderRegioni();
-      show("#regioni");
-    });
-  });
+// Utility: mostra una sola sezione
+function show(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 
-// ====== REGIONI ======
-function renderRegioni() {
-  const box = $("#regionButtons");
-  box.innerHTML = "";
+/* ====== HOME → REGIONI ====== */
+window.openRegioni = function(sport){
+  state.sport = sport;
+  state.regione = null;
+  state.genere = null;
+
+  // aggiorna intestazione
+  document.getElementById('selSport').textContent = sport;
+
+  // render regioni
+  const box = document.getElementById('regioniList');
+  box.innerHTML = '';
   REGIONI.forEach(r => {
-    const b = document.createElement("button");
-    b.className = "chip";
+    const b = document.createElement('button');
+    b.className = 'chip';
     b.textContent = r;
-    b.addEventListener("click", () => {
-      state.regione = r;
-      show("#genere");
-    });
+    b.onclick = () => scegliRegione(r);
     box.appendChild(b);
   });
-}
 
-// ====== GENERE ======
-function bindGenere() {
-  document.querySelectorAll("#genere .chip").forEach(b => {
-    b.addEventListener("click", () => {
-      state.genere = b.dataset.gen;
-      renderClubs();
-      show("#societa");
-    });
-  });
-}
+  // mostra schermata
+  show('regioni');
+};
 
-// ====== SOCIETÀ ======
-function renderClubs() {
-  const list = $("#clubsList");
-  list.innerHTML = "";
-  const clubs = DEMO_CLUBS.filter(c =>
-    c.sport === state.sport &&
-    c.regione === state.regione &&
-    c.genere === state.genere
-  );
-  if (clubs.length === 0) {
-    list.innerHTML = `<div class="empty">Nessuna società trovata.</div>`;
-    return;
-  }
-  clubs.forEach(c => {
-    const row = document.createElement("button");
-    row.className = "row";
-    row.textContent = c.nome;
-    row.addEventListener("click", () => openClub(c));
-    list.appendChild(row);
-  });
-}
+/* ====== REGIONI → GENERE ====== */
+window.scegliRegione = function(reg){
+  state.regione = reg;
 
-function openClub(c) {
-  state.club = c;
-  $("#clubTitle").textContent = c.nome;
-  $("#metaSport").textContent = state.sport;
-  $("#metaRegione").textContent = state.regione;
-  $("#metaGenere").textContent = state.genere;
+  // aggiorna riepilogo
+  document.getElementById('selSport2').textContent = state.sport || '—';
+  document.getElementById('selRegione').textContent = state.regione || '—';
 
-  // Partite
-  const matches = DEMO_MATCHES.filter(m => m.clubId === c.id);
-  const mbox = $("#matchesBox");
-  mbox.innerHTML = matches.length
-    ? matches.map(m => `<div class="row">${m.titolo}<br><small>${m.data} — ${m.luogo}</small></div>`).join("")
-    : `<div class="empty">Nessuna partita in programma.</div>`;
+  show('genere');
+};
 
-  // Sponsor (niente "Errore": se vuoto, messaggio pulito)
-  const sponsors = DEMO_SPONSOR.filter(s => s.clubId === c.id);
-  const sbox = $("#sponsorBox");
-  sbox.innerHTML = sponsors.length
-    ? sponsors.map(s => `<span class="pill">${s.nome}</span>`).join(" ")
-    : `<div class="empty">Nessuno sponsor registrato.</div>`;
+/* ====== GENERE ====== */
+window.scegliGenere = function(gen){
+  state.genere = gen;
+  // Qui in seguito caricheremo le società da Supabase
+  alert(`OK: ${state.sport} • ${state.regione} • ${state.genere}`);
+};
 
-  show("#dettaglio");
-}
-
-// ====== BACK buttons ======
-function bindBack() {
-  document.querySelectorAll(".back").forEach(b => {
-    b.addEventListener("click", () => {
-      const target = b.dataset.back || "#home";
-      show(target);
-    });
-  });
-}
-
-// ====== INIT ======
-bindSportCards();
-bindGenere();
-bindBack();
+/* ====== Bottoni indietro ====== */
+window.backToHome = function(){
+  show('home');
+};
+window.backToRegioni = function(){
+  show('regioni');
+};
