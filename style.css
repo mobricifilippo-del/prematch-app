@@ -1,112 +1,114 @@
-/* ===== PreMatch – tema scuro elegante ===== */
-:root{
-  --bg:#0b1117;          /* sfondo */
-  --panel:#0f172a;       /* barra / pannelli */
-  --muted:#7a8aa0;       /* testo secondario */
-  --card:#0f172a;        /* card scura */
-  --card2:#111827;       /* variazione */
-  --accent:#22c55e;      /* verde PreMatch */
-  --accent-700:#16a34a;  /* hover */
-  --white:#e6edf3;
-  --radius:20px;
-  --shadow:0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.02);
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-*{box-sizing:border-box}
-html,body{margin:0;height:100%}
-body{
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji";
-  color:var(--white);
-  background:
-     radial-gradient(1200px 600px at 15% -10%, #0f1a24 0%, rgba(15,26,36,0) 60%),
-     radial-gradient(1000px 500px at 100% 10%, #0e2330 0%, rgba(14,35,48,0) 55%),
-     var(--bg);
-  min-height:100%;
+body {
+  background-color: #0b1117;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-/* ===== Topbar ===== */
-.topbar{
-  background: linear-gradient(180deg, #0d1520, #0a1016);
-  border-bottom:1px solid rgba(255,255,255,.05);
-  position:sticky; top:0; z-index:10;
-}
-.topbar .wrap{
-  max-width:1100px; margin:0 auto; padding:14px 16px;
-  display:flex; align-items:center; justify-content:space-between;
-}
-.brand{display:flex; align-items:center; gap:10px}
-.brand img{width:28px; height:28px; border-radius:8px}
-.brand span{font-weight:700; letter-spacing:.3px}
-
-.nav{display:flex; gap:10px}
-.link{
-  appearance:none; border:0; cursor:pointer;
-  padding:8px 14px; border-radius:12px;
-  color:var(--white); background:transparent;
-  transition:.2s ease; opacity:.9
-}
-.link:hover{opacity:1; background:rgba(255,255,255,.06)}
-.link.active{background:rgba(255,255,255,.1);}
-
-/* ===== Contenitori ===== */
-.container{max-width:1100px; margin:0 auto; padding:24px 16px 64px}
-.screen{display:none}
-.screen.active{display:block}
-
-.hero h1{
-  font-size:40px; margin:10px 0 6px;
-  text-shadow:0 2px 10px rgba(0,0,0,.35);
-}
-.hero p{color:var(--muted); margin:0 0 22px}
-
-/* ===== Cards griglia sport ===== */
-.grid{
-  display:grid; grid-template-columns:repeat(2,1fr);
-  gap:18px;
-}
-@media (min-width:720px){
-  .grid{grid-template-columns:repeat(3,1fr)}
+/* Header */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #111826;
+  padding: 12px 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-.card{
-  background:linear-gradient(180deg, var(--card), var(--card2));
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden; border:1px solid rgba(255,255,255,.05);
-  transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease;
-}
-.card:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 30px rgba(0,0,0,.45);
-  border-color:rgba(255,255,255,.08);
-}
-.card img{width:100%; height:170px; object-fit:cover; display:block}
-.card h3{
-  margin:10px 14px 14px; font-size:20px; letter-spacing:.2px;
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* ===== Liste (società/partite) ===== */
-.section-title{margin:12px 0 10px}
-.list{display:flex; flex-direction:column; gap:12px}
-.item{
-  background:linear-gradient(180deg, var(--card), var(--card2));
-  border-radius:16px; padding:14px 16px;
-  border:1px solid rgba(255,255,255,.06);
-  box-shadow:var(--shadow); display:flex; justify-content:space-between; gap:10px; align-items:center;
+.brand img {
+  width: 32px;
+  height: 32px;
 }
-.item em{color:var(--muted)}
 
-.btn, .item .btn, .link.cta{
-  appearance:none; border:0; cursor:pointer;
-  padding:10px 14px; border-radius:14px;
-  background:var(--accent); color:#052e16; font-weight:700;
-  box-shadow:0 6px 24px rgba(34,197,94,.25);
-  transition:.15s ease;
+.brand span {
+  font-size: 22px;
+  font-weight: bold;
+  color: #00ff9d;
 }
-.btn:hover{background:var(--accent-700)}
 
-#back-to-home,#back-to-clubs{
-  margin:2px 0 12px; background:rgba(255,255,255,.06); color:var(--white);
-  border:1px solid rgba(255,255,255,.07)
+.nav .link {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+  margin-left: 15px;
+  cursor: pointer;
+  transition: color 0.2s;
 }
-#back-to-home:hover,#back-to-clubs:hover{background:rgba(255,255,255,.1)}
+
+.nav .link:hover {
+  color: #00ff9d;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.hero h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+/* Grid Cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #111826;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.card h3 {
+  padding: 12px;
+  font-size: 18px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px rgba(0, 255, 157, 0.4);
+}
+
+/* Footer */
+footer {
+  margin-top: auto;
+  background: #111826;
+  text-align: center;
+  padding: 12px;
+  font-size: 14px;
+  color: #aaa;
+}
