@@ -2,16 +2,15 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
-  <link rel="icon" href="images/logo.png" />
   <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 </head>
 <body>
+  <!-- Barra in alto con logo e titolo -->
   <header class="topbar">
     <div class="brand">
-      <img src="images/logo.png" alt="logo" />
+      <img src="images/logo.png" alt="logo PreMatch" class="logo"/>
       <span>PreMatch</span>
     </div>
     <nav class="nav">
@@ -20,50 +19,52 @@
     </nav>
   </header>
 
-  <!-- HOME: griglia sport -->
+  <!-- Home page -->
   <main id="home" class="screen active">
     <section class="hero">
       <h1>Scegli lo sport</h1>
-      <p class="muted">Esplora società e partite. Nessuna registrazione richiesta.</p>
+      <p>Entra e scopri tutte le società registrate.</p>
     </section>
 
-    <section class="grid" id="sportsGrid">
-      <!-- riempito da app.js / loadSports() -->
+    <!-- Griglia con gli sport -->
+    <section class="sports-grid">
+      <div class="sport-card" onclick="selectSport('Calcio')">
+        <img src="images/calcio.jpg" alt="Calcio"/>
+        <span>Calcio</span>
+      </div>
+      <div class="sport-card" onclick="selectSport('Futsal')">
+        <img src="images/futsal.jpg" alt="Futsal"/>
+        <span>Futsal</span>
+      </div>
+      <div class="sport-card" onclick="selectSport('Basket')">
+        <img src="images/basket.jpg" alt="Basket"/>
+        <span>Basket</span>
+      </div>
+      <div class="sport-card" onclick="selectSport('Rugby')">
+        <img src="images/rugby.jpg" alt="Rugby"/>
+        <span>Rugby</span>
+      </div>
+      <div class="sport-card" onclick="selectSport('Volley')">
+        <img src="images/volley.jpg" alt="Volley"/>
+        <span>Volley</span>
+      </div>
+      <div class="sport-card" onclick="selectSport('Beach Volley')">
+        <img src="images/beachvolley.jpg" alt="Beach Volley"/>
+        <span>Beach Volley</span>
+      </div>
+      <div class="sport-card" onclick="selectSport('Pallanuoto')">
+        <img src="images/pallanuoto.jpg" alt="Pallanuoto"/>
+        <span>Pallanuoto</span>
+      </div>
     </section>
   </main>
 
-  <!-- LISTA SOCIETA' -->
+  <!-- Placeholder altre sezioni -->
   <main id="clubs" class="screen">
-    <div class="toolbar">
-      <button class="back" data-go="home">← Indietro</button>
-      <h2 id="clubsTitle">Società</h2>
-    </div>
-    <section id="clubsList" class="stack">
-      <!-- riempito da app.js / openSport() -->
-    </section>
+    <h2>Società</h2>
+    <p>Qui compariranno le società registrate.</p>
   </main>
 
-  <!-- DETTAGLIO SOCIETA' -->
-  <main id="clubDetail" class="screen">
-    <div class="toolbar">
-      <button class="back" data-go="clubs">← Indietro</button>
-      <h2 id="clubName">Società</h2>
-    </div>
-
-    <section class="panel">
-      <div id="clubMeta" class="meta"></div>
-      <h3>Sponsor</h3>
-      <ul id="sponsorList" class="list"></ul>
-    </section>
-
-    <section class="panel">
-      <h3>Prossime partite</h3>
-      <div id="matchesList" class="stack"></div>
-    </section>
-  </main>
-
-  <!-- Supabase + App -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js" defer></script>
+  <script src="app.js"></script>
 </body>
 </html>
