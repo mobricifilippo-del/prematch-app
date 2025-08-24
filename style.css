@@ -1,58 +1,130 @@
 /* Reset & base */
 * { margin:0; padding:0; box-sizing:border-box; }
 html, body { height:100%; }
-body {
-  background:#0b1117;
+body{
+  background:#0b1117;           /* sfondo scuro elegante */
   color:#e6ebf0;
-  font-family:system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-family:system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
   line-height:1.5;
 }
 
-/* Header */
-.topbar {
+/* Topbar */
+.topbar{
   position:sticky; top:0; z-index:10;
-  display:flex; align-items:center;
+  display:flex; align-items:center; gap:.75rem;
   padding:12px 16px;
   background:linear-gradient(180deg,#111827,#0b1117);
   border-bottom:1px solid rgba(255,255,255,.06);
 }
-.brand { display:flex; align-items:center; gap:.5rem; }
-.brand img { width:28px; height:28px; border-radius:6px; }
-.brand span { font-weight:700; letter-spacing:2px; }
+.brand{ display:flex; align-items:center; gap:.5rem; }
+.brand img{ width:28px; height:28px; border-radius:6px; }
+.brand span{ font-weight:700; letter-spacing:.2px; }
 
-/* Layout */
-.screen { max-width:1100px; margin:0 auto; padding:24px 16px 56px; }
-h1 { font-size:32px; margin-bottom:8px; color:#e6ebf0; }
-h2 { font-size:26px; margin:24px 0 12px; color:#e6ebf0; }
-p  { color:#aab3be; margin-bottom:22px; }
+/* Layout screens */
+.screen{ max-width:1100px; margin:0 auto; padding:24px 16px 56px; }
+h1{ font-size:38px; margin:0 0 14px; color:#aab3be; }
+h2{ font-size:20px; margin:12px 0 10px; color:#c9d2dd; }
+p{ color:#9aa6b2; margin-bottom:20px; }
+.path b{ color:#e6ebf0; }
 
-/* Cards sport */
-.sports-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+/* Griglia sport (card) */
+.sports-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
 @media (min-width:768px){ .sports-grid{ grid-template-columns:repeat(3,1fr); } }
+
 .sport-card{
-  background:#0f172a; border:1px solid rgba(255,255,255,.06);
-  border-radius:16px; overflow:hidden;
+  background:#0f172a;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:16px;
+  overflow:hidden;
   box-shadow:0 6px 22px rgba(0,0,0,.35);
-  transition:transform .15s ease, box-shadow .15s ease;
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.sport-card:hover{
+  transform:translateY(-2px);
+  border-color:#213a8f;
+  box-shadow:0 10px 26px rgba(0,0,0,.45);
+}
+.sport-card img{ width:100%; height:180px; object-fit:cover; display:block; }
+.sport-card .label{
+  padding:12px 14px; font-weight:700; color:#e6ebf0;
+  background:linear-gradient(180deg,#0f172a,#0b1117);
+  border-top:1px solid rgba(255,255,255,.05);
+}
+
+/* Pill buttons (regioni, genere) */
+.pill-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+@media (min-width:768px){ .pill-grid{ grid-template-columns:repeat(4,1fr); } }
+
+.pill{
+  background:#0f172a;
+  border:1px solid rgba(255,255,255,.08);
+  color:#e6ebf0;
+  padding:12px 10px;
+  border-radius:999px;
+  text-align:center;
   cursor:pointer;
+  transition:all .15s ease;
 }
-.sport-card:hover{ transform:translateY(-2px); }
-.sport-card img{ width:100%; height:120px; object-fit:cover; }
-.sport-card span{ display:block; padding:12px; font-weight:600; color:#fff; text-align:center; }
+.pill:hover{ border-color:#2b62ff; box-shadow:0 6px 16px rgba(0,0,0,.35); }
 
-/* Regioni */
-.regions-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
-.regions-grid button{
-  padding:10px; border:none; border-radius:8px;
-  background:#1f2937; color:#fff; cursor:pointer;
+/* Back button */
+.back{
+  background:transparent; color:#aab3be;
+  border:1px solid rgba(255,255,255,.15);
+  padding:8px 12px; border-radius:10px; margin-bottom:12px;
 }
-.regions-grid button:hover{ background:#374151; }
+.back:hover{ color:#e6ebf0; border-color:#2b62ff; }
 
-/* Back */
-.back-btn{
-  margin-bottom:12px; padding:8px 12px; background:#374151;
-  border:none; border-radius:6px; color:#fff; cursor:pointer;
+/* Griglia clubs */
+.clubs-grid{
+  display:grid;
+  grid-template-columns:repeat(1,1fr);
+  gap:12px;
+}
+@media (min-width:600px){ .clubs-grid{ grid-template-columns:repeat(2,1fr); } }
+.club-card{
+  background:#0f172a;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:14px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.club-name{ font-weight:600; color:#e6ebf0; }
+
+/* Pannelli dettaglio */
+.panel{
+  background:#0f172a;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  padding:14px;
+  margin:16px 0;
+}
+.list .item{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 0; border-bottom:1px dashed rgba(255,255,255,.08);
+}
+.list .item:last-child{ border-bottom:none; }
+
+.sponsor-strip{ display:flex; gap:8px; flex-wrap:wrap; }
+.badge{
+  background:#111b2e; border:1px solid rgba(255,255,255,.08);
+  color:#e6ebf0; padding:8px 10px; border-radius:10px; font-size:.9rem;
 }
 
-/* Utility */
-.hidden{ display:none !important; }
+/* Footer */
+.foot{
+  color:#9aa6b2; font-size:.9rem; padding:20px 16px 28px; text-align:center;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+/* Visibilità */
+.screen{ display:none; }
+.screen.active{ display:block; }
