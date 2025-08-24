@@ -1,121 +1,112 @@
-/* ========== PreMatch — Stile scuro elegante ========== */
+/* ===== PreMatch – tema scuro elegante ===== */
 :root{
-  --bg:#0b1117;
-  --panel:#0f172a;
-  --panel-2:#0b1324;
-  --text:#e5e7eb;
-  --muted:#94a3b8;
-  --brand:#10b981; /* verde PreMatch */
-  --accent:#38bdf8;
-  --card:#111827;
-  --card-2:#0d1628;
-  --shadow: 0 8px 20px rgba(0,0,0,.35);
+  --bg:#0b1117;          /* sfondo */
+  --panel:#0f172a;       /* barra / pannelli */
+  --muted:#7a8aa0;       /* testo secondario */
+  --card:#0f172a;        /* card scura */
+  --card2:#111827;       /* variazione */
+  --accent:#22c55e;      /* verde PreMatch */
+  --accent-700:#16a34a;  /* hover */
+  --white:#e6edf3;
+  --radius:20px;
+  --shadow:0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.02);
 }
 
 *{box-sizing:border-box}
-html,body{
-  margin:0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-  color:var(--text);
+html,body{margin:0;height:100%}
+body{
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color:var(--white);
   background:
-    radial-gradient(1200px circle at 10% -10%, #0d1b2a 0%, transparent 55%),
-    radial-gradient(1000px circle at 110% 0%, #0a2540 0%, transparent 50%),
-    linear-gradient(180deg, var(--panel-2), var(--bg));
-  min-height:100vh;
+     radial-gradient(1200px 600px at 15% -10%, #0f1a24 0%, rgba(15,26,36,0) 60%),
+     radial-gradient(1000px 500px at 100% 10%, #0e2330 0%, rgba(14,35,48,0) 55%),
+     var(--bg);
+  min-height:100%;
 }
 
-/* -------- Topbar -------- */
+/* ===== Topbar ===== */
 .topbar{
-  position:sticky; top:0; z-index:50;
-  background:linear-gradient(180deg, var(--panel-2), var(--panel));
-  border-bottom:1px solid rgba(255,255,255,.06);
-  box-shadow: 0 2px 10px rgba(0,0,0,.4);
+  background: linear-gradient(180deg, #0d1520, #0a1016);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  position:sticky; top:0; z-index:10;
 }
-.wrap{
-  max-width:1050px;
-  margin:0 auto;
-  padding:14px 16px;
+.topbar .wrap{
+  max-width:1100px; margin:0 auto; padding:14px 16px;
   display:flex; align-items:center; justify-content:space-between;
-  gap:12px;
 }
-.brand{display:flex; align-items:center; gap:10px; font-weight:700}
-.brand img{width:28px; height:28px}
-.brand span{opacity:.95}
+.brand{display:flex; align-items:center; gap:10px}
+.brand img{width:28px; height:28px; border-radius:8px}
+.brand span{font-weight:700; letter-spacing:.3px}
 
 .nav{display:flex; gap:10px}
 .link{
-  background:transparent;
-  border:0; color:var(--text);
-  padding:8px 12px; border-radius:10px;
-  font-weight:600; letter-spacing:.2px;
-  opacity:.85; cursor:pointer;
+  appearance:none; border:0; cursor:pointer;
+  padding:8px 14px; border-radius:12px;
+  color:var(--white); background:transparent;
+  transition:.2s ease; opacity:.9
 }
-.link:hover,.link.active{opacity:1; background:rgba(255,255,255,.06)}
+.link:hover{opacity:1; background:rgba(255,255,255,.06)}
+.link.active{background:rgba(255,255,255,.1);}
 
-/* -------- Schermate -------- */
-.screen{display:none; padding:26px 0}
+/* ===== Contenitori ===== */
+.container{max-width:1100px; margin:0 auto; padding:24px 16px 64px}
+.screen{display:none}
 .screen.active{display:block}
-.container{max-width:1050px; margin:0 auto; padding:0 16px}
 
-/* -------- Hero -------- */
-.hero{margin:18px 0 8px}
 .hero h1{
-  font-size:38px; margin:6px 0 2px;
+  font-size:40px; margin:10px 0 6px;
+  text-shadow:0 2px 10px rgba(0,0,0,.35);
 }
-.hero p{color:var(--muted); margin:6px 0 0}
+.hero p{color:var(--muted); margin:0 0 22px}
 
-/* -------- Griglia sport -------- */
+/* ===== Cards griglia sport ===== */
 .grid{
-  margin:18px 0 40px;
-  display:grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
+  display:grid; grid-template-columns:repeat(2,1fr);
   gap:18px;
 }
-@media(min-width:760px){
-  .grid{grid-template-columns: repeat(3, minmax(0,1fr))}
+@media (min-width:720px){
+  .grid{grid-template-columns:repeat(3,1fr)}
 }
 
 .card{
-  background: linear-gradient(180deg, var(--card), var(--card-2));
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:18px; overflow:hidden;
-  box-shadow: var(--shadow);
-  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  background:linear-gradient(180deg, var(--card), var(--card2));
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden; border:1px solid rgba(255,255,255,.05);
+  transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease;
 }
 .card:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(0,0,0,.45);
-  border-color: rgba(56,189,248,.25);
+  transform:translateY(-2px);
+  box-shadow:0 10px 30px rgba(0,0,0,.45);
+  border-color:rgba(255,255,255,.08);
 }
-.card img{
-  display:block; width:100%; height:190px; object-fit:cover;
-  background:#0a1220;
-}
+.card img{width:100%; height:170px; object-fit:cover; display:block}
 .card h3{
-  margin:0; padding:14px 14px 16px;
-  font-size:20px; letter-spacing:.2px;
+  margin:10px 14px 14px; font-size:20px; letter-spacing:.2px;
 }
 
-/* -------- Sezioni lista (società/partite/sponsor) -------- */
-.section-title{
-  font-size:24px; margin:26px 0 10px;
-}
-.list{
-  display:grid; gap:12px;
-}
+/* ===== Liste (società/partite) ===== */
+.section-title{margin:12px 0 10px}
+.list{display:flex; flex-direction:column; gap:12px}
 .item{
-  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  background:linear-gradient(180deg, var(--card), var(--card2));
+  border-radius:16px; padding:14px 16px;
   border:1px solid rgba(255,255,255,.06);
-  border-radius:14px; padding:14px;
-  display:flex; align-items:center; justify-content:space-between;
+  box-shadow:var(--shadow); display:flex; justify-content:space-between; gap:10px; align-items:center;
 }
+.item em{color:var(--muted)}
 
-/* -------- Pulsante principale (se dovesse servire) -------- */
-.btn{
-  display:inline-flex; align-items:center; justify-content:center;
-  gap:8px; padding:10px 14px; border-radius:12px;
-  background:var(--brand); color:#031318; font-weight:800;
-  border:0; cursor:pointer; box-shadow:0 6px 16px rgba(16,185,129,.35);
+.btn, .item .btn, .link.cta{
+  appearance:none; border:0; cursor:pointer;
+  padding:10px 14px; border-radius:14px;
+  background:var(--accent); color:#052e16; font-weight:700;
+  box-shadow:0 6px 24px rgba(34,197,94,.25);
+  transition:.15s ease;
 }
-.btn:active{transform: translateY(1px)}
-/* ========================================================= */
+.btn:hover{background:var(--accent-700)}
+
+#back-to-home,#back-to-clubs{
+  margin:2px 0 12px; background:rgba(255,255,255,.06); color:var(--white);
+  border:1px solid rgba(255,255,255,.07)
+}
+#back-to-home:hover,#back-to-clubs:hover{background:rgba(255,255,255,.1)}
