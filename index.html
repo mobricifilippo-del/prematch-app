@@ -2,265 +2,50 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
   <link rel="icon" href="images/logo.png" />
-  <style>
-    :root{
-      --bg:#0b1117; --panel:#111826; --muted:#9aa4b2; --text:#e5eef7; --brand:#2ecc71; --chip:#1f2937;
-      --card:#0f172a; --card2:#111827; --accent:#2563eb;
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
-    a{color:inherit;text-decoration:none}
-    .wrap{max-width:1050px;margin:0 auto;padding:20px}
-    header{display:flex;align-items:center;gap:16px;padding:14px 20px;background:linear-gradient(180deg,#0e1623,#0b1117)}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:22px}
-    .brand img{width:28px;height:28px;border-radius:8px}
-    nav{margin-left:auto;display:flex;gap:18px}
-    nav a{opacity:.8}
-    nav a.active, nav a:hover{opacity:1}
-    h1{font-size:32px;margin:8px 0 6px}
-    .sub{color:var(--muted);margin-bottom:22px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
-    .card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid #1f2937;border-radius:16px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.25)}
-    .thumb{height:160px;width:100%;object-fit:cover;display:block;background:#0a0f18}
-    .card h3{margin:12px 14px 16px}
-    .row{display:flex;gap:12px;align-items:center;justify-content:space-between}
-    .btn{background:var(--brand);color:#052e16;border:none;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
-    .btn.secondary{background:#0f172a;color:#cbd5e1;border:1px solid #243244}
-    .chip{background:var(--chip);color:#cbd5e1;border-radius:999px;padding:6px 10px;font-size:12px}
-    .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-    .list{display:flex;flex-direction:column;gap:12px}
-    .item{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid #1f2937;border-radius:14px;padding:14px}
-    .muted{color:var(--muted)}
-    .footer{margin-top:36px;color:#93a3b4;font-size:13px}
-    .hidden{display:none}
-    .divider{height:1px;background:#1f2a38;margin:18px 0}
-  </style>
-  <script defer src="https://esm.sh/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Il tuo file JS -->
+  <script src="app.js" defer></script>
 </head>
 <body>
-
-<header>
-  <div class="brand"><img src="images/logo.png" alt=""><span>PreMatch</span></div>
-  <nav>
-    <a href="#" id="nav-home" class="active">Home</a>
-    <a href="#" id="nav-sport">Sport</a>
-    <a href="#" id="nav-auth">Accedi/Registrati</a>
-  </nav>
-</header>
-
-<main class="wrap">
-
-  <!-- HOME -->
-  <section id="view-home">
-    <h1>Scegli lo sport</h1>
-    <p class="sub">Esplora società e scopri le prossime partite. Nessuna registrazione richiesta per la navigazione.</p>
-
-    <div id="sport-grid" class="grid"></div>
-
-    <div class="footer">© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
-  </section>
-
-  <!-- SPORT ➜ SOCIETA' -->
-  <section id="view-sport" class="hidden">
-    <div class="toolbar">
-      <button class="btn secondary" id="back-to-home">← Indietro</button>
-      <span id="sport-title" class="chip"></span>
+  <header>
+    <div class="brand">
+      <img src="images/logo.png" alt="Logo" />
+      <h1>PreMatch</h1>
     </div>
-    <h2>Società</h2>
-    <div id="club-list" class="list"></div>
-  </section>
+    <nav>
+      <a href="#" class="active">Home</a>
+      <a href="#">Partite</a>
+      <a href="#">Società</a>
+      <a href="#">Sponsor</a>
+    </nav>
+  </header>
 
-  <!-- SOCIETA' ➜ PARTITE -->
-  <section id="view-club" class="hidden">
-    <div class="toolbar">
-      <button class="btn secondary" id="back-to-sport">← Indietro</button>
-      <span id="club-title" class="chip"></span>
-    </div>
-    <h2>Prossime partite</h2>
-    <div id="match-list" class="list"></div>
-  </section>
+  <main>
+    <section>
+      <h2>Benvenuto su PreMatch</h2>
+      <p>Visualizza partite, società e sponsor collegati.</p>
+    </section>
 
-</main>
+    <section id="matches">
+      <h2>Prossime Partite</h2>
+      <ul id="match-list"></ul>
+    </section>
 
-<script>
-  // ======== SUPABASE (con i TUOI parametri) ========
-  const SUPABASE_URL = "https://hzzhypahrzclvfepstro.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6emh5cGFocnpjbHZmZXBzdHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0NDAxNDUsImV4cCI6MjA3MTAxNjE0NX0.7niKgLcuDKQZQZxkQfxMYzz9fPT4Mm5wzWeq6r87TIY";
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <section id="sponsors">
+      <h2>Sponsor</h2>
+      <ul id="sponsor-list"></ul>
+    </section>
+  </main>
 
-  // ======== STATO SEMPLICE ========
-  const state = {
-    sport: null,      // {id, nome}
-    club: null        // {id, nome}
-  };
-
-  // ======== ORDER & IMMAGINI ========
-  const sportOrder = ["Calcio","Futsal","Basket","Volley","Beach Volley","Pallanuoto"];
-  const sportImage = {
-    "Calcio":"images/calcio.jpg",
-    "Futsal":"images/futsal.jpg",
-    "Basket":"images/basket.jpg",
-    "Volley":"images/volley.jpg",
-    "Beach Volley":"images/beachvolley.jpg",
-    "Pallanuoto":"images/pallanuoto.jpg"
-  };
-
-  // ======== VIEW HELPERS ========
-  const viewHome  = document.getElementById('view-home');
-  const viewSport = document.getElementById('view-sport');
-  const viewClub  = document.getElementById('view-club');
-
-  const sportGrid = document.getElementById('sport-grid');
-  const clubList  = document.getElementById('club-list');
-  const matchList = document.getElementById('match-list');
-
-  const sportTitle = document.getElementById('sport-title');
-  const clubTitle  = document.getElementById('club-title');
-
-  document.getElementById('back-to-home').onclick  = () => show('home');
-  document.getElementById('back-to-sport').onclick = () => show('sport');
-
-  function show(which){
-    viewHome.classList.add('hidden');
-    viewSport.classList.add('hidden');
-    viewClub.classList.add('hidden');
-    if(which==='home') viewHome.classList.remove('hidden');
-    if(which==='sport') viewSport.classList.remove('hidden');
-    if(which==='club') viewClub.classList.remove('hidden');
-  }
-
-  // ======== RENDER SPORT GRID ========
-  async function loadSports(){
-    // 1) prendo tutti gli sport
-    const { data, error } = await sb.from('sports').select('id,nome');
-    if(error){ console.error(error); sportGrid.innerHTML = `<div class="muted">Errore caricando gli sport.</div>`; return; }
-
-    // 2) ordino come richiesto (Calcio, Futsal, …)
-    const byName = {};
-    data.forEach(s => byName[s.nome] = s);
-    const ordered = sportOrder
-      .filter(n => byName[n])
-      .map(n => byName[n])
-      .concat(data.filter(s => !sportOrder.includes(s.nome))); // eventuali extra alla fine
-
-    // 3) render
-    sportGrid.innerHTML = ordered.map(s => {
-      const img = sportImage[s.nome] || 'images/logo.png';
-      return `
-        <article class="card">
-          <img class="thumb" src="${img}" alt="${s.nome}">
-          <h3>${s.nome}</h3>
-          <div class="row" style="padding:0 14px 14px">
-            <button class="btn" onclick="openSport('${s.id}','${escapeHtml(s.nome)}')">Società</button>
-            <span class="chip">ID breve: ${s.id.slice(0,8)}…</span>
-          </div>
-        </article>`;
-    }).join('');
-  }
-
-  // ======== APRI SPORT -> SOCIETÀ ========
-  window.openSport = async (sportId, sportName) => {
-    state.sport = { id:sportId, nome:sportName };
-    sportTitle.textContent = sportName;
-
-    const { data, error } = await sb.from('societa')
-      .select('id,nome')
-      .eq('sport_id', sportId)
-      .order('nome', { ascending:true });
-
-    if(error){ console.error(error); clubList.innerHTML = `<div class="muted">Errore caricando le società.</div>`; show('sport'); return; }
-
-    if(!data || !data.length){
-      clubList.innerHTML = `<div class="item"><div class="muted">Nessuna società trovata per questo sport.</div></div>`;
-    }else{
-      clubList.innerHTML = data.map(c => `
-        <div class="item">
-          <div class="row">
-            <div>
-              <div style="font-weight:700">${escapeHtml(c.nome)}</div>
-              <div class="muted">ID: ${c.id}</div>
-            </div>
-            <button class="btn" onclick="openClub('${c.id}','${escapeHtml(c.nome)}')">Apri</button>
-          </div>
-        </div>
-      `).join('');
-    }
-    show('sport');
-  };
-
-  // ======== APRI SOCIETÀ -> PARTITE ========
-  window.openClub = async (clubId, clubName) => {
-    state.club = { id:clubId, nome:clubName };
-    clubTitle.textContent = clubName;
-
-    // 1) prendi le squadre della società
-    const { data: squads, error: errSq } = await sb.from('squadre').select('id').eq('societa_id', clubId);
-    if(errSq){ console.error(errSq); matchList.innerHTML = `<div class="muted">Errore caricando squadre.</div>`; show('club'); return; }
-
-    if(!squads || !squads.length){
-      matchList.innerHTML = `<div class="item"><div class="muted">Nessuna squadra per questa società.</div></div>`;
-      show('club'); return;
-    }
-
-    const ids = squads.map(s => s.id);
-
-    // 2) prendi partite dove una delle due squadre è tra le nostre
-    //    (filtriamo entro i prossimi 30 giorni solo come esempio)
-    const nowIso = new Date().toISOString();
-    const in30 = new Date(Date.now()+30*24*60*60*1000).toISOString();
-
-    // supabase-js non supporta OR con due .in direttamente, quindi facciamo due chiamate e uniamo
-    const [p1, p2] = await Promise.all([
-      sb.from('partite').select('id,data,luogo,squadra1_id,squadra2_id')
-        .in('squadra1_id', ids).gte('data', nowIso).lte('data', in30),
-      sb.from('partite').select('id,data,luogo,squadra1_id,squadra2_id')
-        .in('squadra2_id', ids).gte('data', nowIso).lte('data', in30)
-    ]);
-
-    if(p1.error || p2.error){
-      console.error(p1.error || p2.error);
-      matchList.innerHTML = `<div class="muted">Errore caricando le partite.</div>`;
-      show('club'); return;
-    }
-
-    // unisci e deduplica
-    const map = new Map();
-    [...(p1.data||[]), ...(p2.data||[])].forEach(m => map.set(m.id, m));
-    const matches = [...map.values()].sort((a,b)=>new Date(a.data)-new Date(b.data));
-
-    if(!matches.length){
-      matchList.innerHTML = `<div class="item"><div class="muted">Nessuna partita in programma nei prossimi giorni.</div></div>`;
-      show('club'); return;
-    }
-
-    // opzionale: risolvi nomi squadre
-    const allIds = [...new Set(matches.flatMap(m => [m.squadra1_id, m.squadra2_id]))];
-    const { data: names } = await sb.from('squadre').select('id,nome').in('id', allIds);
-    const nameById = Object.fromEntries((names||[]).map(r => [r.id, r.nome]));
-
-    matchList.innerHTML = matches.map(m => {
-      const when = new Date(m.data);
-      const s1 = nameById[m.squadra1_id] || m.squadra1_id.slice(0,6)+'…';
-      const s2 = nameById[m.squadra2_id] || m.squadra2_id.slice(0,6)+'…';
-      return `
-        <div class="item">
-          <div style="font-weight:700;margin-bottom:6px">${escapeHtml(s1)} vs ${escapeHtml(s2)}</div>
-          <div class="muted">${when.toLocaleString('it-IT')} — ${escapeHtml(m.luogo||'TBD')}</div>
-        </div>
-      `;
-    }).join('');
-
-    show('club');
-  };
-
-  function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]))}
-
-  // bootstrap
-  loadSports();
-  show('home');
-</script>
+  <footer>
+    <p>© 2025 PreMatch</p>
+  </footer>
 </body>
 </html>
