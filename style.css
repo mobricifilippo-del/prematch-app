@@ -1,111 +1,85 @@
-/* Reset base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+:root{
+  --bg:#0b1117;
+  --panel:#0f172a;
+  --card:#111827;
+  --ring:#1f2937;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+  --accent:#22c55e;
+  --accent2:#10b981;
+  --danger:#ef4444;
+  --pending:#f59e0b;
 }
 
-body {
-  background: #f9f9f9;
-  color: #333;
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+
+img{display:block;max-width:100%}
+
+.topbar{
+  position:sticky;top:0;z-index:10;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;background:var(--panel);border-bottom:1px solid var(--ring)
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800}
+.brand img{width:28px;height:28px;border-radius:8px}
+.nav{display:flex;gap:8px}
+.link{background:transparent;color:var(--text);border:1px solid var(--ring);padding:8px 12px;border-radius:10px}
+.link:hover{border-color:var(--accent2)}
+
+main{max-width:1100px;margin:0 auto;padding:18px}
+.screen{display:none}
+.screen.active{display:block}
+
+.hero{margin:10px 0 6px}
+.hero h1{margin:0 0 6px;font-size:28px}
+.muted{color:var(--muted)}
+
+.grid{
+  margin-top:14px;display:grid;gap:14px;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr))
 }
 
-/* Barra in alto */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #006837; /* verde elegante */
-  color: white;
-  padding: 10px 20px;
+.card{
+  background:var(--card);border:1px solid var(--ring);border-radius:16px;
+  overflow:hidden;transition:transform .15s ease,border-color .15s ease;cursor:pointer
+}
+.card:hover{transform:translateY(-2px);border-color:var(--accent2)}
+.card img{width:100%;height:120px;object-fit:cover}
+.card .title{padding:10px 12px;font-weight:700}
+
+.toolbar{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.back{background:transparent;border:1px solid var(--ring);color:var(--text);padding:8px 12px;border-radius:10px}
+h2{margin:0}
+
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:14px}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+select{
+  width:100%;background:var(--card);color:var(--text);border:1px solid var(--ring);
+  padding:10px;border-radius:10px;outline:none
+}
+select:focus{border-color:var(--accent2)}
+
+.panel{
+  background:var(--panel);border:1px solid var(--ring);border-radius:16px;padding:14px;margin-bottom:14px
+}
+.stack{display:grid;gap:10px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+
+.item{
+  background:var(--card);border:1px solid var(--ring);border-radius:14px;padding:12px
 }
 
-.topbar .brand {
-  display: flex;
-  align-items: center;
-  font-size: 1.5em;
-  font-weight: bold;
-}
+.meta{color:var(--muted);font-size:14px}
 
-.topbar .brand img.logo {
-  height: 35px;
-  margin-right: 10px;
-}
+.badgeRow{margin:6px 0 10px;display:flex;gap:8px;flex-wrap:wrap}
+.badge{border:1px solid var(--ring);padding:6px 10px;border-radius:999px;font-size:12px}
+.badge.ok{border-color:transparent;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#00331a;font-weight:700}
+.badge.pending{border-color:var(--pending);color:var(--pending)}
 
-.topbar .nav .link {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 1em;
-  margin-left: 15px;
-  cursor: pointer;
-}
+.legend{margin-top:8px;font-size:13px;color:var(--muted);display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}
+.dot.ok{background:var(--accent)}
+.dot.pending{background:var(--pending)}
 
-.topbar .nav .link:hover {
-  text-decoration: underline;
-}
-
-/* Hero in home */
-.hero {
-  text-align: center;
-  padding: 40px 20px;
-}
-
-.hero h1 {
-  font-size: 2em;
-  color: #006837;
-  margin-bottom: 10px;
-}
-
-.hero p {
-  font-size: 1.1em;
-  color: #444;
-}
-
-/* Griglia sport */
-.sports-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-.sport-card {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  text-align: center;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.sport-card img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 10px 10px 0 0;
-}
-
-.sport-card span {
-  display: block;
-  padding: 10px;
-  font-size: 1.1em;
-  font-weight: bold;
-  color: #333;
-}
-
-.sport-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-/* Sezioni */
-.screen {
-  display: none;
-  padding: 20px;
-}
-
-.screen.active {
-  display: block;
-}
+footer{padding:18px;border-top:1px solid var(--ring);text-align:center;color:var(--muted)}
