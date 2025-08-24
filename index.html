@@ -1,64 +1,63 @@
-/* Reset & base */
-* { margin:0; padding:0; box-sizing:border-box; }
-html, body { height:100%; }
-body{
-  background:#0b1117;           /* <— SFONDO SCURO */
-  color:#e6ebf0;
-  font-family:system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-  line-height:1.5;
-}
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PreMatch</title>
 
-/* Header */
-.topbar{
-  position:sticky; top:0; z-index:10;
-  display:flex; align-items:center; gap:.75rem;
-  padding:12px 16px;
-  background:linear-gradient(180deg,#111827,#0b1117);
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-.brand{ display:flex; align-items:center; gap:.5rem; }
-.brand img{ width:28px; height:28px; border-radius:6px; }
-.brand span{ font-weight:700; letter-spacing:.2px; }
+  <!-- Icona del sito -->
+  <link rel="icon" href="images/logo.png" />
 
-/* Layout */
-.screen{ max-width:1100px; margin:0 auto; padding:24px 16px 56px; }
-h1{ font-size:38px; margin:8px 0 14px; }
-p{ color:#aab3be; margin-bottom:22px; }
+  <!-- Collegamento al CSS (forzato refresh con ?v=3) -->
+  <link rel="stylesheet" href="style.css?v=3" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="images/logo.png" alt="logo" />
+      <span>PreMatch</span>
+    </div>
+  </header>
 
-/* Cards sport */
-.sports-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-}
-@media (min-width:768px){ .sports-grid{ grid-template-columns:repeat(3,1fr); } }
+  <!-- HOME -->
+  <main id="home" class="screen active">
+    <h1>Scegli lo sport</h1>
+    <p>Esplora società e organizza in PreMatch. Nessuna registrazione richiesta per la navigazione.</p>
 
-.sport-card{
-  background:#0f172a;
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:16px;
-  overflow:hidden;
-  box-shadow:0 6px 22px rgba(0,0,0,.35);
-  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-}
-.sport-card:hover{
-  transform:translateY(-2px);
-  border-color:rgba(16,185,129,.5);
-  box-shadow:0 10px 28px rgba(0,0,0,.45);
-}
-.sport-card img{
-  width:100%; height:160px; object-fit:cover; display:block;
-  filter:saturate(1.05) contrast(1.02);
-}
-.sport-card h3{
-  margin:0; padding:14px 16px 16px;
-  font-size:20px; font-weight:800; letter-spacing:.2px;
-  color:#eaf2f7;
-}
+    <div class="sports-grid">
+      <div class="sport-card">
+        <img src="images/calcio.jpg" alt="Calcio" />
+        <span>Calcio</span>
+      </div>
+      <div class="sport-card">
+        <img src="images/futsal.jpg" alt="Futsal" />
+        <span>Futsal</span>
+      </div>
+      <div class="sport-card">
+        <img src="images/basket.jpg" alt="Basket" />
+        <span>Basket</span>
+      </div>
+      <div class="sport-card">
+        <img src="images/rugby.jpg" alt="Rugby" />
+        <span>Rugby</span>
+      </div>
+      <div class="sport-card">
+        <img src="images/volley.jpg" alt="Volley" />
+        <span>Volley</span>
+      </div>
+      <div class="sport-card">
+        <img src="images/beachvolley.jpg" alt="Beach Volley" />
+        <span>Beach Volley</span>
+      </div>
+      <div class="sport-card">
+        <img src="images/pallanuoto.jpg" alt="Pallanuoto" />
+        <span>Pallanuoto</span>
+      </div>
+    </div>
+  </main>
 
-/* Footer */
-footer{ border-top:1px solid rgba(255,255,255,.06); }
-footer p{
-  max-width:1100px; margin:0 auto; padding:18px 16px 28px;
-  color:#9aa7b3; font-size:.95rem;
-}
+  <footer>
+    <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
+  </footer>
+</body>
+</html>
