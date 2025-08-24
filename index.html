@@ -2,50 +2,68 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PreMatch</title>
   <link rel="icon" href="images/logo.png" />
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- Il tuo file JS -->
-  <script src="app.js" defer></script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 </head>
 <body>
-  <header>
+  <header class="topbar">
     <div class="brand">
-      <img src="images/logo.png" alt="Logo" />
-      <h1>PreMatch</h1>
+      <img src="images/logo.png" alt="logo" />
+      <span>PreMatch</span>
     </div>
-    <nav>
-      <a href="#" class="active">Home</a>
-      <a href="#">Partite</a>
-      <a href="#">Società</a>
-      <a href="#">Sponsor</a>
+    <nav class="nav">
+      <button class="link" onclick="show('#home')">Home</button>
+      <button class="link" onclick="show('#clubs')">Società</button>
     </nav>
   </header>
 
-  <main>
-    <section>
-      <h2>Benvenuto su PreMatch</h2>
-      <p>Visualizza partite, società e sponsor collegati.</p>
+  <!-- HOME: griglia sport -->
+  <main id="home" class="screen active">
+    <section class="hero">
+      <h1>Scegli lo sport</h1>
+      <p class="muted">Esplora società e partite. Nessuna registrazione richiesta.</p>
     </section>
 
-    <section id="matches">
-      <h2>Prossime Partite</h2>
-      <ul id="match-list"></ul>
-    </section>
-
-    <section id="sponsors">
-      <h2>Sponsor</h2>
-      <ul id="sponsor-list"></ul>
+    <section class="grid" id="sportsGrid">
+      <!-- riempito da app.js / loadSports() -->
     </section>
   </main>
 
-  <footer>
-    <p>© 2025 PreMatch</p>
-  </footer>
+  <!-- LISTA SOCIETA' -->
+  <main id="clubs" class="screen">
+    <div class="toolbar">
+      <button class="back" data-go="home">← Indietro</button>
+      <h2 id="clubsTitle">Società</h2>
+    </div>
+    <section id="clubsList" class="stack">
+      <!-- riempito da app.js / openSport() -->
+    </section>
+  </main>
+
+  <!-- DETTAGLIO SOCIETA' -->
+  <main id="clubDetail" class="screen">
+    <div class="toolbar">
+      <button class="back" data-go="clubs">← Indietro</button>
+      <h2 id="clubName">Società</h2>
+    </div>
+
+    <section class="panel">
+      <div id="clubMeta" class="meta"></div>
+      <h3>Sponsor</h3>
+      <ul id="sponsorList" class="list"></ul>
+    </section>
+
+    <section class="panel">
+      <h3>Prossime partite</h3>
+      <div id="matchesList" class="stack"></div>
+    </section>
+  </main>
+
+  <!-- Supabase + App -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js" defer></script>
 </body>
 </html>
