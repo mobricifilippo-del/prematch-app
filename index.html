@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Header -->
+  <!-- HEADER -->
   <header class="topbar">
     <div class="brand">
       <img src="images/logo.png" alt="logo" />
@@ -16,31 +16,33 @@
     </div>
   </header>
 
-  <!-- HOME: scelta sport -->
+  <!-- HOME: SPORT -->
   <main id="home" class="screen active">
     <section class="hero">
       <h1>Scegli lo sport</h1>
-      <p>Esplora società e organizza in PreMatch. Nessuna registrazione richiesta per la navigazione.</p>
+      <p>Esplora società e organizza in PreMatch. Navigazione libera, nessuna registrazione richiesta.</p>
     </section>
-
-    <section id="sportsGrid" class="sports-grid">
-      <!-- riempito da JS -->
-    </section>
+    <section id="sportsGrid" class="sports-grid"><!-- filled by JS --></section>
   </main>
 
-  <!-- STEP 2: Regione -->
+  <!-- STEP 2: REGIONE (SELECT) -->
   <main id="step-region" class="screen">
     <button class="back" onclick="goBackTo('home')">← Indietro</button>
     <section class="hero">
-      <h2>Scegli la regione</h2>
+      <h2>Seleziona la regione</h2>
       <div class="context"><b>Sport:</b> <span id="ctx-sport"></span></div>
     </section>
-    <section id="regionsWrap" class="chips-wrap">
-      <!-- chip verdi generate da JS -->
+    <section class="form">
+      <div class="field">
+        <label for="regionSelect">Regione</label>
+        <select id="regionSelect" class="select" onchange="onRegionChange(this.value)">
+          <!-- options by JS -->
+        </select>
+      </div>
     </section>
   </main>
 
-  <!-- STEP 3: Genere -->
+  <!-- STEP 3: GENERE (CHIP) -->
   <main id="step-gender" class="screen">
     <button class="back" onclick="goBackTo('step-region')">← Indietro</button>
     <section class="hero">
@@ -56,7 +58,7 @@
     </section>
   </main>
 
-  <!-- STEP 4: Campionato -->
+  <!-- STEP 4: CAMPIONATO (SELECT) -->
   <main id="step-league" class="screen">
     <button class="back" onclick="goBackTo('step-gender')">← Indietro</button>
     <section class="hero">
@@ -67,12 +69,17 @@
         <b>Genere:</b> <span id="ctx-gender-l"></span>
       </div>
     </section>
-    <section id="leaguesWrap" class="chips-wrap">
-      <!-- da JS -->
+    <section class="form">
+      <div class="field">
+        <label for="leagueSelect">Campionato</label>
+        <select id="leagueSelect" class="select" onchange="onLeagueChange(this.value)">
+          <!-- options by JS -->
+        </select>
+      </div>
     </section>
   </main>
 
-  <!-- STEP 5: Società -->
+  <!-- STEP 5: SOCIETÀ -->
   <main id="step-clubs" class="screen">
     <button class="back" onclick="goBackTo('step-league')">← Indietro</button>
     <section class="hero">
@@ -84,9 +91,7 @@
         <b>Campionato:</b> <span id="ctx-league-c"></span>
       </div>
     </section>
-    <section id="clubsWrap" class="list-wrap">
-      <!-- da JS -->
-    </section>
+    <section id="clubsWrap" class="list-wrap"><!-- filled by JS --></section>
   </main>
 
   <!-- DETTAGLIO SOCIETÀ -->
@@ -104,22 +109,16 @@
 
     <section class="card">
       <h3>Prossime partite</h3>
-      <div id="matchesBox" class="matches">
-        <!-- da JS -->
-      </div>
+      <div id="matchesBox" class="matches"><!-- filled by JS --></div>
     </section>
 
     <section class="card">
       <h3>Sponsor della società</h3>
-      <div id="sponsorsBox" class="sponsors">
-        <!-- da JS -->
-      </div>
+      <div id="sponsorsBox" class="sponsors"><!-- filled by JS --></div>
     </section>
   </main>
 
-  <footer class="foot">
-    © PreMatch — semplice, pulita, veloce. Privacy by design.
-  </footer>
+  <footer class="foot">© PreMatch — semplice, pulita, veloce. Privacy by design.</footer>
 
   <script src="app.js"></script>
 </body>
