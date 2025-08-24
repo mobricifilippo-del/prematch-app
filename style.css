@@ -43,26 +43,30 @@ body{
 }
 .sport-card:hover{transform:translateY(-2px)}
 .sport-card__img{width:100%;height:160px;object-fit:cover;display:block}
-.sport-card__label{padding:10px 14px;background:#0d1323;color:#fff;font-weight:700;font-size:18px}
+.sport-card__label{
+  padding:10px 14px;background:#0d1323;color:#ffffff;
+  font-weight:800;font-size:18px;letter-spacing:.3px
+}
 
-/* Form / select */
+/* Form / select / input */
 .form{margin-top:10px}
 .field{display:flex;flex-direction:column;gap:8px;margin:10px 0}
 .field label{color:#cbd5e1;font-weight:700}
-.select{
-  appearance:none;
+.select,.input{
+  appearance:none;width:100%;
   padding:12px 14px;border-radius:12px;
   color:#06240f;background:#16a34a;
   border:none;box-shadow:0 3px 10px rgba(0,0,0,.3);
   font-weight:700;cursor:pointer
 }
-.select:focus{outline:2px solid #22c55e}
+.input{background:#0f172a;color:#e6ebf0;border:1px solid rgba(255,255,255,.12);cursor:text}
+.select:focus,.input:focus{outline:2px solid #22c55e}
 
 /* Chip verdi (Genere) */
 .chips-wrap{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
 .chip{
   appearance:none;border:0;cursor:pointer;
-  padding:10px 14px;border-radius:999px;font-weight:700;
+  padding:10px 14px;border-radius:999px;font-weight:800;
   box-shadow:0 3px 10px rgba(0,0,0,.3)
 }
 .chip--green{background:#16a34a;color:#06240f}
@@ -79,8 +83,36 @@ body{
   padding:16px;border-radius:14px;margin-top:14px
 }
 .card h3{margin-bottom:10px}
+.card .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+
 .matches .match{padding:10px 0;border-bottom:1px dashed rgba(255,255,255,.08)}
 .matches .match:last-child{border-bottom:0}
+
+/* badge stato */
+.badge{
+  display:inline-block;padding:6px 10px;border-radius:999px;
+  font-weight:800;font-size:12px;
+  background:#f59e0b;color:#1f1300;border:1px solid rgba(0,0,0,.2)
+}
+
+/* Buttons */
+.actions{display:flex;gap:10px;margin-top:10px}
+.btn{
+  appearance:none;border:0;border-radius:12px;cursor:pointer;
+  padding:10px 14px;font-weight:800
+}
+.btn--green{background:#16a34a;color:#06240f;box-shadow:0 3px 10px rgba(0,0,0,.3)}
+.btn--ghost{background:#0f172a;color:#e6ebf0;border:1px solid rgba(255,255,255,.18)}
+
+/* Grid 2 */
+.grid2{display:grid;gap:12px}
+@media (min-width:720px){.grid2{grid-template-columns:1fr 1fr}}
+
+/* Messages */
+.msg{
+  margin-top:10px;padding:10px 12px;border-radius:10px;
+  background:#05260f;color:#d1fae5;border:1px solid #14532d
+}
 
 /* Back & footer */
 .back{
