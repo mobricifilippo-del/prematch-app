@@ -1,183 +1,308 @@
-// ==== CONFIG SUPABASE ====
+// ======== CONFIG SUPABASE ========
 const SUPABASE_URL = "https://hzzhypahrzclvfepstro.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6emh5cGFocnpjbHZmZXBzdHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0NDAxNDUsImV4cCI6MjA3MTAxNjE0NX0.7niKgLcuDKQZQZxkQfxMYzz9fPT4Mm5wzWeq6r87TIY";
-const supa = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
-// Stato di navigazione
-const state = {
-  sport: null,         // { id, nome }
-  regione: null,       // { id, nome }
-  genere: null,        // 'M' | 'F'
-  societa: null        // { id, nome }
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ======== STATO APP ========
+let selectedSport = { id: null, nome: null };
+let selectedRegion = { id: null, nome: null };
+let selectedGender = null;
+
+// ======== UTILS DOM ========
+// Creo (se mancano) i contenitori delle sezioni e imposto la classe .screen
+function ensureSections() {
+  const main = document.getElementById("home") || document.querySelector("main");
+
+  function ensure(id, title, withBack=false) {
+    let sec = document.getElementById(id);
+    if (!sec) {
+      sec = document.createElement("section");
+      sec.id = id;
+      sec.className = "screen";
+      const h = document.createElement("h2");
+      h.textContent = title;
+      sec.appendChild(h);
+      if (withBack) {
+        const back = document.createElement("button");
+        back.className = "back";
+        back.textContent = "← Indietro";
+        back.addEventListener("click", () => goBackFrom(id));
+        sec.insertBefore(back, h);
+      }
+      main.appendChild(sec);
+    }
+    return sec;
+  }
+
+  // sezione esistente della griglia sport
+  const sportsGrid = document.querySelector(".sports-grid");
+  if (sportsGrid) {
+    const s = document.getElementById("sports-step") || document.createElement("section");
+    s.id = "sports-step";
+    s.className = "screen active"; // la sola visibile all'avvio
+    s.appendChild(sportsGrid);
+    const hero = document.querySelector(".hero");
+    if (hero && hero.parentElement !== s) s.insertBefore(hero, sportsGrid);
+    main.prepend(s);
+  }
+
+  ensure("region-step",   "Scegli la regione",   true);
+  ensure("gender-step",   "Seleziona il genere", true);
+  ensure("clubs-step",    "Scegli la società",   true);
+  ensure("club-page",     "Società",             true); // dettaglio società
+}
+
+// mostra solo una sezione
+function showOnly(id) {
+  document.querySelectorAll(".screen").forEach(el => el.classList.remove("active"));
+  const sec = document.getElementById(id);
+  if (sec) sec.classList.add("active");
+}
+
+// gestione “Indietro”
+function goBackFrom(id) {
+  if (id === "region-step") {
+    showOnly("sports-step");
+  } else if (id === "gender-step") {
+    showRegions(); // torna a regioni con sport già scelto
+  } else if (id === "clubs-step") {
+    showGender();  // torna al genere
+  } else if (id === "club-page") {
+    showClubs();   // torna all’elenco società
+  }
+}
+
+// helper per creare bottoni/elenco
+function clearAndFill(container, nodes=[]) {
+  container.innerHTML = "";
+  nodes.forEach(n => container.appendChild(n));
+}
+
+function pill(text, onClick) {
+  const b = document.createElement("button");
+  b.className = "pill";
+  b.textContent = text;
+  b.addEventListener("click", onClick);
+  return b;
+}
+
+function card(title, imgSrc, onClick) {
+  const d = document.createElement("div");
+  d.className = "card";
+  if (onClick) d.addEventListener("click", onClick);
+  const img = document.createElement("img");
+  img.src = imgSrc;
+  img.alt = title;
+  const h = document.createElement("h3");
+  h.textContent = title;
+  d.append(img, h);
+  return d;
+}
+
+// mappa immagini per sport
+const sportImage = (nome) => {
+  const k = (nome || "").toLowerCase().replace(/\s+/g, "");
+  return `images/${k}.jpg`;
 };
 
-// Utilità UI
-function show(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-function goBack() {
-  if (document.getElementById("club").classList.contains("active")) show("societa");
-  else if (document.getElementById("societa").classList.contains("active")) show("genere");
-  else if (document.getElementById("genere").classList.contains("active")) show("regioni");
-  else if (document.getElementById("regioni").classList.contains("active")) show("home");
-  else show("home");
+// ======== RENDER: SPORT ========
+async function initSportsGrid() {
+  // se ci sono già le card statiche, aggiungo il click -> selectSport
+  document.querySelectorAll(".sports-grid .card").forEach(c => {
+    const h = c.querySelector("h3");
+    if (!h) return;
+    const nome = h.textContent.trim();
+    c.onclick = () => selectSportByName(nome);
+  });
+
+  // Se vuoi caricare da DB (tabella public.sports), togli il commento:
+  /*
+  const { data, error } = await supabase.from("sports").select("id, nome").order("nome");
+  if (!error && data && data.length) {
+    const grid = document.querySelector(".sports-grid");
+    grid.innerHTML = "";
+    data.forEach(sp => {
+      grid.appendChild(card(sp.nome, sportImage(sp.nome), () => {
+        selectedSport = { id: sp.id, nome: sp.nome };
+        showRegions();
+      }));
+    });
+  }
+  */
 }
 
-// ====== FETCH ======
-async function fetchSports() {
-  const { data, error } = await supa.from("sports").select("id,nome").order("nome");
-  if (error) throw error;
-  return data;
-}
-async function fetchRegioniBySport(sportId) {
-  // tutte le regioni che hanno almeno una società per lo sport scelto
-  const { data, error } = await supa
-    .from("societa")
-    .select("regione_id, regioni:nome, regioni!inner(id,nome)")
-    .eq("sport_id", sportId)
-    .not("regione_id", "is", null);
-  if (error) throw error;
+async function selectSportByName(nome) {
+  // prova a trovare l'id dal DB per filtrare le società
+  let sportId = null;
+  const { data } = await supabase.from("sports").select("id, nome").eq("nome", nome).limit(1);
+  if (data && data[0]) sportId = data[0].id;
 
-  // uniq per regione
-  const map = new Map();
-  data.forEach(r => { map.set(r.regioni.id, r.regioni.nome); });
-  return Array.from(map, ([id, nome]) => ({ id, nome }));
+  selectedSport = { id: sportId, nome };
+  showRegions();
 }
-async function fetchSocieta(sportId, regioneId, genere) {
-  const { data, error } = await supa
-    .from("societa")
-    .select("id,nome")
-    .eq("sport_id", sportId)
-    .eq("regione_id", regioneId)
-    .or(`genere.eq.${genere},genere.is.null`) // se non usi colonna 'genere', questa condizione è innocua
-    .order("nome");
-  if (error) throw error;
-  return data;
+
+// ======== RENDER: REGIONI ========
+async function showRegions() {
+  ensureSections();
+  const sec = document.getElementById("region-step");
+  const cont = document.createElement("div");
+  cont.className = "chips";
+
+  const { data, error } = await supabase.from("regioni").select("id, nome").order("nome");
+  const nodes = [];
+
+  if (error) {
+    nodes.push(document.createTextNode("Errore nel caricamento regioni."));
+  } else {
+    // Bottone “Tutte” (nel caso alcune società non abbiano regione valorizzata)
+    nodes.push(pill("Tutte", () => {
+      selectedRegion = { id: null, nome: "Tutte" };
+      showGender();
+    }));
+    (data || []).forEach(r => {
+      nodes.push(pill(r.nome, () => {
+        selectedRegion = { id: r.id, nome: r.nome };
+        showGender();
+      }));
+    });
+  }
+
+  clearAndFill(sec, [sec.querySelector(".back"), sec.querySelector("h2"), cont]);
+  clearAndFill(cont, nodes);
+  showOnly("region-step");
 }
-async function fetchMatchesBySocieta(societaId) {
-  // prossime partite, ordinati per data
-  const { data, error } = await supa
+
+// ======== RENDER: GENERE ========
+function showGender() {
+  ensureSections();
+  selectedGender = null;
+  const sec = document.getElementById("gender-step");
+  const g = document.createElement("div");
+  g.className = "chips";
+
+  g.appendChild(pill("Maschile", () => { selectedGender = "M"; showClubs(); }));
+  g.appendChild(pill("Femminile", () => { selectedGender = "F"; showClubs(); }));
+
+  clearAndFill(sec, [sec.querySelector(".back"), sec.querySelector("h2"), g]);
+  showOnly("gender-step");
+}
+
+// ======== RENDER: SOCIETÀ ========
+async function showClubs() {
+  ensureSections();
+  const sec = document.getElementById("clubs-step");
+
+  const list = document.createElement("div");
+  list.className = "cards";
+
+  // filtro: sport_id e regione_id. Alcune società potrebbero avere regione_id null.
+  let query = supabase.from("societa").select("id, nome, regione_id, sport_id").order("nome");
+
+  if (selectedSport.id) query = query.eq("sport_id", selectedSport.id);
+  if (selectedRegion.id) query = query.eq("regione_id", selectedRegion.id);
+
+  const { data, error } = await query;
+
+  if (error) {
+    list.textContent = "Errore nel caricamento società.";
+  } else if (!data || !data.length) {
+    list.textContent = "Nessuna società trovata per i filtri selezionati.";
+  } else {
+    data.forEach(c => {
+      list.appendChild(
+        card(c.nome, "images/logo.png", () => openClub(c))
+      );
+    });
+  }
+
+  clearAndFill(sec, [sec.querySelector(".back"), sec.querySelector("h2"), list]);
+  showOnly("clubs-step");
+}
+
+// ======== DETTAGLIO SOCIETÀ ========
+async function openClub(club) {
+  ensureSections();
+  const sec = document.getElementById("club-page");
+
+  const h = sec.querySelector("h2");
+  h.textContent = club.nome;
+
+  const wrap = document.createElement("div");
+  wrap.className = "club";
+
+  // Prossime partite (se presenti)
+  const matchesBox = document.createElement("div");
+  matchesBox.className = "box";
+  const mh = document.createElement("h3");
+  mh.textContent = "Prossime partite";
+  matchesBox.appendChild(mh);
+
+  const { data: matches } = await supabase
     .from("partite")
-    .select("id,data,luogo, squadre1:nome, squadre2:nome, squadra1_id, squadra2_id")
-    .or(`squadra1_id.eq.${societaId},squadra2_id.eq.${societaId}`)
+    .select("id, data, struttura, squadra1_id, squadra2_id")
     .gte("data", new Date().toISOString())
     .order("data", { ascending: true })
-    .limit(10);
-  if (error) throw error;
-  return data;
-}
-async function fetchSponsorsBySocieta(societaId) {
-  // sponsor legati alla società via tabella 'sponsorizzazioni'
-  const { data, error } = await supa
+    .limit(5);
+  // Nota: qui potresti voler filtrare per club.id, collegando partite -> squadre -> società.
+  // Per demo, mostro le prime 5 future.
+
+  const mlist = document.createElement("ul");
+  (matches || []).forEach(m => {
+    const li = document.createElement("li");
+    li.textContent = new Date(m.data).toLocaleString("it-IT") + (m.struttura ? ` — ${m.struttura}` : "");
+    mlist.appendChild(li);
+  });
+  if (!mlist.children.length) {
+    const p = document.createElement("p");
+    p.textContent = "Nessuna partita in programma.";
+    matchesBox.appendChild(p);
+  } else {
+    matchesBox.appendChild(mlist);
+  }
+
+  // Sponsor collegati (se presenti)
+  const sponsorsBox = document.createElement("div");
+  sponsorsBox.className = "box";
+  const sh = document.createElement("h3");
+  sh.textContent = "Sponsor della società";
+  sponsorsBox.appendChild(sh);
+
+  const { data: links } = await supabase
     .from("sponsorizzazioni")
-    .select("sponsors!inner(id,nome,logo_url)")
-    .eq("societa_id", societaId);
-  if (error) throw error;
-  // normalizza
-  return (data || []).map(r => r.sponsors);
-}
+    .select("sponsor_id")
+    .eq("societa_id", club.id);
 
-// ====== RENDER ======
-async function renderSports() {
-  try {
-    const grid = document.getElementById("sportsGrid");
-    grid.innerHTML = "";
-    const sports = await fetchSports();
-    sports.forEach(s => {
-      const card = document.createElement("button");
-      card.className = "card";
-      card.innerHTML = `
-        <img src="images/${s.nome.toLowerCase().replace(' ', '')}.jpg" alt="${s.nome}" />
-        <div class="card-title">${s.nome}</div>`;
-      card.onclick = async () => {
-        state.sport = s;
-        await renderRegioni();
-        show("regioni");
-      };
-      grid.appendChild(card);
-    });
-  } catch (e) { console.error(e); }
-}
-async function renderRegioni() {
-  const grid = document.getElementById("regioniGrid");
-  grid.innerHTML = "";
-  const items = await fetchRegioniBySport(state.sport.id);
-  items.forEach(r => {
-    const b = document.createElement("button");
-    b.className = "card";
-    b.innerHTML = `<div class="card-title">${r.nome}</div>`;
-    b.onclick = () => { state.regione = r; show("genere"); };
-    grid.appendChild(b);
-  });
-}
-function selectGenere(g) {
-  state.genere = g;
-  renderSocieta();
-  show("societa");
-}
-async function renderSocieta() {
-  const list = document.getElementById("societaList");
-  list.innerHTML = "";
-  const clubs = await fetchSocieta(state.sport.id, state.regione.id, state.genere);
-  clubs.forEach(c => {
-    const row = document.createElement("button");
-    row.className = "list-item";
-    row.textContent = c.nome;
-    row.onclick = async () => {
-      state.societa = c;
-      await renderClub();
-      show("club");
-    };
-    list.appendChild(row);
-  });
-}
-async function renderClub() {
-  document.getElementById("clubTitle").textContent = state.societa.nome;
-
-  // partite
-  const matchesWrap = document.getElementById("matchesList");
-  matchesWrap.innerHTML = "";
-  const matches = await fetchMatchesBySocieta(state.societa.id);
-  if (!matches.length) {
-    matchesWrap.innerHTML = `<div class="empty">Nessuna partita in programma</div>`;
+  if (!links || !links.length) {
+    const p = document.createElement("p");
+    p.textContent = "Nessuno sponsor registrato.";
+    sponsorsBox.appendChild(p);
   } else {
-    matches.forEach(m => {
-      const d = new Date(m.data);
-      const card = document.createElement("div");
-      card.className = "mini-card";
-      card.innerHTML = `
-        <div class="mini-title">${d.toLocaleDateString()} ${d.toLocaleTimeString().slice(0,5)}</div>
-        <div class="mini-sub">${m.squadre1 || 'Squadra A'} vs ${m.squadre2 || 'Squadra B'}</div>
-        <div class="mini-meta">${m.luogo || ''}</div>`;
-      matchesWrap.appendChild(card);
+    const ids = links.map(l => l.sponsor_id);
+    const { data: sponsors } = await supabase
+      .from("sponsors")
+      .select("id, nome")
+      .in("id", ids);
+
+    const slist = document.createElement("ul");
+    (sponsors || []).forEach(s => {
+      const li = document.createElement("li");
+      li.textContent = s.nome;
+      slist.appendChild(li);
     });
+    sponsorsBox.appendChild(slist);
   }
 
-  // sponsor (solo quelli della società!)
-  const sponsorStrip = document.getElementById("sponsorStrip");
-  sponsorStrip.innerHTML = "";
-  const sponsors = await fetchSponsorsBySocieta(state.societa.id);
-  if (!sponsors.length) {
-    sponsorStrip.innerHTML = `<div class="empty small">Nessuno sponsor</div>`;
-  } else {
-    sponsors.forEach(sp => {
-      const a = document.createElement("div");
-      a.className = "sponsor-badge";
-      a.innerHTML = sp.logo_url
-        ? `<img src="${sp.logo_url}" alt="${sp.nome}" />`
-        : `<span>${sp.nome}</span>`;
-      sponsorStrip.appendChild(a);
-    });
-  }
+  wrap.append(matchesBox, sponsorsBox);
+  clearAndFill(sec, [sec.querySelector(".back"), h, wrap]);
+  showOnly("club-page");
 }
 
-// Bootstrap
-document.addEventListener("DOMContentLoaded", () => {
-  if (!supa) {
-    console.error("Supabase client non disponibile");
-    return;
-  }
-  renderSports();
-});
+// ======== AVVIO ========
+function boot() {
+  ensureSections();
+  initSportsGrid();     // collega i click alle card sport già presenti
+  showOnly("sports-step");
+}
+
+document.addEventListener("DOMContentLoaded", boot);
