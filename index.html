@@ -2,9 +2,10 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
   <link rel="icon" href="images/logo.png" />
+  <!-- ATTENZIONE: minuscolo -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -15,60 +16,51 @@
     </div>
   </header>
 
-  <!-- Home: scegli lo sport -->
+  <!-- HOME -->
   <main id="home" class="screen active">
     <section class="hero">
       <h1>Scegli lo sport</h1>
-      <p>Esplora società e organizza i PreMatch. Nessuna registrazione richiesta.</p>
+      <p>Esplora società e organizza in PreMatch. Nessuna registrazione richiesta per la navigazione.</p>
     </section>
 
-    <section class="grid" id="sportsGrid">
-      <!-- Card sport generate da app.js -->
-    </section>
-  </main>
-
-  <!-- Step 2: Regioni -->
-  <main id="regioni" class="screen">
-    <button class="back" onclick="goBack()">← Indietro</button>
-    <h2>Scegli la regione</h2>
-    <section class="grid" id="regioniGrid"></section>
-  </main>
-
-  <!-- Step 3: Genere -->
-  <main id="genere" class="screen">
-    <button class="back" onclick="goBack()">← Indietro</button>
-    <h2>Seleziona il genere</h2>
-    <section class="choices">
-      <button class="pill" onclick="selectGenere('M')">Maschile</button>
-      <button class="pill" onclick="selectGenere('F')">Femminile</button>
-    </section>
-  </main>
-
-  <!-- Step 4: Società -->
-  <main id="societa" class="screen">
-    <button class="back" onclick="goBack()">← Indietro</button>
-    <h2>Scegli la società</h2>
-    <section class="list" id="societaList"></section>
-  </main>
-
-  <!-- Step 5: Dettaglio Società (partite + sponsor della società) -->
-  <main id="club" class="screen">
-    <button class="back" onclick="goBack()">← Indietro</button>
-    <h2 id="clubTitle">Società</h2>
-
-    <section>
-      <h3>Prossime partite</h3>
-      <div id="matchesList" class="cards"></div>
-    </section>
-
-    <section>
-      <h3>Sponsor della società</h3>
-      <div id="sponsorStrip" class="sponsor-strip"></div>
+    <section class="sports-grid">
+      <div class="card" onclick="selectSport('calcio')">
+        <img src="images/calcio.jpg" alt="Calcio" />
+        <h3>Calcio</h3>
+      </div>
+      <div class="card" onclick="selectSport('futsal')">
+        <img src="images/futsal.jpg" alt="Futsal" />
+        <h3>Futsal</h3>
+      </div>
+      <div class="card" onclick="selectSport('basket')">
+        <img src="images/basket.jpg" alt="Basket" />
+        <h3>Basket</h3>
+      </div>
+      <div class="card" onclick="selectSport('rugby')">
+        <img src="images/rugby.jpg" alt="Rugby" />
+        <h3>Rugby</h3>
+      </div>
+      <div class="card" onclick="selectSport('volley')">
+        <img src="images/volley.jpg" alt="Volley" />
+        <h3>Volley</h3>
+      </div>
+      <div class="card" onclick="selectSport('beachvolley')">
+        <img src="images/beachvolley.jpg" alt="Beach Volley" />
+        <h3>Beach Volley</h3>
+      </div>
+      <div class="card" onclick="selectSport('pallanuoto')">
+        <img src="images/pallanuoto.jpg" alt="Pallanuoto" />
+        <h3>Pallanuoto</h3>
+      </div>
     </section>
   </main>
 
-  <footer class="foot">© PreMatch — semplice, pulita, veloce. Privacy by design.</footer>
+  <footer class="foot">
+    © PreMatch — semplice, pulita, veloce. Privacy by design.
+  </footer>
 
+  <!-- Carica la libreria Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 </body>
 </html>
