@@ -1,13 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
   <link rel="icon" href="images/logo.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <header class="topbar">
     <div class="brand">
       <img src="images/logo.png" alt="logo" />
@@ -15,75 +16,93 @@
     </div>
   </header>
 
-  <!-- HOME -->
+  <!-- ==================== HOME (solo sport) ==================== -->
   <main id="home" class="screen active">
     <h1>Scegli lo sport</h1>
     <p>Esplora società e organizza in PreMatch. Nessuna registrazione richiesta per la navigazione.</p>
 
     <section class="sports-grid">
-      <article class="sport-card" data-sport="Calcio" onclick="pickSport('Calcio')">
+      <button class="sport-card" data-sport="Calcio">
         <img src="images/calcio.jpg" alt="Calcio" />
-        <h2>Calcio</h2>
-      </article>
-      <article class="sport-card" data-sport="Futsal" onclick="pickSport('Futsal')">
+        <div class="label">Calcio</div>
+      </button>
+
+      <button class="sport-card" data-sport="Futsal">
         <img src="images/futsal.jpg" alt="Futsal" />
-        <h2>Futsal</h2>
-      </article>
-      <article class="sport-card" data-sport="Basket" onclick="pickSport('Basket')">
+        <div class="label">Futsal</div>
+      </button>
+
+      <button class="sport-card" data-sport="Basket">
         <img src="images/basket.jpg" alt="Basket" />
-        <h2>Basket</h2>
-      </article>
-      <article class="sport-card" data-sport="Rugby" onclick="pickSport('Rugby')">
+        <div class="label">Basket</div>
+      </button>
+
+      <button class="sport-card" data-sport="Rugby">
         <img src="images/rugby.jpg" alt="Rugby" />
-        <h2>Rugby</h2>
-      </article>
-      <article class="sport-card" data-sport="Volley" onclick="pickSport('Volley')">
+        <div class="label">Rugby</div>
+      </button>
+
+      <button class="sport-card" data-sport="Volley">
         <img src="images/volley.jpg" alt="Volley" />
-        <h2>Volley</h2>
-      </article>
-      <article class="sport-card" data-sport="Beach Volley" onclick="pickSport('Beach Volley')">
-        <img src="images/beachvolley.jpg" alt="Beach Volley" />
-        <h2>Beach Volley</h2>
-      </article>
-      <article class="sport-card" data-sport="Pallanuoto" onclick="pickSport('Pallanuoto')">
+        <div class="label">Volley</div>
+      </button>
+
+      <button class="sport-card" data-sport="Pallanuoto">
         <img src="images/pallanuoto.jpg" alt="Pallanuoto" />
-        <h2>Pallanuoto</h2>
-      </article>
+        <div class="label">Pallanuoto</div>
+      </button>
+    </section>
+  </main>
+  <!-- ================== FINE HOME ================== -->
+
+  <!-- ==================== REGIONI ==================== -->
+  <main id="regions" class="screen hidden">
+    <button class="back" data-back="home">← Indietro</button>
+    <h2>Scegli la regione</h2>
+    <p>Sport: <strong id="selSportName">-</strong></p>
+
+    <section class="regions-grid" id="regionsGrid">
+      <!-- Bottoni regioni generati da JS -->
     </section>
   </main>
 
-  <!-- REGIONS -->
-  <main id="regions" class="screen hidden">
-    <button class="btn btn-ghost" onclick="goBackTo('home')">← Indietro</button>
-    <h1>Scegli la regione</h1>
-    <p id="picked-sport" class="muted"></p>
-    <div id="regions-grid" class="sports-grid"></div>
-  </main>
-
-  <!-- GENDER -->
+  <!-- ==================== GENERE ==================== -->
   <main id="gender" class="screen hidden">
-    <button class="btn btn-ghost" onclick="goBackTo('regions')">← Indietro</button>
-    <h1>Seleziona il genere</h1>
-    <p id="picked-region" class="muted"></p>
-    <div style="display:flex; gap:12px; margin-top:12px;">
-      <button class="btn" onclick="pickGender('Maschile')">Maschile</button>
-      <button class="btn" onclick="pickGender('Femminile')">Femminile</button>
+    <button class="back" data-back="regions">← Indietro</button>
+    <h2>Seleziona il genere</h2>
+    <div class="gender-row">
+      <button class="pill" data-gender="Maschile">Maschile</button>
+      <button class="pill" data-gender="Femminile">Femminile</button>
     </div>
   </main>
 
-  <!-- CLUBS -->
+  <!-- ==================== SOCIETÀ ==================== -->
   <main id="clubs" class="screen hidden">
-    <button class="btn btn-ghost" onclick="goBackTo('gender')">← Indietro</button>
-    <h1>Scegli la società</h1>
-    <p id="picked-gender" class="muted"></p>
-    <ul id="clubs-list" style="margin-top:14px; display:grid; gap:10px;"></ul>
+    <button class="back" data-back="gender">← Indietro</button>
+    <h2>Scegli la società</h2>
+    <p>
+      Sport: <strong id="sumSport">-</strong> •
+      Regione: <strong id="sumRegion">-</strong> •
+      Genere: <strong id="sumGender">-</strong>
+    </p>
+
+    <ul class="club-list" id="clubList">
+      <!-- Riempito da JS -->
+    </ul>
+
+    <section class="info">
+      <h3>Prossime partite</h3>
+      <div id="nextMatches">Seleziona una società per vedere le partite.</div>
+
+      <h3>Sponsor della società</h3>
+      <div id="sponsorBox">Seleziona una società per vedere eventuali sponsor.</div>
+    </section>
   </main>
 
-  <footer>
-    <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
+  <footer class="footer">
+    © PreMatch — semplice, pulita, veloce. Privacy by design.
   </footer>
 
-  <!-- cache-busting per evitare JS vecchio in cache -->
-  <script src="app.js?v=4"></script>
+  <script src="app.js"></script>
 </body>
 </html>
