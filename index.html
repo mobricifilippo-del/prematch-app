@@ -4,12 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
+
   <link rel="icon" href="images/logo.png" />
-  <!-- CSS corretto -->
-  <link rel="stylesheet" href="Style.css" />
-  <!-- JS corretto -->
-  <script src="app.js" defer></script>
+  <!-- ATTENZIONE: minuscolo -->
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <header class="topbar">
     <div class="brand">
@@ -18,9 +18,9 @@
     </div>
     <nav class="nav">
       <button class="link" onclick="show('#home')">Home</button>
+      <button class="link" onclick="show('#partite')">Partite</button>
       <button class="link" onclick="show('#clubs')">Società</button>
-      <button class="link" onclick="show('#matches')">Partite</button>
-      <button class="link" onclick="show('#sponsors')">Sponsor</button>
+      <button class="link" onclick="show('#sponsor')">Sponsor</button>
     </nav>
   </header>
 
@@ -28,20 +28,63 @@
   <main id="home" class="screen active">
     <section class="hero">
       <h1>Scegli lo sport</h1>
-      <div class="grid">
-        <div class="card"><img src="images/calcio.jpg" alt="Calcio"><h3>Calcio</h3></div>
-        <div class="card"><img src="images/futsal.jpg" alt="Futsal"><h3>Futsal</h3></div>
-        <div class="card"><img src="images/basket.jpg" alt="Basket"><h3>Basket</h3></div>
-        <div class="card"><img src="images/rugby.jpg" alt="Rugby"><h3>Rugby</h3></div>
-        <div class="card"><img src="images/volley.jpg" alt="Volley"><h3>Volley</h3></div>
-        <div class="card"><img src="images/beachvolley.jpg" alt="Beach Volley"><h3>Beach Volley</h3></div>
-        <div class="card"><img src="images/pallanuoto.jpg" alt="Pallanuoto"><h3>Pallanuoto</h3></div>
-      </div>
+      <p>Esplora società e scopri le prossime partite. Nessuna registrazione richiesta.</p>
+    </section>
+
+    <section class="grid">
+      <a class="card" href="#" onclick="openSport('Calcio')">
+        <img src="images/calcio.jpg" alt="Calcio"><h3>Calcio</h3>
+      </a>
+      <a class="card" href="#" onclick="openSport('Futsal')">
+        <img src="images/futsal.jpg" alt="Futsal"><h3>Futsal</h3>
+      </a>
+      <a class="card" href="#" onclick="openSport('Basket')">
+        <img src="images/basket.jpg" alt="Basket"><h3>Basket</h3>
+      </a>
+      <a class="card" href="#" onclick="openSport('Rugby')">
+        <img src="images/rugby.jpg" alt="Rugby"><h3>Rugby</h3>
+      </a>
+      <a class="card" href="#" onclick="openSport('Volley')">
+        <img src="images/volley.jpg" alt="Volley"><h3>Volley</h3>
+      </a>
+      <a class="card" href="#" onclick="openSport('Beach Volley')">
+        <img src="images/beachvolley.jpg" alt="Beach Volley"><h3>Beach Volley</h3>
+      </a>
+      <a class="card" href="#" onclick="openSport('Pallanuoto')">
+        <img src="images/pallanuoto.jpg" alt="Pallanuoto"><h3>Pallanuoto</h3>
+      </a>
     </section>
   </main>
 
-  <footer>
-    <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
+  <!-- PARTITE -->
+  <main id="partite" class="screen">
+    <section class="section">
+      <h2>Prossime Partite</h2>
+      <div id="matches" class="list"></div>
+    </section>
+  </main>
+
+  <!-- SOCIETÀ -->
+  <main id="clubs" class="screen">
+    <section class="section">
+      <h2>Società</h2>
+      <div id="clubsList" class="list"></div>
+    </section>
+  </main>
+
+  <!-- SPONSOR -->
+  <main id="sponsor" class="screen">
+    <section class="section">
+      <h2>Sponsor</h2>
+      <div id="sponsorList" class="list"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    © PreMatch — semplice, pulita, veloce. Privacy by design.
   </footer>
+
+  <!-- JS dell'app -->
+  <script src="app.js"></script>
 </body>
 </html>
