@@ -19,9 +19,19 @@ const REGIONS = [
   "Toscana","Trentino-Alto Adige","Umbria","Valle d'Aosta","Veneto"
 ];
 
-/* Campionati per sport (demo) */
+/* Campionati per sport (aggiornato) */
 const LEAGUES = {
-  calcio: ["Eccellenza", "Promozione", "Under 17", "Under 15"],
+  calcio: [
+    "Serie A Maschile",
+    "Serie A Femminile",
+    "Eccellenza Maschile",
+    "Eccellenza Femminile",
+    "Promozione",
+    "Under 19",
+    "Under 17",
+    "Under 15",
+    "Scuola Calcio"
+  ],
   futsal: ["Eccellenza Futsal", "Serie A Futsal"],
   basket: ["Serie A", "Serie A2", "U17 Ecc"],
   rugby: ["Top10", "Serie A"],
@@ -30,9 +40,9 @@ const LEAGUES = {
   pallanuoto: ["Serie A1", "Serie A2"]
 };
 
-/* Società demo */
+/* Società demo (chiave: sport|regione|genere|campionato) */
 const DEMO_CLUBS = {
-  "calcio|Lazio|Femminile|Eccellenza": [
+  "calcio|Lazio|Femminile|Eccellenza Femminile": [
     {
       name: "AS Roma",
       matches: [{ team:"Prima Squadra vs —", date:"31/08/2025 14:07", venue:"Roma - Stadio Olimpico", status:"confirm" }],
@@ -48,6 +58,7 @@ const DEMO_CLUBS = {
 function clubsFor(sport, region, gender, league){
   const key = `${sport}|${region}|${gender}|${league}`;
   if (DEMO_CLUBS[key]) return DEMO_CLUBS[key];
+  // default demo
   return [
     { name: `${capitalize(sport)} ${region} ${gender} 1`,
       matches:[{team:"Prima Squadra vs —", date:"12/09/2025 18:00", venue:region, status:"pending"}],
@@ -82,7 +93,7 @@ function renderSports(){
   ).join("");
 }
 
-/* STEP: SPORT → REGIONE */
+/* SPORT → REGIONE */
 window.pickSport = function(id,name){
   state.sport=id; state.sportName=name;
   $("#ctx-sport").textContent = name;
@@ -94,7 +105,7 @@ window.pickSport = function(id,name){
   show("step-region");
 };
 
-/* onChange Regione → GENERE */
+/* Regione → GENERE */
 window.onRegionChange = function(value){
   if(!value) return;
   state.region = value;
@@ -103,7 +114,7 @@ window.onRegionChange = function(value){
   show("step-gender");
 };
 
-/* GENERE (chip) → CAMPIONATO */
+/* Genere → CAMPIONATO */
 window.pickGender = function(gender){
   state.gender = gender;
 
@@ -119,7 +130,7 @@ window.pickGender = function(gender){
   show("step-league");
 };
 
-/* onChange Campionato → SOCIETÀ */
+/* Campionato → SOCIETÀ */
 window.onLeagueChange = function(value){
   if(!value) return;
   state.league = value;
@@ -215,7 +226,7 @@ window.submitPreMatch = function(){
   msg.hidden = false;
   msg.textContent = `Richiesta inviata: ${state.club} — ${date} ${time} — Divisa: ${kit}.`;
 
-  // Potremmo anche appendere una "partita in attesa" alla lista
+  // Aggiungi riga in alto nella lista
   const m = $("#matchesBox");
   const extra = document.createElement("div");
   extra.className = "match";
