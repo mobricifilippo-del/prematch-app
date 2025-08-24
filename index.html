@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PreMatch</title>
   <link rel="icon" href="images/logo.png" />
   <link rel="stylesheet" href="style.css" />
@@ -15,58 +15,90 @@
     </div>
   </header>
 
-  <!-- HOME: solo sport -->
+  <!-- HOME (griglia sport) -->
   <main id="home" class="screen active">
-    <h1>Scegli lo sport</h1>
-    <p>Esplora le società. Interazioni riservate alle società verificate.</p>
-    <section class="sports-grid" id="sportsGrid"><!-- da JS --></section>
+    <section class="screen-inner">
+      <h1>Scegli lo sport</h1>
+      <p>Esplora società e organizza in PreMatch. Nessuna registrazione richiesta per la navigazione.</p>
+
+      <!-- Griglia statica: appare anche se JS non carica -->
+      <div class="sports-grid" id="sportsGrid">
+        <button class="sport-card" data-sport="Calcio">
+          <img src="images/calcio.jpg" alt="Calcio" /><h3>Calcio</h3>
+        </button>
+        <button class="sport-card" data-sport="Futsal">
+          <img src="images/futsal.jpg" alt="Futsal" /><h3>Futsal</h3>
+        </button>
+        <button class="sport-card" data-sport="Basket">
+          <img src="images/basket.jpg" alt="Basket" /><h3>Basket</h3>
+        </button>
+        <button class="sport-card" data-sport="Rugby">
+          <img src="images/rugby.jpg" alt="Rugby" /><h3>Rugby</h3>
+        </button>
+        <button class="sport-card" data-sport="Volley">
+          <img src="images/volley.jpg" alt="Volley" /><h3>Volley</h3>
+        </button>
+        <button class="sport-card" data-sport="Beach Volley">
+          <img src="images/beachvolley.jpg" alt="Beach Volley" /><h3>Beach Volley</h3>
+        </button>
+        <button class="sport-card" data-sport="Pallanuoto">
+          <img src="images/pallanuoto.jpg" alt="Pallanuoto" /><h3>Pallanuoto</h3>
+        </button>
+      </div>
+    </section>
   </main>
 
   <!-- REGIONI -->
   <main id="regioni" class="screen">
-    <button class="back" id="backFromRegioni">← Indietro</button>
-    <h1>Scegli la regione</h1>
-    <p class="path">Sport: <b id="pathSport"></b></p>
-    <section class="pill-grid" id="regioniGrid"><!-- da JS --></section>
+    <section class="screen-inner">
+      <button class="back" data-back="#home">← Indietro</button>
+      <h2>Scegli la regione</h2>
+      <p>Sport: <strong id="chosenSport">—</strong></p>
+      <div id="regionButtons" class="chips"></div>
+    </section>
   </main>
 
   <!-- GENERE -->
   <main id="genere" class="screen">
-    <button class="back" id="backFromGenere">← Indietro</button>
-    <h1>Seleziona il genere</h1>
-    <p class="path">Sport: <b id="pathSport2"></b> • Regione: <b id="pathRegione"></b></p>
-    <section class="pill-grid">
-      <button class="pill" data-genere="Maschile">Maschile</button>
-      <button class="pill" data-genere="Femminile">Femminile</button>
+    <section class="screen-inner">
+      <button class="back" data-back="#regioni">← Indietro</button>
+      <h2>Seleziona il genere</h2>
+      <div class="chips">
+        <button class="chip" data-gen="Maschile">Maschile</button>
+        <button class="chip" data-gen="Femminile">Femminile</button>
+      </div>
     </section>
   </main>
 
   <!-- SOCIETÀ -->
-  <main id="clubs" class="screen">
-    <button class="back" id="backFromClubs">← Indietro</button>
-    <h1>Scegli la società</h1>
-    <p class="path">
-      Sport: <b id="pathSport3"></b> • Regione: <b id="pathRegione2"></b> • Genere: <b id="pathGenere"></b>
-    </p>
-    <section class="clubs-grid" id="clubsGrid"><!-- da JS --></section>
+  <main id="societa" class="screen">
+    <section class="screen-inner">
+      <button class="back" data-back="#genere">← Indietro</button>
+      <h2>Scegli la società</h2>
+      <div id="clubsList" class="list"></div>
+    </section>
   </main>
 
   <!-- DETTAGLIO SOCIETÀ -->
-  <main id="clubDetail" class="screen">
-    <button class="back" id="backFromDetail">← Indietro</button>
-    <h1 id="clubTitle">Società</h1>
-    <p class="path">
-      Sport: <b id="pathSport4"></b> • Regione: <b id="pathRegione3"></b> • Genere: <b id="pathGenere2"></b>
-    </p>
+  <main id="dettaglio" class="screen">
+    <section class="screen-inner">
+      <button class="back" data-back="#societa">← Indietro</button>
+      <h2 id="clubTitle">Società</h2>
+      <p class="meta">
+        Sport: <strong id="metaSport"></strong> •
+        Regione: <strong id="metaRegione"></strong> •
+        Genere: <strong id="metaGenere"></strong>
+      </p>
 
-    <section class="panel">
-      <h2>Prossime partite</h2>
-      <div id="matchesList" class="list"><!-- da JS --></div>
-    </section>
+      <div class="card">
+        <h3>Prossime partite</h3>
+        <div id="matchesBox"></div>
+      </div>
 
-    <section class="panel">
-      <h2>Sponsor della società</h2>
-      <div id="sponsorList" class="sponsor-strip"><!-- da JS --></div>
+      <div class="card">
+        <h3>Sponsor della società</h3>
+        <div id="sponsorBox"></div>
+      </div>
     </section>
   </main>
 
@@ -74,12 +106,6 @@
     © PreMatch — semplice, pulita, veloce. Privacy by design.
   </footer>
 
-  <!-- Supabase keys -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    window.SUPABASE_URL = "https://hzzhypahrzclvfepstro.supabase.co";
-    window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6emh5cGFocnpjbHZmZXBzdHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0NDAxNDUsImV4cCI6MjA3MTAxNjE0NX0.7niKgLcuDKQZQZxkQfxMYzz9fPT4Mm5wzWeq6r87TIY";
-  </script>
   <script src="app.js"></script>
 </body>
 </html>
