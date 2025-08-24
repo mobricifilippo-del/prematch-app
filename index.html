@@ -2,375 +2,205 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PreMatch</title>
-  <meta name="description" content="PreMatch — semplice, pulita, veloce" />
-  <link rel="icon" href="images/logo.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
   <style>
-    :root{
-      --bg:#0b1321; --panel:#0f1f32; --panel2:#0d1a2b;
-      --text:#e8eef7; --muted:#9fb6cc; --brand:#1fd175;
-      --accent:#6688ff; --shadow:rgba(0,0,0,.25);
-      --radius:16px; --gap:14px;
-    }
-    *{box-sizing:border-box} html,body{height:100%}
-    body{
-      margin:0; background:radial-gradient(1000px 600px at 100% -50%, #0e2742 0%, #081420 65%, #050b13 100%);
-      color:var(--text);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
-    }
-    a{color:var(--text); text-decoration:none}
-    header{
-      display:flex; gap:12px; align-items:center; padding:18px 16px; position:sticky; top:0; z-index:10;
-      background:linear-gradient(to bottom, rgba(5,11,19,.9), rgba(5,11,19,.6));
-      backdrop-filter: blur(6px);
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    header img{width:34px; height:34px; border-radius:8px; object-fit:cover}
-    header .brand{font-weight:800; font-size:22px; letter-spacing:.3px}
-    header nav{margin-left:auto; display:flex; gap:6px}
-    .btn{appearance:none;border:0;cursor:pointer;font-weight:700;padding:10px 14px;border-radius:12px}
-    .btn.ghost{background:transparent;color:#cfe3ff;padding:8px 10px}
-    .btn.sec{background:#1c2a42;color:#cfe3ff}
-    .btn.pri{background:#2c5af5;color:#fff}
-    .wrap{max-width:980px;margin:0 auto;padding:18px 14px 90px}
-    .title h1{margin:.2rem 0 1rem;font-size:28px}
-    .subtitle{color:var(--muted);margin-bottom:22px;line-height:1.4}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
-    .card{
-      display:flex; flex-direction:column; gap:10px; align-items:center; text-align:center;
-      background:linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%);
-      border:1px solid rgba(255,255,255,.06);
-      box-shadow:0 8px 24px var(--shadow);
-      padding:14px; border-radius:16px; cursor:pointer
-    }
-    .card img{width:100%; height:110px; object-fit:cover; border-radius:12px}
-    .card span{font-weight:700}
-    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
-    select,input[type="search"],input[type="datetime-local"],input[type="text"],textarea{
-      background:#0f2136;color:#e8eef7;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 12px;outline:0
-    }
-    .list{display:flex;flex-direction:column;gap:14px}
-    .row{
-      display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center;
-      background:linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%);
-      border:1px solid rgba(255,255,255,.06);
-      box-shadow:0 8px 24px var(--shadow);
-      padding:12px; border-radius:16px;
-    }
-    .avatar{width:64px;height:64px;border-radius:12px;overflow:hidden;background:#13253a;display:flex;align-items:center;justify-content:center}
-    .avatar img{width:100%;height:100%;object-fit:cover}
+    :root{--bg:#0d0f12;--card:#141821;--muted:#8a93a3;--acc:#2fe477;--acc2:#1db954}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:#fff;font:16px system-ui, -apple-system, Segoe UI, Roboto}
+    header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#0f1218;border-bottom:1px solid #1b2230;position:sticky;top:0;z-index:3}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:700}
+    nav a{color:#fff;text-decoration:none;margin-left:18px;opacity:.9}
+    nav a:hover{opacity:1}
+    main{max-width:980px;margin:0 auto;padding:22px 14px 48px}
+    h1{font-size:28px;margin:8px 0 6px} p.lead{color:var(--muted);margin-top:0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+    .card{background:var(--card);border:1px solid #1c2331;border-radius:14px;padding:14px}
+    .title{font-weight:700;margin:0 0 6px}
     .muted{color:var(--muted);font-size:14px}
-    .selectable{border:2px solid transparent}
-    .selectable.active{border:2px solid var(--accent)}
-    .divider{height:1px;background:rgba(255,255,255,.06);margin:22px 0}
-    .footer{color:var(--muted);font-size:13px;margin-top:26px}
-    .hidden{display:none}
-    .empty{color:#9fb6cc;text-align:center;padding:18px}
-    .fab{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:#27c27a;color:#082019;border-radius:999px;padding:12px 18px;box-shadow:0 10px 30px rgba(0,0,0,.35);display:flex;gap:8px;align-items:center;font-weight:800}
-    /* modal */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5);padding:20px}
-    .modal.show{display:flex}
-    .modal .panel{width:min(560px,96vw);background:#0e1c30;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:16px;box-shadow:0 18px 50px rgba(0,0,0,.55)}
-    .modal .panel h3{margin:6px 0 12px}
-    textarea{min-height:90px;resize:vertical}
-    @media(min-width:780px){.title h1{font-size:32px}}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .btn{display:inline-block;background:var(--acc);color:#001b09;font-weight:700;border-radius:10px;padding:8px 12px;text-decoration:none;border:none;cursor:pointer}
+    .btn.secondary{background:#273042;color:#e7f6ff}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .toolbar{display:flex;gap:8px;margin:12px 0}
+    .crumbs{color:var(--muted);font-size:14px;margin:8px 0 16px}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .item{background:var(--card);border:1px solid #1c2331;border-radius:12px;padding:12px}
+    .spacer{height:8px}
+    .footer{margin-top:36px;color:var(--muted);font-size:13px;text-align:center}
+    .empty{padding:18px;border:1px dashed #273042;border-radius:12px;background:#121622}
+    .time{font-variant-numeric:tabular-nums}
+    .chip{background:#233045;border:1px solid #304562;border-radius:999px;padding:2px 8px;font-size:12px;color:#b8d2ff}
+    @media (hover:hover){ .item:hover,.card:hover{border-color:#2b3b55} }
   </style>
-  <!-- Supabase client (via jsDelivr, compatibile Brave/Android) -->
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.3/+esm";
-
-    // =======================
-    // CONFIG SUPABASE (TUO)
-    // =======================
-    const SUPABASE_URL  = "https://hzzhypahrzclvfepstro.supabase.co";
-    const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6emh5cGFocnpjbHZmZXBzdHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0NDAxNDUsImV4cCI6MjA3MTAxNjE0NX0.7niKgLcuDKQZQZxkQfxMYzz9fPT4Mm5wzWeq6r87TIY";
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
-
-    // immagini per sport
-    const SPORT_IMG = {
-      "Calcio":"images/calcio.jpg",
-      "Futsal":"images/futsal.jpg",
-      "Basket":"images/basket.jpg",
-      "Volley":"images/volley.jpg",
-      "Beach Volley":"images/beachvolley.jpg",
-      "Pallanuoto":"images/pallanuoto.jpg",
-      "Rugby":"images/rugby.jpg"
-    };
-
-    // stato
-    const state = {
-      sport: null,            // oggetto sport selezionato
-      clubsAll: [],           // tutte le società dello sport
-      clubs: [],              // filtrate
-      selCasa: null,
-      selOspite: null,
-      filters: { regione:"", genere:"", q:"" }
-    };
-
-    // DOM refs
-    const elHome        = document.getElementById("screen-home");
-    const elSportsGrid  = document.getElementById("sports-grid");
-    const elExplore     = document.getElementById("screen-explore");
-    const elSportTag    = document.getElementById("sport-tag");
-    const elRegione     = document.getElementById("filter-regione");
-    const elGenere      = document.getElementById("filter-genere");
-    const elSearch      = document.getElementById("filter-q");
-    const elClubList    = document.getElementById("club-list");
-    const elClubsEmpty  = document.getElementById("clubs-empty");
-    const elFab         = document.getElementById("fab");
-    const elBack        = document.getElementById("back");
-
-    // modal
-    const elModal   = document.getElementById("modal");
-    const elSum     = document.getElementById("pm-summary");
-    const elDate    = document.getElementById("pm-date");
-    const elPlace   = document.getElementById("pm-place");
-    const elNotes   = document.getElementById("pm-notes");
-    const elMsg     = document.getElementById("pm-msg");
-    const elCancel  = document.getElementById("pm-cancel");
-    const elSave    = document.getElementById("pm-save");
-
-    // helpers
-    function showHome(){ elHome.classList.remove("hidden"); elExplore.classList.add("hidden"); elFab.classList.add("hidden"); }
-    function showExplore(){ elHome.classList.add("hidden"); elExplore.classList.remove("hidden"); updateFab(); }
-    function updateFab(){ elFab.classList.toggle("hidden", !(state.selCasa && state.selOspite)); }
-
-    // NAV
-    document.getElementById("nav-home").onclick = (e)=>{e.preventDefault(); showHome();}
-    document.getElementById("nav-sport").onclick = (e)=>{e.preventDefault(); showHome();}
-    document.getElementById("nav-login").onclick = (e)=>{e.preventDefault(); alert("Accesso/Registrazione arriveranno più avanti. Per ora esplorazione libera.");}
-    elBack.onclick = ()=>{ showHome(); }
-
-    // filtro handlers
-    elRegione.onchange = ()=>{ state.filters.regione = elRegione.value; applyFilters(); }
-    elGenere.onchange  = ()=>{ state.filters.genere  = elGenere.value; applyFilters(); }
-    elSearch.oninput   = ()=>{ state.filters.q       = elSearch.value.toLowerCase().trim(); applyFilters(); }
-
-    // FAB + MODAL
-    elFab.onclick    = ()=>openPreMatch();
-    elCancel.onclick = ()=>elModal.classList.remove("show");
-    elSave.onclick   = ()=>savePreMatch();
-
-    // =======================
-    // CARICAMENTO SPORT
-    // =======================
-    async function loadSports(){
-      try{
-        const { data, error } = await supabase.from("sports").select("id,nome").order("nome");
-        if(error) throw error;
-        renderSports(data && data.length ? data : fallbackSports());
-      }catch(e){
-        console.warn("Sports fallback:", e?.message);
-        renderSports(fallbackSports());
-      }
-    }
-    function fallbackSports(){
-      return [
-        {id:1,nome:"Calcio"},
-        {id:2,nome:"Futsal"},
-        {id:3,nome:"Basket"},
-        {id:4,nome:"Volley"},
-        {id:5,nome:"Beach Volley"},
-        {id:6,nome:"Pallanuoto"},
-        {id:7,nome:"Rugby"},
-      ];
-    }
-    function renderSports(list){
-      elSportsGrid.innerHTML = list.map(s => `
-        <div class="card" data-sid="${s.id}">
-          <img src="${SPORT_IMG[s.nome] || 'images/logo.png'}" alt="${s.nome}" />
-          <span>${s.nome}</span>
-        </div>
-      `).join("");
-      elSportsGrid.onclick = (ev)=>{
-        const card = ev.target.closest(".card");
-        if(!card) return;
-        const sid = String(card.getAttribute("data-sid"));
-        const sport = list.find(x=>String(x.id)===sid) || list.find(x=>String(x.id)===String(sid));
-        if(!sport) return;
-        selectSport(sport);
-      };
-    }
-
-    // =======================
-    // SOCIETÀ / FILTRI
-    // =======================
-    async function selectSport(sport){
-      state.sport = sport;
-      state.selCasa = null; state.selOspite = null;
-      elSportTag.textContent = sport.nome;
-
-      // regioni
-      const { data: regions } = await supabase.from("regioni").select("id,nome").order("nome");
-      elRegione.innerHTML = `<option value="">Tutte le regioni</option>` + (regions||[]).map(r=>`<option value="${r.id}">${r.nome}</option>`).join("");
-
-      // società
-      const { data, error } = await supabase
-        .from("societa")
-        .select("id,nome,comune,regione_id,genere, regioni:regione_id(nome)")
-        .eq("sport_id", sport.id)
-        .order("nome");
-      if(error){ console.error(error); state.clubsAll=[]; state.clubs=[]; }
-      else{
-        state.clubsAll = (data||[]).map(r=>({ ...r, regione_nome: r.regioni?.nome ?? null }));
-        state.filters = { regione:"", genere:"", q:"" };
-      }
-      elGenere.value = ""; elRegione.value = ""; elSearch.value = "";
-      applyFilters();
-      showExplore();
-    }
-
-    function applyFilters(){
-      let L = [...state.clubsAll];
-      const f = state.filters;
-      if(f.regione) L = L.filter(c=>String(c.regione_id)===String(f.regione));
-      if(f.genere)  L = L.filter(c=>(c.genere||"")===f.genere);
-      if(f.q)       L = L.filter(c => (c.nome||"").toLowerCase().includes(f.q) || (c.comune||"").toLowerCase().includes(f.q));
-      state.clubs = L;
-      renderClubs();
-    }
-
-    function renderClubs(){
-      if(!state.clubs.length){
-        elClubsEmpty.classList.remove("hidden");
-        elClubList.innerHTML = "";
-        updateFab();
-        return;
-      }
-      elClubsEmpty.classList.add("hidden");
-      elClubList.innerHTML = state.clubs.map(c=>{
-        const isCasa = state.selCasa  && state.selCasa.id===c.id;
-        const isOsp  = state.selOspite&& state.selOspite.id===c.id;
-        const role = isCasa ? " (CASA)" : isOsp ? " (OSPITE)" : "";
-        const gLab = c.genere === 'M' ? 'M' : (c.genere === 'F' ? 'F' : '');
-        return `
-          <div class="row selectable ${isCasa||isOsp?'active':''}">
-            <div class="avatar"><img src="${SPORT_IMG[state.sport?.nome] || 'images/logo.png'}" alt=""></div>
-            <div>
-              <div style="font-weight:800">${c.nome}${role}</div>
-              <div class="muted">${c.comune||""} ${c.regione_nome?('· '+c.regione_nome):''} ${gLab?('· '+gLab):''}</div>
-            </div>
-            <div style="display:flex;gap:8px">
-              <button class="btn sec" data-ruolo="casa"   data-id="${c.id}">Casa</button>
-              <button class="btn pri" data-ruolo="ospite" data-id="${c.id}">Ospite</button>
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      elClubList.onclick = (e)=>{
-        const btn = e.target.closest("[data-ruolo]");
-        if(!btn) return;
-        const id = btn.getAttribute("data-id");
-        const club = state.clubs.find(x=>String(x.id)===String(id));
-        if(!club) return;
-        if(btn.dataset.ruolo==="casa"){ state.selCasa = club; if(state.selOspite && state.selOspite.id===club.id) state.selOspite=null; }
-        else { state.selOspite = club; if(state.selCasa && state.selCasa.id===club.id) state.selCasa=null; }
-        renderClubs();
-        updateFab();
-      };
-    }
-
-    // =======================
-    // CREA PREMATCH
-    // =======================
-    function openPreMatch(){
-      if(!(state.selCasa && state.selOspite)) return;
-      elSum.innerHTML = `<b>${state.selCasa.nome}</b> vs <b>${state.selOspite.nome}</b> — <span class="muted">${state.sport.nome}</span>`;
-      elDate.value = "";
-      elPlace.value = "";
-      elNotes.value = "";
-      elMsg.textContent = "";
-      elModal.classList.add("show");
-    }
-
-    async function savePreMatch(){
-      const when  = elDate.value ? new Date(elDate.value).toISOString() : null;
-      const luogo = elPlace.value.trim() || null;
-      const note  = elNotes.value.trim() || null;
-      elMsg.textContent = "Salvataggio…";
-
-      try{
-        const payload = {
-          sport_id: state.sport.id,
-          casa_id:  state.selCasa.id,
-          ospite_id:state.selOspite.id,
-          data:     when,
-          luogo, note
-        };
-        const { error } = await supabase.from("prematch").insert(payload);
-        if(error) throw error;
-        elMsg.innerHTML = `<span style="color:#4be5a2">PreMatch creato ✅</span>`;
-        setTimeout(()=>{ elModal.classList.remove("show"); }, 800);
-      }catch(e){
-        elMsg.innerHTML = `<span style="color:#ff9aa5">Errore: ${e.message || 'Operazione non autorizzata'}</span>`;
-      }
-    }
-
-    // AVVIO
-    loadSports();
-  </script>
 </head>
 <body>
   <header>
-    <img src="images/logo.png" alt="PreMatch logo" />
-    <div class="brand">PreMatch</div>
+    <div class="brand">🏟️ PreMatch</div>
     <nav>
-      <a id="nav-home"  class="btn ghost" href="#">Home</a>
-      <a id="nav-sport" class="btn ghost" href="#sport">Sport</a>
-      <a id="nav-login" class="btn ghost" href="#login">Accedi/Registrati</a>
+      <a href="#" onclick="goHome();return false;">Home</a>
+      <a href="#" onclick="viewSports();return false;">Sport</a>
+      <a href="#" onclick="alert('Auth non necessaria per esplorare 🙂');return false;">Accedi/Registrati</a>
     </nav>
   </header>
 
-  <main class="wrap">
-    <!-- HOME (SPORT) -->
-    <section id="screen-home">
-      <div class="title"><h1>Scegli lo sport</h1></div>
-      <div class="subtitle">Esplora società e organizza i PreMatch. Nessuna registrazione richiesta per la navigazione.</div>
-      <div id="sports-grid" class="grid"></div>
-    </section>
-
-    <!-- EXPLORA (SOCIETÀ) -->
-    <section id="screen-explore" class="hidden">
-      <button id="back" class="btn sec">⟵ Indietro</button>
-      <div class="toolbar">
-        <span class="btn ghost" id="sport-tag" style="pointer-events:none;opacity:.9;"></span>
-        <select id="filter-regione"><option value="">Tutte le regioni</option></select>
-        <select id="filter-genere">
-          <option value="">Genere: tutti</option>
-          <option value="M">Maschile</option>
-          <option value="F">Femminile</option>
-        </select>
-        <input id="filter-q" type="search" placeholder="Cerca società…" />
-      </div>
-      <div class="list" id="club-list"></div>
-      <div class="empty hidden" id="clubs-empty">Nessuna società trovata per i filtri applicati.</div>
-    </section>
-
-    <div class="divider"></div>
-    <div class="footer">© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
+  <main id="app">
+    <h1>Scegli lo sport</h1>
+    <p class="lead">Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</p>
+    <div class="spacer"></div>
+    <div class="toolbar">
+      <button class="btn" onclick="viewSports()">Apri elenco sport</button>
+    </div>
   </main>
 
-  <!-- FAB CREA PREMATCH -->
-  <button id="fab" class="fab hidden">🤝 CREA PREMATCH</button>
+  <div class="footer">© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
 
-  <!-- MODAL PREMATCH -->
-  <div id="modal" class="modal">
-    <div class="panel">
-      <h3>Crea PreMatch</h3>
-      <div id="pm-summary" class="muted" style="margin:6px 0 12px"></div>
-      <div class="toolbar" style="margin:8px 0">
-        <input id="pm-date"  type="datetime-local" />
-        <input id="pm-place" type="text" placeholder="Luogo (facoltativo)" style="flex:1" />
-      </div>
-      <textarea id="pm-notes" placeholder="Note (facoltative)"></textarea>
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
-        <button id="pm-cancel" class="btn sec">Annulla</button>
-        <button id="pm-save"   class="btn pri">Salva</button>
-      </div>
-      <div id="pm-msg" class="muted" style="margin-top:8px"></div>
-    </div>
-  </div>
+  <script>
+    // ========= SUPABASE (già configurato) =========
+    const SUPABASE_URL = "https://hzzhypahrzclvfepstro.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6emh5cGFocnpjbHZmZXBzdHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0NDAxNDUsImV4cCI6MjA3MTAxNjE0NX0.7niKgLcuDKQZQZxkQfxMYzz9fPT4Mm5wzWeq6r87TIY";
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ========= STATO SEMPLICE =========
+    const S = {
+      sport: null, // {id,nome}
+      societa: null, // {id,nome}
+      squadra: null // {id,nome}
+    };
+    const $ = sel => document.querySelector(sel);
+    const app = $("#app");
+    const fmtTime = iso => new Date(iso).toLocaleString();
+
+    function crumbs() {
+      const parts = [];
+      parts.push(`<a href="#" onclick="goHome();return false;">Home</a>`);
+      if (S.sport) parts.push(`<a href="#" onclick="viewSports();return false;">${escapeHTML(S.sport.nome)}</a>`);
+      if (S.societa) parts.push(`<a href="#" onclick="viewSocieta(S.sport.id);return false;">${escapeHTML(S.societa.nome)}</a>`);
+      if (S.squadra) parts.push(`<span>${escapeHTML(S.squadra.nome)}</span>`);
+      return `<div class="crumbs">${parts.join(" › ")}</div>`;
+    }
+    function escapeHTML(s){return (s??'').toString().replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]))}
+
+    // ========= VISTE =========
+    function goHome(){
+      S.sport=S.societa=S.squadra=null;
+      app.innerHTML = `
+        <h1>Scegli lo sport</h1>
+        <p class="lead">Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</p>
+        <div class="toolbar"><button class="btn" onclick="viewSports()">Apri elenco sport</button></div>
+      `;
+    }
+
+    async function viewSports(){
+      S.sport=S.societa=S.squadra=null;
+      app.innerHTML = `<h1>Sport</h1>${crumbs()}<div class="grid" id="grid"></div>`;
+      const grid = $("#grid");
+      const { data, error } = await sb.from("sports").select("id,nome").order("nome");
+      if (error){ grid.innerHTML = `<div class="empty">Errore caricamento sport.</div>`; return; }
+      if (!data || data.length===0){ grid.innerHTML = `<div class="empty">Nessuno sport presente.</div>`; return; }
+      grid.innerHTML = data.map(sp => `
+        <div class="card">
+          <div class="title">${escapeHTML(sp.nome)}</div>
+          <div class="muted">ID: ${escapeHTML(sp.id)}</div>
+          <div class="spacer"></div>
+          <button class="btn" onclick="S.sport=${json(sp)}; viewSocieta('${sp.id}')">Società</button>
+        </div>
+      `).join("");
+    }
+
+    async function viewSocieta(sportId){
+      S.societa=S.squadra=null;
+      const header = `<h1>Società</h1>${crumbs()}`;
+      app.innerHTML = header + `<div class="list" id="list"></div>`;
+      const list = $("#list");
+      const { data, error } = await sb.from("societa").select("id,nome,regione_id,genere").eq("sport_id", sportId).order("nome");
+      if (error){ list.innerHTML = `<div class="empty">Errore caricamento società.</div>`; return; }
+      if (!data || data.length===0){ list.innerHTML = `<div class="empty">Nessuna società per questo sport.</div>`; return; }
+      list.innerHTML = data.map(sc => `
+        <div class="item">
+          <div class="row">
+            <div>
+              <div class="title">${escapeHTML(sc.nome)}</div>
+              <div class="muted">Regione: ${sc.regione_id??'-'} · Genere: ${sc.genere??'-'}</div>
+            </div>
+            <div>
+              <button class="btn secondary" onclick="S.societa=${json(sc)}; viewSquadre('${sc.id}')">Squadre</button>
+              <button class="btn" onclick="S.societa=${json(sc)}; viewPartiteSocieta('${sc.id}')">Partite</button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function viewSquadre(societaId){
+      S.squadra=null;
+      app.innerHTML = `<h1>Squadre</h1>${crumbs()}<div class="list" id="list"></div>`;
+      const list = $("#list");
+      const { data, error } = await sb.from("squadre").select("id,nome").eq("societa_id", societaId).order("nome");
+      if (error){ list.innerHTML = `<div class="empty">Errore caricamento squadre.</div>`; return; }
+      if (!data || data.length===0){ list.innerHTML = `<div class="empty">Nessuna squadra per questa società.</div>`; return; }
+      list.innerHTML = data.map(sq => `
+        <div class="item">
+          <div class="row">
+            <div>
+              <div class="title">${escapeHTML(sq.nome)}</div>
+              <div class="muted">ID: ${escapeHTML(sq.id)}</div>
+            </div>
+            <div>
+              <button class="btn" onclick="S.squadra=${json(sq)}; viewPartiteSquadra('${sq.id}')">Partite</button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function viewPartiteSocieta(societaId){
+      // prendo le squadre della società e poi le partite dove squadra1_id ∈ squadre
+      const { data: squadre, error: e1 } = await sb.from("squadre").select("id").eq("societa_id", societaId);
+      app.innerHTML = `<h1>Partite società</h1>${crumbs()}<div class="list" id="list"></div>`;
+      const list = $("#list");
+      if (e1){ list.innerHTML = `<div class="empty">Errore caricamento squadre.</div>`; return; }
+      if (!squadre || squadre.length===0){ list.innerHTML = `<div class="empty">Questa società non ha squadre.</div>`; return; }
+      const ids = squadre.map(x=>x.id);
+      const { data, error } = await sb.from("partite")
+        .select("id,data,luogo,stato,squadra1_id,squadra2_id")
+        .in("squadra1_id", ids)
+        .order("data",{ascending:true})
+        .limit(50);
+      renderPartite(list, data, error);
+    }
+
+    async function viewPartiteSquadra(squadraId){
+      app.innerHTML = `<h1>Partite squadra</h1>${crumbs()}<div class="list" id="list"></div>`;
+      const list = $("#list");
+      const { data, error } = await sb.from("partite")
+        .select("id,data,luogo,stato,squadra1_id,squadra2_id")
+        .eq("squadra1_id", squadraId)
+        .order("data",{ascending:true})
+        .limit(50);
+      renderPartite(list, data, error);
+    }
+
+    function renderPartite(container, data, error){
+      if (error){ container.innerHTML = `<div class="empty">Errore caricamento partite.</div>`; return; }
+      if (!data || data.length===0){ container.innerHTML = `<div class="empty">Nessuna partita trovata.</div>`; return; }
+      container.innerHTML = data.map(p => `
+        <div class="item">
+          <div class="row">
+            <div>
+              <div class="title time">${fmtTime(p.data)}</div>
+              <div class="muted">Luogo: ${escapeHTML(p.luogo ?? '-')}</div>
+            </div>
+            <div class="chip">${escapeHTML(p.stato ?? 'ok')}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // ========= UTIL =========
+    function json(o){ return JSON.stringify(o).replace(/</g,'\\u003c') }
+
+    // carica subito la lista sport se vuoi: viewSports();
+  </script>
 </body>
 </html>
