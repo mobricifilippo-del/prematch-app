@@ -21,31 +21,31 @@
     <p>Esplora società e organizza in PreMatch. Nessuna registrazione richiesta per la navigazione.</p>
 
     <section class="sports-grid">
-      <article class="sport-card" data-sport="Calcio">
+      <article class="sport-card" data-sport="Calcio" onclick="pickSport('Calcio')">
         <img src="images/calcio.jpg" alt="Calcio" />
         <h2>Calcio</h2>
       </article>
-      <article class="sport-card" data-sport="Futsal">
+      <article class="sport-card" data-sport="Futsal" onclick="pickSport('Futsal')">
         <img src="images/futsal.jpg" alt="Futsal" />
         <h2>Futsal</h2>
       </article>
-      <article class="sport-card" data-sport="Basket">
+      <article class="sport-card" data-sport="Basket" onclick="pickSport('Basket')">
         <img src="images/basket.jpg" alt="Basket" />
         <h2>Basket</h2>
       </article>
-      <article class="sport-card" data-sport="Rugby">
+      <article class="sport-card" data-sport="Rugby" onclick="pickSport('Rugby')">
         <img src="images/rugby.jpg" alt="Rugby" />
         <h2>Rugby</h2>
       </article>
-      <article class="sport-card" data-sport="Volley">
+      <article class="sport-card" data-sport="Volley" onclick="pickSport('Volley')">
         <img src="images/volley.jpg" alt="Volley" />
         <h2>Volley</h2>
       </article>
-      <article class="sport-card" data-sport="Beach Volley">
+      <article class="sport-card" data-sport="Beach Volley" onclick="pickSport('Beach Volley')">
         <img src="images/beachvolley.jpg" alt="Beach Volley" />
         <h2>Beach Volley</h2>
       </article>
-      <article class="sport-card" data-sport="Pallanuoto">
+      <article class="sport-card" data-sport="Pallanuoto" onclick="pickSport('Pallanuoto')">
         <img src="images/pallanuoto.jpg" alt="Pallanuoto" />
         <h2>Pallanuoto</h2>
       </article>
@@ -83,6 +83,7 @@
     <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
   </footer>
 
-  <script src="app.js"></script>
+  <!-- cache-busting per evitare JS vecchio in cache -->
+  <script src="app.js?v=4"></script>
 </body>
 </html>
