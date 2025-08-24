@@ -1,63 +1,88 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PreMatch</title>
-
-  <!-- Logo icona -->
-  <link rel="icon" href="images/logo.png" type="image/png">
-
-  <!-- Collegamento al CSS -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="images/logo.png" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <img src="images/logo.png" alt="logo">
+      <img src="images/logo.png" alt="logo" />
       <span>PreMatch</span>
     </div>
   </header>
 
+  <!-- HOME -->
   <main id="home" class="screen active">
     <h1>Scegli lo sport</h1>
     <p>Esplora società e organizza in PreMatch. Nessuna registrazione richiesta per la navigazione.</p>
 
-    <!-- Sezione sport -->
-    <div class="sports-grid">
-      <div class="sport-card">
-        <img src="images/calcio.jpg" alt="Calcio">
-        <h3>Calcio</h3>
-      </div>
-      <div class="sport-card">
-        <img src="images/futsal.jpg" alt="Futsal">
-        <h3>Futsal</h3>
-      </div>
-      <div class="sport-card">
-        <img src="images/basket.jpg" alt="Basket">
-        <h3>Basket</h3>
-      </div>
-      <div class="sport-card">
-        <img src="images/rugby.jpg" alt="Rugby">
-        <h3>Rugby</h3>
-      </div>
-      <div class="sport-card">
-        <img src="images/volley.jpg" alt="Volley">
-        <h3>Volley</h3>
-      </div>
-      <div class="sport-card">
-        <img src="images/beach-volley.jpg" alt="Beach Volley">
-        <h3>Beach Volley</h3>
-      </div>
-      <div class="sport-card">
-        <img src="images/pallanuoto.jpg" alt="Pallanuoto">
-        <h3>Pallanuoto</h3>
-      </div>
+    <section class="sports-grid">
+      <article class="sport-card" data-sport="Calcio">
+        <img src="images/calcio.jpg" alt="Calcio" />
+        <h2>Calcio</h2>
+      </article>
+      <article class="sport-card" data-sport="Futsal">
+        <img src="images/futsal.jpg" alt="Futsal" />
+        <h2>Futsal</h2>
+      </article>
+      <article class="sport-card" data-sport="Basket">
+        <img src="images/basket.jpg" alt="Basket" />
+        <h2>Basket</h2>
+      </article>
+      <article class="sport-card" data-sport="Rugby">
+        <img src="images/rugby.jpg" alt="Rugby" />
+        <h2>Rugby</h2>
+      </article>
+      <article class="sport-card" data-sport="Volley">
+        <img src="images/volley.jpg" alt="Volley" />
+        <h2>Volley</h2>
+      </article>
+      <article class="sport-card" data-sport="Beach Volley">
+        <img src="images/beachvolley.jpg" alt="Beach Volley" />
+        <h2>Beach Volley</h2>
+      </article>
+      <article class="sport-card" data-sport="Pallanuoto">
+        <img src="images/pallanuoto.jpg" alt="Pallanuoto" />
+        <h2>Pallanuoto</h2>
+      </article>
+    </section>
+  </main>
+
+  <!-- REGIONS -->
+  <main id="regions" class="screen hidden">
+    <button class="btn btn-ghost" onclick="goBackTo('home')">← Indietro</button>
+    <h1>Scegli la regione</h1>
+    <p id="picked-sport" class="muted"></p>
+    <div id="regions-grid" class="sports-grid"></div>
+  </main>
+
+  <!-- GENDER -->
+  <main id="gender" class="screen hidden">
+    <button class="btn btn-ghost" onclick="goBackTo('regions')">← Indietro</button>
+    <h1>Seleziona il genere</h1>
+    <p id="picked-region" class="muted"></p>
+    <div style="display:flex; gap:12px; margin-top:12px;">
+      <button class="btn" onclick="pickGender('Maschile')">Maschile</button>
+      <button class="btn" onclick="pickGender('Femminile')">Femminile</button>
     </div>
+  </main>
+
+  <!-- CLUBS -->
+  <main id="clubs" class="screen hidden">
+    <button class="btn btn-ghost" onclick="goBackTo('gender')">← Indietro</button>
+    <h1>Scegli la società</h1>
+    <p id="picked-gender" class="muted"></p>
+    <ul id="clubs-list" style="margin-top:14px; display:grid; gap:10px;"></ul>
   </main>
 
   <footer>
     <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
   </footer>
+
+  <script src="app.js"></script>
 </body>
 </html>
