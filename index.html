@@ -1,88 +1,82 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
   <link rel="icon" href="images/logo.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- HEADER (NON TOCCARE) -->
   <header class="topbar">
     <div class="brand">
-      <img src="images/logo.png" alt="logo" />
+      <img src="images/logo.png" alt="logo">
       <span>PreMatch</span>
     </div>
   </header>
 
-  <!-- HOME -->
+  <!-- SCHERMATE -->
   <main id="home" class="screen active">
     <h1>Scegli lo sport</h1>
     <p>Esplora società e organizza in PreMatch. Nessuna registrazione richiesta per la navigazione.</p>
-    <div class="sports-grid">
-      <div class="sport-card" onclick="selectSport('Calcio')">
-        <img src="images/calcio.jpg" alt="Calcio" />
-        <span>Calcio</span>
-      </div>
-      <div class="sport-card" onclick="selectSport('Futsal')">
-        <img src="images/futsal.jpg" alt="Futsal" />
-        <span>Futsal</span>
-      </div>
-      <div class="sport-card" onclick="selectSport('Basket')">
-        <img src="images/basket.jpg" alt="Basket" />
-        <span>Basket</span>
-      </div>
-      <div class="sport-card" onclick="selectSport('Rugby')">
-        <img src="images/rugby.jpg" alt="Rugby" />
-        <span>Rugby</span>
-      </div>
-      <div class="sport-card" onclick="selectSport('Volley')">
-        <img src="images/volley.jpg" alt="Volley" />
-        <span>Volley</span>
-      </div>
-      <div class="sport-card" onclick="selectSport('Beach Volley')">
-        <img src="images/beachvolley.jpg" alt="Beach Volley" />
-        <span>Beach Volley</span>
-      </div>
-      <div class="sport-card" onclick="selectSport('Pallanuoto')">
-        <img src="images/pallanuoto.jpg" alt="Pallanuoto" />
-        <span>Pallanuoto</span>
-      </div>
-    </div>
+
+    <section class="sports-grid" id="sportsGrid">
+      <!-- Le card vengono popolate da JS (usa le immagini esistenti) -->
+    </section>
   </main>
 
-  <!-- REGIONI -->
-  <main id="regioni" class="screen hidden">
-    <button class="back-btn" onclick="goBack('home')">← Indietro</button>
-    <h2>Scegli la regione</h2>
-    <p id="selectedSport"></p>
-    <div class="regions-grid">
-      <button type="button" onclick="selectRegion('Abruzzo')">Abruzzo</button>
-      <button type="button" onclick="selectRegion('Basilicata')">Basilicata</button>
-      <button type="button" onclick="selectRegion('Calabria')">Calabria</button>
-      <button type="button" onclick="selectRegion('Campania')">Campania</button>
-      <button type="button" onclick="selectRegion('Emilia-Romagna')">Emilia-Romagna</button>
-      <button type="button" onclick="selectRegion('Friuli-Venezia Giulia')">Friuli-Venezia Giulia</button>
-      <button type="button" onclick="selectRegion('Lazio')">Lazio</button>
-      <button type="button" onclick="selectRegion('Liguria')">Liguria</button>
-      <button type="button" onclick="selectRegion('Lombardia')">Lombardia</button>
-      <button type="button" onclick="selectRegion('Marche')">Marche</button>
-      <button type="button" onclick="selectRegion('Molise')">Molise</button>
-      <button type="button" onclick="selectRegion('Piemonte')">Piemonte</button>
-      <button type="button" onclick="selectRegion('Puglia')">Puglia</button>
-      <button type="button" onclick="selectRegion('Sardegna')">Sardegna</button>
-      <button type="button" onclick="selectRegion('Sicilia')">Sicilia</button>
-      <button type="button" onclick="selectRegion('Toscana')">Toscana</button>
-      <button type="button" onclick="selectRegion('Trentino-Alto Adige')">Trentino-Alto Adige</button>
-      <button type="button" onclick="selectRegion('Umbria')">Umbria</button>
-      <button type="button" onclick="selectRegion('Veneto')">Veneto</button>
-    </div>
+  <main id="regioni" class="screen">
+    <button class="back" id="backFromRegioni">← Indietro</button>
+    <h1>Scegli la regione</h1>
+    <p class="path">Sport: <b id="pathSport"></b></p>
+    <section class="pill-grid" id="regioniGrid"></section>
   </main>
 
-  <!-- FOOTER (NON TOCCARE) -->
-  <footer>
-    <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
+  <main id="genere" class="screen">
+    <button class="back" id="backFromGenere">← Indietro</button>
+    <h1>Seleziona il genere</h1>
+    <p class="path">Sport: <b id="pathSport2"></b> • Regione: <b id="pathRegione"></b></p>
+    <section class="pill-grid">
+      <button class="pill" data-genere="Maschile">Maschile</button>
+      <button class="pill" data-genere="Femminile">Femminile</button>
+    </section>
+  </main>
+
+  <main id="clubs" class="screen">
+    <button class="back" id="backFromClubs">← Indietro</button>
+    <h1>Scegli la società</h1>
+    <p class="path">
+      Sport: <b id="pathSport3"></b> • Regione: <b id="pathRegione2"></b> • Genere: <b id="pathGenere"></b>
+    </p>
+    <section class="clubs-grid" id="clubsGrid">
+      <!-- Placeholder/JS -->
+    </section>
+  </main>
+
+  <main id="clubDetail" class="screen">
+    <button class="back" id="backFromDetail">← Indietro</button>
+    <h1 id="clubTitle">Società</h1>
+    <p class="path">
+      Sport: <b id="pathSport4"></b> • Regione: <b id="pathRegione3"></b> • Genere: <b id="pathGenere2"></b>
+    </p>
+
+    <section class="panel">
+      <h2>Prossime partite</h2>
+      <div id="matchesList" class="list">
+        <!-- Placeholder: riempiamo con JS finché non colleghiamo Supabase -->
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Sponsor della società</h2>
+      <div id="sponsorList" class="sponsor-strip">
+        <!-- Placeholder: JS -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    © PreMatch — semplice, pulita, veloce. Privacy by design.
   </footer>
 
   <script src="app.js"></script>
