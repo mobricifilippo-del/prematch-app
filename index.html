@@ -2,205 +2,250 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PreMatch</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+  <link rel="icon" href="images/logo.png" />
   <style>
-    :root{--bg:#0d0f12;--card:#141821;--muted:#8a93a3;--acc:#2fe477;--acc2:#1db954}
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:#fff;font:16px system-ui, -apple-system, Segoe UI, Roboto}
-    header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#0f1218;border-bottom:1px solid #1b2230;position:sticky;top:0;z-index:3}
-    .brand{display:flex;gap:10px;align-items:center;font-weight:700}
-    nav a{color:#fff;text-decoration:none;margin-left:18px;opacity:.9}
-    nav a:hover{opacity:1}
-    main{max-width:980px;margin:0 auto;padding:22px 14px 48px}
-    h1{font-size:28px;margin:8px 0 6px} p.lead{color:var(--muted);margin-top:0}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-    .card{background:var(--card);border:1px solid #1c2331;border-radius:14px;padding:14px}
-    .title{font-weight:700;margin:0 0 6px}
-    .muted{color:var(--muted);font-size:14px}
-    .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
-    .btn{display:inline-block;background:var(--acc);color:#001b09;font-weight:700;border-radius:10px;padding:8px 12px;text-decoration:none;border:none;cursor:pointer}
-    .btn.secondary{background:#273042;color:#e7f6ff}
-    .btn:disabled{opacity:.5;cursor:not-allowed}
-    .toolbar{display:flex;gap:8px;margin:12px 0}
-    .crumbs{color:var(--muted);font-size:14px;margin:8px 0 16px}
-    .list{display:flex;flex-direction:column;gap:10px}
-    .item{background:var(--card);border:1px solid #1c2331;border-radius:12px;padding:12px}
-    .spacer{height:8px}
-    .footer{margin-top:36px;color:var(--muted);font-size:13px;text-align:center}
-    .empty{padding:18px;border:1px dashed #273042;border-radius:12px;background:#121622}
-    .time{font-variant-numeric:tabular-nums}
-    .chip{background:#233045;border:1px solid #304562;border-radius:999px;padding:2px 8px;font-size:12px;color:#b8d2ff}
-    @media (hover:hover){ .item:hover,.card:hover{border-color:#2b3b55} }
+    :root{--bg:#0e1217;--card:#0f1722;--text:#e8eef9;--muted:#9fb0c3;--brand:#22c55e}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    header{display:flex;gap:24px;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid #1b2534;background:#0c1117;position:sticky;top:0;z-index:5}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px}
+    nav a{margin-left:18px;opacity:.9}
+    h1{font-size:38px;margin:18px 0 8px}
+    .lead{color:var(--muted);margin:0 0 22px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+    .card{background:linear-gradient(180deg,#0f1722, #0b1220);border:1px solid #1a2333;border-radius:16px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.35);transition:transform .15s}
+    .card:hover{transform:translateY(-2px)}
+    .thumb{aspect-ratio:16/9;width:100%;object-fit:cover;display:block}
+    .pad{padding:14px 16px}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .title{font-weight:700;font-size:20px}
+    .chip{font-size:13px;background:#152033;border:1px solid #223148;padding:5px 10px;border-radius:30px;color:#c6d3e3}
+    .btn{background:var(--brand);color:#052812;border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
+    .section-title{margin:26px 0 10px;font-size:26px}
+    .muted{color:var(--muted)}
+    footer{border-top:1px solid #1b2534;margin-top:40px;padding:20px;text-align:center;color:#a6b6c9}
+    .hidden{display:none}
+    .back{appearance:none;background:#132033;color:#cfe3ff;border:1px solid #24354f;border-radius:10px;padding:8px 12px;cursor:pointer}
+    .bar{display:flex;align-items:center;gap:10px;justify-content:space-between;margin:8px 0 18px}
   </style>
+  <!-- Supabase client -->
+  <script defer src="https://esm.sh/@supabase/supabase-js@2.45.4"></script>
 </head>
 <body>
   <header>
-    <div class="brand">🏟️ PreMatch</div>
+    <div class="brand">
+      <img src="images/logo.png" alt="" width="28" height="28" />
+      <span>PreMatch</span>
+    </div>
     <nav>
-      <a href="#" onclick="goHome();return false;">Home</a>
-      <a href="#" onclick="viewSports();return false;">Sport</a>
-      <a href="#" onclick="alert('Auth non necessaria per esplorare 🙂');return false;">Accedi/Registrati</a>
+      <a href="#" onclick="UI.show('sports');return false;">Home</a>
+      <a href="#" onclick="UI.show('sports');return false;">Sport</a>
+      <a href="#" style="opacity:.6">Accedi/Registrati</a>
     </nav>
   </header>
 
-  <main id="app">
+  <main class="wrap">
     <h1>Scegli lo sport</h1>
     <p class="lead">Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</p>
-    <div class="spacer"></div>
-    <div class="toolbar">
-      <button class="btn" onclick="viewSports()">Apri elenco sport</button>
-    </div>
+
+    <!-- Sports -->
+    <section id="view-sports">
+      <div id="sports" class="grid"></div>
+    </section>
+
+    <!-- Clubs -->
+    <section id="view-clubs" class="hidden">
+      <div class="bar">
+        <button class="back" onclick="UI.show('sports')">← Indietro</button>
+        <div class="muted" id="bc-sport"></div>
+      </div>
+      <h2 class="section-title">Società</h2>
+      <div id="clubs" class="grid"></div>
+    </section>
+
+    <!-- Teams -->
+    <section id="view-teams" class="hidden">
+      <div class="bar">
+        <button class="back" onclick="UI.show('clubs')">← Indietro</button>
+        <div class="muted" id="bc-club"></div>
+      </div>
+      <h2 class="section-title">Squadre</h2>
+      <div id="teams" class="grid"></div>
+    </section>
+
+    <!-- Matches -->
+    <section id="view-matches" class="hidden">
+      <div class="bar">
+        <button class="back" onclick="UI.show('teams')">← Indietro</button>
+        <div class="muted" id="bc-team"></div>
+      </div>
+      <h2 class="section-title">Partite</h2>
+      <div id="matches" class="grid"></div>
+      <p class="muted" id="no-matches" style="margin-top:8px"></p>
+    </section>
+
+    <footer>© PreMatch — semplice, pulita, veloce. Privacy by design.</footer>
   </main>
 
-  <div class="footer">© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
-
   <script>
-    // ========= SUPABASE (già configurato) =========
+    // --- CONFIG SUPABASE (già inseriti) ---
     const SUPABASE_URL = "https://hzzhypahrzclvfepstro.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6emh5cGFocnpjbHZmZXBzdHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0NDAxNDUsImV4cCI6MjA3MTAxNjE0NX0.7niKgLcuDKQZQZxkQfxMYzz9fPT4Mm5wzWeq6r87TIY";
-    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ========= STATO SEMPLICE =========
-    const S = {
-      sport: null, // {id,nome}
-      societa: null, // {id,nome}
-      squadra: null // {id,nome}
+    let supabaseClient;
+
+    // mapping sport -> immagine
+    const sportImage = {
+      "Calcio": "images/calcio.jpg",
+      "Futsal": "images/futsal.jpg",
+      "Basket": "images/basket.jpg",
+      "Volley": "images/volley.jpg",
+      "Beach Volley": "images/beachvolley.jpg",
+      "Pallanuoto": "images/pallanuoto.jpg"
     };
+
+    // stato UI corrente
+    const state = {
+      sport: null, sportName: null,
+      club: null,  clubName: null,
+      team: null,  teamName: null
+    };
+
+    // helpers
     const $ = sel => document.querySelector(sel);
-    const app = $("#app");
-    const fmtTime = iso => new Date(iso).toLocaleString();
+    const show = id => {
+      $("#view-sports").classList.add("hidden");
+      $("#view-clubs").classList.add("hidden");
+      $("#view-teams").classList.add("hidden");
+      $("#view-matches").classList.add("hidden");
+      if(id==="sports") $("#view-sports").classList.remove("hidden");
+      if(id==="clubs")  $("#view-clubs").classList.remove("hidden");
+      if(id==="teams")  $("#view-teams").classList.remove("hidden");
+      if(id==="matches")$("#view-matches").classList.remove("hidden");
+      window.scrollTo({top:0, behavior:"instant"});
+    };
 
-    function crumbs() {
-      const parts = [];
-      parts.push(`<a href="#" onclick="goHome();return false;">Home</a>`);
-      if (S.sport) parts.push(`<a href="#" onclick="viewSports();return false;">${escapeHTML(S.sport.nome)}</a>`);
-      if (S.societa) parts.push(`<a href="#" onclick="viewSocieta(S.sport.id);return false;">${escapeHTML(S.societa.nome)}</a>`);
-      if (S.squadra) parts.push(`<span>${escapeHTML(S.squadra.nome)}</span>`);
-      return `<div class="crumbs">${parts.join(" › ")}</div>`;
-    }
-    function escapeHTML(s){return (s??'').toString().replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]))}
+    const UI = {
+      show, 
+      async loadSports(){
+        const order = ["Calcio","Futsal","Basket","Volley","Beach Volley","Pallanuoto"];
+        const { data, error } = await supabaseClient.from("sports").select("id,nome");
+        if(error){ console.error(error); return; }
+        // ordina come richiesto
+        const byName = new Map(data.map(s=>[s.nome,s]));
+        const sorted = order.filter(n=>byName.has(n)).map(n=>byName.get(n))
+          .concat(data.filter(s=>!order.includes(s.nome)));
+        $("#sports").innerHTML = sorted.map(s => cardSport(s)).join("");
+        show("sports");
+      },
+      async loadClubs(sport){
+        state.sport = sport.id; state.sportName = sport.nome;
+        $("#bc-sport").textContent = `Sport: ${sport.nome}`;
+        const { data, error } = await supabaseClient
+          .from("societa")
+          .select("id,nome,regione_id,genere")
+          .eq("sport_id", sport.id)
+          .order("nome");
+        if(error){ console.error(error); return; }
+        $("#clubs").innerHTML = data.map(c => cardClub(c)).join("");
+        show("clubs");
+      },
+      async loadTeams(club){
+        state.club = club.id; state.clubName = club.nome;
+        $("#bc-club").textContent = `Sport: ${state.sportName} • Società: ${club.nome}`;
+        const { data, error } = await supabaseClient
+          .from("squadre")
+          .select("id,nome")
+          .eq("societa_id", club.id)
+          .order("nome");
+        if(error){ console.error(error); return; }
+        $("#teams").innerHTML = data.map(t => cardTeam(t)).join("");
+        show("teams");
+      },
+      async loadMatches(team){
+        state.team = team.id; state.teamName = team.nome;
+        $("#bc-team").textContent = `Società: ${state.clubName} • Squadra: ${team.nome}`;
+        const { data, error } = await supabaseClient
+          .from("partite")
+          .select("id, squadra1_id, squadra2_id, data, luogo, stato")
+          .or(`squadra1_id.eq.${team.id},squadra2_id.eq.${team.id}`)
+          .order("data", { ascending: true });
+        if(error){ console.error(error); return; }
+        if(!data || data.length===0){
+          $("#matches").innerHTML = "";
+          $("#no-matches").textContent = "Nessuna partita programmata per questa squadra.";
+        }else{
+          $("#no-matches").textContent = "";
+          $("#matches").innerHTML = data.map(m => cardMatch(m)).join("");
+        }
+        show("matches");
+      }
+    };
+    window.UI = UI;
 
-    // ========= VISTE =========
-    function goHome(){
-      S.sport=S.societa=S.squadra=null;
-      app.innerHTML = `
-        <h1>Scegli lo sport</h1>
-        <p class="lead">Naviga le società e scopri le prossime partite. Nessuna registrazione richiesta per esplorare.</p>
-        <div class="toolbar"><button class="btn" onclick="viewSports()">Apri elenco sport</button></div>
-      `;
-    }
-
-    async function viewSports(){
-      S.sport=S.societa=S.squadra=null;
-      app.innerHTML = `<h1>Sport</h1>${crumbs()}<div class="grid" id="grid"></div>`;
-      const grid = $("#grid");
-      const { data, error } = await sb.from("sports").select("id,nome").order("nome");
-      if (error){ grid.innerHTML = `<div class="empty">Errore caricamento sport.</div>`; return; }
-      if (!data || data.length===0){ grid.innerHTML = `<div class="empty">Nessuno sport presente.</div>`; return; }
-      grid.innerHTML = data.map(sp => `
-        <div class="card">
-          <div class="title">${escapeHTML(sp.nome)}</div>
-          <div class="muted">ID: ${escapeHTML(sp.id)}</div>
-          <div class="spacer"></div>
-          <button class="btn" onclick="S.sport=${json(sp)}; viewSocieta('${sp.id}')">Società</button>
-        </div>
-      `).join("");
-    }
-
-    async function viewSocieta(sportId){
-      S.societa=S.squadra=null;
-      const header = `<h1>Società</h1>${crumbs()}`;
-      app.innerHTML = header + `<div class="list" id="list"></div>`;
-      const list = $("#list");
-      const { data, error } = await sb.from("societa").select("id,nome,regione_id,genere").eq("sport_id", sportId).order("nome");
-      if (error){ list.innerHTML = `<div class="empty">Errore caricamento società.</div>`; return; }
-      if (!data || data.length===0){ list.innerHTML = `<div class="empty">Nessuna società per questo sport.</div>`; return; }
-      list.innerHTML = data.map(sc => `
-        <div class="item">
-          <div class="row">
-            <div>
-              <div class="title">${escapeHTML(sc.nome)}</div>
-              <div class="muted">Regione: ${sc.regione_id??'-'} · Genere: ${sc.genere??'-'}</div>
-            </div>
-            <div>
-              <button class="btn secondary" onclick="S.societa=${json(sc)}; viewSquadre('${sc.id}')">Squadre</button>
-              <button class="btn" onclick="S.societa=${json(sc)}; viewPartiteSocieta('${sc.id}')">Partite</button>
-            </div>
+    function cardSport(s){
+      const img = sportImage[s.nome] || "images/calcio.jpg";
+      return `
+        <article class="card" onclick='UI.loadClubs(${JSON.stringify(s)})'>
+          <img class="thumb" src="${img}" alt="${s.nome}">
+          <div class="pad row">
+            <div class="title">${s.nome}</div>
+            <span class="chip">Apri</span>
           </div>
-        </div>
-      `).join("");
+        </article>`;
     }
-
-    async function viewSquadre(societaId){
-      S.squadra=null;
-      app.innerHTML = `<h1>Squadre</h1>${crumbs()}<div class="list" id="list"></div>`;
-      const list = $("#list");
-      const { data, error } = await sb.from("squadre").select("id,nome").eq("societa_id", societaId).order("nome");
-      if (error){ list.innerHTML = `<div class="empty">Errore caricamento squadre.</div>`; return; }
-      if (!data || data.length===0){ list.innerHTML = `<div class="empty">Nessuna squadra per questa società.</div>`; return; }
-      list.innerHTML = data.map(sq => `
-        <div class="item">
-          <div class="row">
-            <div>
-              <div class="title">${escapeHTML(sq.nome)}</div>
-              <div class="muted">ID: ${escapeHTML(sq.id)}</div>
-            </div>
-            <div>
-              <button class="btn" onclick="S.squadra=${json(sq)}; viewPartiteSquadra('${sq.id}')">Partite</button>
-            </div>
+    function cardClub(c){
+      return `
+        <article class="card" onclick='UI.loadTeams(${JSON.stringify(c)})'>
+          <img class="thumb" src="${sportImage[state.sportName] || "images/calcio.jpg"}" alt="${c.nome}">
+          <div class="pad">
+            <div class="row"><div class="title">${c.nome}</div><span class="chip">Società</span></div>
+            <div class="muted">Genere: ${c.genere ?? "–"} • Regione: ${c.regione_id ?? "–"}</div>
           </div>
-        </div>
-      `).join("");
+        </article>`;
     }
-
-    async function viewPartiteSocieta(societaId){
-      // prendo le squadre della società e poi le partite dove squadra1_id ∈ squadre
-      const { data: squadre, error: e1 } = await sb.from("squadre").select("id").eq("societa_id", societaId);
-      app.innerHTML = `<h1>Partite società</h1>${crumbs()}<div class="list" id="list"></div>`;
-      const list = $("#list");
-      if (e1){ list.innerHTML = `<div class="empty">Errore caricamento squadre.</div>`; return; }
-      if (!squadre || squadre.length===0){ list.innerHTML = `<div class="empty">Questa società non ha squadre.</div>`; return; }
-      const ids = squadre.map(x=>x.id);
-      const { data, error } = await sb.from("partite")
-        .select("id,data,luogo,stato,squadra1_id,squadra2_id")
-        .in("squadra1_id", ids)
-        .order("data",{ascending:true})
-        .limit(50);
-      renderPartite(list, data, error);
-    }
-
-    async function viewPartiteSquadra(squadraId){
-      app.innerHTML = `<h1>Partite squadra</h1>${crumbs()}<div class="list" id="list"></div>`;
-      const list = $("#list");
-      const { data, error } = await sb.from("partite")
-        .select("id,data,luogo,stato,squadra1_id,squadra2_id")
-        .eq("squadra1_id", squadraId)
-        .order("data",{ascending:true})
-        .limit(50);
-      renderPartite(list, data, error);
-    }
-
-    function renderPartite(container, data, error){
-      if (error){ container.innerHTML = `<div class="empty">Errore caricamento partite.</div>`; return; }
-      if (!data || data.length===0){ container.innerHTML = `<div class="empty">Nessuna partita trovata.</div>`; return; }
-      container.innerHTML = data.map(p => `
-        <div class="item">
-          <div class="row">
-            <div>
-              <div class="title time">${fmtTime(p.data)}</div>
-              <div class="muted">Luogo: ${escapeHTML(p.luogo ?? '-')}</div>
-            </div>
-            <div class="chip">${escapeHTML(p.stato ?? 'ok')}</div>
+    function cardTeam(t){
+      return `
+        <article class="card" onclick='UI.loadMatches(${JSON.stringify(t)})'>
+          <img class="thumb" src="${sportImage[state.sportName] || "images/calcio.jpg"}" alt="${t.nome}">
+          <div class="pad row">
+            <div class="title">${t.nome}</div>
+            <span class="chip">Squadra</span>
           </div>
-        </div>
-      `).join("");
+        </article>`;
+    }
+    function fmtDate(iso){
+      try{
+        const d = new Date(iso);
+        return d.toLocaleString('it-IT',{weekday:'short', day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+      }catch{ return iso; }
+    }
+    function cardMatch(m){
+      return `
+        <article class="card">
+          <img class="thumb" src="${sportImage[state.sportName] || "images/calcio.jpg"}" alt="match">
+          <div class="pad">
+            <div class="row">
+              <div class="title">${fmtDate(m.data)}</div>
+              <span class="chip">${m.stato || "programmata"}</span>
+            </div>
+            <div class="muted">Luogo: ${m.luogo || "—"}</div>
+          </div>
+        </article>`;
     }
 
-    // ========= UTIL =========
-    function json(o){ return JSON.stringify(o).replace(/</g,'\\u003c') }
-
-    // carica subito la lista sport se vuoi: viewSports();
+    // bootstrap
+    window.addEventListener("load", async () => {
+      // Inizializza supabase
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { persistSession: false }
+      });
+      await UI.loadSports();
+    });
   </script>
 </body>
 </html>
