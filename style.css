@@ -4,112 +4,127 @@
   --muted:#8a94a6;
   --text:#eaf0ff;
   --accent:#41d27b;
-  --accent-ink:#0b1115;
+  --accent-600:#2ac36a;
   --border:#252b35;
+  --white:#ffffff;
 }
 
 *{box-sizing:border-box}
 html,body{
   margin:0; padding:0;
   background:var(--bg); color:var(--text);
-  font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 
+/* Topbar */
 .topbar{
   position:sticky; top:0; z-index:10;
-  background:linear-gradient(180deg, rgba(15,18,22,.9), rgba(15,18,22,.6));
+  background:linear-gradient(180deg, rgba(15,18,22,.92), rgba(15,18,22,.65));
   backdrop-filter: blur(6px);
   border-bottom:1px solid var(--border);
 }
-.brand{display:flex; align-items:center; gap:.6rem; padding:.8rem 1rem; font-weight:800; cursor:pointer}
-.brand img{width:28px; height:28px; border-radius:6px; border:1px solid var(--border);}
-.brand span{color:var(--accent);}
+.brand{display:flex; align-items:center; gap:.6rem; padding:.9rem 1rem; font-weight:800; letter-spacing:.3px}
+.brand-logo{width:28px; height:28px; border-radius:6px; border:1px solid var(--border);}
 
-.footer{padding:1.2rem; border-top:1px solid var(--border); color:var(--muted); font-size:.9rem}
+/* Layout */
+.container{max-width:1100px; margin:0 auto; padding:1.2rem}
+.h1{font-size:1.9rem; font-weight:800; margin:.6rem 0 0}
+.sub{color:var(--muted); margin:.2rem 0 1.2rem}
 
-.container{max-width:1000px; margin:0 auto; padding: 1.2rem}
-.h1{font-size:1.9rem; font-weight:900; margin:.6rem 0 0}
-.sub{color:var(--muted); margin:.2rem 0 1.4rem}
-
-/* GRID SPORT 2-per-riga su mobile */
-.grid{display:grid; gap:1rem; grid-template-columns: 1fr 1fr;}
-@media(min-width:900px){ .grid{grid-template-columns: repeat(3,1fr);} }
+/* Grid di card sport */
+.grid{display:grid; gap:1rem}
+@media(min-width:520px){ .grid{grid-template-columns: repeat(2, 1fr);} }
+@media(min-width:920px){ .grid{grid-template-columns: repeat(3, 1fr);} }
 
 .card{
-  background:var(--card); border:1px solid var(--border);
+  background:var(--card);
+  border:1px solid var(--border);
   border-radius:16px; overflow:hidden; cursor:pointer;
   transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
 }
 .card:hover{ transform: translateY(-2px); border-color:#2f3745; box-shadow:0 8px 24px rgba(0,0,0,.25); }
-.card img{width:100%; height:120px; object-fit:cover; display:block; background:#0b0f14;}
-.card .title{padding:.8rem 1rem; font-weight:800; color:var(--accent);}
+.card img{width:100%; height:140px; object-fit:cover; display:block; background:#0b0f14;}
+.card .title{padding:.9rem 1rem; font-weight:800; color:var(--accent);}
 
-/* CHIPS */
-.chips{display:flex; flex-wrap:wrap; gap:.6rem; margin:.5rem 0 1.1rem}
-.chip{
-  padding:.55rem .9rem; border:1px solid var(--border); border-radius:999px; cursor:pointer;
-  background:#12161c; color:var(--text); font-weight:700;
-}
-.chip:hover{border-color:#2f3745}
-.chip.active{border-color:var(--accent); color:var(--accent); box-shadow:0 0 0 2px rgba(65,210,123,.12) inset}
-
-/* PANELS / ROWS */
+/* Chips (regioni, campionati, società) */
 .panel{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1rem}
+.chips{display:flex; flex-wrap:wrap; gap:.6rem; margin:.4rem 0 1rem}
+.chip{
+  color:var(--accent);
+  border:1px solid var(--accent);
+  background:transparent;
+  padding:.5rem .8rem; border-radius:999px; cursor:pointer; font-weight:700;
+}
+.chip:hover{background:rgba(65,210,123,.08)}
+.chip.active{background:var(--accent); color:#0c1318;}
+
+/* Pulsanti */
+.actions{display:flex; gap:.6rem; margin:1rem 0}
+.btn{
+  border:1px solid var(--border); background:#141922; color:var(--text);
+  padding:.65rem 1rem; border-radius:10px; cursor:pointer; font-weight:700;
+}
+.btn.primary{ border-color:transparent; background:var(--accent); color:#0b1115; }
+.btn:disabled{opacity:.5; cursor:not-allowed}
+
+/* Riga partite */
 .row{display:flex; align-items:center; justify-content:space-between; border-bottom:1px dashed var(--border); padding:.8rem 0}
 .row:last-child{border-bottom:none}
 .row .team{font-weight:800}
 .row .meta{color:var(--muted); font-size:.95rem}
 
-/* BUTTONS */
-.actions{display:flex; gap:.6rem; margin:1rem 0}
-.btn{
-  border:1px solid var(--border); background:#141922; color:var(--text);
-  padding:.7rem 1rem; border-radius:12px; cursor:pointer; font-weight:800;
+/* Sezione colori maglie su sfondo bianco */
+.kit-box{
+  background:var(--white); color:#111; border-radius:14px; padding:1rem; border:1px solid var(--border);
 }
-.btn.primary{ border-color:transparent; background:var(--accent); color:var(--accent-ink); }
-.btn:disabled{opacity:.5; cursor:not-allowed}
+.kit-title{font-weight:800; margin-bottom:.6rem}
+.swatches{display:flex; gap:.6rem; flex-wrap:wrap}
+.swatch{
+  width:34px; height:34px; border-radius:8px; border:2px solid #00000022; cursor:pointer;
+}
+.swatch.selected{outline:3px solid var(--accent)}
 
-/* COMPANY HEADER */
-.company-head{display:flex; flex-direction:column; gap:.3rem; margin-bottom:.8rem}
-.company-logo{
-  width:110px; height:110px; border-radius:999px; margin:0 auto 1rem;
-  border:1px solid var(--border); background:#111; display:flex; align-items:center; justify-content:center;
-}
-.company-logo img{width:56%; height:auto; opacity:.95}
+/* Profilo Società */
+.club-header{display:flex; flex-direction:column; align-items:center; gap:.6rem; margin-bottom:1rem}
+.club-logo{width:84px; height:84px; border-radius:18px; border:1px solid var(--border); background:#0b0f14; object-fit:cover}
+.club-name{font-size:1.3rem; font-weight:900}
 
-/* KIT swatches */
-.kits{display:flex; flex-wrap:wrap; gap:.8rem; margin-top:.2rem}
-.kit{
-  border:1px solid var(--border); border-radius:12px; padding:.7rem .9rem; background:#12161c;
+/* Dropdown semplici */
+.dropdown{border:1px solid var(--border); border-radius:12px; overflow:hidden; margin:.8rem 0}
+.dropdown summary{
+  list-style:none; cursor:pointer; user-select:none;
+  padding:.9rem 1rem; font-weight:800; color:var(--accent); background:#131821;
 }
-.kit h4{margin:0 0 .5rem 0; font-size:.95rem; color:var(--accent)}
-.sw{display:flex; gap:.4rem}
-.sw span{
-  width:18px; height:18px; border-radius:4px; border:2px solid rgba(255,255,255,.15); display:inline-block;
-}
+.dropdown summary::-webkit-details-marker{display:none}
+.dropdown .content{padding:1rem; background:#10151b}
 
-/* MODAL */
+/* CTA fissa */
+.cta-wrap{display:flex; justify-content:center; margin-top:1rem}
+.prematch-btn{
+  display:flex; align-items:center; gap:.6rem;
+  border:none; background:var(--accent); color:#0a1115; font-weight:900;
+  padding:.8rem 1rem; border-radius:999px; cursor:pointer;
+}
+.prematch-btn img{width:20px; height:20px; border-radius:4px; border:1px solid #00000022}
+
+/* Modal */
+.modal.hidden{display:none}
 .modal{
-  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-  background:rgba(0,0,0,.55); z-index:50; padding:1rem;
+  position:fixed; inset:0; background:rgba(0,0,0,.5);
+  display:flex; align-items:center; justify-content:center; padding:1rem;
 }
-.modal-card{width:100%; max-width:560px; background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1rem}
-.modal-title{font-weight:900; font-size:1.45rem; margin:.2rem 0 1rem}
-.pal{display:flex; gap:.5rem; flex-wrap:wrap}
-.dot{
-  width:32px; height:32px; border-radius:8px; border:2px solid rgba(255,255,255,.15); cursor:pointer;
+.modal-card{
+  width:min(720px, 95vw);
+  background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1rem;
 }
-.dot.active{outline:3px solid rgba(65,210,123,.35)}
-.warn{margin-top:.6rem; color:#ffcc66; font-weight:700}
+.modal-title{font-size:1.3rem; font-weight:900; margin-bottom:.4rem}
+.modal-row{display:grid; gap:.6rem; grid-template-columns: 1fr 1fr; margin: .5rem 0}
+.modal-row label{color:var(--muted); font-size:.92rem}
+.modal-row input, .modal-row select{
+  background:#0f141b; border:1px solid var(--border); color:var(--text);
+  border-radius:10px; padding:.6rem .7rem;
+}
+.modal-actions{display:flex; justify-content:flex-end; gap:.6rem; margin-top:1rem}
 
-/* CTA with small logo */
-.btn-logo{
-  position:relative; padding-left:2.6rem;
-  background:var(--accent); color:var(--accent-ink);
-}
-.btn-logo::before{
-  content:""; position:absolute; left:.9rem; top:50%; transform:translateY(-50%);
-  width:18px; height:18px; background:url('./images/logo-icon.png') center/contain no-repeat;
-  filter:none;
-}
-.section-title-strong{color:var(--accent); font-weight:900}
+/* Footer */
+.footer{padding:1.2rem; border-top:1px solid var(--border); color:var(--muted); font-size:.9rem}
