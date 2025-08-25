@@ -66,16 +66,18 @@ const CLUBS = {
   }
 };
 
-/* ================= FUNZIONI ================= */
-
+/* ========= STATO ========= */
 let selectedSport = null;
 let selectedRegion = null;
 let selectedLeague = null;
 let selectedClub = null;
 
-/* Carica sport */
+/* ========= FUNZIONI ========= */
+function qs(id){ return document.getElementById(id); }
+
+/* Carica sport in home */
 function loadSports() {
-  const container = document.getElementById("sports-container");
+  const container = qs("sports-container");
   container.innerHTML = "";
   SPORTS.forEach(sport => {
     const card = document.createElement("div");
@@ -84,19 +86,19 @@ function loadSports() {
       <img src="${sport.img}" alt="${sport.name}">
       <p>${sport.name}</p>
     `;
-    card.onclick = () => selectSport(sport.name, sport.id);
+    card.addEventListener("click", () => selectSport(sport.name, sport.id));
     container.appendChild(card);
   });
 }
 
 /* Selezione sport */
 function selectSport(name, id) {
-  selectedSport = name;
-  document.getElementById("sports-section").classList.add("hidden");
-  document.getElementById("regions-section").classList.remove("hidden");
-  document.getElementById("selected-sport").textContent = name;
+  selectedSport = name; // es: "Calcio"
+  qs("sports-section").classList.add("hidden");
+  qs("regions-section").classList.remove("hidden");
+  qs("selected-sport").textContent = name;
 
-  const container = document.getElementById("regions-container");
+  const container = qs("regions-container");
   container.innerHTML = "";
   REGIONS.forEach(region => {
     const btn = document.createElement("button");
@@ -109,13 +111,14 @@ function selectSport(name, id) {
 /* Selezione regione */
 function selectRegion(region) {
   selectedRegion = region;
-  document.getElementById("regions-section").classList.add("hidden");
-  document.getElementById("leagues-section").classList.remove("hidden");
-  document.getElementById("selected-region").textContent = region;
+  qs("regions-section").classList.add("hidden");
+  qs("leagues-section").classList.remove("hidden");
+  qs("selected-region").textContent = region;
 
-  const container = document.getElementById("leagues-container");
+  const container = qs("leagues-container");
   container.innerHTML = "";
-  (LEAGUES[selectedSport.toLowerCase()] || []).forEach(league => {
+  const key = selectedSport.toLowerCase(); // "calcio"
+  (LEAGUES[key] || []).forEach(league => {
     const btn = document.createElement("button");
     btn.textContent = league;
     btn.onclick = () => selectLeague(league);
@@ -126,11 +129,11 @@ function selectRegion(region) {
 /* Selezione campionato */
 function selectLeague(league) {
   selectedLeague = league;
-  document.getElementById("leagues-section").classList.add("hidden");
-  document.getElementById("clubs-section").classList.remove("hidden");
-  document.getElementById("selected-league").textContent = league;
+  qs("leagues-section").classList.add("hidden");
+  qs("clubs-section").classList.remove("hidden");
+  qs("selected-league").textContent = league;
 
-  const container = document.getElementById("clubs-container");
+  const container = qs("clubs-container");
   container.innerHTML = "";
   const clubs = (CLUBS[selectedSport] && CLUBS[selectedSport][selectedRegion]) || [];
   clubs.forEach(club => {
@@ -144,28 +147,24 @@ function selectLeague(league) {
 /* Selezione società */
 function selectClub(club) {
   selectedClub = club;
-  document.getElementById("clubs-section").classList.add("hidden");
-  document.getElementById("club-page").classList.remove("hidden");
-  document.getElementById("club-name").textContent = club;
-  document.getElementById("club-info").textContent =
+  qs("clubs-section").classList.add("hidden");
+  qs("club-page").classList.remove("hidden");
+  qs("club-name").textContent = club;
+  qs("club-info").textContent =
     `Sport: ${selectedSport} • Regione: ${selectedRegion} • Campionato: ${selectedLeague}`;
-
-  // Mostra il pulsante Crea PreMatch
-  document.getElementById("create-prematch-btn").classList.remove("hidden");
+  qs("create-prematch-btn").classList.remove("hidden");
 }
 
-/* Torna indietro */
-function goBack(section) {
-  document.querySelectorAll("section").forEach(sec => sec.classList.add("hidden"));
-  document.getElementById(section).classList.remove("hidden");
+/* Torna indietro a una sezione */
+function goBack(sectionId) {
+  document.querySelectorAll("main section").forEach(s => s.classList.add("hidden"));
+  qs(sectionId).classList.remove("hidden");
 }
 
-/* Crea PreMatch */
-function createPrematch() {
+/* CTA prematch */
+function createPrematch(){
   alert(`PreMatch creato per ${selectedClub} (${selectedLeague})`);
 }
 
-/* Avvio */
-window.onload = () => {
-  loadSports();
-};
+/* Avvio sicuro */
+document.addEventListener("DOMContentLoaded", loadSports);
