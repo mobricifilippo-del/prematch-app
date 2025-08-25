@@ -1,121 +1,130 @@
-/* Reset & base */
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%}
-body{
-  background:#0b1117; /* scuro elegante */
-  color:#e6ebf0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-  line-height:1.5;
+/* Reset base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
-/* Header */
-.topbar{
-  position:sticky; top:0; z-index:10;
-  display:flex; align-items:center; gap:.75rem;
-  padding:12px 16px;
-  background:linear-gradient(180deg,#111827,#0b1117);
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-.brand{display:flex;align-items:center;gap:.5rem}
-.brand img{width:28px;height:28px;border-radius:6px}
-.brand span{font-weight:700;letter-spacing:.2px}
-
-/* Layout */
-.screen{max-width:1100px;margin:0 auto;padding:24px 16px 80px}
-.screen h1{font-size:38px;margin:8px 0 14px}
-.screen h2{font-size:28px;margin:4px 0 12px}
-.screen h3{font-size:18px;margin-bottom:10px}
-.meta{opacity:.75;margin:4px 0 16px}
-.hero p{color:#aab3be;margin-top:4px}
-
-/* Sports grid */
-.sports-grid{
-  display:grid; gap:14px;
-  grid-template-columns:repeat(2,1fr);
-}
-@media (min-width:768px){ .sports-grid{ grid-template-columns:repeat(3,1fr);} }
-
-.sport-card{
-  background:#0f172a;
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:16px; overflow:hidden;
-  box-shadow:0 6px 22px rgba(0,0,0,.35);
-  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-  cursor:pointer;
-}
-.sport-card:hover{ transform:translateY(-2px); border-color:#22c55e; }
-.sport-card .img-wrap{aspect-ratio:16/11; background:#0b1522;}
-.sport-card img{width:100%;height:100%;object-fit:cover;display:block}
-.sport-card h3{
-  margin:0; padding:14px 12px 16px;
-  background:linear-gradient(180deg,#0f172a,#0b1117);
-  color:#e8f4ec; font-weight:800;
+body {
+  background: #111; /* sfondo scuro elegante */
+  color: #eee;
+  min-height: 100vh;
 }
 
-/* Chips, badge, cards */
-.chip-wrap{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
-.chip{
-  background:#0f172a;border:1px solid rgba(255,255,255,.12);
-  color:#e6ebf0;padding:10px 14px;border-radius:999px;
-}
-.chip:hover{border-color:#22c55e}
-
-.card-list{display:grid;gap:10px}
-.card{
-  background:#0f172a;border:1px solid rgba(255,255,255,.08);
-  padding:12px;border-radius:12px
-}
-.panel{
-  background:#0f172a;border:1px solid rgba(255,255,255,.08);
-  padding:14px;border-radius:14px;margin:12px 0
-}
-.badge-wrap{display:flex;flex-wrap:wrap;gap:8px}
-.badge{background:#14432a;color:#c8f1d9;padding:8px 10px;border-radius:10px;border:1px solid #1e8f58}
-
-/* CTA fissa in basso */
-.cta-fixed{
-  position:sticky; bottom:12px; display:flex; justify-content:center; margin-top:10px;
-}
-.btn-primary{
-  background:#22c55e; color:#052e16; font-weight:800;
-  border:none; border-radius:999px; padding:14px 20px;
-  box-shadow:0 10px 26px rgba(34,197,94,.25);
-}
-.btn-primary:hover{filter:brightness(1.05)}
-.btn-outline{
-  background:transparent;border:1px solid rgba(255,255,255,.18);
-  color:#e6ebf0;border-radius:10px;padding:10px 14px
-}
-.back{
-  background:#0f172a;border:1px solid rgba(255,255,255,.18);
-  color:#e6ebf0;border-radius:6px;padding:8px 10px;margin-bottom:10px
+header.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: #222;
+  border-bottom: 2px solid #0f0;
 }
 
-/* Modale */
-.modal{
-  position:fixed; inset:0; display:none; align-items:center; justify-content:center;
-  background:rgba(0,0,0,.6); z-index:30;
+header .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.modal.show{display:flex}
-.modal__dialog{
-  width:min(560px,92vw); background:#0f172a; border:1px solid rgba(255,255,255,.1);
-  border-radius:14px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.5)
-}
-.modal__header,.modal__footer{display:flex;align-items:center;gap:10px;padding:12px 14px}
-.modal__header{justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08)}
-.modal__footer{justify-content:flex-end;border-top:1px solid rgba(255,255,255,.08)}
-.modal__body{padding:14px}
-.icon-btn{background:#0b1117;border:1px solid rgba(255,255,255,.15);color:#e6ebf0;border-radius:8px;padding:8px 10px}
-.lbl{display:block;margin-bottom:6px;opacity:.85}
-.input{
-  width:100%; padding:10px 12px; border-radius:10px;
-  border:1px solid rgba(255,255,255,.18); background:#0b1117; color:#e6ebf0
-}
-.color-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
-.swatch{
-  width:40px;height:40px;border-radius:10px;border:2px solid rgba(255,255,255,.15);cursor:pointer
-}
-.swatch.selected{outline:3px solid #22c55e}
 
-/* Utility */
-.hidden{display:none}
+header .brand img {
+  height: 40px;
+}
+
+header .brand span {
+  font-size: 20px;
+  font-weight: bold;
+  color: #0f0;
+}
+
+main.screen {
+  padding: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+.hero h1, h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #0f0;
+}
+
+/* Griglie sport / regioni / società */
+.sports-grid,
+.regioni-grid,
+.clubs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Card sport */
+.sport-card {
+  background: #222;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+  transition: transform 0.2s;
+  text-align: center;
+}
+
+.sport-card:hover {
+  transform: scale(1.05);
+}
+
+.sport-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.sport-card span {
+  display: block;
+  padding: 10px;
+  color: #0f0; /* verde leggibile */
+  font-weight: bold;
+}
+
+/* Card regioni e società */
+.regioni-grid .region-card,
+.clubs-grid .club-card {
+  background: #222;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  transition: background 0.2s;
+}
+
+.regioni-grid .region-card:hover,
+.clubs-grid .club-card:hover {
+  background: #0f0;
+  color: #111;
+  font-weight: bold;
+}
+
+/* Pulsante PreMatch */
+button.prematch-btn {
+  margin-top: 20px;
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #0f0;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #111;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button.prematch-btn:hover {
+  background: #1aff1a;
+}
