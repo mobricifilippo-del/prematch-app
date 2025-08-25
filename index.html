@@ -5,17 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
 
-  <!-- CSS con cache-busting -->
+  <!-- cache busting: aumenta v=3 se non vedi subito gli aggiornamenti -->
   <link rel="stylesheet" href="./style.css?v=3" />
-
-  <!-- Favicon e logo header -->
   <link rel="icon" href="./images/logo-icon.png" />
-  <meta name="theme-color" content="#0f1216" />
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
-      <!-- logo CHIARO per header scuro -->
+    <div class="brand" onclick="location.href='./'">
       <img src="./images/logo-light.png" alt="PreMatch" />
       <span>PreMatch</span>
     </div>
@@ -27,7 +23,6 @@
     <div>© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
   </footer>
 
-  <!-- JS con cache-busting -->
   <script src="./app.js?v=3"></script>
 </body>
 </html>
