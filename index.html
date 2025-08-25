@@ -1,159 +1,117 @@
 <!doctype html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>PreMatch</title>
-  <link rel="icon" href="images/logo.png" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="images/logo.png">
+  <link rel="stylesheet" href="style.css">
+  <!-- il ?v forza l’aggiornamento cache -->
+  <script src="app.js?v=8" defer></script>
 </head>
 <body>
-  <!-- HEADER -->
   <header class="topbar">
     <div class="brand">
-      <img src="images/logo.png" alt="logo" />
+      <img src="images/logo.png" alt="PreMatch" />
       <span>PreMatch</span>
     </div>
   </header>
 
-  <!-- HOME: SPORT -->
+  <!-- HOME -->
   <main id="home" class="screen active">
     <section class="hero">
       <h1>Scegli lo sport</h1>
       <p>Esplora le società e organizza il PreMatch. Navigazione libera, semplice e veloce.</p>
     </section>
-    <section id="sportsGrid" class="sports-grid"><!-- filled by JS --></section>
+
+    <div id="sportsGrid" class="sports-grid"></div>
+
+    <noscript>
+      <p style="margin-top:16px;">Attiva JavaScript per vedere gli sport.</p>
+    </noscript>
   </main>
 
-  <!-- STEP 2: REGIONE -->
-  <main id="step-region" class="screen">
-    <button class="back" onclick="goBackTo('home')">← Indietro</button>
-    <section class="hero">
-      <h2>Seleziona la regione</h2>
-      <div class="context"><b>Sport:</b> <span id="ctx-sport"></span></div>
-    </section>
-    <section class="form">
-      <div class="field">
-        <label for="regionSelect">Regione</label>
-        <select id="regionSelect" class="select" onchange="onRegionChange(this.value)"></select>
-      </div>
-    </section>
-  </main>
+  <!-- REGIONI -->
+  <section id="screen-regioni" class="screen">
+    <button class="back" onclick="goBack()">← Indietro</button>
+    <h2>Scegli la regione</h2>
+    <p class="meta">Sport: <span id="metaSport"></span></p>
+    <div id="regionList" class="chip-wrap"></div>
+  </section>
 
-  <!-- STEP 3: GENERE -->
-  <main id="step-gender" class="screen">
-    <button class="back" onclick="goBackTo('step-region')">← Indietro</button>
-    <section class="hero">
-      <h2>Seleziona il genere</h2>
-      <div class="context">
-        <b>Sport:</b> <span id="ctx-sport-g"></span> •
-        <b>Regione:</b> <span id="ctx-region-g"></span>
-      </div>
-    </section>
-    <section class="chips-wrap">
-      <button class="chip chip--green" onclick="pickGender('Maschile')">Maschile</button>
-      <button class="chip chip--green" onclick="pickGender('Femminile')">Femminile</button>
-    </section>
-  </main>
+  <!-- GENERE -->
+  <section id="screen-genere" class="screen">
+    <button class="back" onclick="goBack()">← Indietro</button>
+    <h2>Seleziona il genere</h2>
+    <div class="chip-wrap">
+      <button class="chip" onclick="selectGender('Maschile')">Maschile</button>
+      <button class="chip" onclick="selectGender('Femminile')">Femminile</button>
+    </div>
+  </section>
 
-  <!-- STEP 4: CAMPIONATO -->
-  <main id="step-league" class="screen">
-    <button class="back" onclick="goBackTo('step-gender')">← Indietro</button>
-    <section class="hero">
-      <h2>Scegli il campionato</h2>
-      <div class="context">
-        <b>Sport:</b> <span id="ctx-sport-l"></span> •
-        <b>Regione:</b> <span id="ctx-region-l"></span> •
-        <b>Genere:</b> <span id="ctx-gender-l"></span>
-      </div>
-    </section>
-    <section class="form">
-      <div class="field">
-        <label for="leagueSelect">Campionato</label>
-        <select id="leagueSelect" class="select" onchange="onLeagueChange(this.value)"></select>
-      </div>
-    </section>
-  </main>
+  <!-- CAMPIONATI -->
+  <section id="screen-campionati" class="screen">
+    <button class="back" onclick="goBack()">← Indietro</button>
+    <h2>Scegli il campionato</h2>
+    <div id="leagueList" class="chip-wrap"></div>
+  </section>
 
-  <!-- STEP 5: SOCIETÀ -->
-  <main id="step-clubs" class="screen">
-    <button class="back" onclick="goBackTo('step-league')">← Indietro</button>
-    <section class="hero">
-      <h2>Scegli la società</h2>
-      <div class="context">
-        <b>Sport:</b> <span id="ctx-sport-c"></span> •
-        <b>Regione:</b> <span id="ctx-region-c"></span> •
-        <b>Genere:</b> <span id="ctx-gender-c"></span> •
-        <b>Campionato:</b> <span id="ctx-league-c"></span>
-      </div>
-    </section>
-    <section id="clubsWrap" class="list-wrap"></section>
-  </main>
+  <!-- SOCIETÀ -->
+  <section id="screen-societa" class="screen">
+    <button class="back" onclick="goBack()">← Indietro</button>
+    <h2>Società</h2>
+    <div id="clubList" class="card-list"></div>
+  </section>
 
   <!-- DETTAGLIO SOCIETÀ -->
-  <main id="club-detail" class="screen">
-    <button class="back" onclick="goBackTo('step-clubs')">← Indietro</button>
-    <section class="hero">
-      <h2 id="clubName">Società</h2>
-      <div class="context">
-        <b>Sport:</b> <span id="ctx-sport-d"></span> •
-        <b>Regione:</b> <span id="ctx-region-d"></span> •
-        <b>Genere:</b> <span id="ctx-gender-d"></span> •
-        <b>Campionato:</b> <span id="ctx-league-d"></span>
-      </div>
-    </section>
+  <section id="screen-club" class="screen">
+    <button class="back" onclick="goBack()">← Indietro</button>
+    <h2 id="clubName">Società</h2>
+    <p class="meta">
+      Sport: <span id="clubSport"></span> •
+      Regione: <span id="clubRegion"></span> •
+      Genere: <span id="clubGender"></span>
+    </p>
 
-    <section class="card">
-      <div class="card-head">
-        <h3>Prossime partite</h3>
-        <span id="prematchStatus" class="badge" hidden>PreMatch in attesa</span>
-      </div>
-      <div id="matchesBox" class="matches"></div>
-    </section>
+    <div class="panel">
+      <h3>Prossime partite</h3>
+      <div id="matchList"></div>
+    </div>
 
-    <section class="card">
+    <div class="panel">
       <h3>Sponsor della società</h3>
-      <div id="sponsorsBox" class="sponsors"></div>
-    </section>
+      <div id="sponsorList" class="badge-wrap"></div>
+    </div>
 
-    <!-- CREA PREMATCH -->
-    <section class="card">
-      <h3>Crea PreMatch</h3>
-      <p class="muted">Compila i dati essenziali e invia la richiesta ufficiale.</p>
-      <div class="form grid2">
-        <div class="field">
-          <label for="pmDate">Data</label>
-          <input id="pmDate" type="date" class="input" />
-        </div>
-        <div class="field">
-          <label for="pmTime">Ora</label>
-          <input id="pmTime" type="time" class="input" />
-        </div>
-        <div class="field">
-          <label for="pmKit">Colore divisa</label>
-          <select id="pmKit" class="select">
-            <option value="">Seleziona…</option>
-            <option>Chiara</option>
-            <option>Scura</option>
-            <option>Seconda</option>
-            <option>Terza</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="pmNote">Note (opzionale)</label>
-          <input id="pmNote" type="text" class="input" placeholder="Es. richiesta anticipo di 30 min" />
-        </div>
+    <!-- Pulsante “CREA PREMATCH” ben visibile -->
+    <div class="cta-fixed">
+      <button class="btn-primary" onclick="openPrematch()">🤝 CREA PREMATCH</button>
+    </div>
+  </section>
+
+  <!-- MODALE PREMATCH -->
+  <div id="prematchModal" class="modal">
+    <div class="modal__dialog">
+      <div class="modal__header">
+        <h3>Crea PreMatch</h3>
+        <button class="icon-btn" onclick="closePrematch()">✕</button>
       </div>
-      <div class="actions">
-        <button class="btn btn--ghost" onclick="resetPreMatch()">Annulla</button>
-        <button class="btn btn--green" onclick="submitPreMatch()">Invia richiesta</button>
+
+      <div class="modal__body">
+        <label class="lbl">Scegli la maglia</label>
+        <div id="kitColors" class="color-grid">
+          <!-- swatch generati da JS -->
+        </div>
+
+        <label class="lbl" style="margin-top:14px;">Note (opzionale)</label>
+        <input id="noteInput" class="input" type="text" placeholder="Es. richiesta anticipo di 30 min">
       </div>
-      <div id="pmMsg" class="msg" hidden></div>
-    </section>
-  </main>
 
-  <footer class="foot">© PreMatch — semplice, pulita, veloce. Privacy by design.</footer>
-
-  <script src="app.js"></script>
+      <div class="modal__footer">
+        <button class="btn-outline" onclick="closePrematch()">Annulla</button>
+        <button class="btn-primary" onclick="sendPrematch()">Invia richiesta</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
