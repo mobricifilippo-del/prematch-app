@@ -1,117 +1,69 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PreMatch</title>
-  <link rel="icon" href="images/logo.png">
-  <link rel="stylesheet" href="style.css">
-  <!-- il ?v forza l’aggiornamento cache -->
-  <script src="app.js?v=8" defer></script>
+  <link rel="stylesheet" href="style.css?v=13">
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <img src="images/logo.png" alt="PreMatch" />
+      <img src="images/logo.png" alt="logo" />
       <span>PreMatch</span>
     </div>
   </header>
 
-  <!-- HOME -->
   <main id="home" class="screen active">
     <section class="hero">
       <h1>Scegli lo sport</h1>
-      <p>Esplora le società e organizza il PreMatch. Navigazione libera, semplice e veloce.</p>
+      <div class="sports-grid">
+        <div class="sport-card" onclick="selectSport('Calcio')">
+          <img src="images/calcio.jpg" alt="Calcio">
+          <span>Calcio</span>
+        </div>
+        <div class="sport-card" onclick="selectSport('Futsal')">
+          <img src="images/futsal.jpg" alt="Futsal">
+          <span>Futsal</span>
+        </div>
+        <div class="sport-card" onclick="selectSport('Basket')">
+          <img src="images/basket.jpg" alt="Basket">
+          <span>Basket</span>
+        </div>
+        <div class="sport-card" onclick="selectSport('Rugby')">
+          <img src="images/rugby.jpg" alt="Rugby">
+          <span>Rugby</span>
+        </div>
+        <div class="sport-card" onclick="selectSport('Volley')">
+          <img src="images/volley.jpg" alt="Volley">
+          <span>Volley</span>
+        </div>
+        <div class="sport-card" onclick="selectSport('Beach Volley')">
+          <img src="images/beachvolley.jpg" alt="Beach Volley">
+          <span>Beach Volley</span>
+        </div>
+        <div class="sport-card" onclick="selectSport('Pallanuoto')">
+          <img src="images/pallanuoto.jpg" alt="Pallanuoto">
+          <span>Pallanuoto</span>
+        </div>
+      </div>
     </section>
-
-    <div id="sportsGrid" class="sports-grid"></div>
-
-    <noscript>
-      <p style="margin-top:16px;">Attiva JavaScript per vedere gli sport.</p>
-    </noscript>
   </main>
 
-  <!-- REGIONI -->
-  <section id="screen-regioni" class="screen">
-    <button class="back" onclick="goBack()">← Indietro</button>
-    <h2>Scegli la regione</h2>
-    <p class="meta">Sport: <span id="metaSport"></span></p>
-    <div id="regionList" class="chip-wrap"></div>
-  </section>
-
-  <!-- GENERE -->
-  <section id="screen-genere" class="screen">
-    <button class="back" onclick="goBack()">← Indietro</button>
-    <h2>Seleziona il genere</h2>
-    <div class="chip-wrap">
-      <button class="chip" onclick="selectGender('Maschile')">Maschile</button>
-      <button class="chip" onclick="selectGender('Femminile')">Femminile</button>
+  <main id="regioni" class="screen hidden">
+    <h2>Scegli la Regione</h2>
+    <div class="regioni-grid" id="regioni-list">
+      <!-- generato da JS -->
     </div>
-  </section>
+  </main>
 
-  <!-- CAMPIONATI -->
-  <section id="screen-campionati" class="screen">
-    <button class="back" onclick="goBack()">← Indietro</button>
-    <h2>Scegli il campionato</h2>
-    <div id="leagueList" class="chip-wrap"></div>
-  </section>
-
-  <!-- SOCIETÀ -->
-  <section id="screen-societa" class="screen">
-    <button class="back" onclick="goBack()">← Indietro</button>
-    <h2>Società</h2>
-    <div id="clubList" class="card-list"></div>
-  </section>
-
-  <!-- DETTAGLIO SOCIETÀ -->
-  <section id="screen-club" class="screen">
-    <button class="back" onclick="goBack()">← Indietro</button>
-    <h2 id="clubName">Società</h2>
-    <p class="meta">
-      Sport: <span id="clubSport"></span> •
-      Regione: <span id="clubRegion"></span> •
-      Genere: <span id="clubGender"></span>
-    </p>
-
-    <div class="panel">
-      <h3>Prossime partite</h3>
-      <div id="matchList"></div>
+  <main id="societa" class="screen hidden">
+    <h2>Scegli la Società</h2>
+    <div class="clubs-grid" id="societa-list">
+      <!-- generato da JS -->
     </div>
+  </main>
 
-    <div class="panel">
-      <h3>Sponsor della società</h3>
-      <div id="sponsorList" class="badge-wrap"></div>
-    </div>
-
-    <!-- Pulsante “CREA PREMATCH” ben visibile -->
-    <div class="cta-fixed">
-      <button class="btn-primary" onclick="openPrematch()">🤝 CREA PREMATCH</button>
-    </div>
-  </section>
-
-  <!-- MODALE PREMATCH -->
-  <div id="prematchModal" class="modal">
-    <div class="modal__dialog">
-      <div class="modal__header">
-        <h3>Crea PreMatch</h3>
-        <button class="icon-btn" onclick="closePrematch()">✕</button>
-      </div>
-
-      <div class="modal__body">
-        <label class="lbl">Scegli la maglia</label>
-        <div id="kitColors" class="color-grid">
-          <!-- swatch generati da JS -->
-        </div>
-
-        <label class="lbl" style="margin-top:14px;">Note (opzionale)</label>
-        <input id="noteInput" class="input" type="text" placeholder="Es. richiesta anticipo di 30 min">
-      </div>
-
-      <div class="modal__footer">
-        <button class="btn-outline" onclick="closePrematch()">Annulla</button>
-        <button class="btn-primary" onclick="sendPrematch()">Invia richiesta</button>
-      </div>
-    </div>
-  </div>
+  <script src="app.js?v=13"></script>
 </body>
 </html>
