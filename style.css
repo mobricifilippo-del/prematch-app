@@ -1,130 +1,116 @@
-/* Reset base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+/* Reset */
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+
+/* Tema scuro + accento verde */
+:root{
+  --bg:#0b1117;
+  --panel:#111827;
+  --txt:#e6ebf0;
+  --muted:#9fb0c2;
+  --accent:#11dd4a;
+  --accent-2:#0f172a;
+  --card:#0f172a;
+  --shadow:0 6px 22px rgba(0,0,0,.35);
 }
 
-body {
-  background: #111; /* sfondo scuro elegante */
-  color: #eee;
-  min-height: 100vh;
+body{
+  background:var(--bg);
+  color:var(--txt);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Noto Sans",Arial,sans-serif;
+  line-height:1.5;
 }
 
-header.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 20px;
-  background: #222;
-  border-bottom: 2px solid #0f0;
+/* Topbar */
+.topbar{
+  position:sticky;top:0;z-index:10;
+  display:flex;align-items:center;gap:.75rem;
+  padding:12px 16px;
+  background:linear-gradient(180deg,#111827,#0b1117);
+  border-bottom:2px solid var(--accent);
+}
+.brand{display:flex;align-items:center;gap:.75rem}
+.brand img{width:28px;height:28px;border-radius:6px}
+.brand span{font-weight:800;color:var(--accent);font-size:20px}
+
+/* Layout */
+.screen{max-width:1100px;margin:0 auto;padding:24px 16px 56px}
+h1{font-size:36px;margin:8px 0 16px;color:var(--accent)}
+h2{font-size:28px;margin:6px 0 14px}
+h3{font-size:18px;margin-bottom:10px}
+p{color:var(--muted);margin-bottom:18px}
+.muted{color:var(--muted)}
+.hidden{display:none}
+
+/* Griglia sport */
+.sports-grid{
+  display:grid;gap:14px;
+  grid-template-columns:repeat(2,1fr);
+}
+@media(min-width:768px){
+  .sports-grid{grid-template-columns:repeat(3,1fr)}
+}
+.sport-card{
+  background:var(--card);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:16px;overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  cursor:pointer;
+}
+.sport-card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.sport-card img{width:100%;height:160px;object-fit:cover;display:block}
+.sport-card p{
+  padding:12px 14px;
+  font-weight:800;letter-spacing:.3px;
+  background:linear-gradient(180deg,#121a27,#0f172a);
+  color:var(--accent);
+  text-align:center;
 }
 
-header .brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* Bottoni “pill” per regioni/leghe/società */
+.pill-grid{display:flex;flex-wrap:wrap;gap:10px}
+.pill-grid button{
+  padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.15);
+  background:#0f172a;color:var(--txt);cursor:pointer;
+  transition:transform .12s ease, border-color .12s ease, color .12s ease;
+}
+.pill-grid button:hover{
+  transform:translateY(-1px);
+  border-color:var(--accent); color:var(--accent);
 }
 
-header .brand img {
-  height: 40px;
+/* Card pannelli info */
+.card{
+  background:var(--panel);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
+  padding:16px; margin:16px 0;
+  box-shadow:var(--shadow);
+}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  background:#0f6a2d;color:#fff;padding:8px 10px;border-radius:999px;font-size:14px
 }
 
-header .brand span {
-  font-size: 20px;
-  font-weight: bold;
-  color: #0f0;
+/* CTA */
+.cta{
+  margin-top:12px;
+  background:var(--accent); color:#04130a;
+  border:none; border-radius:12px;
+  padding:14px 16px; font-weight:900; letter-spacing:.3px;
+  cursor:pointer;
+  box-shadow:0 8px 18px rgba(17,221,74,.25);
 }
+.cta:hover{filter:brightness(1.05)}
 
-main.screen {
-  padding: 20px;
+/* Back */
+.back{
+  margin:4px 0 10px;
+  background:#0f172a;border:1px solid rgba(255,255,255,.15);
+  color:var(--txt); padding:8px 12px; border-radius:10px; cursor:pointer;
 }
+.back:hover{border-color:var(--accent);color:var(--accent)}
 
-.hidden {
-  display: none;
-}
-
-.hero h1, h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #0f0;
-}
-
-/* Griglie sport / regioni / società */
-.sports-grid,
-.regioni-grid,
-.clubs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 20px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-/* Card sport */
-.sport-card {
-  background: #222;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.6);
-  transition: transform 0.2s;
-  text-align: center;
-}
-
-.sport-card:hover {
-  transform: scale(1.05);
-}
-
-.sport-card img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-}
-
-.sport-card span {
-  display: block;
-  padding: 10px;
-  color: #0f0; /* verde leggibile */
-  font-weight: bold;
-}
-
-/* Card regioni e società */
-.regioni-grid .region-card,
-.clubs-grid .club-card {
-  background: #222;
-  padding: 15px;
-  border-radius: 10px;
-  text-align: center;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-  transition: background 0.2s;
-}
-
-.regioni-grid .region-card:hover,
-.clubs-grid .club-card:hover {
-  background: #0f0;
-  color: #111;
-  font-weight: bold;
-}
-
-/* Pulsante PreMatch */
-button.prematch-btn {
-  margin-top: 20px;
-  display: block;
-  width: 100%;
-  padding: 12px;
-  background: #0f0;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #111;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-button.prematch-btn:hover {
-  background: #1aff1a;
-}
+/* Footer */
+.foot{max-width:1100px;margin:0 auto 28px;padding:0 16px;color:var(--muted);font-size:14px}
