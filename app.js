@@ -1,6 +1,4 @@
-/* ======== DATI DEMO OFFLINE ======== */
-
-/* Sport */
+/* ====== DATI DEMO (puoi estendere) ====== */
 const SPORTS = [
   { id:"calcio",       name:"Calcio",       img:"images/calcio.jpg" },
   { id:"futsal",       name:"Futsal",       img:"images/futsal.jpg" },
@@ -11,233 +9,236 @@ const SPORTS = [
   { id:"pallanuoto",   name:"Pallanuoto",   img:"images/pallanuoto.jpg" }
 ];
 
-/* Regioni */
 const REGIONS = [
   "Abruzzo","Basilicata","Calabria","Campania","Emilia-Romagna",
   "Friuli-Venezia Giulia","Lazio","Liguria","Lombardia","Marche",
-  "Molise","Piemonte","Puglia","Sardegna","Sicilia",
-  "Toscana","Trentino-Alto Adige","Umbria","Valle d'Aosta","Veneto"
+  "Molise","Piemonte","Puglia","Sardegna","Sicilia","Toscana",
+  "Trentino-Alto Adige","Umbria","Valle d'Aosta","Veneto"
 ];
 
-/* Campionati per sport (aggiornato) */
 const LEAGUES = {
   calcio: [
-    "Serie A Maschile",
-    "Serie A Femminile",
-    "Eccellenza Maschile",
-    "Eccellenza Femminile",
-    "Promozione",
-    "Under 19",
-    "Under 17",
-    "Under 15",
-    "Scuola Calcio"
+    "Serie A Maschile","Serie A Femminile","Eccellenza Maschile","Eccellenza Femminile"
   ],
-  futsal: ["Eccellenza Futsal", "Serie A Futsal"],
-  basket: ["Serie A", "Serie A2", "U17 Ecc"],
-  rugby: ["Top10", "Serie A"],
-  volley: ["Superlega", "A2", "U18"],
-  beachvolley: ["Pro Tour"],
-  pallanuoto: ["Serie A1", "Serie A2"]
+  futsal: ["Serie A","Serie B"],
+  basket: ["Serie A","Serie B"],
+  rugby: ["Top10","Serie A"],
+  volley: ["Superlega","A2"],
+  beachvolley: ["Nazionale","Regionale"],
+  pallanuoto: ["Serie A1","Serie A2"]
 };
 
-/* Società demo (chiave: sport|regione|genere|campionato) */
-const DEMO_CLUBS = {
-  "calcio|Lazio|Femminile|Eccellenza Femminile": [
-    {
-      name: "AS Roma",
-      matches: [{ team:"Prima Squadra vs —", date:"31/08/2025 14:07", venue:"Roma - Stadio Olimpico", status:"confirm" }],
-      sponsors: ["Qatar Airways","DigitalBiscione"]
-    },
-    {
-      name: "SS Lazio Women",
-      matches: [{ team:"Prima Squadra vs —", date:"07/09/2025 20:45", venue:"Roma - Formello", status:"pending" }],
-      sponsors: []
-    }
-  ]
-};
-function clubsFor(sport, region, gender, league){
-  const key = `${sport}|${region}|${gender}|${league}`;
-  if (DEMO_CLUBS[key]) return DEMO_CLUBS[key];
-  // default demo
-  return [
-    { name: `${capitalize(sport)} ${region} ${gender} 1`,
-      matches:[{team:"Prima Squadra vs —", date:"12/09/2025 18:00", venue:region, status:"pending"}],
-      sponsors:[] },
-    { name: `${capitalize(sport)} ${region} ${gender} 2`,
-      matches:[{team:"Under 18 vs —", date:"19/09/2025 15:30", venue:region, status:""}],
-      sponsors:[] }
-  ];
-}
+// demo società e sponsor
+const SOCIETIES = [
+  { id:1, name:"AS Roma",   sport:"calcio", region:"Lazio", leagues:["Serie A Femminile","Serie A Maschile"] },
+  { id:2, name:"SS Lazio",  sport:"calcio", region:"Lazio", leagues:["Serie A Maschile"] },
+  { id:3, name:"Dinamo Sassari", sport:"basket", region:"Sardegna", leagues:["Serie A"] },
+];
 
-/* ======== STATO ======== */
-const state = { sport:null, sportName:null, region:null, gender:null, league:null, club:null };
-
-/* ======== UTILS ======== */
-function $(s){ return document.querySelector(s); }
-function show(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo({top:0,behavior:'instant'});
-}
-function goBackTo(id){ show(id); }
-function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
-
-/* ======== RENDER HOME (SPORT) ======== */
-function renderSports(){
-  const wrap = $("#sportsGrid");
-  wrap.innerHTML = SPORTS.map(sp=>`
-    <article class="sport-card" role="button" onclick="pickSport('${sp.id}','${sp.name}')">
-      <img class="sport-card__img" src="${sp.img}" alt="${sp.name}" />
-      <div class="sport-card__label">${sp.name}</div>
-    </article>
-  ).join("");
-}
-
-/* SPORT → REGIONE */
-window.pickSport = function(id,name){
-  state.sport=id; state.sportName=name;
-  $("#ctx-sport").textContent = name;
-
-  const sel = $("#regionSelect");
-  sel.innerHTML = `<option value="">Seleziona una regione…</option>` +
-    REGIONS.map(r => `<option value="${r}">${r}</option>`).join("");
-
-  show("step-region");
+const SPONSORS = {
+  1:["Qatar Airways","DigitalBiscione"],
+  2:["Caffè Roma","ItalPower"],
+  3:["SardEnergy"]
 };
 
-/* Regione → GENERE */
-window.onRegionChange = function(value){
-  if(!value) return;
-  state.region = value;
-  $("#ctx-sport-g").textContent = state.sportName;
-  $("#ctx-region-g").textContent = state.region;
-  show("step-gender");
+const MATCHES = {
+  1:[{ title:"Prima Squadra vs —", date:"31/08/2025 14:07", place:"Roma - Stadio Olimpico" }],
+  2:[{ title:"Lazio vs —", date:"02/09/2025 20:45", place:"Roma - Olimpico" }],
+  3:[{ title:"Dinamo vs —", date:"05/09/2025 18:00", place:"Sassari" }]
 };
 
-/* Genere → CAMPIONATO */
-window.pickGender = function(gender){
-  state.gender = gender;
-
-  $("#ctx-sport-l").textContent   = state.sportName;
-  $("#ctx-region-l").textContent  = state.region;
-  $("#ctx-gender-l").textContent  = gender;
-
-  const leagues = LEAGUES[state.sport] || [];
-  const sel = $("#leagueSelect");
-  sel.innerHTML = `<option value="">Seleziona un campionato…</option>` +
-    leagues.map(l => `<option value="${l}">${l}</option>`).join("");
-
-  show("step-league");
+/* ====== STATO DI NAVIGAZIONE ====== */
+const state = {
+  sport:null, region:null, gender:null, league:null, club:null,
+  history:[]
 };
 
-/* Campionato → SOCIETÀ */
-window.onLeagueChange = function(value){
-  if(!value) return;
-  state.league = value;
-
-  $("#ctx-sport-c").textContent   = state.sportName;
-  $("#ctx-region-c").textContent  = state.region;
-  $("#ctx-gender-c").textContent  = state.gender;
-  $("#ctx-league-c").textContent  = state.league;
-
-  const clubs = clubsFor(state.sport, state.region, state.gender, state.league);
-  $("#clubsWrap").innerHTML = clubs.map(c =>
-    `<div class="item"><button onclick="openClub('${encodeURIComponent(c.name)}')">${c.name}</button></div>`
-  ).join("");
-
-  show("step-clubs");
-};
-
-/* DETTAGLIO SOCIETÀ */
-window.openClub = function(encodedName){
-  const name = decodeURIComponent(encodedName);
-  state.club = name;
-
-  $("#clubName").textContent = name;
-  $("#ctx-sport-d").textContent  = state.sportName;
-  $("#ctx-region-d").textContent = state.region;
-  $("#ctx-gender-d").textContent = state.gender;
-  $("#ctx-league-d").textContent = state.league;
-
-  const data = clubsFor(state.sport, state.region, state.gender, state.league)
-               .find(c=>c.name===name);
-
-  // Partite
-  const m = $("#matchesBox");
-  if (data && data.matches && data.matches.length){
-    m.innerHTML = data.matches.map(x => {
-      const badge = x.status==="confirm" ? `<span class="badge" style="background:#22c55e;color:#05210f;border-color:#0a2213">PreMatch confermato</span>` :
-                     x.status==="pending" ? `<span class="badge">PreMatch in attesa</span>` : "";
-      return `<div class="match">
-        <div class="t" style="display:flex;gap:8px;align-items:center">
-          <strong>${x.team}</strong> ${badge}
-        </div>
-        <div class="d">${x.date} — ${x.venue}</div>
-      </div>`;
-    }).join("");
-  } else m.innerHTML = `<div class="match">Nessuna partita programmata</div>`;
-
-  // Sponsor
-  const s = $("#sponsorsBox");
-  if (data && data.sponsors && data.sponsors.length){
-    s.innerHTML = data.sponsors.map(sp =>
-      `<span class="chip chip--green" style="margin-right:8px">${sp}</span>`
-    ).join("");
-  } else s.innerHTML = `<span class="chip chip--green">Nessuno sponsor</span>`;
-
-  // Stato prematch (reset)
-  $("#prematchStatus").hidden = true;
-  $("#pmMsg").hidden = true;
-  $("#pmDate").value = "";
-  $("#pmTime").value = "";
-  $("#pmKit").value = "";
-  $("#pmNote").value = "";
-
-  show("club-detail");
-};
-
-/* ======== CREA PREMATCH (DEMO) ======== */
-window.resetPreMatch = function(){
-  $("#pmMsg").hidden = true;
-  $("#pmDate").value = "";
-  $("#pmTime").value = "";
-  $("#pmKit").value = "";
-  $("#pmNote").value = "";
-};
-
-window.submitPreMatch = function(){
-  const date = $("#pmDate").value;
-  const time = $("#pmTime").value;
-  const kit  = $("#pmKit").value;
-
-  if(!date || !time || !kit){
-    const msg = $("#pmMsg");
-    msg.hidden = false;
-    msg.textContent = "Compila data, ora e colore divisa.";
-    return;
+/* ====== AVVIO ====== */
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    renderSports();
+  } catch(e) {
+    console.error(e);
+    showFallbackMessage("Errore durante il caricamento. Riprova.");
   }
+});
 
-  // Demo: imposta stato "in attesa"
-  const st = $("#prematchStatus");
-  st.hidden = false;
-  st.textContent = "PreMatch in attesa";
+/* ====== RENDER HOME (SPORT) ====== */
+function renderSports() {
+  const grid = document.getElementById('sportsGrid');
+  if(!grid){ showFallbackMessage('Manca il contenitore #sportsGrid in index.html'); return; }
 
-  const msg = $("#pmMsg");
-  msg.hidden = false;
-  msg.textContent = `Richiesta inviata: ${state.club} — ${date} ${time} — Divisa: ${kit}.`;
+  grid.innerHTML = SPORTS.map(s => `
+    <article class="sport-card" data-sport="${s.id}">
+      <div class="img-wrap">
+        <img loading="lazy" src="${s.img}" alt="${s.name}">
+      </div>
+      <h3>${s.name}</h3>
+    </article>
+  `).join('');
 
-  // Aggiungi riga in alto nella lista
-  const m = $("#matchesBox");
-  const extra = document.createElement("div");
-  extra.className = "match";
-  extra.innerHTML = `
-    <div class="t" style="display:flex;gap:8px;align-items:center">
-      <strong>Nuovo PreMatch</strong> <span class="badge">PreMatch in attesa</span>
-    </div>
-    <div class="d">${date} ${time} — Da concordare</div>
-  `;
-  m.prepend(extra);
-};
+  grid.querySelectorAll('.sport-card').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      const id = card.getAttribute('data-sport');
+      onSportSelected(id);
+    });
+  });
+}
 
-/* BOOTSTRAP */
-renderSports();
+function showFallbackMessage(msg){
+  const tgt = document.getElementById('sportsGrid') || document.querySelector('main');
+  if(!tgt) return;
+  tgt.innerHTML = `<div class="panel">${msg}</div>`;
+}
+
+/* ====== NAVIGAZIONE SCHERMATE ====== */
+function show(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if(el){ el.classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function go(toId){
+  state.history.push(document.querySelector('.screen.active')?.id || 'home');
+  show(toId);
+}
+function goBack(){
+  const prev = state.history.pop() || 'home';
+  show(prev);
+}
+
+/* ====== FLOW ====== */
+function onSportSelected(sportId){
+  state.sport = sportId;
+  state.region = state.gender = state.league = state.club = null;
+
+  // regioni
+  const list = document.getElementById('regionList');
+  document.getElementById('metaSport').textContent = SPORTS.find(s=>s.id===sportId)?.name || '';
+  list.innerHTML = REGIONS.map(r => `<button class="chip" onclick="selectRegion('${r}')">${r}</button>`).join('');
+  go('screen-regioni');
+}
+
+function selectRegion(region){
+  state.region = region;
+  // genere
+  go('screen-genere');
+}
+
+function selectGender(g){
+  state.gender = g;
+
+  // campionati per sport
+  const leagues = LEAGUES[state.sport] || [];
+  const wrap = document.getElementById('leagueList');
+  wrap.innerHTML = leagues
+    .filter(l => !l.toLowerCase().includes('femminile') || state.gender==='Femminile' ? true
+                : !l.toLowerCase().includes('femminile'))
+    .map(l => `<button class="chip" onclick="selectLeague('${l.replace(/'/g,"\\'")}')">${l}</button>`).join('');
+
+  go('screen-campionati');
+}
+
+function selectLeague(league){
+  state.league = league;
+
+  // elenco società compatibili
+  const list = document.getElementById('clubList');
+  const clubs = SOCIETIES.filter(c =>
+    c.sport===state.sport &&
+    c.region===state.region &&
+    c.leagues.includes(league)
+  );
+
+  if(clubs.length===0){
+    list.innerHTML = `<div class="panel">Nessuna società trovata per <b>${league}</b> in <b>${state.region}</b>.</div>`;
+  } else {
+    list.innerHTML = clubs.map(c => `
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+          <div><b>${c.name}</b><div class="meta">${state.region} • ${league}</div></div>
+          <button class="btn-primary" onclick="openClub(${c.id})">Apri</button>
+        </div>
+      </div>
+    `).join('');
+  }
+  go('screen-societa');
+}
+
+function openClub(id){
+  const club = SOCIETIES.find(c=>c.id===id);
+  if(!club){ return; }
+  state.club = id;
+
+  document.getElementById('clubName').textContent = club.name;
+  document.getElementById('clubSport').textContent = SPORTS.find(s=>s.id===club.sport)?.name || '';
+  document.getElementById('clubRegion').textContent = club.region;
+  document.getElementById('clubGender').textContent = state.gender;
+
+  // partite
+  const matches = MATCHES[id] || [];
+  document.getElementById('matchList').innerHTML =
+    matches.length ? matches.map(m => `
+      <div class="card"><b>${m.title}</b><br>${m.date} — ${m.place}</div>
+    `).join('')
+    : `<div class="card">Nessuna partita programmata.</div>`;
+
+  // sponsor
+  const sps = SPONSORS[id] || [];
+  document.getElementById('sponsorList').innerHTML =
+    sps.length ? sps.map(s=>`<span class="badge">${s}</span>`).join('') :
+    `<span class="badge" style="background:#40261f;border-color:#7b1d10;color:#ffd5cd">Nessuno</span>`;
+
+  go('screen-club');
+}
+
+/* ====== MODALE PREMATCH ====== */
+const KIT_PALETTE = [
+  "#ffffff","#000000","#c1121f","#1d4ed8","#22c55e","#f59e0b",
+  "#9333ea","#52525b","#2563eb","#be185d","#16a34a","#ca8a04"
+];
+
+let selectedColor = null;
+
+function openPrematch(){
+  // genera i colori cliccabili
+  const box = document.getElementById('kitColors');
+  box.innerHTML = KIT_PALETTE.map((c,i)=>`
+    <button class="swatch" style="background:${c}" data-color="${c}" aria-label="${c}"></button>
+  `).join('');
+
+  box.querySelectorAll('.swatch').forEach(sw=>{
+    sw.addEventListener('click', ()=>{
+      box.querySelectorAll('.swatch').forEach(x=>x.classList.remove('selected'));
+      sw.classList.add('selected');
+      selectedColor = sw.getAttribute('data-color');
+    });
+  });
+
+  document.getElementById('noteInput').value = '';
+  document.getElementById('prematchModal').classList.add('show');
+}
+
+function closePrematch(){
+  document.getElementById('prematchModal').classList.remove('show');
+  selectedColor = null;
+}
+
+function sendPrematch(){
+  // demo: mostro un alert con riepilogo
+  const club = SOCIETIES.find(c=>c.id===state.club);
+  const note = document.getElementById('noteInput').value.trim();
+  const colorTxt = selectedColor || "(non selezionato)";
+  alert(
+`Richiesta PreMatch inviata!
+
+Società: ${club?.name || '-'}
+Sport: ${SPORTS.find(s=>s.id===state.sport)?.name} • ${state.gender}
+Regione: ${state.region}
+Campionato: ${state.league}
+Maglia: ${colorTxt}
+Note: ${note || '(nessuna)'}`
+  );
+
+  // qui in futuro: chiamata a Supabase / API
+  closePrematch();
+}
