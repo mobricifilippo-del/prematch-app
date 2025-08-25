@@ -2,28 +2,31 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
-  <link rel="icon" href="./images/favicon.png" />
-  <link rel="stylesheet" href="./style.css" />
+
+  <!-- Favicons -->
+  <link rel="icon" href="./images/logo-icon.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="./images/logo-icon.png" />
+
+  <!-- CSS (con versione per forzare cache) -->
+  <link rel="stylesheet" href="./style.css?v=6" />
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <img class="brand-logo" src="./images/logo-light.png" alt="PreMatch" />
+      <img src="./images/logo-light.png" alt="PreMatch" />
       <span>PreMatch</span>
     </div>
   </header>
 
   <main id="app"></main>
 
-  <!-- Modal overlay -->
-  <div id="modal" class="modal hidden" role="dialog" aria-modal="true"></div>
-
   <footer class="footer">
     <div>© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
   </footer>
 
-  <script src="./app.js?v=1"></script>
+  <!-- App (con versione per forzare cache) -->
+  <script src="./app.js?v=6"></script>
 </body>
 </html>
