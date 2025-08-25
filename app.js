@@ -1,4 +1,4 @@
-// ====== Dataset demo ======
+// ===== Dataset di esempio =====
 const DATA = {
   sports: [
     { key: "calcio",     name: "Calcio",     img: "./images/calcio.jpg" },
@@ -9,65 +9,41 @@ const DATA = {
     { key: "pallanuoto", name: "Pallanuoto", img: "./images/pallanuoto.jpg" },
   ],
   genders: ["Maschile", "Femminile"],
+
   regions: ["Lazio", "Lombardia", "Sicilia", "Piemonte", "Veneto", "Emilia-Romagna"],
 
-  // per semplicità: categorie calcio ricche, gli altri sport essenziali
-  leaguesBySportGenderRegion: {
-    "calcio|Maschile|Lazio": [
-      "Serie A","Serie B","Serie C","Dilettanti Eccellenza","Promozione","Prima Categoria","Scuola Calcio"
-    ],
-    "calcio|Femminile|Lazio": [
-      "Serie A Femminile","Serie B Femminile","Serie C Femminile","Eccellenza Femminile","Scuola Calcio"
-    ],
-    "basket|Maschile|Lazio": ["Serie B Interregionale","Serie C Unica","Giovanili"],
-    "basket|Femminile|Lazio": ["A2 Femminile","B Femminile","Giovanili"],
-    "volley|Maschile|Lazio": ["A3","B","Giovanili"],
-    "volley|Femminile|Lazio": ["A2","B1","Giovanili"],
-    "rugby|Maschile|Lazio": ["Serie A Elite","Serie A","Giovanili"],
-    "rugby|Femminile|Lazio": ["Serie A Femminile","Giovanili"],
-    "pallanuoto|Maschile|Lazio": ["A2","B","Giovanili"],
-    "pallanuoto|Femminile|Lazio": ["A1","A2","Giovanili"],
-    // fallback automatico per altre regioni
+  leaguesBy: {
+    // per semplicità usiamo lo stesso set per demo; in reale si filtra per sport+genere+regione
+    default: ["Serie A", "Eccellenza", "Promozione", "Prima Categoria", "Scuola Calcio"],
   },
 
   clubsByLeague: {
-    "Eccellenza Femminile": ["ASD Roma Nord Women", "Sporting Tuscolano Women"],
-    "Serie A Femminile":    ["Roma Women", "Lazio Women"],
-    "Promozione":           ["Virtus Marino", "Borghesiana FC"],
-    "Serie B Interregionale":["Treviso Volley"],
-    "Serie A Elite":        ["Capitolina", "Fiamme Oro"],
-    "A2 Femminile":         ["Virtus Basket Rosa", "Stellazzurra Rosa"],
-    "Scuola Calcio":        ["Pulcini 2015", "Esordienti 2012"],
+    "Serie A": ["AC Aurora", "Trust Every Woman"],
+    "Eccellenza": ["ASD Roma Nord", "Sporting Tuscolano"],
+    "Promozione": ["Virtus Marino", "Borghesiana FC"],
+    "Prima Categoria": ["Atletico Ostia"],
+    "Scuola Calcio": ["Piccoli Draghi", "Junior Stars"]
   },
 
   matchesMock: [
-    { home: "Prima Squadra", away: "—", when: "31/08/2025 14:07", where: "Roma – Stadio Olimpico", status:"pending" },
-    { home: "Juniores",      away: "—", when: "01/09/2025 18:30", where: "Roma – Campo Test",       status:"pending" },
+    { home: "Prima Squadra", away: "—", when: "31/08/2025 14:07", where: "Roma – Stadio Olimpico" },
+    { home: "Juniores",      away: "—", when: "01/09/2025 18:30", where: "Roma – Campo Test" },
   ],
 };
 
-const COLOR_SWATCHES = ["#ffffff","#000000","#ff0000","#0044ff","#41d27b","#ff9900","#aa00ff","#00c2ff"];
-
-// ====== Stato ======
+// ===== Stato =====
 const state = { sport:null, gender:null, region:null, league:null, club:null };
 
-// ====== Root ======
+// ===== App root =====
 const app = document.getElementById("app");
-const toastEl = document.getElementById("toast");
-const modal = document.getElementById("prematchModal");
-const homeColorsEl = document.getElementById("homeColors");
-const awayColorsEl = document.getElementById("awayColors");
-const inputDate = document.getElementById("matchDate");
-const inputTime = document.getElementById("matchTime");
-const inputPlace = document.getElementById("matchPlace");
-const btnCreate = document.getElementById("btnCreate");
 
-// ====== Helpers ======
+// ===== Helper DOM =====
 function h(tag, attrs = {}, children = []) {
   const el = document.createElement(tag);
   Object.entries(attrs).forEach(([k, v]) => {
     if (k === "class") el.className = v;
     else if (k === "onclick") el.addEventListener("click", v);
+    else if (k === "onerror") el.onerror = v;
     else el.setAttribute(k, v);
   });
   (Array.isArray(children) ? children : [children]).forEach(c => {
@@ -78,272 +54,280 @@ function h(tag, attrs = {}, children = []) {
   return el;
 }
 function clearMain(){ app.innerHTML = ""; }
-function titleBlock(t, s){ return h("div",{class:"container"},[
-  h("div",{class:"h1"},t), h("div",{class:"sub"}, s||"")
-]);}
-function showToast(msg){
-  toastEl.textContent = msg;
-  toastEl.classList.add("show");
-  setTimeout(()=>toastEl.classList.remove("show"), 2200);
+function sectionTitle(title, subtitle){
+  return h("div", {class:"container"}, [
+    h("div", {class:"h1"}, title),
+    h("div", {class:"sub"}, subtitle || ""),
+  ]);
 }
-function todayStr(){ const d=new Date(); return d.toISOString().slice(0,10); }
-function timeStr(){ const d=new Date(); return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
 
-// ====== FLOW ======
+// ===== Pagine =====
 function pageSports(){
   clearMain();
-  app.appendChild(titleBlock("Scegli lo sport","Seleziona per iniziare"));
-  const grid = h("div",{class:"container grid"});
+  app.appendChild(sectionTitle("Scegli lo sport","Seleziona per iniziare"));
 
-  DATA.sports.forEach(s=>{
-    const card = h("div",{class:"card", onclick:()=>{ state.sport=s.key; pageGender(); }},[
-      h("img",{src:s.img, alt:s.name, onerror:"this.style.display='none'"}),
-      h("div",{class:"title"},s.name),
+  const grid = h("div", {class:"container grid"});
+  DATA.sports.forEach(s => {
+    const card = h("div", {class:"card", tabindex:"0"}, [
+      h("img", {src: s.img, alt: s.name, onerror: function(){ this.style.display="none"; }}),
+      h("div", {class:"title"}, s.name),
     ]);
+    card.addEventListener("click", () => {
+      // evidenzia interazione
+      [...grid.children].forEach(c=>c.classList.remove("active"));
+      card.classList.add("active");
+
+      state.sport = s.key;
+      // auto-avanza
+      setTimeout(pageGender, 80);
+    });
     grid.appendChild(card);
   });
-
   app.appendChild(grid);
 }
 
 function pageGender(){
   clearMain();
-  const sportName = (DATA.sports.find(x=>x.key===state.sport)||{}).name || "";
-  app.appendChild(titleBlock(`Seleziona il genere`, sportName));
+  app.appendChild(sectionTitle("Scegli il genere", ""));
 
-  const box = h("div",{class:"container panel"});
-  const chips = h("div",{class:"chips"});
-
-  DATA.genders.forEach(g=>{
-    const chip = h("div",{class:"chip", onclick:()=>{
+  const box = h("div", {class:"container panel"});
+  const chips = h("div", {class:"chips"});
+  DATA.genders.forEach(g => {
+    const chip = h("div", {class:"chip"}, g);
+    chip.addEventListener("click", ()=>{
+      [...chips.children].forEach(c=>c.classList.remove("active"));
+      chip.classList.add("active");
       state.gender = g;
-      // auto-advance
-      pageRegions();
-    }}, g);
+      setTimeout(pageRegions, 80);
+    });
     chips.appendChild(chip);
   });
-
   box.appendChild(chips);
   app.appendChild(box);
 }
 
 function pageRegions(){
   clearMain();
-  app.appendChild(titleBlock("Scegli la regione", `${cap(s(state.sport))} • ${state.gender}`));
+  app.appendChild(sectionTitle("Scegli la regione", ""));
 
-  const box = h("div",{class:"container panel"});
-  const chips = h("div",{class:"chips"});
-
-  DATA.regions.forEach(r=>{
-    const chip = h("div",{class:"chip", onclick:()=>{
+  const box = h("div", {class:"container panel"});
+  const chips = h("div", {class:"chips"});
+  DATA.regions.forEach(r => {
+    const chip = h("div", {class:"chip"}, r);
+    chip.addEventListener("click", ()=>{
+      [...chips.children].forEach(c=>c.classList.remove("active"));
+      chip.classList.add("active");
       state.region = r;
-      pageLeagues();
-    }}, r);
+      setTimeout(pageLeagues, 80);
+    });
     chips.appendChild(chip);
   });
-
   box.appendChild(chips);
+
+  // azione “indietro” sola, niente Avanti
+  const actions = h("div", {class:"actions"}, [
+    h("button", {class:"btn", onclick: () => pageGender()}, "Indietro")
+  ]);
+  box.appendChild(actions);
+
   app.appendChild(box);
 }
 
 function pageLeagues(){
   clearMain();
-  app.appendChild(titleBlock("Scegli il campionato", `${state.region} • ${state.gender}`));
+  app.appendChild(sectionTitle("Scegli il campionato", `${state.gender} • ${state.region}`));
 
-  const key = `${state.sport}|${state.gender}|${state.region}`;
-  let leagues = DATA.leaguesBySportGenderRegion[key];
-
-  // fallback se mancano categorie per regione
-  if(!leagues){
-    if(state.sport==="calcio" && state.gender==="Femminile"){
-      leagues = ["Serie A Femminile","Serie B Femminile","Serie C Femminile","Eccellenza Femminile","Scuola Calcio"];
-    }else if(state.sport==="calcio"){
-      leagues = ["Serie A","Serie B","Serie C","Dilettanti Eccellenza","Promozione","Prima Categoria","Scuola Calcio"];
-    }else{
-      leagues = ["Campionato", "Giovanili"];
-    }
-  }
-
-  const box = h("div",{class:"container panel"});
-  const chips = h("div",{class:"chips"});
-
-  leagues.forEach(l=>{
-    const chip = h("div",{class:"chip", onclick:()=>{
+  const leagues = DATA.leaguesBy.default; // in reale: filtra per sport+genere+regione
+  const box = h("div", {class:"container panel"});
+  const chips = h("div", {class:"chips"});
+  leagues.forEach(l => {
+    const chip = h("div", {class:"chip"}, l);
+    chip.addEventListener("click", ()=>{
+      [...chips.children].forEach(c=>c.classList.remove("active"));
+      chip.classList.add("active");
       state.league = l;
-      pageClubs();
-    }}, l);
+      setTimeout(pageClubs, 80);
+    });
     chips.appendChild(chip);
   });
-
   box.appendChild(chips);
+
+  const actions = h("div", {class:"actions"}, [
+    h("button", {class:"btn", onclick: () => pageRegions()}, "Indietro")
+  ]);
+  box.appendChild(actions);
+
   app.appendChild(box);
 }
 
 function pageClubs(){
   clearMain();
-  app.appendChild(titleBlock("Scegli la società", `${state.league} • ${state.region}`));
-  const list = DATA.clubsByLeague[state.league] || ["Società Dimostrativa A","Società Dimostrativa B"];
+  app.appendChild(sectionTitle("Scegli la società", `${state.league} • ${state.region}`));
 
-  const box = h("div",{class:"container panel"});
-  const chips = h("div",{class:"chips"});
-
-  list.forEach(c=>{
-    const chip = h("div",{class:"chip", onclick:()=>{
+  const clubs = DATA.clubsByLeague[state.league] || ["Società Dimostrativa"];
+  const box = h("div", {class:"container panel"});
+  const chips = h("div", {class:"chips"});
+  clubs.forEach(c => {
+    const chip = h("div", {class:"chip"}, c);
+    chip.addEventListener("click", ()=>{
+      [...chips.children].forEach(c=>c.classList.remove("active"));
+      chip.classList.add("active");
       state.club = c;
-      pageClubDetail();
-    }}, c);
+      setTimeout(pageClubDetail, 80);
+    });
     chips.appendChild(chip);
   });
-
   box.appendChild(chips);
+
+  const actions = h("div", {class:"actions"}, [
+    h("button", {class:"btn", onclick: () => pageLeagues()}, "Indietro")
+  ]);
+  box.appendChild(actions);
+
   app.appendChild(box);
 }
 
 function pageClubDetail(){
   clearMain();
-  app.appendChild(titleBlock(state.club, `${state.league} • ${state.gender} • ${state.region}`));
+  app.appendChild(sectionTitle(state.club, `${state.league} • ${state.gender} • ${state.region}`));
 
-  const wrap = h("div",{class:"container panel"});
-  // logo società demo + info
-  wrap.appendChild(h("div",{class:"row"},[
-    h("div",{class:"team"}, "Logo/Info Società"),
-    h("div",{class:"meta"}, "Indirizzo • Contatti • Sponsor")
-  ]));
+  const wrap = h("div", {class:"container"});
 
-  // partite demo
-  DATA.matchesMock.forEach(m=>{
-    const status = m.status==="confirmed" ? "🟢 Confermato" : "🔴 In attesa";
-    wrap.appendChild(h("div",{class:"row"},[
-      h("div",{class:"team"}, `${m.home} vs ${m.away}`),
-      h("div",{class:"meta"}, `${m.when} — ${m.where} • ${status}`)
-    ]));
+  // logo società centrato
+  const logo = h("img", {
+    class:"club-logo",
+    src:"./images/club-placeholder.png",
+    alt:"Logo società",
+    onerror:function(){ this.style.display='none'; }
   });
 
-  // CTA: Crea PreMatch
-  const actions = h("div",{class:"actions"},[
-    h("button",{class:"btn", onclick:()=>pageClubs()},"Indietro"),
-    h("button",{class:"btn primary", onclick:()=>openPreMatchModal()}, "Crea PreMatch")
+  const info = h("div", {class:"panel"}, [
+    h("div", {class:"label"}, "Contatti ufficiali"),
+    h("div", {class:"muted"}, "Email: info@societa.demo • Tel: +39 000 000 0000"),
+
+    h("div", {class:"spacer"}),
+    h("div", {class:"label"}, "Impianto"),
+    h("div", {class:"muted"}, "Stadio/Impianto — Indirizzo completo"),
+
+    h("div", {class:"spacer"}),
+    h("div", {class:"label"}, "Sponsor collegati"),
+    h("div", {class:"muted"}, "Hotel Demo, Ristorante Demo (solo esempio)"),
   ]);
 
+  const matchesPanel = h("div", {class:"panel"}, [
+    h("div", {class:"label"}, "Prossime partite"),
+    ...DATA.matchesMock.map(m =>
+      h("div", {class:"row"}, [
+        h("div", {class:"team"}, `${m.home} vs ${m.away}`),
+        h("div", {class:"meta"}, `${m.when} — ${m.where}`)
+      ])
+    )
+  ]);
+
+  // Bottone Crea PreMatch con logo
+  const actions = h("div", {class:"actions"}, [
+    h("button", {class:"btn"}, "Indietro"),
+    (() => {
+      const btn = h("button", {class:"btn primary btn-icon"}, [
+        h("img", {src:"./images/logo-dark.png", alt:"PM", onerror:function(){ this.style.display='none'; }}),
+        "Crea PreMatch"
+      ]);
+      btn.addEventListener("click", pagePreMatch);
+      return btn;
+    })()
+  ]);
+  actions.firstChild.addEventListener("click", () => pageClubs());
+
+  wrap.appendChild(logo);
+  wrap.appendChild(info);
+  wrap.appendChild(matchesPanel);
+  wrap.appendChild(actions);
   app.appendChild(wrap);
-  app.appendChild(h("div",{class:"container"},actions));
 }
 
-// ====== PreMatch Modal ======
-let homeColor = COLOR_SWATCHES[0];
-let awayColor = COLOR_SWATCHES[1];
+function colorSwatch(value){
+  const sw = h("div", {class:"chip"}, value);
+  // colore testo sempre verde già da CSS; attivo con bordo verde
+  return sw;
+}
 
-function openPreMatchModal(){
-  // riempi swatch
-  homeColorsEl.innerHTML = "";
-  awayColorsEl.innerHTML = "";
-  COLOR_SWATCHES.forEach(col=>{
-    const a = h("button",{class:"swatch", style:`background:${col}`, onclick:(e)=>{
-      [...homeColorsEl.children].forEach(s=>s.classList.remove("active"));
-      e.currentTarget.classList.add("active"); homeColor = col;
-    }});
-    if(col===homeColor) a.classList.add("active");
-    homeColorsEl.appendChild(a);
+function pagePreMatch(){
+  clearMain();
+  app.appendChild(sectionTitle("Crea PreMatch", `${state.club} • ${state.league} • ${state.region}`));
 
-    const b = h("button",{class:"swatch", style:`background:${col}`, onclick:(e)=>{
-      [...awayColorsEl.children].forEach(s=>s.classList.remove("active"));
-      e.currentTarget.classList.add("active"); awayColor = col;
-    }});
-    if(col===awayColor) b.classList.add("active");
-    awayColorsEl.appendChild(b);
+  const box = h("div", {class:"container panel"});
+
+  // selezione colori maglie con chip (no testo libero)
+  const colors = ["Bianco","Nero","Rosso","Blu","Verde","Giallo","Arancio","Azzurro","Bordeaux"];
+  let home=null, away=null;
+
+  box.appendChild(h("div", {class:"label"}, "Maglia CASA — Colore"));
+  const chipsHome = h("div", {class:"chips"});
+  colors.forEach(c=>{
+    const chip = colorSwatch(c);
+    chip.addEventListener("click", ()=>{
+      [...chipsHome.children].forEach(x=>x.classList.remove("active"));
+      chip.classList.add("active");
+      home = c;
+    });
+    chipsHome.appendChild(chip);
   });
+  box.appendChild(chipsHome);
 
-  // default data/ora/luogo
-  inputDate.value = todayStr();
-  inputTime.value = timeStr();
-  inputPlace.value = "Impianto di casa";
+  box.appendChild(h("div", {class:"label"}, "Maglia TRASFERTA — Colore"));
+  const chipsAway = h("div", {class:"chips"});
+  colors.forEach(c=>{
+    const chip = colorSwatch(c);
+    chip.addEventListener("click", ()=>{
+      [...chipsAway.children].forEach(x=>x.classList.remove("active"));
+      chip.classList.add("active");
+      away = c;
+    });
+    chipsAway.appendChild(chip);
+  });
+  box.appendChild(chipsAway);
 
-  // conferma
-  btnCreate.onclick = (ev)=>{
-    ev.preventDefault();
-    if(!inputDate.value || !inputTime.value || !inputPlace.value){
-      showToast("Compila data, ora e luogo.");
-      return;
-    }
-    // segna conferma demo
-    DATA.matchesMock = DATA.matchesMock.map((m,i)=> i===0 ? ({...m, away: state.club, when: `${fmtDate(inputDate.value)} ${inputTime.value}`, where: inputPlace.value, status:"confirmed"}) : m);
+  // azioni
+  const actions = h("div", {class:"actions"}, [
+    h("button", {class:"btn", onclick: () => pageClubDetail()}, "Indietro"),
+    (() => {
+      const btn = h("button", {class:"btn primary btn-icon"}, [
+        h("img", {src:"./images/logo-dark.png", alt:"PM", onerror:function(){ this.style.display='none'; }}),
+        "Conferma PreMatch"
+      ]);
+      btn.addEventListener("click", ()=>{
+        if(!home || !away){
+          alert("Seleziona i colori delle maglie (casa e trasferta).");
+          return;
+        }
+        pagePreMatchDone(home, away);
+      });
+      return btn;
+    })()
+  ]);
 
-    modal.close();
-    showToast("PreMatch creato e confermato (demo).");
-
-    // crea PDF PreMatch demo
-    downloadPrematchPDF();
-    // torna alla pagina società per mostrare stato aggiornato
-    pageClubDetail();
-  };
-
-  modal.showModal();
+  box.appendChild(actions);
+  app.appendChild(box);
 }
 
-function fmtDate(d){
-  const [y,m,dd] = d.split("-");
-  return `${dd}/${m}/${y}`;
+function pagePreMatchDone(homeColor, awayColor){
+  clearMain();
+  app.appendChild(sectionTitle("PreMatch creato ✅", `${state.club} • ${state.league} • ${state.region}`));
+
+  const box = h("div", {class:"container panel"}, [
+    h("div", {class:"label"}, "Riepilogo"),
+    h("div", {class:"row"}, [ h("div",{class:"team"},"Casa"), h("div",{class:"meta"}, homeColor) ]),
+    h("div", {class:"row"}, [ h("div",{class:"team"},"Trasferta"), h("div",{class:"meta"}, awayColor) ]),
+    h("div", {class:"row"}, [ h("div",{class:"team"},"Stato"), h("div",{class:"meta"}, "Inviato — in attesa di conferma") ]),
+  ]);
+
+  const actions = h("div", {class:"actions"}, [
+    h("button", {class:"btn", onclick: () => pageSports()}, "Torna alla Home")
+  ]);
+
+  app.appendChild(box);
+  app.appendChild(h("div", {class:"container"}, actions));
 }
 
-function downloadPrematchPDF(){
-  const club = state.club || "Società Avversaria";
-  const league = state.league || "-";
-  const region = state.region || "-";
-  const gender = state.gender || "-";
-  const sportName = (DATA.sports.find(x=>x.key===state.sport)||{}).name || "-";
-
-  const when = `${fmtDate(inputDate.value)} ${inputTime.value}`;
-  const where = inputPlace.value;
-
-  const html = `
-  <html><head><meta charset="utf-8"><title>PreMatch</title>
-  <style>
-    body{font-family:Arial,Helvetica,sans-serif; padding:24px; color:#111}
-    .head{display:flex; align-items:center; gap:12px; margin-bottom:12px}
-    .head img{width:28px; height:28px}
-    h1{margin:8px 0 14px; font-size:20px}
-    table{border-collapse:collapse; width:100%}
-    td,th{border:1px solid #ddd; padding:8px; font-size:14px}
-    th{background:#f4f7f9; text-align:left}
-    .badge{display:inline-block; padding:4px 8px; border-radius:8px; background:#e8fff2; color:#0a5; font-weight:bold}
-    .color{display:inline-block; width:14px; height:14px; border-radius:50%; border:1px solid #888; vertical-align:middle}
-    .muted{color:#777}
-  </style>
-  </head><body>
-    <div class="head">
-      <img src="${location.origin}${location.pathname.replace(/\/[^/]*$/,'')}/images/logo-dark.png" alt="PreMatch"/>
-      <strong>PreMatch</strong>
-    </div>
-    <h1>Conferma PreMatch <span class="badge">Confermato</span></h1>
-    <table>
-      <tr><th>Sport</th><td>${sportName}</td></tr>
-      <tr><th>Genere</th><td>${gender}</td></tr>
-      <tr><th>Regione</th><td>${region}</td></tr>
-      <tr><th>Campionato</th><td>${league}</td></tr>
-      <tr><th>Società avversaria</th><td>${club}</td></tr>
-      <tr><th>Data/Ora</th><td>${when}</td></tr>
-      <tr><th>Luogo</th><td>${where}</td></tr>
-      <tr><th>Colori</th>
-        <td>
-          Casa: <span class="color" style="background:${homeColor}"></span>
-          &nbsp;&nbsp;Trasferta: <span class="color" style="background:${awayColor}"></span>
-        </td>
-      </tr>
-      <tr><th>Riferimento</th><td class="muted">${new Date().toISOString()}</td></tr>
-    </table>
-  </body></html>`;
-
-  const blob = new Blob([html], {type:"text/html"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = "PreMatch.pdf.html";
-  document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
-}
-
-// ====== Utils ======
-const s = x=>x||"";
-const cap = x=>x ? x.charAt(0).toUpperCase()+x.slice(1) : "";
-
-// ====== Avvio ======
+// avvio
 pageSports();
