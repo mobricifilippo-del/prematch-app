@@ -4,14 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
-  <link rel="stylesheet" href="./style.css" />
-  <!-- favicon -->
+
+  <!-- CSS con cache-buster -->
+  <link rel="stylesheet" href="./style.css?v=1" />
+
+  <!-- favicon (favicon tab) -->
   <link rel="icon" href="./images/logo-icon.png" />
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <!-- Logo per il sito (sfondo scuro → logo-light) -->
+      <!-- Logo per sfondo scuro -->
       <img src="./images/logo-light.png" alt="PreMatch" onerror="this.style.display='none'"/>
       <span>PreMatch</span>
     </div>
@@ -20,9 +23,10 @@
   <main id="app"></main>
 
   <footer class="footer">
-    <div>CREA PREMATCH © PreMatch — semplice, pulita, veloce. Privacy by design.</div>
+    <div>© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
   </footer>
 
-  <script src="./app.js"></script>
+  <!-- JS con cache-buster -->
+  <script src="./app.js?v=1"></script>
 </body>
 </html>
