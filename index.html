@@ -1,142 +1,28 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
-
-  <link rel="icon" type="image/png" href="images/logo-icon.png" />
-  <link rel="apple-touch-icon" href="images/logo-icon.png" />
-  <meta name="theme-color" content="#00d05a" />
-
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- jsPDF per generare il PDF demo -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script defer src="app.js"></script>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="icon" href="./images/logo-dark.png" />
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <img src="images/logo-light.png" alt="PreMatch" />
+      <img src="./images/logo-dark.png" alt="PreMatch" onerror="this.style.display='none'"/>
       <span>PreMatch</span>
     </div>
   </header>
 
-  <main>
-    <!-- HOME -->
-    <section id="home" class="screen active">
-      <h1>Scegli lo sport</h1>
-      <p class="lead">Esplora le società e organizza in PreMatch. Navigazione libera, semplice e veloce.</p>
-      <div id="sportsGrid" class="sports-grid"></div>
-      <footer class="footnote">© PreMatch — semplice, pulita, veloce. Privacy by design.</footer>
-    </section>
-
-    <!-- REGIONI / GENERE / CAMPIONATO -->
-    <section id="regions" class="screen">
-      <button class="back" data-back="home">← Indietro</button>
-      <h2>Scegli la regione</h2>
-      <p class="meta">Sport: <span id="selSport"></span></p>
-      <div id="regionsWrap" class="chips-wrap"></div>
-
-      <h2 class="mt">Seleziona il genere</h2>
-      <div id="genderWrap" class="chips-wrap">
-        <button class="chip chip-ghost" data-gender="Maschile">Maschile</button>
-        <button class="chip chip-ghost" data-gender="Femminile">Femminile</button>
-      </div>
-
-      <h2 class="mt">Seleziona il campionato</h2>
-      <div id="leagueWrap" class="chips-wrap"></div>
-
-      <footer class="footnote">© PreMatch — semplice, pulita, veloce. Privacy by design.</footer>
-    </section>
-
-    <!-- SOCIETÀ -->
-    <section id="clubs" class="screen">
-      <button class="back" data-back="regions">← Indietro</button>
-      <h2>Scegli la società</h2>
-      <p class="meta" id="breadcrumbClubs"></p>
-      <div id="clubsGrid" class="clubs-grid"></div>
-      <footer class="footnote">© PreMatch — semplice, pulita, veloce. Privacy by design.</footer>
-    </section>
-
-    <!-- PAGINA SOCIETÀ -->
-    <section id="clubDetail" class="screen">
-      <button class="back" data-back="clubs">← Indietro</button>
-      <div class="club-hero">
-        <img id="clubLogo" src="images/logo-light.png" alt="Logo società" />
-        <h2 id="clubName">Società</h2>
-        <p class="meta" id="clubMeta"></p>
-      </div>
-
-      <div class="card">
-        <h3>Contatti</h3>
-        <p id="clubContacts"></p>
-      </div>
-
-      <div class="card">
-        <h3>Impianto</h3>
-        <p id="clubVenue"></p>
-      </div>
-
-      <div class="card">
-        <h3>Prossime partite</h3>
-        <ul id="clubMatches" class="list"></ul>
-      </div>
-
-      <div class="cta-wrap">
-        <button id="btnPrematch" class="btn btn-primary">
-          <img src="images/logo-icon.png" alt="" />
-          Crea PreMatch
-        </button>
-      </div>
-
-      <footer class="footnote">© PreMatch — semplice, pulita, veloce. Privacy by design.</footer>
-    </section>
+  <main id="app">
+    <!-- La pagina viene costruita via JS -->
   </main>
 
-  <!-- MODALE PREMATCH -->
-  <div id="prematchModal" class="modal">
-    <div class="modal-dialog">
-      <div class="modal-head">
-        <h3>Crea PreMatch</h3>
-        <button class="icon-close" id="pmClose">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-row">
-          <label>Data e ora</label>
-          <input type="datetime-local" id="pmDateTime" />
-        </div>
+  <footer class="footer">
+    <div>CREA PREMATCH © PreMatch — semplice, pulita, veloce. Privacy by design.</div>
+  </footer>
 
-        <div class="form-row">
-          <label>Campo / Luogo</label>
-          <input type="text" id="pmVenue" placeholder="Es. Stadio Comunale, Via Roma 10" />
-        </div>
-
-        <div class="grid-2">
-          <div>
-            <label>Divisa CASA</label>
-            <div id="homeColors" class="swatches"></div>
-          </div>
-          <div>
-            <label>Divisa TRASFERTA</label>
-            <div id="awayColors" class="swatches"></div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <label>Note (opzionale)</label>
-          <input type="text" id="pmNote" placeholder="Es. anticipo 30 minuti" />
-        </div>
-      </div>
-      <div class="modal-foot">
-        <button class="btn btn-ghost" id="pmCancel">Annulla</button>
-        <button class="btn btn-primary" id="pmSubmit">
-          <img src="images/logo-icon.png" alt="" />
-          Genera PDF PreMatch
-        </button>
-      </div>
-    </div>
-  </div>
+  <script src="./script.js"></script>
 </body>
 </html>
