@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
-  <link rel="icon" href="./images/logo-icon.png" />
-  <link rel="stylesheet" href="./style.css?v=6" />
+  <link rel="stylesheet" href="./style.css?v=2" />
+  <link rel="icon" href="./images/logo-dark.png" />
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <img src="./images/logo-icon.png" alt="PreMatch" />
+      <img src="./images/logo-dark.png" alt="PreMatch" onerror="this.style.display='none'"/>
       <span>PreMatch</span>
     </div>
   </header>
@@ -21,46 +21,6 @@
     <div>© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
   </footer>
 
-  <div id="toast" class="toast" aria-live="polite"></div>
-
-  <!-- Modale PreMatch -->
-  <dialog id="prematchModal">
-    <form method="dialog" class="modal">
-      <h3 class="modal-title">Crea PreMatch</h3>
-
-      <div class="modal-row">
-        <label>Colori maglie (Casa)</label>
-        <div class="swatches" id="homeColors"></div>
-      </div>
-
-      <div class="modal-row">
-        <label>Colori maglie (Trasferta)</label>
-        <div class="swatches" id="awayColors"></div>
-      </div>
-
-      <div class="modal-row two">
-        <div>
-          <label>Data</label>
-          <input type="date" id="matchDate" required />
-        </div>
-        <div>
-          <label>Ora</label>
-          <input type="time" id="matchTime" required />
-        </div>
-      </div>
-
-      <div class="modal-row">
-        <label>Luogo (indirizzo)</label>
-        <input type="text" id="matchPlace" placeholder="Via/Stadio, Città" required />
-      </div>
-
-      <menu class="modal-actions">
-        <button value="cancel" class="btn">Annulla</button>
-        <button id="btnCreate" value="default" class="btn primary">Conferma</button>
-      </menu>
-    </form>
-  </dialog>
-
-  <script src="./app.js?v=6"></script>
+  <script src="./app.js?v=2"></script>
 </body>
 </html>
