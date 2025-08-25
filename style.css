@@ -3,80 +3,108 @@
   --card:#171b21;
   --muted:#8a94a6;
   --text:#eaf0ff;
-  --accent:#12d36a; /* verde acceso */
-  --accent-ink:#06150d;
+  --accent:#41d27b;
   --border:#252b35;
+  --accent-press:#1fb064;
 }
 
 *{box-sizing:border-box}
 html,body{
   margin:0; padding:0;
   background:var(--bg); color:var(--text);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 
 /* Topbar */
 .topbar{
   position:sticky; top:0; z-index:10;
-  background:linear-gradient(180deg, rgba(15,18,22,.95), rgba(15,18,22,.7));
+  background:linear-gradient(180deg, rgba(15,18,22,.9), rgba(15,18,22,.6));
   backdrop-filter: blur(6px);
   border-bottom:1px solid var(--border);
 }
 .brand{display:flex; align-items:center; gap:.6rem; padding:.8rem 1rem; font-weight:800}
-.brand img{width:28px; height:28px; border-radius:6px; border:1px solid var(--border)}
-
-/* Footer */
-.footer{padding:1.2rem; border-top:1px solid var(--border); color:var(--muted); font-size:.9rem; text-align:center}
+.brand img{width:28px; height:28px; border-radius:6px; border:1px solid var(--border); background:#0b0f14;}
+.brand span{letter-spacing:.2px}
 
 /* Layout */
-.container{max-width:1000px; margin:0 auto; padding: 1.1rem}
-.h1{font-size:2rem; font-weight:900; margin:.6rem 0 0}
-.sub{color:var(--muted); margin:.2rem 0 1.2rem}
+.container{max-width:1000px; margin:0 auto; padding: 1.2rem}
+.h1{font-size:1.9rem; font-weight:800; margin:.6rem 0 0}
+.sub{color:var(--muted); margin:.2rem 0 1.4rem}
 
-/* Griglia sport 2x2 anche su mobile */
-.grid{display:grid; gap:12px; grid-template-columns:repeat(2,1fr)}
-@media(min-width:880px){ .grid{grid-template-columns: repeat(3,1fr)} }
+/* Grid sport: 2 per riga su mobile */
+.grid{display:grid; gap:1rem}
+@media(min-width:520px){ .grid{grid-template-columns: repeat(2,1fr);} }
+@media(min-width:900px){ .grid{grid-template-columns: repeat(3,1fr);} }
 
-/* Card sport compatte */
+/* Card */
 .card{
   background:var(--card); border:1px solid var(--border);
-  border-radius:14px; overflow:hidden; cursor:pointer;
+  border-radius:16px; overflow:hidden; cursor:pointer;
   transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
 }
-.card:hover{ transform: translateY(-2px); border-color:#2f3745; box-shadow:0 8px 24px rgba(0,0,0,.25) }
-.card.selected{ border-color:var(--accent); box-shadow:0 0 0 2px rgba(18,211,106,.25) inset }
-.card img{width:100%; height:110px; object-fit:cover; display:block; background:#0b0f14}
-.card .title{padding:.7rem .8rem; font-weight:800; color:var(--accent)}
+.card:hover{ transform: translateY(-2px); border-color:#2f3745; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+.card img{width:100%; height:140px; object-fit:cover; display:block; background:#0b0f14;}
+.card .title{padding:.9rem 1rem; font-weight:800; color:var(--accent);}
+.card.active{ outline:2px solid var(--accent); }
 
 /* Chips */
-.chips{display:flex; flex-wrap:wrap; gap:.5rem; margin:.4rem 0 1rem}
+.chips{display:flex; flex-wrap:wrap; gap:.6rem; margin:.8rem 0 1.2rem}
 .chip{
-  padding:.48rem .75rem; border:1px solid var(--border); border-radius:999px;
-  cursor:pointer; background:#12161c; transition:all .12s;
+  padding:.55rem .85rem; border:1px solid var(--border); border-radius:999px;
+  cursor:pointer; background:#12161c; font-weight:600;
 }
 .chip:hover{border-color:#2f3745}
-.chip.active{border-color:var(--accent); color:var(--accent); background:#0f1713}
+.chip.active{border-color:var(--accent); color:var(--accent);}
 
-/* Pannelli / righe */
-.panel{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:1rem}
+/* Panel + rows */
+.panel{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1rem}
 .row{display:flex; align-items:center; justify-content:space-between; border-bottom:1px dashed var(--border); padding:.8rem 0}
 .row:last-child{border-bottom:none}
-.row .team{font-weight:800}
+.row .team{font-weight:700}
 .row .meta{color:var(--muted); font-size:.95rem}
 
-/* Azioni */
+/* Buttons */
 .actions{display:flex; gap:.6rem; margin:1rem 0}
 .btn{
   border:1px solid var(--border); background:#141922; color:var(--text);
   padding:.6rem .9rem; border-radius:10px; cursor:pointer; font-weight:700;
 }
-.btn.primary{ border-color:transparent; background:var(--accent); color:var(--accent-ink) }
-.btn:disabled{opacity:.55; cursor:not-allowed}
+.btn.primary{ border-color:transparent; background:var(--accent); color:#0b1115; }
+.btn.primary:active{ background:var(--accent-press); }
+.btn:disabled{opacity:.5; cursor:not-allowed}
 
-/* CTA PreMatch con logo */
-.prematch-cta{
-  display:flex; align-items:center; gap:.6rem;
-  background:var(--accent); color:var(--accent-ink);
-  border:none; border-radius:12px; padding:.9rem 1.1rem; font-weight:900; cursor:pointer;
+.footer{padding:1.2rem; border-top:1px solid var(--border); color:var(--muted); font-size:.9rem}
+
+/* Toast */
+.toast{
+  position: fixed; left:50%; transform: translateX(-50%);
+  bottom: 18px; min-width: 220px; max-width: 90%;
+  background:#131821; border:1px solid var(--border); color:var(--text);
+  padding:.8rem 1rem; border-radius:10px; display:none; box-shadow:0 8px 24px rgba(0,0,0,.35);
 }
-.prematch-cta img{width:22px; height:22px; border-radius:4px}
+.toast.show{ display:block; animation: fadein .12s ease-out }
+@keyframes fadein{ from{opacity:.3; transform: translate(-50%, 10px)} to{opacity:1; transform: translate(-50%, 0)} }
+
+/* Modal */
+dialog{ border:none; padding:0; background: transparent; }
+.modal{
+  width:min(560px, 92vw); background:#0f131a; border:1px solid var(--border);
+  border-radius:16px; padding:1rem 1rem 0.6rem;
+}
+.modal-title{ margin:0 0 1rem; font-size:1.3rem }
+.modal-row{ margin:.8rem 0 }
+.modal-row.two{ display:grid; gap:.8rem; grid-template-columns: 1fr 1fr; }
+.modal-row label{ display:block; font-size:.9rem; color:var(--muted); margin-bottom:.35rem }
+.modal-row input[type="text"], .modal-row input[type="date"], .modal-row input[type="time"]{
+  width:100%; padding:.6rem .7rem; border-radius:10px; border:1px solid var(--border);
+  background:#131821; color:var(--text);
+}
+.modal-actions{ display:flex; justify-content:flex-end; gap:.6rem; padding:.6rem 0 0.2rem }
+
+/* Swatches */
+.swatches{ display:flex; gap:.5rem; flex-wrap:wrap }
+.swatch{
+  width:28px; height:28px; border-radius:999px; border:2px solid #0005; cursor:pointer;
+  outline:2px solid transparent;
+}
+.swatch.active{ outline-color:var(--accent); }
