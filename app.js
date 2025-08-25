@@ -1,244 +1,171 @@
-/* ====== DATI DEMO (puoi estendere) ====== */
+/* ========= DATI DEMO OFFLINE ========= */
+
+/* Sport */
 const SPORTS = [
-  { id:"calcio",       name:"Calcio",       img:"images/calcio.jpg" },
-  { id:"futsal",       name:"Futsal",       img:"images/futsal.jpg" },
-  { id:"basket",       name:"Basket",       img:"images/basket.jpg" },
-  { id:"rugby",        name:"Rugby",        img:"images/rugby.jpg" },
-  { id:"volley",       name:"Volley",       img:"images/volley.jpg" },
-  { id:"beachvolley",  name:"Beach Volley", img:"images/beachvolley.jpg" },
-  { id:"pallanuoto",   name:"Pallanuoto",   img:"images/pallanuoto.jpg" }
+  { id: "calcio", name: "Calcio", img: "images/calcio.jpg" },
+  { id: "futsal", name: "Futsal", img: "images/futsal.jpg" },
+  { id: "basket", name: "Basket", img: "images/basket.jpg" },
+  { id: "rugby", name: "Rugby", img: "images/rugby.jpg" },
+  { id: "volley", name: "Volley", img: "images/volley.jpg" },
+  { id: "beachvolley", name: "Beach Volley", img: "images/beachvolley.jpg" },
+  { id: "pallanuoto", name: "Pallanuoto", img: "images/pallanuoto.jpg" }
 ];
 
+/* Regioni */
 const REGIONS = [
   "Abruzzo","Basilicata","Calabria","Campania","Emilia-Romagna",
   "Friuli-Venezia Giulia","Lazio","Liguria","Lombardia","Marche",
-  "Molise","Piemonte","Puglia","Sardegna","Sicilia","Toscana",
-  "Trentino-Alto Adige","Umbria","Valle d'Aosta","Veneto"
+  "Molise","Piemonte","Puglia","Sardegna","Sicilia",
+  "Toscana","Trentino-Alto Adige","Umbria","Valle d'Aosta","Veneto"
 ];
 
+/* Campionati per sport */
 const LEAGUES = {
   calcio: [
-    "Serie A Maschile","Serie A Femminile","Eccellenza Maschile","Eccellenza Femminile"
+    "Serie A Maschile",
+    "Serie A Femminile",
+    "Eccellenza Maschile",
+    "Eccellenza Femminile"
   ],
-  futsal: ["Serie A","Serie B"],
-  basket: ["Serie A","Serie B"],
-  rugby: ["Top10","Serie A"],
-  volley: ["Superlega","A2"],
-  beachvolley: ["Nazionale","Regionale"],
-  pallanuoto: ["Serie A1","Serie A2"]
+  basket: ["Serie A Maschile", "Serie A Femminile"],
+  volley: ["Serie A1 Maschile", "Serie A1 Femminile"],
+  rugby: ["Top10 Maschile", "Serie A Femminile"],
+  futsal: ["Serie A Maschile", "Serie A Femminile"],
+  beachvolley: ["Campionato Nazionale"],
+  pallanuoto: ["Serie A1 Maschile", "Serie A1 Femminile"]
 };
 
-// demo società e sponsor
-const SOCIETIES = [
-  { id:1, name:"AS Roma",   sport:"calcio", region:"Lazio", leagues:["Serie A Femminile","Serie A Maschile"] },
-  { id:2, name:"SS Lazio",  sport:"calcio", region:"Lazio", leagues:["Serie A Maschile"] },
-  { id:3, name:"Dinamo Sassari", sport:"basket", region:"Sardegna", leagues:["Serie A"] },
-];
-
-const SPONSORS = {
-  1:["Qatar Airways","DigitalBiscione"],
-  2:["Caffè Roma","ItalPower"],
-  3:["SardEnergy"]
-};
-
-const MATCHES = {
-  1:[{ title:"Prima Squadra vs —", date:"31/08/2025 14:07", place:"Roma - Stadio Olimpico" }],
-  2:[{ title:"Lazio vs —", date:"02/09/2025 20:45", place:"Roma - Olimpico" }],
-  3:[{ title:"Dinamo vs —", date:"05/09/2025 18:00", place:"Sassari" }]
-};
-
-/* ====== STATO DI NAVIGAZIONE ====== */
-const state = {
-  sport:null, region:null, gender:null, league:null, club:null,
-  history:[]
-};
-
-/* ====== AVVIO ====== */
-document.addEventListener('DOMContentLoaded', () => {
-  try {
-    renderSports();
-  } catch(e) {
-    console.error(e);
-    showFallbackMessage("Errore durante il caricamento. Riprova.");
+/* Società demo */
+const CLUBS = {
+  "Calcio": {
+    "Lazio": ["AS Roma", "SS Lazio"],
+    "Lombardia": ["Inter", "Milan"],
+    "Campania": ["Napoli"]
+  },
+  "Futsal": {
+    "Lazio": ["Futsal Roma"]
+  },
+  "Basket": {
+    "Lombardia": ["Olimpia Milano"],
+    "Emilia-Romagna": ["Virtus Bologna"]
+  },
+  "Volley": {
+    "Piemonte": ["Cuneo Volley"],
+    "Lazio": ["Volley Roma"]
+  },
+  "Rugby": {
+    "Veneto": ["Benetton Treviso"],
+    "Lazio": ["Rugby Roma"]
+  },
+  "Beach Volley": {
+    "Sardegna": ["Beach Club Cagliari"]
+  },
+  "Pallanuoto": {
+    "Liguria": ["Pro Recco"],
+    "Lazio": ["Roma Nuoto"]
   }
-});
+};
 
-/* ====== RENDER HOME (SPORT) ====== */
-function renderSports() {
-  const grid = document.getElementById('sportsGrid');
-  if(!grid){ showFallbackMessage('Manca il contenitore #sportsGrid in index.html'); return; }
+/* ================= FUNZIONI ================= */
 
-  grid.innerHTML = SPORTS.map(s => `
-    <article class="sport-card" data-sport="${s.id}">
-      <div class="img-wrap">
-        <img loading="lazy" src="${s.img}" alt="${s.name}">
-      </div>
-      <h3>${s.name}</h3>
-    </article>
-  `).join('');
+let selectedSport = null;
+let selectedRegion = null;
+let selectedLeague = null;
+let selectedClub = null;
 
-  grid.querySelectorAll('.sport-card').forEach(card=>{
-    card.addEventListener('click', ()=>{
-      const id = card.getAttribute('data-sport');
-      onSportSelected(id);
-    });
+/* Carica sport */
+function loadSports() {
+  const container = document.getElementById("sports-container");
+  container.innerHTML = "";
+  SPORTS.forEach(sport => {
+    const card = document.createElement("div");
+    card.className = "sport-card";
+    card.innerHTML = `
+      <img src="${sport.img}" alt="${sport.name}">
+      <p>${sport.name}</p>
+    `;
+    card.onclick = () => selectSport(sport.name, sport.id);
+    container.appendChild(card);
   });
 }
 
-function showFallbackMessage(msg){
-  const tgt = document.getElementById('sportsGrid') || document.querySelector('main');
-  if(!tgt) return;
-  tgt.innerHTML = `<div class="panel">${msg}</div>`;
-}
+/* Selezione sport */
+function selectSport(name, id) {
+  selectedSport = name;
+  document.getElementById("sports-section").classList.add("hidden");
+  document.getElementById("regions-section").classList.remove("hidden");
+  document.getElementById("selected-sport").textContent = name;
 
-/* ====== NAVIGAZIONE SCHERMATE ====== */
-function show(id){
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const el = document.getElementById(id);
-  if(el){ el.classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }
-}
-function go(toId){
-  state.history.push(document.querySelector('.screen.active')?.id || 'home');
-  show(toId);
-}
-function goBack(){
-  const prev = state.history.pop() || 'home';
-  show(prev);
-}
-
-/* ====== FLOW ====== */
-function onSportSelected(sportId){
-  state.sport = sportId;
-  state.region = state.gender = state.league = state.club = null;
-
-  // regioni
-  const list = document.getElementById('regionList');
-  document.getElementById('metaSport').textContent = SPORTS.find(s=>s.id===sportId)?.name || '';
-  list.innerHTML = REGIONS.map(r => `<button class="chip" onclick="selectRegion('${r}')">${r}</button>`).join('');
-  go('screen-regioni');
-}
-
-function selectRegion(region){
-  state.region = region;
-  // genere
-  go('screen-genere');
-}
-
-function selectGender(g){
-  state.gender = g;
-
-  // campionati per sport
-  const leagues = LEAGUES[state.sport] || [];
-  const wrap = document.getElementById('leagueList');
-  wrap.innerHTML = leagues
-    .filter(l => !l.toLowerCase().includes('femminile') || state.gender==='Femminile' ? true
-                : !l.toLowerCase().includes('femminile'))
-    .map(l => `<button class="chip" onclick="selectLeague('${l.replace(/'/g,"\\'")}')">${l}</button>`).join('');
-
-  go('screen-campionati');
-}
-
-function selectLeague(league){
-  state.league = league;
-
-  // elenco società compatibili
-  const list = document.getElementById('clubList');
-  const clubs = SOCIETIES.filter(c =>
-    c.sport===state.sport &&
-    c.region===state.region &&
-    c.leagues.includes(league)
-  );
-
-  if(clubs.length===0){
-    list.innerHTML = `<div class="panel">Nessuna società trovata per <b>${league}</b> in <b>${state.region}</b>.</div>`;
-  } else {
-    list.innerHTML = clubs.map(c => `
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-          <div><b>${c.name}</b><div class="meta">${state.region} • ${league}</div></div>
-          <button class="btn-primary" onclick="openClub(${c.id})">Apri</button>
-        </div>
-      </div>
-    `).join('');
-  }
-  go('screen-societa');
-}
-
-function openClub(id){
-  const club = SOCIETIES.find(c=>c.id===id);
-  if(!club){ return; }
-  state.club = id;
-
-  document.getElementById('clubName').textContent = club.name;
-  document.getElementById('clubSport').textContent = SPORTS.find(s=>s.id===club.sport)?.name || '';
-  document.getElementById('clubRegion').textContent = club.region;
-  document.getElementById('clubGender').textContent = state.gender;
-
-  // partite
-  const matches = MATCHES[id] || [];
-  document.getElementById('matchList').innerHTML =
-    matches.length ? matches.map(m => `
-      <div class="card"><b>${m.title}</b><br>${m.date} — ${m.place}</div>
-    `).join('')
-    : `<div class="card">Nessuna partita programmata.</div>`;
-
-  // sponsor
-  const sps = SPONSORS[id] || [];
-  document.getElementById('sponsorList').innerHTML =
-    sps.length ? sps.map(s=>`<span class="badge">${s}</span>`).join('') :
-    `<span class="badge" style="background:#40261f;border-color:#7b1d10;color:#ffd5cd">Nessuno</span>`;
-
-  go('screen-club');
-}
-
-/* ====== MODALE PREMATCH ====== */
-const KIT_PALETTE = [
-  "#ffffff","#000000","#c1121f","#1d4ed8","#22c55e","#f59e0b",
-  "#9333ea","#52525b","#2563eb","#be185d","#16a34a","#ca8a04"
-];
-
-let selectedColor = null;
-
-function openPrematch(){
-  // genera i colori cliccabili
-  const box = document.getElementById('kitColors');
-  box.innerHTML = KIT_PALETTE.map((c,i)=>`
-    <button class="swatch" style="background:${c}" data-color="${c}" aria-label="${c}"></button>
-  `).join('');
-
-  box.querySelectorAll('.swatch').forEach(sw=>{
-    sw.addEventListener('click', ()=>{
-      box.querySelectorAll('.swatch').forEach(x=>x.classList.remove('selected'));
-      sw.classList.add('selected');
-      selectedColor = sw.getAttribute('data-color');
-    });
+  const container = document.getElementById("regions-container");
+  container.innerHTML = "";
+  REGIONS.forEach(region => {
+    const btn = document.createElement("button");
+    btn.textContent = region;
+    btn.onclick = () => selectRegion(region);
+    container.appendChild(btn);
   });
-
-  document.getElementById('noteInput').value = '';
-  document.getElementById('prematchModal').classList.add('show');
 }
 
-function closePrematch(){
-  document.getElementById('prematchModal').classList.remove('show');
-  selectedColor = null;
+/* Selezione regione */
+function selectRegion(region) {
+  selectedRegion = region;
+  document.getElementById("regions-section").classList.add("hidden");
+  document.getElementById("leagues-section").classList.remove("hidden");
+  document.getElementById("selected-region").textContent = region;
+
+  const container = document.getElementById("leagues-container");
+  container.innerHTML = "";
+  (LEAGUES[selectedSport.toLowerCase()] || []).forEach(league => {
+    const btn = document.createElement("button");
+    btn.textContent = league;
+    btn.onclick = () => selectLeague(league);
+    container.appendChild(btn);
+  });
 }
 
-function sendPrematch(){
-  // demo: mostro un alert con riepilogo
-  const club = SOCIETIES.find(c=>c.id===state.club);
-  const note = document.getElementById('noteInput').value.trim();
-  const colorTxt = selectedColor || "(non selezionato)";
-  alert(
-`Richiesta PreMatch inviata!
+/* Selezione campionato */
+function selectLeague(league) {
+  selectedLeague = league;
+  document.getElementById("leagues-section").classList.add("hidden");
+  document.getElementById("clubs-section").classList.remove("hidden");
+  document.getElementById("selected-league").textContent = league;
 
-Società: ${club?.name || '-'}
-Sport: ${SPORTS.find(s=>s.id===state.sport)?.name} • ${state.gender}
-Regione: ${state.region}
-Campionato: ${state.league}
-Maglia: ${colorTxt}
-Note: ${note || '(nessuna)'}`
-  );
-
-  // qui in futuro: chiamata a Supabase / API
-  closePrematch();
+  const container = document.getElementById("clubs-container");
+  container.innerHTML = "";
+  const clubs = (CLUBS[selectedSport] && CLUBS[selectedSport][selectedRegion]) || [];
+  clubs.forEach(club => {
+    const btn = document.createElement("button");
+    btn.textContent = club;
+    btn.onclick = () => selectClub(club);
+    container.appendChild(btn);
+  });
 }
+
+/* Selezione società */
+function selectClub(club) {
+  selectedClub = club;
+  document.getElementById("clubs-section").classList.add("hidden");
+  document.getElementById("club-page").classList.remove("hidden");
+  document.getElementById("club-name").textContent = club;
+  document.getElementById("club-info").textContent =
+    `Sport: ${selectedSport} • Regione: ${selectedRegion} • Campionato: ${selectedLeague}`;
+
+  // Mostra il pulsante Crea PreMatch
+  document.getElementById("create-prematch-btn").classList.remove("hidden");
+}
+
+/* Torna indietro */
+function goBack(section) {
+  document.querySelectorAll("section").forEach(sec => sec.classList.add("hidden"));
+  document.getElementById(section).classList.remove("hidden");
+}
+
+/* Crea PreMatch */
+function createPrematch() {
+  alert(`PreMatch creato per ${selectedClub} (${selectedLeague})`);
+}
+
+/* Avvio */
+window.onload = () => {
+  loadSports();
+};
