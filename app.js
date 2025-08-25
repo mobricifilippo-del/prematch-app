@@ -1,333 +1,307 @@
-// ===== Dataset di esempio =====
-const DATA = {
-  sports: [
-    { key: "calcio",     name: "Calcio",     img: "./images/calcio.jpg" },
-    { key: "futsal",     name: "Futsal",     img: "./images/futsal.jpg" },
-    { key: "basket",     name: "Basket",     img: "./images/basket.jpg" },
-    { key: "volley",     name: "Volley",     img: "./images/volley.jpg" },
-    { key: "rugby",      name: "Rugby",      img: "./images/rugby.jpg" },
-    { key: "pallanuoto", name: "Pallanuoto", img: "./images/pallanuoto.jpg" },
-  ],
-  genders: ["Maschile", "Femminile"],
+/* ======== DATI DEMO ========= */
 
-  regions: ["Lazio", "Lombardia", "Sicilia", "Piemonte", "Veneto", "Emilia-Romagna"],
+// Sport
+const SPORTS = [
+  { key:"calcio",     name:"Calcio",     img:"./images/calcio.jpg" },
+  { key:"futsal",     name:"Futsal",     img:"./images/futsal.jpg" },
+  { key:"basket",     name:"Basket",     img:"./images/basket.jpg" },
+  { key:"volley",     name:"Volley",     img:"./images/volley.jpg" },
+  { key:"beachvolley",name:"Beach Volley", img:"./images/beachvolley.jpg" },
+  { key:"rugby",      name:"Rugby",      img:"./images/rugby.jpg" },
+];
 
-  leaguesBy: {
-    // per semplicità usiamo lo stesso set per demo; in reale si filtra per sport+genere+regione
-    default: ["Serie A", "Eccellenza", "Promozione", "Prima Categoria", "Scuola Calcio"],
+// 20 regioni
+const REGIONS = [
+  "Abruzzo","Basilicata","Calabria","Campania","Emilia-Romagna","Friuli-Venezia Giulia",
+  "Lazio","Liguria","Lombardia","Marche","Molise","Piemonte","Puglia","Sardegna",
+  "Sicilia","Toscana","Trentino-Alto Adige","Umbria","Valle d'Aosta","Veneto"
+];
+
+// Campionati per sport/genere (demo)
+const LEAGUES = {
+  calcio: {
+    maschile: [
+      "Serie A","Serie B","Serie C","Serie D",
+      "Eccellenza","Promozione","Prima Categoria","Seconda Categoria","Terza Categoria",
+      "Juniores U19","Allievi U17","Giovanissimi U15",
+      "Esordienti","Pulcini","Primi Calci","Piccoli Amici","Scuola Calcio"
+    ],
+    femminile: [
+      "Serie A Femminile","Serie B Femminile","Serie C Femminile","Eccellenza Femminile",
+      "Juniores Femminile","Under 17 Femminile","Under 15 Femminile","Scuola Calcio Femminile"
+    ],
   },
-
-  clubsByLeague: {
-    "Serie A": ["AC Aurora", "Trust Every Woman"],
-    "Eccellenza": ["ASD Roma Nord", "Sporting Tuscolano"],
-    "Promozione": ["Virtus Marino", "Borghesiana FC"],
-    "Prima Categoria": ["Atletico Ostia"],
-    "Scuola Calcio": ["Piccoli Draghi", "Junior Stars"]
+  futsal: {
+    maschile: ["Serie A","Serie A2","Serie B","Under 19","Under 17"],
+    femminile: ["Serie A Femminile","Serie A2 Femminile","Under 17 Femminile"]
   },
-
-  matchesMock: [
-    { home: "Prima Squadra", away: "—", when: "31/08/2025 14:07", where: "Roma – Stadio Olimpico" },
-    { home: "Juniores",      away: "—", when: "01/09/2025 18:30", where: "Roma – Campo Test" },
-  ],
+  basket: {
+    maschile:["Serie A","Serie A2","Serie B","Serie C","Under 19","Under 17","Under 15"],
+    femminile:["Serie A1 F","Serie A2 F","Serie B F","Under 17 F","Under 15 F"]
+  },
+  volley: {
+    maschile:["SuperLega","A2","A3","Serie B","C","D","Giovanili"],
+    femminile:["A1 F","A2 F","A3 F","B1 F","B2 F","C F","D F","Giovanili F"]
+  },
+  beachvolley: {
+    maschile:["Elite","Open","Junior"],
+    femminile:["Elite F","Open F","Junior F"]
+  },
+  rugby: {
+    maschile:["Top10","Serie A","Serie B","Serie C","U19","U17","U15"],
+    femminile:["Serie A F","Serie A2 F","U17 F","U15 F"]
+  }
 };
 
-// ===== Stato =====
+// Società fittizie per regione (demo)
+const CLUBS_BY_REGION = {
+  "Lazio": ["ASD Roma Nord","Sporting Tuscolano","Ostia Mare","Futsal Roma"],
+  "Lombardia": ["SSD Milano","Inter Club Demo","Brixia Basket","Lario Team"],
+  "Piemonte": ["Torino Volley","Cuneo Calcio","Novara Rugby","Alessandria"],
+  "Veneto": ["Treviso Volley","Padova Calcio","Verona Futsal","Vicenza"],
+  "Sicilia": ["Siracusa Calcio","Catania Futsal","Palermo Rugby","Trapani"],
+  "Emilia-Romagna": ["Bologna Basket","Parma Calcio","Rimini Volley","Modena"]
+};
+
+// Partite demo
+const MATCHES = [
+  { home:"Prima Squadra", away:"—", when:"31/08/2025 14:07", where:"Roma — Stadio Olimpico" },
+  { home:"Juniores",      away:"—", when:"01/09/2025 18:30", where:"Roma — Campo Test" },
+];
+
+/* ======== STATO ========= */
 const state = { sport:null, gender:null, region:null, league:null, club:null };
 
-// ===== App root =====
+/* ======== UTILS ========= */
 const app = document.getElementById("app");
 
-// ===== Helper DOM =====
-function h(tag, attrs = {}, children = []) {
+function h(tag, attrs={}, children=[]) {
   const el = document.createElement(tag);
-  Object.entries(attrs).forEach(([k, v]) => {
-    if (k === "class") el.className = v;
-    else if (k === "onclick") el.addEventListener("click", v);
-    else if (k === "onerror") el.onerror = v;
-    else el.setAttribute(k, v);
-  });
-  (Array.isArray(children) ? children : [children]).forEach(c => {
-    if (c == null) return;
-    if (typeof c === "string") el.appendChild(document.createTextNode(c));
-    else el.appendChild(c);
+  for (const [k,v] of Object.entries(attrs)) {
+    if (k==="class") el.className = v;
+    else if (k==="onclick") el.addEventListener("click", v);
+    else el.setAttribute(k,v);
+  }
+  (Array.isArray(children)?children:[children]).forEach(c=>{
+    if (c==null) return;
+    el.appendChild(typeof c==="string" ? document.createTextNode(c) : c);
   });
   return el;
 }
-function clearMain(){ app.innerHTML = ""; }
-function sectionTitle(title, subtitle){
-  return h("div", {class:"container"}, [
-    h("div", {class:"h1"}, title),
-    h("div", {class:"sub"}, subtitle || ""),
-  ]);
-}
+const clear = ()=> app.innerHTML="";
+const title = (t,s)=> h("div",{class:"container"},[
+  h("div",{class:"h1"},t),
+  h("div",{class:"sub"},s||"")
+]);
 
-// ===== Pagine =====
+/* ======== PAGINE ========= */
+
+// 1) SPORT
 function pageSports(){
-  clearMain();
-  app.appendChild(sectionTitle("Scegli lo sport","Seleziona per iniziare"));
+  clear();
+  app.appendChild(title("Scegli lo sport","Seleziona per iniziare il percorso"));
 
-  const grid = h("div", {class:"container grid"});
-  DATA.sports.forEach(s => {
-    const card = h("div", {class:"card", tabindex:"0"}, [
-      h("img", {src: s.img, alt: s.name, onerror: function(){ this.style.display="none"; }}),
-      h("div", {class:"title"}, s.name),
-    ]);
-    card.addEventListener("click", () => {
-      // evidenzia interazione
-      [...grid.children].forEach(c=>c.classList.remove("active"));
-      card.classList.add("active");
-
+  const grid = h("div",{class:"container grid sports"});
+  SPORTS.forEach(s=>{
+    const card = h("div",{class:"card", onclick:()=>{
       state.sport = s.key;
-      // auto-avanza
-      setTimeout(pageGender, 80);
-    });
+      pageGender();
+    }},[
+      h("img",{src:s.img,alt:s.name}),
+      h("div",{class:"title"},s.name)
+    ]);
     grid.appendChild(card);
   });
   app.appendChild(grid);
 }
 
+// 2) GENERE (auto-avanza al click)
 function pageGender(){
-  clearMain();
-  app.appendChild(sectionTitle("Scegli il genere", ""));
+  clear();
+  app.appendChild(title("Scegli il genere",""));
 
-  const box = h("div", {class:"container panel"});
-  const chips = h("div", {class:"chips"});
-  DATA.genders.forEach(g => {
-    const chip = h("div", {class:"chip"}, g);
-    chip.addEventListener("click", ()=>{
-      [...chips.children].forEach(c=>c.classList.remove("active"));
-      chip.classList.add("active");
-      state.gender = g;
-      setTimeout(pageRegions, 80);
-    });
+  const box = h("div",{class:"container panel"});
+  const chips = h("div",{class:"chips"});
+
+  ["Maschile","Femminile"].forEach(label=>{
+    const key = label.toLowerCase();
+    const chip = h("div",{class:"chip", onclick:()=>{
+      state.gender = key;
+      // passa subito alle regioni
+      pageRegions();
+    }}, label);
     chips.appendChild(chip);
   });
+
   box.appendChild(chips);
+  box.appendChild(h("div",{class:"actions"},[
+    h("button",{class:"btn",onclick:()=>pageSports()},"Indietro")
+  ]));
   app.appendChild(box);
 }
 
+// 3) REGIONI (auto-avanza)
 function pageRegions(){
-  clearMain();
-  app.appendChild(sectionTitle("Scegli la regione", ""));
+  clear();
+  app.appendChild(title("Scegli la regione",""));
 
-  const box = h("div", {class:"container panel"});
-  const chips = h("div", {class:"chips"});
-  DATA.regions.forEach(r => {
-    const chip = h("div", {class:"chip"}, r);
-    chip.addEventListener("click", ()=>{
-      [...chips.children].forEach(c=>c.classList.remove("active"));
-      chip.classList.add("active");
+  const box = h("div",{class:"container panel"});
+  const chips = h("div",{class:"chips"});
+  REGIONS.forEach(r=>{
+    const chip = h("div",{class:"chip",onclick:()=>{
       state.region = r;
-      setTimeout(pageLeagues, 80);
-    });
+      pageLeagues();
+    }}, r);
     chips.appendChild(chip);
   });
+
   box.appendChild(chips);
-
-  // azione “indietro” sola, niente Avanti
-  const actions = h("div", {class:"actions"}, [
-    h("button", {class:"btn", onclick: () => pageGender()}, "Indietro")
-  ]);
-  box.appendChild(actions);
-
+  box.appendChild(h("div",{class:"actions"},[
+    h("button",{class:"btn",onclick:()=>pageGender()},"Indietro")
+  ]));
   app.appendChild(box);
 }
 
+// 4) CAMPIONATI (auto-avanza)
 function pageLeagues(){
-  clearMain();
-  app.appendChild(sectionTitle("Scegli il campionato", `${state.gender} • ${state.region}`));
+  clear();
+  const sport = state.sport;
+  const gender = state.gender;
+  const leagues = (LEAGUES[sport] && LEAGUES[sport][gender]) ? LEAGUES[sport][gender] : [];
 
-  const leagues = DATA.leaguesBy.default; // in reale: filtra per sport+genere+regione
-  const box = h("div", {class:"container panel"});
-  const chips = h("div", {class:"chips"});
-  leagues.forEach(l => {
-    const chip = h("div", {class:"chip"}, l);
-    chip.addEventListener("click", ()=>{
-      [...chips.children].forEach(c=>c.classList.remove("active"));
-      chip.classList.add("active");
+  app.appendChild(title("Scegli il campionato", `${capital(sport)} • ${capital(gender)} • ${state.region}`));
+
+  const box = h("div",{class:"container panel"});
+  const chips = h("div",{class:"chips"});
+  leagues.forEach(l=>{
+    const chip = h("div",{class:"chip",onclick:()=>{
       state.league = l;
-      setTimeout(pageClubs, 80);
-    });
+      pageClubs();
+    }}, l);
     chips.appendChild(chip);
   });
+
   box.appendChild(chips);
-
-  const actions = h("div", {class:"actions"}, [
-    h("button", {class:"btn", onclick: () => pageRegions()}, "Indietro")
-  ]);
-  box.appendChild(actions);
-
+  box.appendChild(h("div",{class:"actions"},[
+    h("button",{class:"btn",onclick:()=>pageRegions()},"Indietro")
+  ]));
   app.appendChild(box);
 }
 
+// 5) SOCIETÀ (auto-avanza al dettaglio)
 function pageClubs(){
-  clearMain();
-  app.appendChild(sectionTitle("Scegli la società", `${state.league} • ${state.region}`));
+  clear();
+  app.appendChild(title("Scegli la società", `${state.league} • ${state.region}`));
 
-  const clubs = DATA.clubsByLeague[state.league] || ["Società Dimostrativa"];
-  const box = h("div", {class:"container panel"});
-  const chips = h("div", {class:"chips"});
-  clubs.forEach(c => {
-    const chip = h("div", {class:"chip"}, c);
-    chip.addEventListener("click", ()=>{
-      [...chips.children].forEach(c=>c.classList.remove("active"));
-      chip.classList.add("active");
+  const clubs = CLUBS_BY_REGION[state.region] || ["Società Dimostrativa"];
+  const box = h("div",{class:"container panel"});
+  const chips = h("div",{class:"chips"});
+  clubs.forEach(c=>{
+    const chip = h("div",{class:"chip",onclick:()=>{
       state.club = c;
-      setTimeout(pageClubDetail, 80);
-    });
+      pageClubDetail();
+    }}, c);
     chips.appendChild(chip);
   });
+
   box.appendChild(chips);
-
-  const actions = h("div", {class:"actions"}, [
-    h("button", {class:"btn", onclick: () => pageLeagues()}, "Indietro")
-  ]);
-  box.appendChild(actions);
-
+  box.appendChild(h("div",{class:"actions"},[
+    h("button",{class:"btn",onclick:()=>pageLeagues()},"Indietro")
+  ]));
   app.appendChild(box);
 }
 
+// 6) DETTAGLIO SOCIETÀ
 function pageClubDetail(){
-  clearMain();
-  app.appendChild(sectionTitle(state.club, `${state.league} • ${state.gender} • ${state.region}`));
+  clear();
 
-  const wrap = h("div", {class:"container"});
+  app.appendChild(title(state.club, `${state.league} • ${capital(state.gender)} • ${state.region}`));
 
-  // logo società centrato
-  const logo = h("img", {
-    class:"club-logo",
-    src:"./images/club-placeholder.png",
-    alt:"Logo società",
-    onerror:function(){ this.style.display='none'; }
-  });
-
-  const info = h("div", {class:"panel"}, [
-    h("div", {class:"label"}, "Contatti ufficiali"),
-    h("div", {class:"muted"}, "Email: info@societa.demo • Tel: +39 000 000 0000"),
-
-    h("div", {class:"spacer"}),
-    h("div", {class:"label"}, "Impianto"),
-    h("div", {class:"muted"}, "Stadio/Impianto — Indirizzo completo"),
-
-    h("div", {class:"spacer"}),
-    h("div", {class:"label"}, "Sponsor collegati"),
-    h("div", {class:"muted"}, "Hotel Demo, Ristorante Demo (solo esempio)"),
+  // Logo centrale società
+  const hero = h("div",{class:"container club-hero"},[
+    h("div",{class:"club-logo"},[
+      h("img",{src:"./images/logo-icon.png",alt:"Logo società"})
+    ])
   ]);
+  app.appendChild(hero);
 
-  const matchesPanel = h("div", {class:"panel"}, [
-    h("div", {class:"label"}, "Prossime partite"),
-    ...DATA.matchesMock.map(m =>
-      h("div", {class:"row"}, [
-        h("div", {class:"team"}, `${m.home} vs ${m.away}`),
-        h("div", {class:"meta"}, `${m.when} — ${m.where}`)
+  // Pannelli info
+  const info = h("div",{class:"container panel"},[
+    h("div",{class:"row"},[
+      h("div",{class:"team"},"Contatti ufficiali"),
+    ]),
+    h("div",{class:"sub"},"Email: info@societa.demo • Tel: +39 000 000 0000"),
+    h("div",{class:"row"},[ h("div",{class:"team"},"Impianto") ]),
+    h("div",{class:"sub"},"Stadio/Impianto — Indirizzo completo"),
+    h("div",{class:"row"},[ h("div",{class:"team"},"Sponsor collegati") ]),
+    h("div",{class:"sub"},"Hotel Demo, Ristorante Demo (solo esempio)"),
+  ]);
+  app.appendChild(info);
+
+  // Partite
+  const matchesPanel = h("div",{class:"container panel"});
+  matchesPanel.appendChild(h("div",{class:"h1"},"Prossime partite"));
+  MATCHES.forEach(m=>{
+    matchesPanel.appendChild(
+      h("div",{class:"row"},[
+        h("div",{class:"team"},`${m.home} vs ${m.away}`),
+        h("div",{class:"meta"},`${m.when} — ${m.where}`)
       ])
-    )
-  ]);
-
-  // Bottone Crea PreMatch con logo
-  const actions = h("div", {class:"actions"}, [
-    h("button", {class:"btn"}, "Indietro"),
-    (() => {
-      const btn = h("button", {class:"btn primary btn-icon"}, [
-        h("img", {src:"./images/logo-dark.png", alt:"PM", onerror:function(){ this.style.display='none'; }}),
-        "Crea PreMatch"
-      ]);
-      btn.addEventListener("click", pagePreMatch);
-      return btn;
-    })()
-  ]);
-  actions.firstChild.addEventListener("click", () => pageClubs());
-
-  wrap.appendChild(logo);
-  wrap.appendChild(info);
-  wrap.appendChild(matchesPanel);
-  wrap.appendChild(actions);
-  app.appendChild(wrap);
-}
-
-function colorSwatch(value){
-  const sw = h("div", {class:"chip"}, value);
-  // colore testo sempre verde già da CSS; attivo con bordo verde
-  return sw;
-}
-
-function pagePreMatch(){
-  clearMain();
-  app.appendChild(sectionTitle("Crea PreMatch", `${state.club} • ${state.league} • ${state.region}`));
-
-  const box = h("div", {class:"container panel"});
-
-  // selezione colori maglie con chip (no testo libero)
-  const colors = ["Bianco","Nero","Rosso","Blu","Verde","Giallo","Arancio","Azzurro","Bordeaux"];
-  let home=null, away=null;
-
-  box.appendChild(h("div", {class:"label"}, "Maglia CASA — Colore"));
-  const chipsHome = h("div", {class:"chips"});
-  colors.forEach(c=>{
-    const chip = colorSwatch(c);
-    chip.addEventListener("click", ()=>{
-      [...chipsHome.children].forEach(x=>x.classList.remove("active"));
-      chip.classList.add("active");
-      home = c;
-    });
-    chipsHome.appendChild(chip);
+    );
   });
-  box.appendChild(chipsHome);
+  app.appendChild(matchesPanel);
 
-  box.appendChild(h("div", {class:"label"}, "Maglia TRASFERTA — Colore"));
-  const chipsAway = h("div", {class:"chips"});
-  colors.forEach(c=>{
-    const chip = colorSwatch(c);
-    chip.addEventListener("click", ()=>{
-      [...chipsAway.children].forEach(x=>x.classList.remove("active"));
-      chip.classList.add("active");
-      away = c;
-    });
-    chipsAway.appendChild(chip);
+  // Azioni: indietro + Crea PreMatch con logo
+  const actions = h("div",{class:"container actions"},[
+    h("button",{class:"btn",onclick:()=>pageClubs()},"Indietro"),
+    h("button",{class:"btn primary",onclick:()=>openPrematchModal()},[
+      h("img",{class:"btn-icon",src:"./images/logo-icon.png",alt:""}),"Crea PreMatch"
+    ])
+  ]);
+  app.appendChild(actions);
+}
+
+/* ======== MODAL CREAZIONE PREMATCH (demo colori) ========= */
+function openPrematchModal(){
+  const backdrop = h("div",{class:"modal-backdrop"});
+  const modal = h("div",{class:"modal"});
+
+  const palette = ["#d32f2f","#1976d2","#2e7d32","#f9a825","#6a1b9a","#000000","#ffffff"];
+  let home = palette[0], away = palette[1];
+
+  const swH = h("div",{class:"swatches"});
+  const swA = h("div",{class:"swatches"});
+  palette.forEach(col=>{
+    const s1 = h("div",{class:"swatch"+(col===home?" active":""),style:`background:${col}`,onclick:()=>{
+      home = col; [...swH.children].forEach(c=>c.classList.remove("active")); s1.classList.add("active");
+    }});
+    const s2 = h("div",{class:"swatch"+(col===away?" active":""),style:`background:${col}`,onclick:()=>{
+      away = col; [...swA.children].forEach(c=>c.classList.remove("active")); s2.classList.add("active");
+    }});
+    swH.appendChild(s1); swA.appendChild(s2);
   });
-  box.appendChild(chipsAway);
 
-  // azioni
-  const actions = h("div", {class:"actions"}, [
-    h("button", {class:"btn", onclick: () => pageClubDetail()}, "Indietro"),
-    (() => {
-      const btn = h("button", {class:"btn primary btn-icon"}, [
-        h("img", {src:"./images/logo-dark.png", alt:"PM", onerror:function(){ this.style.display='none'; }}),
-        "Conferma PreMatch"
-      ]);
-      btn.addEventListener("click", ()=>{
-        if(!home || !away){
-          alert("Seleziona i colori delle maglie (casa e trasferta).");
-          return;
-        }
-        pagePreMatchDone(home, away);
-      });
-      return btn;
-    })()
-  ]);
+  modal.appendChild(h("div",{class:"h1"},"Crea PreMatch"));
+  modal.appendChild(h("div",{class:"sub"},"Scegli colori maglie (Casa / Trasferta)"));
+  modal.appendChild(h("div",{},["Casa"]));
+  modal.appendChild(swH);
+  modal.appendChild(h("div",{},["Trasferta"]));
+  modal.appendChild(swA);
 
-  box.appendChild(actions);
-  app.appendChild(box);
+  modal.appendChild(h("div",{class:"actions"},[
+    h("button",{class:"btn",onclick:()=>document.body.removeChild(backdrop)},"Annulla"),
+    h("button",{class:"btn primary",onclick:()=>{
+      document.body.removeChild(backdrop);
+      alert("PreMatch inviato! (demo)\nCasa: "+home+" • Trasferta: "+away);
+    }},"Invia richiesta")
+  ]));
+
+  backdrop.appendChild(modal);
+  document.body.appendChild(backdrop);
 }
 
-function pagePreMatchDone(homeColor, awayColor){
-  clearMain();
-  app.appendChild(sectionTitle("PreMatch creato ✅", `${state.club} • ${state.league} • ${state.region}`));
+/* ======== HELPERS ========= */
+function capital(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : ""; }
 
-  const box = h("div", {class:"container panel"}, [
-    h("div", {class:"label"}, "Riepilogo"),
-    h("div", {class:"row"}, [ h("div",{class:"team"},"Casa"), h("div",{class:"meta"}, homeColor) ]),
-    h("div", {class:"row"}, [ h("div",{class:"team"},"Trasferta"), h("div",{class:"meta"}, awayColor) ]),
-    h("div", {class:"row"}, [ h("div",{class:"team"},"Stato"), h("div",{class:"meta"}, "Inviato — in attesa di conferma") ]),
-  ]);
-
-  const actions = h("div", {class:"actions"}, [
-    h("button", {class:"btn", onclick: () => pageSports()}, "Torna alla Home")
-  ]);
-
-  app.appendChild(box);
-  app.appendChild(h("div", {class:"container"}, actions));
-}
-
-// avvio
+/* start */
 pageSports();
