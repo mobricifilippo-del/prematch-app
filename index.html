@@ -9,8 +9,8 @@
   <link rel="icon" href="./images/logo-icon.png" sizes="32x32" />
   <link rel="apple-touch-icon" href="./images/logo-icon.png" />
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="./style.css?v=7" />
+  <!-- CSS (cache-busting) -->
+  <link rel="stylesheet" href="./style.css?v=9" />
 </head>
 <body>
   <header class="topbar">
@@ -18,9 +18,9 @@
       <img src="./images/logo-light.png" alt="PreMatch" />
       <span>PreMatch</span>
     </div>
-    <div class="auth">
-      <button class="btn ghost">Login</button>
-      <button class="btn primary">Registrazione</button>
+    <div class="actions-right">
+      <button class="btn ghost" id="btnLoginTop">Login</button>
+      <button class="btn primary" id="btnRegTop">Registrazione</button>
     </div>
   </header>
 
@@ -30,6 +30,7 @@
     <div>© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
   </footer>
 
-  <script src="./app.js?v=7"></script>
+  <!-- App (cache-busting) -->
+  <script src="./app.js?v=9"></script>
 </body>
 </html>
