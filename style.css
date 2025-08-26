@@ -20,20 +20,17 @@ html,body{
 
 .topbar{
   position:sticky; top:0; z-index:10;
+  display:flex; align-items:center; justify-content:space-between;   /* << */
+  gap:.8rem;                                                          /* << */
   background:linear-gradient(180deg, rgba(15,18,22,.95), rgba(15,18,22,.7));
   backdrop-filter: blur(6px);
   border-bottom:1px solid var(--border);
-  display:flex; align-items:center; justify-content:space-between;
+  padding-right:.8rem;                                                /* << */
 }
 .brand{display:flex; align-items:center; gap:.6rem; padding:.8rem 1rem; font-weight:800}
 .brand img{width:28px; height:28px; border-radius:6px; border:1px solid var(--border);}
 .brand span{color:var(--accent)}
-.nav{display:flex; gap:.5rem; padding:.6rem}
-.link{
-  background:transparent; border:1px solid var(--border); color:var(--text);
-  padding:.45rem .7rem; border-radius:10px; cursor:pointer; font-weight:700;
-}
-.link:hover{border-color:#2f3745}
+.auth-actions{display:flex; align-items:center; gap:.5rem;}           /* << */
 
 .footer{padding:1.2rem; border-top:1px solid var(--border); color:var(--muted); font-size:.9rem}
 
@@ -50,6 +47,7 @@ html,body{
   border-radius:16px; overflow:hidden; cursor:pointer;
   transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
 }
+.card:active{ transform: scale(.98); }                                /* << feedback al tap */
 .card:hover{ transform: translateY(-2px); border-color:#2f3745; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
 .card.selected{ outline:2px solid var(--accent); }
 .card img{width:100%; height:140px; object-fit:cover; display:block; background:#0b0f14;}
@@ -60,12 +58,11 @@ html,body{
 .chip{
   padding:.5rem .8rem; border:1px solid var(--border);
   border-radius:999px; cursor:pointer; background:#12161c; color:var(--text);
-  font-weight:800;
-  transition:filter .08s linear, border-color .08s linear, transform .08s linear;
+  font-weight:600; transition: transform .08s ease;
 }
+.chip:active{ transform: scale(.98); }                                 /* << feedback al tap */
 .chip:hover{border-color:#30394a}
 .chip.active{border-color:var(--accent); color:var(--accent); box-shadow: 0 0 0 2px rgba(65,210,123,.15) inset}
-.chip.pressed{filter:brightness(1.2) contrast(1.1); transform:scale(.98)}
 
 /* Pannelli / righe */
 .panel{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1rem}
@@ -77,38 +74,13 @@ html,body{
 .actions{display:flex; gap:.6rem; margin:1rem 0}
 .btn{
   border:1px solid var(--border); background:#141922; color:var(--text);
-  padding:.65rem 1rem; border-radius:10px; cursor:pointer; font-weight:800;
+  padding:.65rem 1rem; border-radius:10px; cursor:pointer; font-weight:700;
 }
+.btn.small{ padding:.45rem .8rem; border-radius:12px; font-weight:800; } /* << */
+.btn.ghost{ background:transparent; border-color:#2f3745; }              /* << */
 .btn.primary{ border-color:transparent; background:var(--accent); color:#0b1115; }
 .btn.primary:hover{ background:var(--accent-strong) }
+.btn:active{ transform: scale(.98); }                                     /* << feedback tap */
 .btn:disabled{opacity:.5; cursor:not-allowed}
 
-/* Accordion */
-.section{margin-top:1rem}
-.section .hd{display:flex; align-items:center; justify-content:space-between; gap:1rem}
-.section .hd .tt{font-weight:900; color:var(--accent)}
-.section .bd{margin-top:.8rem}
-
-/* Logo + CTA in testata profilo */
-.club-head{display:flex; align-items:center; justify-content:center; gap:1rem; margin-top:.2rem}
-.club-logo, .cta-pm{
-  width:92px; height:92px; border-radius:999px; border:1px solid var(--border);
-  background:#0b0f14; display:flex; align-items:center; justify-content:center;
-  padding:10px;
-}
-.club-logo img, .cta-pm img{width:100%; height:100%; object-fit:contain; border-radius:12px}
-.cta-pm{cursor:pointer; transition:transform .1s ease, filter .1s ease}
-.cta-pm:hover{transform:translateY(-2px)}
-.cta-label{font-weight:800; text-align:center; margin-top:.3rem; color:var(--accent)}
-
-/* Dialog overlay */
-.overlay{position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:flex-start; justify-content:center; padding-top:8vh; z-index:30}
-.sheet{width:min(720px,94%); background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden}
-.sheet .hd{padding:1rem 1.2rem; font-size:1.3rem; font-weight:900; border-bottom:1px solid var(--border)}
-.sheet .bd{padding:1rem 1.2rem; display:flex; flex-direction:column; gap:1rem}
-.sheet .bar{display:flex; justify-content:flex-end; gap:.6rem; padding:0 1.2rem 1rem}
-
-/* Colori solo MAGLIETTA (niente pantaloncini/calzettoni) */
-.swatches{display:grid; grid-template-columns: repeat(8, 28px); gap:.5rem; background:#fff; padding:10px; border-radius:12px}
-.sw{width:28px; height:28px; border-radius:6px; border:2px solid rgba(0,0,0,.12); cursor:pointer}
-.sw.sel{outline:2px solid var(--accent)}
+/* (il resto del tuo CSS può rimanere invariato) */
