@@ -5,23 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
 
-  <!-- Favicons -->
   <link rel="icon" href="./images/logo-icon.png" sizes="32x32" />
   <link rel="apple-touch-icon" href="./images/logo-icon.png" />
 
-  <!-- CSS (cache-buster) -->
-  <link rel="stylesheet" href="./style.css?v=10" />
+  <!-- CSS (versione per forzare la cache) -->
+  <link rel="stylesheet" href="./style.css?v=12" />
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
-      <img src="./images/logo-light.png" alt="PreMatch" />
-      <span>PreMatch</span>
+    <div class="topbar-inner">
+      <div class="brand">
+        <img src="./images/logo-light.png" alt="PreMatch" />
+        <span>PreMatch</span>
+      </div>
+      <div class="actions">
+        <button class="btn ghost" id="btnCoach">Allenatore</button>
+        <button class="btn ghost">Login</button>
+        <button class="btn primary">Registrazione</button>
+      </div>
     </div>
-    <nav class="nav">
-      <button class="link" id="btnLogin">Login</button>
-      <button class="link accent" id="btnSignup">Registrati</button>
-    </nav>
   </header>
 
   <main id="app"></main>
@@ -30,7 +32,7 @@
     <div>© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
   </footer>
 
-  <!-- App (cache-buster) -->
-  <script src="./app.js?v=10"></script>
+  <!-- App (versione per forzare la cache) -->
+  <script src="./app.js?v=12"></script>
 </body>
 </html>
