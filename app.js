@@ -2,8 +2,8 @@
    PreMatch DEMO - app.js
    ========================= */
 
-/* ---------- Config ---------- */
-const IS_VISITOR = true; // demo: visitando pagina avversaria
+/* ---------- Config demo ---------- */
+const IS_VISITOR = true; // visitatore (società avversaria)
 const LOGOS = {
   light: "./images/logo-light.png",
   dark: "./images/logo-dark.png",
@@ -46,7 +46,7 @@ const DATA = {
       uniforms: { casa: "#e74a3c", trasferta: "#2c3e50", terza: "#2980b9" },
       gallery: ["./images/calcio.jpg", "./images/volley.jpg"],
       sponsors: ["Hotel Demo", "Ristorante Demo"],
-      contacts: { email: "info@societa.demo", tel: "+39 000 000 0000", indirizzo:"Via dello Sport 1, Roma" },
+      contacts: { email: "info@societa.demo", tel: "+39 000 000 0000" },
       matches: [
         { home: "Prima Squadra", when: "31/08/2025 14:07", where: "Roma — Stadio Olimpico" },
         { home: "Juniores",      when: "01/09/2025 18:30", where: "Roma — Campo Test" },
@@ -60,7 +60,6 @@ const state = { sport:null, gender:null, region:null, league:null, club:null };
 
 /* ---------- Helpers DOM ---------- */
 const app = document.getElementById("app");
-
 function h(tag, attrs = {}, children = []) {
   const el = document.createElement(tag);
   Object.entries(attrs).forEach(([k,v])=>{
@@ -84,18 +83,27 @@ function sectionTitle(title, subtitle){
     h("div", {class:"sub"}, subtitle||"")
   ]);
 }
-/* piccolo helper: mostra feedback tap prima di navigare */
-function pressThen(fn, target){
-  target.classList.add("pressed");
-  setTimeout(()=>{ target.classList.remove("pressed"); fn(); }, 120);
-}
 function chip(text, active, onClick){
-  const el = h("div", {class: "chip"+(active?" active":""), onclick:(e)=>{
-    el.classList.add("active");
-    setTimeout(()=>onClick(e), 100);
-  }}, text);
-  return el;
+  return h("div", {class: "chip"+(active?" active":""), onclick:onClick}, text);
 }
+function gridCard(item, onClick){
+  const card = h("div", {class:"card"}, [
+    h("img", {src:item.img, alt:item.name, onerror(){this.style.display="none"}}),
+    h("div", {class:"title"}, item.name)
+  ]);
+  // feedback tap + piccolo delay prima di navigare
+  card.addEventListener("click", ()=>{
+    card.classList.add("pressed");
+    setTimeout(onClick, 120);
+  });
+  return card;
+}
+
+/* ---------- Topbar logo fix ---------- */
+(function fixBrandLogo(){
+  const brand = document.querySelector(".brand img");
+  if (brand) { brand.src = LOGOS.light; brand.alt = "PreMatch"; }
+})();
 
 /* ---------- Pagine ---------- */
 function pageSports(){
@@ -104,12 +112,12 @@ function pageSports(){
 
   const grid = h("div", {class:"container grid"});
   DATA.sports.forEach(s=>{
-    const card = h("div", {class:"card"}, [
-      h("img", {src:s.img, alt:s.name, onerror(){this.style.display="none"}}),
-      h("div", {class:"title"}, s.name)
-    ]);
-    card.addEventListener("click", ()=> pressThen(()=>{ state.sport=s.key; pageGender(); }, card));
-    grid.appendChild(card);
+    grid.appendChild(
+      gridCard({img:s.img, name:s.name}, ()=>{
+        state.sport = s.key;
+        pageGender();
+      })
+    );
   });
   app.appendChild(grid);
 }
@@ -121,12 +129,13 @@ function pageGender(){
   const box = h("div",{class:"container panel"});
   const row = h("div",{class:"chips"});
   DATA.genders.forEach(g=>{
-    row.appendChild(
-      chip(g, state.gender===g, ()=>{
-        state.gender = g;
-        pageRegions();
-      })
-    );
+    const c = chip(g, state.gender===g, ()=>{
+      state.gender = g;
+      [...row.children].forEach(x=>x.classList.remove("active"));
+      c.classList.add("active");
+      setTimeout(pageRegions, 120);
+    });
+    row.appendChild(c);
   });
   box.appendChild(row);
   box.appendChild(h("div",{class:"actions"},[
@@ -142,12 +151,13 @@ function pageRegions(){
   const box = h("div",{class:"container panel"});
   const wrap = h("div",{class:"chips"});
   DATA.regions.forEach(r=>{
-    wrap.appendChild(
-      chip(r, state.region===r, ()=>{
-        state.region = r;
-        pageLeagues();
-      })
-    );
+    const c = chip(r, state.region===r, ()=>{
+      state.region = r;
+      [...wrap.children].forEach(x=>x.classList.remove("active"));
+      c.classList.add("active");
+      setTimeout(pageLeagues, 120);
+    });
+    wrap.appendChild(c);
   });
   box.appendChild(wrap);
   box.appendChild(h("div",{class:"actions"},[
@@ -164,12 +174,13 @@ function pageLeagues(){
   const box = h("div",{class:"container panel"});
   const wrap = h("div",{class:"chips"});
   leagues.forEach(l=>{
-    wrap.appendChild(
-      chip(l, state.league===l, ()=>{
-        state.league = l;
-        pageClubs();
-      })
-    );
+    const c = chip(l, state.league===l, ()=>{
+      state.league = l;
+      [...wrap.children].forEach(x=>x.classList.remove("active"));
+      c.classList.add("active");
+      setTimeout(pageClubs, 120);
+    });
+    wrap.appendChild(c);
   });
   box.appendChild(wrap);
   box.appendChild(h("div",{class:"actions"},[
@@ -185,13 +196,14 @@ function pageClubs(){
   const clubs = DATA.clubsByLeague[state.league] || ["Società Dimostrativa"];
   const box = h("div",{class:"container panel"});
   const wrap = h("div",{class:"chips"});
-  clubs.forEach(c=>{
-    wrap.appendChild(
-      chip(c, state.club===c, ()=>{
-        state.club = c;
-        pageClubProfile(c);
-      })
-    );
+  clubs.forEach(cname=>{
+    const c = chip(cname, state.club===cname, ()=>{
+      state.club = cname;
+      [...wrap.children].forEach(x=>x.classList.remove("active"));
+      c.classList.add("active");
+      setTimeout(()=>pageClubProfile(cname), 120);
+    });
+    wrap.appendChild(c);
   });
   box.appendChild(wrap);
   box.appendChild(h("div",{class:"actions"},[
@@ -200,81 +212,63 @@ function pageClubs(){
   app.appendChild(box);
 }
 
-/* ----- Pagina Società ----- */
+/* ----- Società ----- */
 function pageClubProfile(clubName){
   clearMain();
 
   const club = DATA.clubProfiles[clubName] || {
     logo: LOGOS.icon,
     uniforms: {casa:"#ffffff", trasferta:"#000000", terza:"#2ecc71"},
-    gallery: [], sponsors: [], contacts:{email:"-", tel:"-", indirizzo:"-"},
+    gallery: [], sponsors: [], contacts:{email:"-", tel:"-"},
     matches: []
   };
 
   app.appendChild(sectionTitle(clubName, `${state.league||""} • ${state.gender||""} • ${state.region||""}`));
 
-  // Hero con due cerchi uguali
+  // Logo + FAB (dimensione uguale)
   const hero = h("div",{class:"container club-hero"},[
-    h("div",{class:"club-logo"},[
-      h("img",{src:club.logo||LOGOS.icon, alt:clubName})
+    h("div",{class:"club-logo"}, [
+      h("img",{src:club.logo||LOGOS.icon, alt:clubName, style:{width:"72px", height:"72px", objectFit:"contain"}})
     ]),
-    h("div",{},[
-      h("div",{class:"prematch-btn", onclick:()=>openPrematchModal(club)},[
-        h("img",{src:LOGOS.icon, alt:"PM"})
-      ]),
-      h("div",{class:"prematch-cta"},"Crea PreMatch")
-    ])
+    (IS_VISITOR ? (()=>{
+      const wrap = h("div",{},[
+        h("div",{class:"fab-match", onclick:()=>openPrematchModal(club)},[
+          h("img",{src:LOGOS.icon, alt:"PM"})
+        ]),
+        h("div",{class:"fab-caption"},"Crea PreMatch")
+      ]);
+      return wrap;
+    })() : h("div"))
   ]);
   app.appendChild(hero);
 
-  // Accordion
-  const acc = h("div",{class:"container accordion"});
+  // Accordion: info / gallery / matches
+  app.appendChild(accordion("Informazioni", [
+    h("div",{},"Email: "+(club.contacts.email||"-")),
+    h("div",{},"Tel: "+(club.contacts.tel||"-"))
+  ]));
+  app.appendChild(accordion("Galleria foto", gallery(club.gallery)));
+  app.appendChild(accordion("Match in programma", matchesPanel(club.matches)));
 
-  // Informazioni
-  acc.appendChild(accordionItem("Informazioni", h("div",{},[
-    elRow("Indirizzo", club.contacts.indirizzo||"-"),
-    elRow("Email", club.contacts.email||"-"),
-    elRow("Telefono", club.contacts.tel||"-")
-  ])));
-
-  // Galleria
-  acc.appendChild(accordionItem("Galleria foto", galleryContent(club.gallery)));
-
-  // Match in programma
-  const mPanel = h("div",{});
-  (club.matches.length?club.matches:[{home:"—",when:"—",where:"—"}]).forEach(m=>{
-    mPanel.appendChild(h("div",{class:"row"},[
-      h("div",{class:"team"}, m.home+" vs —"),
-      h("div",{class:"meta"}, `${m.when} — ${m.where}`)
-    ]));
-  });
-  acc.appendChild(accordionItem("Match in programma", mPanel));
-
-  app.appendChild(acc);
-
-  // Azioni
+  // back
   app.appendChild(h("div",{class:"container actions"},[
-    h("button",{class:"btn", onclick:()=>pageClubs()},"Indietro"),
+    h("button",{class:"btn", onclick:()=>pageClubs()},"Indietro")
   ]));
 }
-function elRow(label, value){
-  const d = h("div",{class:"row"});
-  d.appendChild(h("div",{class:"team"}, label));
-  d.appendChild(h("div",{class:"meta"}, value));
-  return d;
-}
-function accordionItem(title, content){
-  const item = h("div",{class:"acc-item"});
+
+function accordion(title, contentNodes){
+  const it = h("div",{class:"container acc-item"});
   const hd = h("div",{class:"acc-hd"},[
-    h("span",{class:"t"}, title),
-    h("span",{}, "▾")
+    h("div",{class:"t"},title),
+    h("div",{}, "▾")
   ]);
-  const bd = h("div",{class:"acc-bd"}, content);
-  hd.addEventListener("click", ()=> item.classList.toggle("open"));
-  item.appendChild(hd); item.appendChild(bd);
-  return item;
+  const bd = h("div",{class:"acc-bd"});
+  (Array.isArray(contentNodes)?contentNodes:[contentNodes]).forEach(n=>bd.appendChild(n));
+  hd.addEventListener("click", ()=> it.classList.toggle("open"));
+  it.appendChild(hd); it.appendChild(bd);
+  return it;
 }
-function galleryContent(list){
+function gallery(list){
   if (!list || !list.length) return h("div",{class:"sub"},"Nessuna foto caricata.");
   const g = h("div",{class:"grid"});
   list.forEach(src=> g.appendChild(
@@ -282,70 +276,99 @@ function galleryContent(list){
   ));
   return g;
 }
+function matchesPanel(list){
+  const box = h("div",{});
+  (list && list.length ? list : [{home:"—",when:"—",where:"—"}]).forEach(m=>{
+    box.appendChild(h("div",{class:"row"},[
+      h("div",{class:"team"}, m.home+" vs —"),
+      h("div",{class:"meta"}, `${m.when} — ${m.where}`)
+    ]));
+  });
+  return box;
+}
 
 /* ----- Modale PreMatch ----- */
 function openPrematchModal(club){
   const overlay = h("div",{class:"overlay"});
   const sheet = h("div",{class:"sheet"});
-  overlay.appendChild(sheet);
-
   const hd = h("div",{class:"hd"},"Crea PreMatch");
   const bd = h("div",{class:"bd"});
   const bar = h("div",{class:"bar"});
 
-  sheet.appendChild(hd); sheet.appendChild(bd); sheet.appendChild(bar);
+  sheet.appendChild(hd); sheet.appendChild(bd); sheet.appendChild(bar); overlay.appendChild(sheet);
 
-  // colore maglia
-  bd.appendChild(h("div",{class:"sub", style:{margin:"0"}}, "Scegli colore maglia (ospite)"));
+  // palette + selezione colore maglia
+  bd.appendChild(h("div",{class:"sub"},"Scegli colore maglia (ospite)"));
   const colors = ["#ffffff","#000000","#f1c40f","#e74c3c","#3498db","#2ecc71","#e67e22","#8e44ad"];
-  const sel = { maglia:null, when:"", where:"", friendly:false };
-  const pal = h("div",{class:"palette"},
-    colors.map(c=>{
-      const d = h("button",{class:"dot", style:{backgroundColor:c}, onclick:(e)=>{
-        [...pal.children].forEach(x=>x.classList.remove("sel"));
-        e.currentTarget.classList.add("sel");
-        sel.maglia = c;
-      }});
-    return d;})
-  );
-  bd.appendChild(pal);
+  const strip = h("div",{style:{
+    display:"grid", gridTemplateColumns:"repeat(8,1fr)", gap:"10px", background:"#fff",
+    padding:"10px", borderRadius:"12px"
+  }});
+  const sel = { shirt:null, when:"", where:"", friendly:false, note:"" };
+  colors.forEach(hex=>{
+    const b = h("button",{style:{
+      width:"32px", height:"32px", borderRadius:"8px", border:"1px solid #d0d7de", background:hex, cursor:"pointer"
+    }});
+    b.addEventListener("click", ()=>{
+      sel.shirt = hex;
+      [...strip.children].forEach(x=>x.style.outline="none");
+      b.style.outline = "2px solid var(--accent)";
+      b.style.outlineOffset = "2px";
+    });
+    strip.appendChild(b);
+  });
+  bd.appendChild(strip);
 
   // data/ora + luogo
-  bd.appendChild(h("div",{class:"sub mt8"},"Data & ora"));
-  const dt = h("input",{type:"datetime-local", class:"input", onchange:e=> sel.when=e.target.value});
+  const dt = h("input",{type:"datetime-local", style:{width:"100%", padding:"10px", borderRadius:"10px", border:"1px solid var(--border)", background:"#0f141a", color:"var(--text)"}});
+  const place = h("input",{type:"text", placeholder:"Via dello Sport 1, Città", style:{width:"100%", padding:"10px", borderRadius:"10px", border:"1px solid var(--border)", background:"#0f141a", color:"var(--text)"}});
+  dt.addEventListener("change", e=> sel.when = e.target.value);
+  place.addEventListener("input", e=> sel.where = e.target.value);
+  bd.appendChild(h("div",{class:"sub"},"Data & ora"));
   bd.appendChild(dt);
-
-  bd.appendChild(h("div",{class:"sub mt8"},"Luogo (indirizzo)"));
-  const place = h("input",{type:"text", placeholder:"Via dello Sport 1, Città", class:"input", oninput:e=> sel.where=e.target.value});
+  bd.appendChild(h("div",{class:"sub"},"Luogo (indirizzo)"));
   bd.appendChild(place);
 
-  // toggle amichevole
-  const friendly = h("label",{style:{display:"flex",alignItems:"center",gap:".6rem",marginTop:".4rem"}},[
+  // amichevole
+  const chkWrap = h("label",{style:{display:"flex", alignItems:"center", gap:"10px"}},[
     h("input",{type:"checkbox", onchange:e=> sel.friendly = e.target.checked}),
     h("span",{},"Richiedi amichevole")
   ]);
-  bd.appendChild(friendly);
+  bd.appendChild(chkWrap);
 
-  // bottoni
-  bar.appendChild(h("button",{class:"btn", onclick:()=>document.body.removeChild(overlay)},"Annulla"));
-  bar.appendChild(h("button",{class:"btn primary", onclick:()=>{
-    if(!sel.maglia){ alert("Seleziona il colore della maglia."); return; }
+  // NUOVO: messaggio testo libero
+  bd.appendChild(h("div",{class:"sub"},"Messaggio per la società (opzionale)"));
+  const note = h("textarea",{placeholder:"Scrivi un saluto o una nota…", style:{
+    width:"100%", minHeight:"80px", padding:"10px", borderRadius:"10px", border:"1px solid var(--border)",
+    background:"#0f141a", color:"var(--text)", resize:"vertical"
+  }});
+  note.addEventListener("input", e=> sel.note = e.target.value);
+  bd.appendChild(note);
+
+  // azioni
+  const annulla = h("button",{class:"btn", onclick:()=>document.body.removeChild(overlay)},"Annulla");
+  const conferma = h("button",{class:"btn primary", onclick:()=>{
+    if(!sel.shirt){ alert("Seleziona il colore della maglia."); return; }
     document.body.removeChild(overlay);
-    confirmToast(sel.friendly);
-  }},"Conferma"));
+    confirmToast(sel);
+  }},"Conferma");
+  bar.appendChild(annulla); bar.appendChild(conferma);
 
   document.body.appendChild(overlay);
 }
 
-function confirmToast(isFriendly){
-  const msg = isFriendly ? "Richiesta AMICHEVOLE inviata ✅" : "Richiesta PreMatch inviata ✅";
+function confirmToast(sel){
+  const msg =
+    "PreMatch inviato ✅"
+    + (sel.friendly ? " • Richiesta amichevole" : "")
+    + (sel.note ? " • Messaggio incluso" : "");
   const t = h("div",{style:{
     position:"fixed", left:"50%", bottom:"22px", transform:"translateX(-50%)",
     background:"var(--accent)", color:"#0b1115", padding:"10px 14px",
-    borderRadius:"10px", fontWeight:"800", zIndex:1200, border:"1px solid transparent"
+    borderRadius:"10px", fontWeight:"700", zIndex:1200
   }}, msg);
   document.body.appendChild(t);
-  setTimeout(()=> t.remove(), 1800);
+  setTimeout(()=> t.remove(), 2200);
 }
 
 /* ---------- Avvio ---------- */
