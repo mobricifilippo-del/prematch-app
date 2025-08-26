@@ -2,73 +2,17 @@
    PreMatch DEMO - app.js
    ========================= */
 
-/* ---------- Config/logo ---------- */
+/* ----- Config demo ----- */
+const IS_VISITOR = true; // visitando l’avversario
+const STAFF_CODE_DEMO = "PM2025"; // codice staff dimostrativo
+
 const LOGOS = {
-  light: "./images/logo-light.png", // topbar (dark background)
-  dark: "./images/logo-dark.png",   // PDF/sfondi chiari
-  icon: "./images/logo-icon.png",   // tondo
+  light: "./images/logo-light.png",
+  dark: "./images/logo-dark.png",
+  icon: "./images/logo-icon.png",
 };
 
-/* ---------- AUTENTICAZIONE (mock) ---------- */
-/* Salva solo in localStorage: {name, role: 'societa'|'utente'} */
-const Auth = {
-  get(){ try{ return JSON.parse(localStorage.getItem("pm_user")) || null; }catch(e){ return null; } },
-  set(u){ localStorage.setItem("pm_user", JSON.stringify(u)); renderAuth(); },
-  clear(){ localStorage.removeItem("pm_user"); renderAuth(); }
-};
-function renderAuth(){
-  const mount = document.getElementById("auth");
-  const u = Auth.get();
-  mount.innerHTML = "";
-  if (!u){
-    mount.appendChild(btn("Accedi", ()=>openAuthModal("login"), "link"));
-    mount.appendChild(btn("Registrati", ()=>openAuthModal("register"), "primary"));
-  }else{
-    mount.appendChild(el("span",{class:"name"},`👤 ${u.name} • ${u.role==='societa'?'Società':'Utente'}`));
-    mount.appendChild(btn("Esci", ()=>Auth.clear(), "link"));
-  }
-}
-function openAuthModal(mode){
-  const overlay = el("div",{class:"overlay"});
-  const sheet = el("div",{class:"sheet"});
-  overlay.appendChild(sheet);
-
-  sheet.appendChild(el("div",{class:"hd"}, mode==="login"?"Accedi":"Registrati"));
-  const bd = el("div",{class:"bd"});
-  const bar = el("div",{class:"bar"});
-  sheet.appendChild(bd); sheet.appendChild(bar);
-
-  const name = inputText("Nome/Club");
-  const roleWrap = el("div",{},[
-    label("Sei una:"),
-    el("div",{class:"chips"},[
-      chip("Società", false, ()=>selectRole("societa")),
-      chip("Utente", false, ()=>selectRole("utente"))
-    ])
-  ]);
-  let role = null;
-  function selectRole(r){
-    role = r;
-    [...roleWrap.querySelectorAll(".chip")].forEach(c=>c.classList.remove("active"));
-    const t = r==="societa" ? "Società" : "Utente";
-    [...roleWrap.querySelectorAll(".chip")].find(x=>x.textContent===t).classList.add("active");
-  }
-
-  bd.appendChild(name.wrap);
-  bd.appendChild(roleWrap);
-
-  bar.appendChild(btn("Annulla", ()=>overlay.remove()));
-  bar.appendChild(btn(mode==="login"?"Accedi":"Crea account", ()=>{
-    if (!name.input.value) return alert("Inserisci il nome.");
-    if (!role) return alert("Seleziona il ruolo.");
-    Auth.set({name:name.input.value.trim(), role});
-    overlay.remove();
-  },"primary"));
-
-  document.body.appendChild(overlay);
-}
-
-/* ---------- Dati DEMO ---------- */
+/* ----- Dati demo ----- */
 const DATA = {
   sports: [
     { key: "calcio",     name: "Calcio",     img: "./images/calcio.jpg" },
@@ -81,11 +25,11 @@ const DATA = {
   genders: ["Maschile", "Femminile"],
   regions: ["Lazio", "Lombardia", "Sicilia", "Piemonte", "Veneto", "Emilia-Romagna"],
   leaguesBy: {
-    Lazio: ["Eccellenza", "Promozione", "Prima Categoria", "Scuola Calcio"],
-    Lombardia: ["Serie C Silver", "Serie D", "Scuola Calcio"],
-    Sicilia: ["Serie C", "Promozione", "Scuola Calcio"],
-    Piemonte: ["Eccellenza", "Scuola Calcio"],
-    Veneto: ["Serie B Interregionale", "Scuola Calcio"],
+    "Lazio": ["Eccellenza", "Promozione", "Prima Categoria", "Scuola Calcio"],
+    "Lombardia": ["Serie C Silver", "Serie D", "Scuola Calcio"],
+    "Sicilia": ["Serie C", "Promozione", "Scuola Calcio"],
+    "Piemonte": ["Eccellenza", "Scuola Calcio"],
+    "Veneto": ["Serie B Interregionale", "Scuola Calcio"],
     "Emilia-Romagna": ["Promozione", "Scuola Calcio"],
   },
   clubsByLeague: {
@@ -101,358 +45,455 @@ const DATA = {
   clubProfiles: {
     "ASD Roma Nord": {
       logo: LOGOS.icon,
-      gallery: ["./images/calcio.jpg","./images/volley.jpg"],
+      uniforms: { casa: "#e74a3c", trasferta: "#2c3e50", terza: "#2980b9" },
+      gallery: ["./images/calcio.jpg", "./images/volley.jpg"],
       sponsors: ["Hotel Demo", "Ristorante Demo"],
       contacts: { email: "info@societa.demo", tel: "+39 000 000 0000" },
-      uniforms: { casa: "#e74a3c", trasferta: "#2c3e50", terza: "#2980b9" },
       matches: [
         { home: "Prima Squadra", when: "31/08/2025 14:07", where: "Roma — Stadio Olimpico" },
         { home: "Juniores",      when: "01/09/2025 18:30", where: "Roma — Campo Test" },
+      ],
+      roster: [
+        { name:"Rossi Anna",     n:"1",  role:"Por" },
+        { name:"Bianchi Sara",   n:"2",  role:"Dif" },
+        { name:"Verdi Elisa",    n:"3",  role:"Dif" },
+        { name:"Neri Marta",     n:"4",  role:"Cen" },
+        { name:"Gialli Chiara",  n:"7",  role:"Att" },
+        { name:"Blu Francesca",  n:"9",  role:"Att" },
+        { name:"Viola Laura",    n:"10", role:"Cen" },
+        { name:"Arancio Giada",  n:"11", role:"Att" },
       ]
     },
   }
 };
 
-/* ---------- Stato ---------- */
+/* ----- Stato ----- */
 const state = { sport:null, gender:null, region:null, league:null, club:null };
 
-/* ---------- Helpers DOM ---------- */
+/* ----- Helpers DOM ----- */
 const app = document.getElementById("app");
-
-function el(tag, attrs={}, children=[]){
-  const n = document.createElement(tag);
+function h(tag, attrs = {}, children = []) {
+  const el = document.createElement(tag);
   Object.entries(attrs).forEach(([k,v])=>{
-    if (k==="class") n.className=v;
-    else if (k==="onclick") n.addEventListener("click", v);
-    else if (k==="onchange") n.addEventListener("change", v);
-    else if (k==="style") Object.assign(n.style, v);
-    else n.setAttribute(k,v);
+    if (k === "class") el.className = v;
+    else if (k === "onclick") el.addEventListener("click", v);
+    else if (k === "oninput") el.addEventListener("input", v);
+    else if (k === "onchange") el.addEventListener("change", v);
+    else if (k === "style") Object.assign(el.style, v);
+    else el.setAttribute(k, v);
   });
   (Array.isArray(children)?children:[children]).forEach(c=>{
     if (c==null) return;
-    n.appendChild(typeof c==="string"?document.createTextNode(c):c);
+    el.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
   });
-  return n;
+  return el;
 }
-function btn(label, onClick, extraClass=""){ return el("button",{class:`btn ${extraClass}`.trim(), onclick:onClick},label); }
-function label(text){ return el("div",{class:"sub", style:{margin:"0 0 6px 0"}}, text); }
-function inputText(ph){ 
-  const input = el("input",{type:"text",placeholder:ph,style:{width:"100%",padding:"10px",borderRadius:"10px",border:"1px solid var(--border)",background:"#0f141a",color:"var(--text)"}});
-  return {input, wrap: el("div",{},[label(ph), input])};
+function clearMain(){ app.innerHTML = ""; }
+function sectionTitle(title, subtitle){
+  return h("div", {class:"container"}, [
+    h("div", {class:"h1"}, title),
+    h("div", {class:"sub"}, subtitle||"")
+  ]);
 }
 function chip(text, active, onClick){
-  return el("div",{class:`chip chip-green${active?" active":""}`, onclick:onClick},text);
+  return h("div", {class: "chip"+(active?" active":""), onclick:onClick}, text);
 }
-function sectionTitle(title, subtitle){
-  return el("div",{class:"container"},[
-    el("div",{class:"h1"},title),
-    el("div",{class:"sub"},subtitle||"")
+function gridCard(item, onClick){
+  return h("div", {class:"card", onclick:onClick}, [
+    h("img", {src:item.img, alt:item.name, onerror(){this.style.display="none"}}),
+    h("div", {class:"title"}, item.name)
   ]);
 }
 
-/* ---------- HOME ---------- */
+/* topbar logo (safety) */
+(function(){
+  const brand = document.querySelector(".brand img");
+  if (brand) brand.src = LOGOS.light;
+})();
+
+/* ----- Pagine ----- */
 function pageSports(){
   clearMain();
-  app.appendChild(sectionTitle("Scegli lo sport","Seleziona per iniziare"));
+  app.appendChild(sectionTitle("Scegli lo sport", "Seleziona per iniziare"));
 
-  const grid = el("div",{class:"container grid"});
+  const grid = h("div", {class:"container grid"});
   DATA.sports.forEach(s=>{
-    const card = el("div",{class:"card", onclick:()=>{
-      // feedback visivo
-      card.classList.add("selected");
-      setTimeout(()=>{ card.classList.remove("selected"); proceed(); }, 140);
-      function proceed(){ state.sport = s.key; pageGender(); }
-    }},[
-      el("img",{src:s.img,alt:s.name, onerror(){this.style.display="none"}}),
-      el("div",{class:"title"}, s.name)
-    ]);
-    grid.appendChild(card);
+    grid.appendChild(gridCard({img:s.img, name:s.name}, ()=>{
+      state.sport = s.key; pageGender();
+    }));
   });
   app.appendChild(grid);
 }
 
-/* ---------- GENERE ---------- */
 function pageGender(){
   clearMain();
   app.appendChild(sectionTitle("Seleziona il genere",""));
 
-  const box = el("div",{class:"container panel"});
-  const row = el("div",{class:"chips"});
+  const box = h("div",{class:"container panel"});
+  const row = h("div",{class:"chips"});
   DATA.genders.forEach(g=>{
-    row.appendChild(
-      chip(g, state.gender===g, ()=>{
-        state.gender=g;
-        [...row.children].forEach(c=>c.classList.remove("active"));
-        event.currentTarget.classList.add("active");
-        pageRegions();
-      })
-    );
+    row.appendChild(chip(g, state.gender===g, ()=>{
+      state.gender = g;
+      [...row.children].forEach(c=>c.classList.remove("active"));
+      event.currentTarget.classList.add("active");
+      pageRegions();
+    }));
   });
   box.appendChild(row);
-  box.appendChild(el("div",{class:"actions"},[btn("Indietro", ()=>pageSports())]));
+  box.appendChild(h("div",{class:"actions"},[
+    h("button",{class:"btn", onclick:()=>pageSports()},"Indietro"),
+  ]));
   app.appendChild(box);
 }
 
-/* ---------- REGIONI ---------- */
 function pageRegions(){
   clearMain();
   app.appendChild(sectionTitle("Scegli la regione",""));
 
-  const box = el("div",{class:"container panel"});
-  const row = el("div",{class:"chips"});
+  const box = h("div",{class:"container panel"});
+  const wrap = h("div",{class:"chips"});
   DATA.regions.forEach(r=>{
-    row.appendChild(
-      chip(r, state.region===r, ()=>{
-        state.region=r;
-        [...row.children].forEach(c=>c.classList.remove("active"));
-        event.currentTarget.classList.add("active");
-        pageLeagues();
-      })
-    );
+    wrap.appendChild(chip(r, state.region===r, ()=>{
+      state.region = r;
+      [...wrap.children].forEach(c=>c.classList.remove("active"));
+      event.currentTarget.classList.add("active");
+      pageLeagues();
+    }));
   });
-  box.appendChild(row);
-  box.appendChild(el("div",{class:"actions"},[btn("Indietro", ()=>pageGender())]));
+  box.appendChild(wrap);
+  box.appendChild(h("div",{class:"actions"},[
+    h("button",{class:"btn", onclick:()=>pageGender()},"Indietro"),
+  ]));
   app.appendChild(box);
 }
 
-/* ---------- CAMPIONATI ---------- */
 function pageLeagues(){
   clearMain();
   app.appendChild(sectionTitle("Scegli il campionato", state.region||""));
 
   const leagues = DATA.leaguesBy[state.region] || [];
-  const box = el("div",{class:"container panel"});
-  const row = el("div",{class:"chips"});
+  const box = h("div",{class:"container panel"});
+  const wrap = h("div",{class:"chips"});
   leagues.forEach(l=>{
-    row.appendChild(
-      chip(l, state.league===l, ()=>{
-        state.league=l;
-        [...row.children].forEach(c=>c.classList.remove("active"));
-        event.currentTarget.classList.add("active");
-        pageClubs();
-      })
-    );
+    wrap.appendChild(chip(l, state.league===l, ()=>{
+      state.league = l;
+      [...wrap.children].forEach(c=>c.classList.remove("active"));
+      event.currentTarget.classList.add("active");
+      pageClubs();
+    }));
   });
-  box.appendChild(row);
-  box.appendChild(el("div",{class:"actions"},[btn("Indietro", ()=>pageRegions())]));
+  box.appendChild(wrap);
+  box.appendChild(h("div",{class:"actions"},[
+    h("button",{class:"btn", onclick:()=>pageRegions()},"Indietro"),
+  ]));
   app.appendChild(box);
 }
 
-/* ---------- SOCIETÀ (lista) ---------- */
 function pageClubs(){
   clearMain();
   app.appendChild(sectionTitle("Scegli la società", state.league||""));
 
   const clubs = DATA.clubsByLeague[state.league] || ["Società Dimostrativa"];
-  const box = el("div",{class:"container panel"});
-  const row = el("div",{class:"chips"});
+  const box = h("div",{class:"container panel"});
+  const wrap = h("div",{class:"chips"});
   clubs.forEach(c=>{
-    row.appendChild(
-      chip(c, state.club===c, ()=>{
-        state.club=c;
-        [...row.children].forEach(x=>x.classList.remove("active"));
-        event.currentTarget.classList.add("active");
-        pageClubProfile(c);
-      })
-    );
+    wrap.appendChild(chip(c, state.club===c, ()=>{
+      state.club = c;
+      [...wrap.children].forEach(x=>x.classList.remove("active"));
+      event.currentTarget.classList.add("active");
+      pageClubProfile(c);
+    }));
   });
-  box.appendChild(row);
-  box.appendChild(el("div",{class:"actions"},[btn("Indietro", ()=>pageLeagues())]));
+  box.appendChild(wrap);
+  box.appendChild(h("div",{class:"actions"},[
+    h("button",{class:"btn", onclick:()=>pageLeagues()},"Indietro"),
+  ]));
   app.appendChild(box);
 }
 
-/* ---------- PAGINA SOCIETÀ ---------- */
+/* ----- Pagina società ----- */
 function pageClubProfile(clubName){
   clearMain();
 
   const club = DATA.clubProfiles[clubName] || {
     logo: LOGOS.icon,
-    gallery: [], sponsors: [], contacts:{email:"-", tel:"-"},
-    uniforms: {casa:"#ffffff", trasferta:"#000000"},
-    matches: []
+    uniforms: {casa:"#ffffff", trasferta:"#000000", terza:"#2ecc71"},
+    gallery: [], sponsors: [], contacts:{email:"-", tel:"-"}, matches: [], roster:[]
   };
 
   app.appendChild(sectionTitle(clubName, `${state.league||""} • ${state.gender||""} • ${state.region||""}`));
 
-  // Logo centrale
-  app.appendChild(el("div",{class:"container", style:{display:"flex",justifyContent:"center"}},[
-    el("img",{src:club.logo||LOGOS.icon, alt:clubName, class:"avatar"})
-  ]));
+  // logo centrato
+  app.appendChild(
+    h("div",{class:"container", style:{display:"flex", justifyContent:"center", marginBottom:"-0.2rem"}},[
+      h("img",{src:club.logo||LOGOS.icon, alt:clubName, style:{
+        width:"92px", height:"92px", borderRadius:"999px", border:"1px solid #252b35",
+        background:"#0b0f14", padding:"10px", objectFit:"contain"
+      }})
+    ])
+  );
 
-  // Divise (mostro solo colori ufficiali già impostati dalla società)
-  const uni = club.uniforms || {};
-  const panel = el("div",{class:"container panel"});
-  panel.appendChild(el("div",{class:"h2", style:{fontWeight:"800"}}, "Colori divise (ufficiali società)"));
-  panel.appendChild(el("div",{class:"sub"},"Casa / Trasferta / Terza (se presente)"));
-  const row = el("div",{style:{display:"flex", gap:"10px", marginTop:"8px", alignItems:"center"}},[
-    swatch(uni.casa||"#ccc"),
-    swatch(uni.trasferta||"#555"),
-    uni.terza ? swatch(uni.terza) : el("span",{})
+  // colori ufficiali (solo display)
+  const u = Object.assign({casa:"#ffffff", trasferta:"#000000", terza:"#2ecc71"}, club.uniforms||{});
+  const colorPanel = h("div",{class:"container panel"});
+  colorPanel.appendChild(h("div",{class:"h2", style:{fontWeight:"800"}}, "Colori divise (ufficiali società)"));
+  colorPanel.appendChild(h("div",{class:"sub"},"Casa / Trasferta / Terza (se presente)"));
+  const row = h("div",{style:{display:"flex", gap:"10px", marginTop:"10px"}},[
+    sw(u.casa), sw(u.trasferta), sw(u.terza)
   ]);
-  panel.appendChild(row);
-  app.appendChild(panel);
+  colorPanel.appendChild(row);
+  app.appendChild(colorPanel);
 
-  // Info extra in accordion
+  // accordion info
   app.appendChild(accordion("Galleria foto", gallery(club.gallery)));
-  app.appendChild(accordion("Sponsor", sponsor(club.sponsors)));
+  app.appendChild(accordion("Sponsor", sponsors(club.sponsors)));
   app.appendChild(accordion("Contatti", contacts(club.contacts)));
 
-  // Prossime partite
-  const mpanel = el("div",{class:"container panel"});
-  mpanel.appendChild(el("div",{class:"h2", style:{fontWeight:"800", color:"var(--accent)"}}, "Prossime partite"));
+  // partite
+  const panel = h("div",{class:"container panel"});
+  panel.appendChild(h("div",{class:"h2", style:{fontWeight:"800", color:"var(--accent)"}}, "Prossime partite"));
   (club.matches.length?club.matches:[{home:"—",when:"—",where:"—"}]).forEach(m=>{
-    mpanel.appendChild(el("div",{class:"row"},[
-      el("div",{class:"team"}, `${m.home} vs —`),
-      el("div",{class:"meta"}, `${m.when} — ${m.where}`)
+    panel.appendChild(h("div",{class:"row"},[
+      h("div",{class:"team"}, m.home+" vs —"),
+      h("div",{class:"meta"}, `${m.when} — ${m.where}`)
     ]));
   });
+  app.appendChild(panel);
 
-  // Azioni
-  const actions = el("div",{class:"actions"},[
-    btn("Indietro", ()=>pageClubs())
+  // azioni in fondo: indietro + Crea PreMatch + Convocazioni (staff)
+  const actions = h("div",{class:"container actions"},[
+    h("button",{class:"btn", onclick:()=>pageClubs()},"Indietro"),
+    IS_VISITOR ? createPrematchButton() : null,
+    staffAccessButton(club) // sempre visibile: la società con il codice entra
   ]);
+  app.appendChild(actions);
 
-  // Mostra “Crea PreMatch” se:
-  // - sei loggato
-  // - e sei una Società
-  // (nel reale potrai anche impedire il bottone sulla “tua” pagina)
-  const u = Auth.get();
-  if (u && u.role === "societa"){
-    actions.appendChild(createPrematchButton(clubName));
+  function sw(hex){ return h("span",{style:{
+    display:"inline-block", width:"24px", height:"24px", borderRadius:"6px",
+    border:"1px solid #d0d7de", background:hex
+  }}); }
+  function accordion(title, content){
+    const head = h("button",{class:"btn", style:{width:"100%", textAlign:"left", fontWeight:"700"}}, title);
+    const body = h("div",{style:{display:"none", marginTop:".6rem"}}, content);
+    const wrap = h("div",{class:"container panel"},[head, body]);
+    head.addEventListener("click", ()=> body.style.display = (body.style.display==="none"?"block":"none"));
+    return wrap;
+  }
+  function gallery(list){
+    if (!list || !list.length) return h("div",{class:"sub"},"Nessuna foto caricata.");
+    const g = h("div",{class:"grid"});
+    list.forEach(src=> g.appendChild(
+      h("img",{src, alt:"Foto impianto", style:{width:"100%", height:"140px", objectFit:"cover", borderRadius:"12px"}})
+    ));
+    return g;
+  }
+  function sponsors(list){
+    if (!list || !list.length) return h("div",{class:"sub"},"Nessuno sponsor collegato.");
+    const ul = h("ul"); list.forEach(n=> ul.appendChild(h("li",{}, n))); return ul;
+  }
+  function contacts(c){
+    return h("div",{},[
+      h("div",{},"Email: "+(c.email||"-")),
+      h("div",{},"Tel: "+(c.tel||"-"))
+    ]);
+  }
+}
+
+/* ----- Bottone Crea PreMatch ----- */
+function createPrematchButton(){
+  const btn = h("button",{class:"btn primary pm-badge"},[
+    h("img",{src:LOGOS.icon, alt:"PM"}),
+    "Crea PreMatch"
+  ]);
+  btn.addEventListener("click", ()=> openPrematchModal());
+  return btn;
+}
+
+function openPrematchModal(){
+  const overlay = h("div",{class:"overlay"});
+  const sheet = h("div",{class:"sheet"});
+  overlay.appendChild(sheet);
+
+  const sel = { jersey:null, when:"", where:"" };
+  const palette = ["#ffffff","#000000","#f1c40f","#e74c3c","#3498db","#2ecc71","#e67e22","#8e44ad"];
+
+  function colorDot(hex){
+    const b = h("button",{class:"color-dot", style:{
+      width:"28px",height:"28px",borderRadius:"8px",border:"1px solid #252b35",backgroundColor:hex,cursor:"pointer"
+    }});
+    b.addEventListener("click", ()=>{
+      sel.jersey = hex;
+      [...grid.children].forEach(x=>x.classList.remove("selected"));
+      b.classList.add("selected");
+    });
+    return b;
   }
 
-  app.appendChild(mpanel);
-  app.appendChild(el("div",{class:"container"}, actions));
-}
+  const hd = h("div",{class:"hd"},"Crea PreMatch");
+  const bd = h("div",{class:"bd"});
+  const bar = h("div",{class:"bar"});
 
-/* ---------- Componenti utili ---------- */
-function accordion(title, content){
-  const wrap = el("div",{class:"container panel"});
-  const hd = btn(title, ()=>toggle(), "");
-  hd.style.width="100%"; hd.style.textAlign="left";
-  hd.style.fontWeight="800";
-  const bd = el("div",{style:{display:"none", marginTop:".6rem"}}, content);
-  wrap.appendChild(hd); wrap.appendChild(bd);
-  function toggle(){ bd.style.display = bd.style.display==="none" ? "block" : "none"; }
-  return wrap;
-}
-function gallery(list){
-  if (!list || !list.length) return el("div",{class:"sub"},"Nessuna foto caricata.");
-  const g = el("div",{class:"grid"});
-  list.forEach(src=> g.appendChild(el("img",{src, alt:"Foto", style:{width:"100%", height:"140px", objectFit:"cover", borderRadius:"12px"}})));
-  return g;
-}
-function sponsor(list){
-  if (!list || !list.length) return el("div",{class:"sub"},"Nessuno sponsor collegato.");
-  const ul = el("ul"); list.forEach(n=>ul.appendChild(el("li",{},n))); return ul;
-}
-function contacts(c){
-  return el("div",{},[
-    el("div",{},"Email: "+(c.email||"-")),
-    el("div",{},"Tel: "+(c.tel||"-"))
-  ]);
-}
-function swatch(hex){ return el("span",{style:{display:"inline-block", width:"24px", height:"24px", borderRadius:"6px", border:"1px solid #d0d7de", background:hex}}); }
+  const grid = h("div",{style:{display:"grid",gridTemplateColumns:"repeat(8,1fr)",gap:"8px",background:"#fff",padding:"10px",borderRadius:"12px"}}, palette.map(colorDot));
+  bd.appendChild(h("div",{class:"sub"},"Scegli colore maglia (ospite)"));
+  bd.appendChild(grid);
 
-/* ---------- PreMatch (solo MAGLIA) ---------- */
-function createPrematchButton(clubName){
-  const b = btn("Crea PreMatch", ()=>openPrematchModal(clubName), "primary");
-  // badge con logo
-  b.style.display="inline-flex"; b.style.alignItems="center"; b.style.gap=".5rem";
-  b.prepend(el("img",{src:LOGOS.icon, alt:"PM", style:{width:"18px", height:"18px", borderRadius:"4px"}}));
-  return b;
-}
-function openPrematchModal(clubName){
-  const overlay = el("div",{class:"overlay"});
-  const sheet = el("div",{class:"sheet"});
-  overlay.appendChild(sheet);
-  sheet.appendChild(el("div",{class:"hd"},"Crea PreMatch"));
-  const bd = el("div",{class:"bd"});
-  const bar = el("div",{class:"bar"});
-  sheet.appendChild(bd); sheet.appendChild(bar);
+  const dt = h("input",{type:"datetime-local"});
+  const place = h("input",{type:"text", placeholder:"Via dello Sport 1, Città"});
+  dt.addEventListener("change", e=> sel.when = e.target.value);
+  place.addEventListener("input", e=> sel.where = e.target.value);
 
-  // Colore maglia ospite (SOLO maglia)
-  bd.appendChild(label("Scegli colore maglia (ospite)"));
-  const colors = ["#ffffff","#000000","#f1c40f","#e74c3c","#3498db","#2ecc71","#e67e22","#8e44ad"];
-  let sel = { maglia:null, when:"", where:"" };
-  const row = el("div",{class:"color-row"},
-    colors.map(hex=> colorDot(hex,false,()=>{
-      sel.maglia = hex;
-      [...row.children].forEach(n=>n.classList.remove("selected"));
-      event.currentTarget.classList.add("selected");
-    }))
-  );
-  bd.appendChild(row);
+  bd.appendChild(h("div",{class:"form-row"},[h("div",{class:"sub"},"Data & ora"), dt]));
+  bd.appendChild(h("div",{class:"form-row"},[h("div",{class:"sub"},"Luogo (indirizzo)"), place]));
 
-  // Data/Ora + Luogo
-  const dt = el("input",{type:"datetime-local", style:{width:"100%", padding:"10px", borderRadius:"10px", border:"1px solid var(--border)", background:"#0f141a", color:"var(--text)"}, onchange:e=>sel.when=e.target.value});
-  const place = el("input",{type:"text", placeholder:"Via dello Sport 1, Città", style:{width:"100%", padding:"10px", borderRadius:"10px", border:"1px solid var(--border)", background:"#0f141a", color:"var(--text)"}, onchange:e=>sel.where=e.target.value});
-  bd.appendChild(el("div",{},[label("Data & ora"), dt]));
-  bd.appendChild(el("div",{},[label("Campo / indirizzo"), place]));
-
-  bar.appendChild(btn("Annulla", ()=>overlay.remove()));
-  bar.appendChild(btn("Conferma", ()=>{
-    if(!sel.maglia) return alert("Seleziona il colore maglia.");
-    if(!sel.when) return alert("Inserisci data/ora.");
-    if(!sel.where) return alert("Inserisci il campo/indirizzo.");
-    overlay.remove();
-    showPrematchSummary(clubName, sel);
-  }, "primary"));
-
-  document.body.appendChild(overlay);
-}
-function showPrematchSummary(clubName, sel){
-  const overlay = el("div",{class:"overlay"});
-  const sheet = el("div",{class:"sheet"});
-  overlay.appendChild(sheet);
-
-  const tit = `${state.league||""} • ${state.gender||""} • ${state.region||""}`;
-  sheet.appendChild(el("div",{class:"hd"},"Riepilogo PreMatch"));
-  const bd = el("div",{class:"bd"});
-  const bar = el("div",{class:"bar"});
-  sheet.appendChild(bd); sheet.appendChild(bar);
-
-  const u = Auth.get();
-  const myClub = u?.role==="societa" ? (u.name || "Società A") : "Società A";
-  const other = clubName || "Società B";
-
-  bd.appendChild(el("div",{},[
-    el("div",{class:"sub"}, tit),
-    el("div",{style:{fontWeight:"800", margin:"6px 0 8px 0"}}, `${myClub} vs ${other}`),
-  ]));
-  bd.appendChild(el("div",{},[
-    el("div",{class:"sub"},"Colore maglia (ospite)"),
-    swatch(sel.maglia)
-  ]));
-  bd.appendChild(el("div",{},[
-    el("div",{class:"sub"},"Data & ora"),
-    el("div",{}, sel.when || "—")
-  ]));
-  bd.appendChild(el("div",{},[
-    el("div",{class:"sub"},"Campo / indirizzo"),
-    el("div",{}, sel.where || "—")
-  ]));
-
-  bar.appendChild(btn("Chiudi", ()=>overlay.remove()));
-  bar.appendChild(btn("Invia richiesta", ()=>{
+  const ann = h("button",{class:"btn"},"Annulla");
+  ann.onclick = ()=> document.body.removeChild(overlay);
+  const ok  = h("button",{class:"btn primary"},"Conferma");
+  ok.onclick = ()=>{
+    if(!sel.jersey){ alert("Seleziona il colore della maglia."); return; }
+    document.body.removeChild(overlay);
     toast("Richiesta PreMatch inviata ✅");
-    overlay.remove();
-  },"primary"));
+  };
 
+  bar.appendChild(ann); bar.appendChild(ok);
+  sheet.appendChild(hd); sheet.appendChild(bd); sheet.appendChild(bar);
   document.body.appendChild(overlay);
 }
 
-/* ---------- Utils ---------- */
-function clearMain(){ app.innerHTML=""; }
+/* ----- Accesso Convocazioni (staff con codice) ----- */
+function staffAccessButton(club){
+  const btn = h("button",{class:"btn"},"Convocazioni (staff)");
+  btn.addEventListener("click", ()=> openStaffCodeModal(club));
+  return btn;
+}
+
+function openStaffCodeModal(club){
+  const overlay = h("div",{class:"overlay"});
+  const sheet = h("div",{class:"sheet"});
+  overlay.appendChild(sheet);
+
+  const hd = h("div",{class:"hd"},"Area Staff – Inserisci codice");
+  const bd = h("div",{class:"bd"});
+  const bar = h("div",{class:"bar"});
+
+  const inp = h("input",{type:"text", placeholder:"Es. PM2025"});
+  const hint = h("div",{class:"hint"},"Codice dimostrativo: PM2025");
+  bd.appendChild(h("div",{class:"form-row"},[inp, hint]));
+
+  const ann = h("button",{class:"btn"},"Annulla");
+  ann.onclick = ()=> document.body.removeChild(overlay);
+  const ok  = h("button",{class:"btn primary"},"Entra");
+  ok.onclick = ()=>{
+    if(inp.value.trim().toUpperCase() === STAFF_CODE_DEMO){
+      document.body.removeChild(overlay);
+      pageConvocazioni(club);
+    } else {
+      alert("Codice errato.");
+    }
+  };
+
+  bar.appendChild(ann); bar.appendChild(ok);
+  sheet.appendChild(hd); sheet.appendChild(bd); sheet.appendChild(bar);
+  document.body.appendChild(overlay);
+}
+
+/* ----- Pagina Convocazioni ----- */
+function pageConvocazioni(club){
+  clearMain();
+  const prof = DATA.clubProfiles[state.club] || { roster:[] };
+
+  app.appendChild(sectionTitle("Convocazioni", `${state.club} • ${state.league||""} • ${state.region||""}`));
+
+  const box = h("div",{class:"container panel"});
+  box.appendChild(h("div",{class:"sub"},"Spunta le atlete convocate."));
+
+  const list = h("div",{class:"list"});
+  const selected = new Set();
+  (prof.roster||[]).forEach(p=>{
+    const ck = h("input",{type:"checkbox", class:"ck"});
+    ck.addEventListener("change", e=>{
+      if(e.target.checked) selected.add(p.name); else selected.delete(p.name);
+    });
+    list.appendChild(
+      h("div",{class:"item"},[
+        h("div",{},[
+          h("div",{class:"name"}, `${p.n} • ${p.name}`),
+          h("div",{class:"meta"}, p.role||"")
+        ]),
+        ck
+      ])
+    );
+  });
+  box.appendChild(list);
+
+  // dettagli raduno
+  const when = h("input",{type:"datetime-local"});
+  const where = h("input",{type:"text", placeholder:"Luogo raduno (es. Campo Comunale, Via...)"});
+  const notes = h("textarea",{placeholder:"Note per le convocate (documenti, orario spogliatoi, ecc.)"});
+
+  box.appendChild(h("div",{class:"form-row"},[h("div",{class:"sub"},"Appuntamento"), when]));
+  box.appendChild(h("div",{class:"form-row"},[h("div",{class:"sub"},"Luogo raduno"), where]));
+  box.appendChild(h("div",{class:"form-row"},[h("div",{class:"sub"},"Note"), notes]));
+
+  const actions = h("div",{class:"actions"},[
+    h("button",{class:"btn", onclick:()=>pageClubProfile(state.club)},"Indietro"),
+    h("button",{class:"btn primary", onclick:()=>{
+      exportConvocazioni({
+        club: state.club, league: state.league, region: state.region,
+        players: Array.from(selected), when: when.value, where: where.value, notes: notes.value
+      });
+    }},"Esporta PDF Lista")
+  ]);
+
+  app.appendChild(box);
+  app.appendChild(h("div",{class:"container"}, actions));
+}
+
+/* stampa semplice (HTML → stampa/PDF) */
+function exportConvocazioni(data){
+  const w = window.open("", "_blank");
+  const css = `
+    body{font-family:system-ui,Segoe UI,Roboto,Arial; margin:24px}
+    h1{margin:0 0 6px 0} h2{margin:18px 0 8px 0}
+    .muted{color:#555} ul{margin:8px 0 0 18px}
+    .tag{display:inline-block;padding:2px 6px;border:1px solid #ddd;border-radius:6px;margin-left:6px}
+  `;
+  const list = (data.players||[]).map(n=>`<li>${n}</li>`).join("") || "<li>—</li>";
+  const when = data.when ? new Date(data.when).toLocaleString() : "—";
+  w.document.write(`
+    <html><head><meta charset="utf-8"><title>Convocazioni</title>
+      <style>${css}</style>
+    </head><body>
+      <div style="display:flex;align-items:center;gap:10px">
+        <img src="${LOGOS.dark}" style="width:28px;height:28px;border:1px solid #eee;border-radius:6px" />
+        <h1>Convocazioni</h1>
+      </div>
+      <div class="muted">${data.club} — ${data.league||""} — ${data.region||""}</div>
+
+      <h2>Atlete convocate</h2>
+      <ul>${list}</ul>
+
+      <h2>Dettagli raduno</h2>
+      <div>Quando: <span class="tag">${when}</span></div>
+      <div style="margin-top:6px">Dove: <span class="tag">${data.where||"—"}</span></div>
+
+      <h2>Note</h2>
+      <div>${(data.notes||"—").replace(/\n/g,"<br>")}</div>
+      <script>window.print()</script>
+    </body></html>
+  `);
+  w.document.close();
+}
+
+/* toast */
 function toast(msg){
-  const t = el("div",{style:{
+  const t = h("div",{style:{
     position:"fixed", left:"50%", bottom:"22px", transform:"translateX(-50%)",
     background:"var(--accent)", color:"#0b1115", padding:"10px 14px",
-    borderRadius:"10px", fontWeight:"800", zIndex:1200
+    borderRadius:"10px", fontWeight:"700", zIndex:1200
   }}, msg);
-  document.body.appendChild(t); setTimeout(()=>t.remove(),1800);
+  document.body.appendChild(t);
+  setTimeout(()=> t.remove(), 1800);
 }
 
-/* ---------- Avvio ---------- */
-renderAuth();
+/* avvio */
 pageSports();
