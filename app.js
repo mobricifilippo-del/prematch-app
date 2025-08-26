@@ -121,9 +121,9 @@ function toast(msg){
     h("span","PreMatch")
   ]);
   const auth = h("div",{class:"auth"},[
+    h("button",{class:"btn", onclick:openCoachGate},"Allenatore"),
     h("button",{class:"btn", onclick:()=>toast("Login (demo)")},"Login"),
-    h("button",{class:"btn primary", onclick:()=>toast("Registrazione (demo)")},"Registrazione"),
-    h("button",{class:"btn", onclick:openCoachGate},"Allenatore")
+    h("button",{class:"btn primary", onclick:()=>toast("Registrazione (demo)")},"Registrazione")
   ]);
   row.appendChild(brand); row.appendChild(auth);
   header.appendChild(row);
@@ -137,8 +137,7 @@ function pageSports(){
   const grid = h("div", {class:"container grid"});
   DATA.sports.forEach(s=>{
     const card = gridCard({img:s.img, name:s.name}, ()=>{
-      // flash visivo più evidente
-      card.classList.add("selected");
+      card.classList.add("selected");      // flash visivo
       setTimeout(()=>{ state.sport = s.key; pageGender(); }, 120);
     });
     grid.appendChild(card);
@@ -251,16 +250,26 @@ function pageClubProfile(clubName){
     matches: []
   };
 
+  // immagine sport “a caso” (selezionato) per il cerchio sinistro
+  const sportImg = (() => {
+    const s = DATA.sports.find(x => x.key === state.sport);
+    if (s) return s.img;
+    // fallback: prima disponibile
+    return DATA.sports[0].img;
+  })();
+
   app.appendChild(sectionTitle(clubName, `${state.league||""} • ${state.gender||""} • ${state.region||""}`));
 
-  // header con due cerchi uguali
+  // header con due cerchi IDENTICI
   const header = h("div",{class:"container club-header"},[
     h("div",{class:"left"},[
-      h("div",{class:"club-circle"},[ h("img",{src:club.logo||LOGOS.icon, alt:clubName}) ])
+      h("div",{class:"club-circle"},[ 
+        h("img",{src:sportImg, alt:"Sport", class:"cover"})
+      ])
     ]),
     h("div",{class:"pm-wrap"},[
-      h("button",{class:"club-circle", onclick:()=>openPrematchModal(club)},[
-        h("img",{src:club.logo||LOGOS.icon, alt:"PM"})
+      h("div",{class:"club-circle button", role:"button", tabindex:"0", onclick:()=>openPrematchModal(club)},[
+        h("img",{src:LOGOS.light, alt:"PreMatch", class:"cover"})
       ]),
       h("div",{class:"pm-cta"},"Crea PreMatch")
     ])
@@ -404,7 +413,6 @@ function pageCoach(){
   clearMain();
   app.appendChild(sectionTitle("Convocazioni", state.club ? `Società: ${state.club}` : "Demo"));
 
-  // dati locali
   const key = "pm_convocazioni";
   const saved = JSON.parse(localStorage.getItem(key) || "[]");
 
