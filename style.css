@@ -6,7 +6,7 @@
   --accent:#41d27b;
   --accent-strong:#21c063;
   --border:#252b35;
-  --light:#f7f9fc;       /* per il pannello colori chiaro */
+  --light:#f7f9fc;
   --dark:#0b1115;
 }
 
@@ -41,7 +41,7 @@ html,body{
 .card{
   background:var(--card); border:1px solid var(--border);
   border-radius:16px; overflow:hidden; cursor:pointer;
-  transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+  transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease, filter .12s ease;
 }
 .card:hover{ transform: translateY(-2px); border-color:#2f3745; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
 .card.selected{ outline:2px solid var(--accent); }
@@ -53,11 +53,13 @@ html,body{
 .chip{
   padding:.5rem .8rem; border:1px solid var(--border);
   border-radius:999px; cursor:pointer; background:#12161c; color:var(--text);
-  font-weight:600;
-  transition: transform .12s ease, background .12s ease;
+  font-weight:700; transition:transform .12s ease, filter .12s ease, border-color .12s ease;
 }
 .chip:hover{border-color:#30394a}
 .chip.active{border-color:var(--accent); color:var(--accent); box-shadow: 0 0 0 2px rgba(65,210,123,.15) inset}
+
+/* Press feedback universale */
+.pressed{ transform: scale(.98); filter: brightness(1.1); }
 
 /* Pannelli / righe */
 .panel{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1rem}
@@ -69,8 +71,8 @@ html,body{
 .actions{display:flex; gap:.6rem; margin:1rem 0}
 .btn{
   border:1px solid var(--border); background:#141922; color:var(--text);
-  padding:.65rem 1rem; border-radius:10px; cursor:pointer; font-weight:700;
-  transition: transform .12s ease, background .12s ease, opacity .12s ease;
+  padding:.65rem 1rem; border-radius:10px; cursor:pointer; font-weight:800;
+  transition:transform .12s ease, filter .12s ease;
 }
 .btn.primary{ border-color:transparent; background:var(--accent); color:#0b1115; }
 .btn.primary:hover{ background:var(--accent-strong) }
@@ -104,25 +106,29 @@ html,body{
 .kit-light .kit-label{color:#64748b}
 .kit-light .sw{border-color:rgba(0,0,0,.15)}
 
-/* Bottoncino con logo nel CTA */
+/* Bottoncino con logo nel CTA inline */
 .pm-badge{display:inline-flex; align-items:center; gap:.4rem}
 .pm-badge img{width:18px; height:18px; border-radius:4px; border:1px solid var(--border)}
 
-/* ==============================
-   Feedback interattivo universale
-   ============================== */
-.btn:active {
-  transform: scale(0.97);
-  opacity: 0.8;
+/* ====== HEADER SOCIETÀ con CTA tonda ====== */
+.club-head{
+  max-width:1000px; margin: 0 auto 1rem; padding: 0 1.2rem;
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
 }
+.club-left{display:flex; align-items:center; gap:.9rem}
+.club-logo{
+  width:92px; height:92px; border-radius:999px; border:1px solid var(--border);
+  background:#0b0f14; padding:10px; object-fit:contain;
+}
+.club-title{display:flex; flex-direction:column}
+.club-title .name{font-weight:900; font-size:1.2rem}
+.club-title .meta{color:var(--muted); font-size:.9rem}
 
-.chip:active {
-  transform: scale(0.95);
-  background: var(--accent);
-  color: #0b1115;
+.cta-right{display:flex; flex-direction:column; align-items:center; gap:.35rem}
+.pm-round{
+  width:64px; height:64px; border-radius:999px; border:none; cursor:pointer;
+  background:var(--accent); display:flex; align-items:center; justify-content:center;
+  transition: transform .12s ease, filter .12s ease;
 }
-
-.card:active {
-  transform: scale(0.98);
-  opacity: 0.9;
-}
+.pm-round img{width:28px; height:28px}
+.pm-caption{font-size:.8rem; color:var(--muted); font-weight:800; text-align:center}
