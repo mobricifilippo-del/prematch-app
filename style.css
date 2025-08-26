@@ -4,7 +4,7 @@
   --muted:#8a94a6;
   --text:#eaf0ff;
   --accent:#41d27b;
-  --accent-strong:#21c063;
+  --accent-strong:#22c064;
   --border:#252b35;
   --light:#f7f9fc;
   --dark:#0b1115;
@@ -18,95 +18,111 @@ html,body{
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ---------- TOPBAR ---------- */
 .topbar{
   position:sticky; top:0; z-index:10;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:1rem;
+  padding:.5rem .8rem;
   background:linear-gradient(180deg, rgba(15,18,22,.95), rgba(15,18,22,.7));
   backdrop-filter: blur(6px);
   border-bottom:1px solid var(--border);
-  display:flex; align-items:center; gap:.5rem;
-  padding:.35rem .6rem;
-  flex-wrap:nowrap;                 /* non andare a capo */
 }
-.brand{display:flex; align-items:center; gap:.55rem; padding:.45rem .6rem; font-weight:800; min-width:0}
+.brand{display:flex; align-items:center; gap:.6rem; font-weight:800}
 .brand img{width:28px; height:28px; border-radius:6px; border:1px solid var(--border);}
 .brand span{color:var(--accent)}
-.auth{display:flex; gap:.5rem; margin-left:auto; white-space:nowrap}
-.btn{
-  border:1px solid var(--border); background:#141922; color:var(--text);
-  padding:.6rem .9rem; border-radius:10px; cursor:pointer; font-weight:700;
-}
-.btn.ghost{ background:transparent; border:1px solid var(--border); color:var(--text); }
-.btn.primary{ border-color:transparent; background:var(--accent); color:#0b1115; }
-.btn.primary:hover{ background:var(--accent-strong) }
+.actions-right{display:flex; align-items:center; gap:.6rem}
 
-/* bottoni più compatti sui telefoni così restano sulla riga */
-@media (max-width:480px){
-  .auth .btn{ padding:.45rem .7rem; font-size:.9rem; border-radius:9px; }
-}
-
-/* ---------- FOOTER E TITOLI ---------- */
 .footer{padding:1.2rem; border-top:1px solid var(--border); color:var(--muted); font-size:.9rem}
+
 .container{max-width:1000px; margin:0 auto; padding: 1.2rem}
 .h1{font-size:1.9rem; font-weight:800; margin:.6rem 0 0}
-.sub{color:var(--muted); margin:.2rem 0 1.4rem}
+.sub{color:var(--muted); margin:.2rem 0 1.2rem}
 
-/* ---------- GRID SPORT ---------- */
+/* Grid sport 2→3 colonne */
 .grid{display:grid; gap:1rem; grid-template-columns: repeat(2, 1fr);}
 @media(min-width:900px){ .grid{grid-template-columns: repeat(3,1fr);} }
 
 .card{
   background:var(--card); border:1px solid var(--border);
   border-radius:16px; overflow:hidden; cursor:pointer;
-  transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+  transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease, opacity .12s;
 }
 .card:hover{ transform: translateY(-2px); border-color:#2f3745; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
-.card.selected{ outline:2px solid var(--accent); }
+.card.pressed{ transform: scale(.985); opacity:.85; }
 .card img{width:100%; height:140px; object-fit:cover; display:block; background:#0b0f14;}
 .card .title{padding:.85rem 1rem; font-weight:800; color:var(--accent);}
 
-/* ---------- CHIP ---------- */
-.chips{display:flex; flex-wrap:wrap; gap:.6rem; margin:.5rem 0 1.2rem}
+/* Chip (filtri step) */
+.chips{display:flex; flex-wrap:wrap; gap:.6rem; margin:.5rem 0 1rem}
 .chip{
   padding:.5rem .8rem; border:1px solid var(--border);
   border-radius:999px; cursor:pointer; background:#12161c; color:var(--text);
-  font-weight:600;
+  font-weight:700; transition:transform .1s ease, background .12s ease, border-color .12s ease;
 }
-.chip:hover{border-color:#30394a}
+.chip:active{transform:scale(.97)}
 .chip.active{border-color:var(--accent); color:var(--accent); box-shadow: 0 0 0 2px rgba(65,210,123,.15) inset}
 
-/* feedback di pressione */
-.card:active, .chip:active, .btn:active { transform: scale(.98); opacity:.9; }
-
-/* ---------- PANNELLI / RIGHE ---------- */
+/* Pannelli / righe */
 .panel{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1rem}
 .row{display:flex; align-items:center; justify-content:space-between; border-bottom:1px dashed var(--border); padding:.8rem 0}
 .row:last-child{border-bottom:none}
 .row .team{font-weight:700}
 .row .meta{color:var(--muted); font-size:.95rem}
 
+/* Bottoni */
 .actions{display:flex; gap:.6rem; margin:1rem 0}
+.btn{
+  border:1px solid var(--border); background:#141922; color:var(--text);
+  padding:.65rem 1rem; border-radius:10px; cursor:pointer; font-weight:800;
+  transition:transform .1s ease, background .12s ease;
+}
+.btn:active{transform:scale(.98)}
+.btn.primary{ border-color:transparent; background:var(--accent); color:#0b1115; }
+.btn.primary:hover{ background:var(--accent-strong) }
+.btn.ghost{ background:transparent; }
+.btn:disabled{opacity:.5; cursor:not-allowed}
 
-/* ---------- ACCORDION ---------- */
-.acc{display:flex; flex-direction:column; gap:.7rem}
-.acc-item{background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden;}
-.acc-hd{display:flex; align-items:center; justify-content:space-between; padding:.9rem 1rem; cursor:pointer; font-weight:800; color:var(--accent);}
-.acc-bd{display:none; padding:1rem; border-top:1px dashed var(--border);}
+/* Società: testata con avatar + bottone tondo uguali */
+.club-hero{display:flex; align-items:center; justify-content:center; gap:2.6rem; margin-top:.4rem; margin-bottom:.6rem}
+.club-logo, .prematch-btn{
+  width:120px; height:120px; border-radius:999px;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--border);
+}
+.club-logo{ background:#0b0f14; }
+.club-logo img{width:56px; height:56px; border-radius:8px; border:1px solid var(--border)}
+
+.prematch-btn{ background:var(--accent); color:#0b1115; box-shadow:0 8px 22px rgba(0,0,0,.35)}
+.prematch-btn img{width:36px; height:36px; border-radius:6px; border:1px solid rgba(0,0,0,.08)}
+.prematch-cta{ text-align:center; font-weight:800; color:var(--accent); margin-top:.4rem }
+
+/* Accordion */
+.accordion{display:flex; flex-direction:column; gap:.9rem}
+.acc-item{border:1px solid var(--border); border-radius:14px; overflow:hidden; background:#131821;}
+.acc-hd{display:flex; align-items:center; justify-content:space-between; padding:1rem 1.1rem; cursor:pointer; font-weight:800}
+.acc-hd .t{color:var(--accent)}
+.acc-bd{padding:1rem 1.1rem; border-top:1px dashed var(--border); display:none}
 .acc-item.open .acc-bd{display:block}
-.gallery-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:.7rem; }
-.gallery-grid img { width:100%; height:120px; object-fit:cover; border-radius:10px; }
 
-/* ---------- CLUB HERO (logo + bottone PM) ---------- */
-.club-hero { display:flex; align-items:center; justify-content:center; gap:28px; margin:10px 0 18px; }
+/* Modale */
+.overlay{position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:flex-end; justify-content:center; z-index:30}
+.sheet{width:100%; max-width:720px; background:var(--card); border-top-left-radius:16px; border-top-right-radius:16px; border:1px solid var(--border)}
+.sheet .hd{padding:1rem 1.2rem; font-size:1.3rem; font-weight:800}
+.sheet .bd{padding:1rem 1.2rem; display:flex; flex-direction:column; gap:1rem}
+.sheet .bar{display:flex; justify-content:flex-end; gap:.6rem; padding:0 1.2rem 1rem}
 
-/* stesso diametro per entrambi */
-.club-logo, .pm-fab { width:104px; height:104px; border-radius:50%; display:grid; place-items:center; }
+/* Palette colori (maglia) */
+.palette{display:grid; grid-template-columns: repeat(8, 1fr); gap:10px; background:#fff; padding:10px; border-radius:12px}
+.dot{
+  width:28px; height:28px; border-radius:8px; border:1px solid #c9ced6; cursor:pointer;
+}
+.dot.sel{outline:2px solid var(--accent); outline-offset:2px}
 
-/* logo società: cerchio scuro con bordo */
-.club-logo { border:1px solid var(--border); background:#0b0f14; }
-.club-logo img { width:72px; height:72px; object-fit:contain; }
+/* Form piccoli */
+.input{
+  width:100%; padding:10px; border-radius:10px;
+  border:1px solid var(--border); background:#0f141a; color:var(--text)
+}
 
-/* bottone PM tondo */
-.pm-fab { background:var(--accent); color:#0b1115; border:none; box-shadow:0 8px 20px rgba(0,0,0,.25); }
-.pm-fab img { width:36px; height:36px; }
-.pm-fab-label { text-align:center; margin-top:6px; font-weight:800; color:var(--accent); }
+/* Helper */
+.mt8{margin-top:.5rem}
