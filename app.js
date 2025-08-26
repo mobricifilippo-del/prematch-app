@@ -85,16 +85,7 @@ function sectionTitle(title, subtitle){
   ]);
 }
 function chip(text, active, onClick){
-  const el = h("div", {class: "chip"+(active?" active":""), onclick:onClick}, text);
-  return el;
-}
-function colorDot(hex, selected, onClick){
-  return h("button", {
-    class:"color-dot"+(selected?" selected":""),
-    onclick:onClick,
-    style:{ width:"28px", height:"28px", borderRadius:"8px",
-      border:"1px solid #252b35", backgroundColor:hex, cursor:"pointer" }
-  });
+  return h("div", {class: "chip"+(active?" active":""), onclick:onClick}, text);
 }
 function gridCard(item, onClick){
   return h("div", {class:"card", onclick:onClick}, [
@@ -103,11 +94,14 @@ function gridCard(item, onClick){
   ]);
 }
 
-/* ---------- Topbar logo fix ---------- */
+/* Logo topbar coerente */
 (function fixBrandLogo(){
   const brand = document.querySelector(".brand img");
   if (brand) { brand.src = LOGOS.light; brand.alt = "PreMatch"; }
 })();
+
+/* ---------- Micro-ritardo (feedback) ---------- */
+const go = (fn) => setTimeout(fn, 160);
 
 /* ---------- Pagine ---------- */
 function pageSports(){
@@ -118,7 +112,7 @@ function pageSports(){
     grid.appendChild(
       gridCard({img:s.img, name:s.name}, ()=>{
         state.sport = s.key;
-        pageGender();
+        go(pageGender);
       })
     );
   });
@@ -136,7 +130,7 @@ function pageGender(){
         state.gender = g;
         [...row.children].forEach(c=>c.classList.remove("active"));
         e.currentTarget.classList.add("active");
-        pageRegions();
+        go(pageRegions);
       })
     );
   });
@@ -158,7 +152,7 @@ function pageRegions(){
         state.region = r;
         [...wrap.children].forEach(c=>c.classList.remove("active"));
         e.currentTarget.classList.add("active");
-        pageLeagues();
+        go(pageLeagues);
       })
     );
   });
@@ -181,7 +175,7 @@ function pageLeagues(){
         state.league = l;
         [...wrap.children].forEach(c=>c.classList.remove("active"));
         e.currentTarget.classList.add("active");
-        pageClubs();
+        go(pageClubs);
       })
     );
   });
@@ -204,7 +198,7 @@ function pageClubs(){
         state.club = c;
         [...wrap.children].forEach(x=>x.classList.remove("active"));
         e.currentTarget.classList.add("active");
-        pageClubProfile(c);
+        go(()=>pageClubProfile(c));
       })
     );
   });
@@ -215,7 +209,27 @@ function pageClubs(){
   app.appendChild(box);
 }
 
-/* ----- Società ----- */
+/* ---------- Società ---------- */
+function clubHero(club){
+  const wrap = h("div",{class:"container"});
+  const row = h("div",{class:"club-hero"});
+  // logo società
+  const logo = h("div",{class:"club-logo"},[
+    h("img",{src:club.logo||LOGOS.icon, alt:"Logo società"})
+  ]);
+  // CTA tonda PM
+  const cta = h("div",{style:{display:"flex", flexDirection:"column", alignItems:"center"}},[
+    h("button",{class:"club-cta", onclick:()=>openPrematchModal()},[
+      h("img",{src:LOGOS.icon, alt:"PM"})
+    ]),
+    h("div",{class:"club-cta-label"},"Crea PreMatch")
+  ]);
+  row.appendChild(logo);
+  row.appendChild(cta);
+  wrap.appendChild(row);
+  return wrap;
+}
+
 function pageClubProfile(clubName){
   clearMain();
   const club = DATA.clubProfiles[clubName] || {
@@ -226,16 +240,10 @@ function pageClubProfile(clubName){
   };
   app.appendChild(sectionTitle(clubName, `${state.league||""} • ${state.gender||""} • ${state.region||""}`));
 
-  const avatar = h("div",{class:"container", style:{display:"flex", justifyContent:"center", marginBottom:"-0.2rem"}},[
-    h("img",{src:club.logo||LOGOS.icon, alt:clubName, style:{
-      width:"92px", height:"92px", borderRadius:"999px", border:"1px solid #252b35",
-      background:"#0b0f14", padding:"10px", objectFit:"contain"
-    }})
-  ]);
-  app.appendChild(avatar);
+  // Logo + CTA tonda affiancati
+  app.appendChild(clubHero(club));
 
-  // (qui puoi riaggiungere divise/accordion quando vuoi)
-
+  // Prossime partite (resta come prima)
   const panel = h("div",{class:"container panel"});
   panel.appendChild(h("div",{class:"h2", style:{fontWeight:"800", color:"var(--accent)"}}, "Prossime partite"));
   (club.matches.length?club.matches:[{home:"—",when:"—",where:"—"}]).forEach(m=>{
@@ -247,23 +255,21 @@ function pageClubProfile(clubName){
 
   const actions = h("div",{class:"actions"},[
     h("button",{class:"btn", onclick:()=>pageClubs()},"Indietro"),
-    IS_VISITOR ? createPrematchButton(club) : null
   ]);
   app.appendChild(panel);
   app.appendChild(h("div",{class:"container"}, actions));
 }
 
-/* ----- Bottone + Modale PreMatch ----- */
-function createPrematchButton(){
-  const btn = h("button",{class:"btn primary", style:{display:"flex", alignItems:"center", gap:".5rem"}},[
-    h("img",{src:LOGOS.icon, alt:"PM", style:{width:"18px", height:"18px", borderRadius:"4px"}}),
-    "Crea PreMatch"
-  ]);
-  btn.addEventListener("click", ()=>{ openPrematchModal(); });
-  return btn;
-}
-
+/* ----- Modale PreMatch (solo maglia) ----- */
 function colorPalette(){ return ["#ffffff","#000000","#f1c40f","#e74c3c","#3498db","#2ecc71","#e67e22","#8e44ad"]; }
+function colorDot(hex, selected, onClick){
+  return h("button", {
+    class:"color-dot"+(selected?" selected":""),
+    onclick:onClick,
+    style:{ width:"28px", height:"28px", borderRadius:"8px",
+      border:"1px solid #252b35", backgroundColor:hex, cursor:"pointer" }
+  });
+}
 function colorSwatch(hex, big=false){
   return h("span", {style:{
     display:"inline-block", width: big?"24px":"16px", height: big?"24px":"16px",
@@ -273,7 +279,8 @@ function colorSwatch(hex, big=false){
 
 function openPrematchModal(){
   const overlay = h("div",{style:{
-    position:"fixed", inset:0, background:"rgba(0,0,0,.6)", zIndex:1000, display:"flex", justifyContent:"center", alignItems:"flex-start", paddingTop:"8vh"
+    position:"fixed", inset:0, background:"rgba(0,0,0,.6)", zIndex:1000,
+    display:"flex", justifyContent:"center", alignItems:"flex-start", paddingTop:"8vh"
   }});
   const modal = h("div",{style:{
     width:"min(640px, 92%)", background:"#11161c", color:"var(--text)",
@@ -339,9 +346,9 @@ function confirmToast(){
   setTimeout(()=>{ t.remove(); }, 1800);
 }
 
-/* ---------- Avvio ---------- */
+/* Avvio */
 pageSports();
 
-/* ---------- Stile interattivo aggiuntivo ---------- */
+/* Evidenza selezione colore */
 const extraCss = `.color-dot.selected{outline:2px solid var(--accent);outline-offset:2px;}`;
 document.head.appendChild(Object.assign(document.createElement("style"),{textContent:extraCss}));
