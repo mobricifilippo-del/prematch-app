@@ -18,26 +18,40 @@ html,body{
   -webkit-tap-highlight-color: transparent;
 }
 
+/* ---------- TOPBAR ---------- */
 .topbar{
   position:sticky; top:0; z-index:10;
   background:linear-gradient(180deg, rgba(15,18,22,.95), rgba(15,18,22,.7));
   backdrop-filter: blur(6px);
   border-bottom:1px solid var(--border);
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 .5rem;
+  display:flex; align-items:center; gap:.5rem;
+  padding:.35rem .6rem;
+  flex-wrap:nowrap;                 /* non andare a capo */
 }
-.brand{display:flex; align-items:center; gap:.6rem; padding:.8rem 1rem; font-weight:800}
+.brand{display:flex; align-items:center; gap:.55rem; padding:.45rem .6rem; font-weight:800; min-width:0}
 .brand img{width:28px; height:28px; border-radius:6px; border:1px solid var(--border);}
 .brand span{color:var(--accent)}
-.auth{display:flex; gap:.6rem; padding:.4rem .5rem;}
+.auth{display:flex; gap:.5rem; margin-left:auto; white-space:nowrap}
+.btn{
+  border:1px solid var(--border); background:#141922; color:var(--text);
+  padding:.6rem .9rem; border-radius:10px; cursor:pointer; font-weight:700;
+}
+.btn.ghost{ background:transparent; border:1px solid var(--border); color:var(--text); }
+.btn.primary{ border-color:transparent; background:var(--accent); color:#0b1115; }
+.btn.primary:hover{ background:var(--accent-strong) }
 
+/* bottoni più compatti sui telefoni così restano sulla riga */
+@media (max-width:480px){
+  .auth .btn{ padding:.45rem .7rem; font-size:.9rem; border-radius:9px; }
+}
+
+/* ---------- FOOTER E TITOLI ---------- */
 .footer{padding:1.2rem; border-top:1px solid var(--border); color:var(--muted); font-size:.9rem}
-
 .container{max-width:1000px; margin:0 auto; padding: 1.2rem}
 .h1{font-size:1.9rem; font-weight:800; margin:.6rem 0 0}
 .sub{color:var(--muted); margin:.2rem 0 1.4rem}
 
-/* Grid sport 2 colonne */
+/* ---------- GRID SPORT ---------- */
 .grid{display:grid; gap:1rem; grid-template-columns: repeat(2, 1fr);}
 @media(min-width:900px){ .grid{grid-template-columns: repeat(3,1fr);} }
 
@@ -51,7 +65,7 @@ html,body{
 .card img{width:100%; height:140px; object-fit:cover; display:block; background:#0b0f14;}
 .card .title{padding:.85rem 1rem; font-weight:800; color:var(--accent);}
 
-/* chip */
+/* ---------- CHIP ---------- */
 .chips{display:flex; flex-wrap:wrap; gap:.6rem; margin:.5rem 0 1.2rem}
 .chip{
   padding:.5rem .8rem; border:1px solid var(--border);
@@ -61,10 +75,10 @@ html,body{
 .chip:hover{border-color:#30394a}
 .chip.active{border-color:var(--accent); color:var(--accent); box-shadow: 0 0 0 2px rgba(65,210,123,.15) inset}
 
-/* Feedback pressione */
+/* feedback di pressione */
 .card:active, .chip:active, .btn:active { transform: scale(.98); opacity:.9; }
 
-/* Pannelli / righe */
+/* ---------- PANNELLI / RIGHE ---------- */
 .panel{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1rem}
 .row{display:flex; align-items:center; justify-content:space-between; border-bottom:1px dashed var(--border); padding:.8rem 0}
 .row:last-child{border-bottom:none}
@@ -72,16 +86,8 @@ html,body{
 .row .meta{color:var(--muted); font-size:.95rem}
 
 .actions{display:flex; gap:.6rem; margin:1rem 0}
-.btn{
-  border:1px solid var(--border); background:#141922; color:var(--text);
-  padding:.65rem 1rem; border-radius:10px; cursor:pointer; font-weight:700;
-}
-.btn.primary{ border-color:transparent; background:var(--accent); color:#0b1115; }
-.btn.primary:hover{ background:var(--accent-strong) }
-.btn:disabled{opacity:.5; cursor:not-allowed}
-.btn.ghost{ background:transparent; border:1px solid var(--border); color:var(--text); }
 
-/* Sezioni a tendina */
+/* ---------- ACCORDION ---------- */
 .acc{display:flex; flex-direction:column; gap:.7rem}
 .acc-item{background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden;}
 .acc-hd{display:flex; align-items:center; justify-content:space-between; padding:.9rem 1rem; cursor:pointer; font-weight:800; color:var(--accent);}
@@ -90,11 +96,17 @@ html,body{
 .gallery-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:.7rem; }
 .gallery-grid img { width:100%; height:120px; object-fit:cover; border-radius:10px; }
 
-/* Club hero */
+/* ---------- CLUB HERO (logo + bottone PM) ---------- */
 .club-hero { display:flex; align-items:center; justify-content:center; gap:28px; margin:10px 0 18px; }
-.club-logo, .pm-fab { width:96px; height:96px; border-radius:50%; display:grid; place-items:center; }
+
+/* stesso diametro per entrambi */
+.club-logo, .pm-fab { width:104px; height:104px; border-radius:50%; display:grid; place-items:center; }
+
+/* logo società: cerchio scuro con bordo */
 .club-logo { border:1px solid var(--border); background:#0b0f14; }
-.club-logo img { width:64px; height:64px; object-fit:contain; }
+.club-logo img { width:72px; height:72px; object-fit:contain; }
+
+/* bottone PM tondo */
 .pm-fab { background:var(--accent); color:#0b1115; border:none; box-shadow:0 8px 20px rgba(0,0,0,.25); }
 .pm-fab img { width:36px; height:36px; }
 .pm-fab-label { text-align:center; margin-top:6px; font-weight:800; color:var(--accent); }
