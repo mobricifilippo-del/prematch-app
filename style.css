@@ -8,6 +8,9 @@
   --border:#252b35;
   --light:#f7f9fc;
   --dark:#0b1115;
+
+  /* dimensione cerchi logo + CTA prematch */
+  --circle-size: 92px;
 }
 
 *{box-sizing:border-box}
@@ -18,115 +21,158 @@ html,body{
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Topbar */
+/* ========== TOPBAR ========== */
 .topbar{
   position:sticky; top:0; z-index:10;
-  display:flex; align-items:center; gap:.8rem;
-  padding:.5rem .8rem;
   background:linear-gradient(180deg, rgba(15,18,22,.95), rgba(15,18,22,.7));
   backdrop-filter: blur(6px);
   border-bottom:1px solid var(--border);
+
+  /* FIX: layout stabile con azioni a destra */
+  display:flex; align-items:center; justify-content:space-between;
+  gap:.8rem; padding:.4rem .8rem;
+  min-width:0;
 }
-.brand{display:flex; align-items:center; gap:.6rem; font-weight:800; flex:1}
+.brand{
+  display:flex; align-items:center; gap:.6rem;
+  font-weight:800; min-width:0;
+}
 .brand img{width:28px; height:28px; border-radius:6px; border:1px solid var(--border);}
-.brand span{color:var(--accent)}
-.auth{margin-left:auto; display:flex; gap:.6rem}
+.brand span{color:var(--accent); white-space:nowrap}
 
-.btn{
-  border:1px solid var(--border); background:#141922; color:var(--text);
-  padding:.55rem .9rem; border-radius:10px; cursor:pointer; font-weight:700;
+/* gruppo azioni (Login / Registrazione) sempre a destra */
+.topbar .auth, .topbar-actions{
+  margin-left:auto; display:flex; align-items:center; gap:.6rem;
+  white-space:nowrap; flex-wrap:nowrap;
 }
-.btn.primary{ border-color:transparent; background:var(--accent); color:#0b1115; }
-.btn.primary:hover{ background:var(--accent-strong) }
-.btn:disabled{opacity:.5; cursor:not-allowed}
-.btn-ghost{background:transparent}
 
-/* Footer */
+/* ========== TIPOGRAFIA / LAYOUT ========== */
 .footer{padding:1.2rem; border-top:1px solid var(--border); color:var(--muted); font-size:.9rem}
 
-/* Containers */
 .container{max-width:1000px; margin:0 auto; padding: 1.2rem}
 .h1{font-size:1.9rem; font-weight:800; margin:.6rem 0 0}
 .sub{color:var(--muted); margin:.2rem 0 1.4rem}
 
-/* Grid sport */
+/* ========== GRID SPORT ========== */
 .grid{display:grid; gap:1rem; grid-template-columns: repeat(2, 1fr);}
 @media(min-width:900px){ .grid{grid-template-columns: repeat(3,1fr);} }
 
 .card{
   background:var(--card); border:1px solid var(--border);
   border-radius:16px; overflow:hidden; cursor:pointer;
-  transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+  transition: transform .14s ease, border-color .14s ease, box-shadow .14s ease, background .14s ease;
 }
 .card:hover{ transform: translateY(-2px); border-color:#2f3745; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
 .card img{width:100%; height:140px; object-fit:cover; display:block; background:#0b0f14;}
 .card .title{padding:.85rem 1rem; font-weight:800; color:var(--accent);}
 
-/* press effect visibile */
-.card.pressed,
-.chip.pressed{ filter:brightness(1.2); transform:scale(.98); transition:transform .08s }
+/* highlight visivo più evidente alla pressione */
+.card:active,
+.card.pressed{ background:#1b212a; transform:translateY(0) scale(.98); }
 
-/* chip */
+/* ========== CHIP ========== */
 .chips{display:flex; flex-wrap:wrap; gap:.6rem; margin:.5rem 0 1.2rem}
 .chip{
   padding:.5rem .8rem; border:1px solid var(--border);
   border-radius:999px; cursor:pointer; background:#12161c; color:var(--text);
-  font-weight:700; transition:background .1s, border-color .1s, color .1s;
+  font-weight:700; transition:background .14s, transform .14s, border-color .14s, box-shadow .14s;
 }
 .chip:hover{border-color:#30394a}
 .chip.active{border-color:var(--accent); color:var(--accent); box-shadow: 0 0 0 2px rgba(65,210,123,.15) inset}
+/* pressione più visibile e più lunga */
+.chip:active,
+.chip.pressed{ background:#1b212a; transform:scale(.98); }
 
-/* Pannelli / righe */
+/* ========== PANNELLI / RIGHE ========== */
 .panel{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1rem}
 .row{display:flex; align-items:center; justify-content:space-between; border-bottom:1px dashed var(--border); padding:.8rem 0}
 .row:last-child{border-bottom:none}
 .row .team{font-weight:700}
 .row .meta{color:var(--muted); font-size:.95rem}
 
-/* Sezioni a tendina (accordion) */
+/* ========== BOTTONI ========== */
+.actions{display:flex; gap:.6rem; margin:1rem 0}
+.btn{
+  border:1px solid var(--border); background:#141922; color:var(--text);
+  padding:.65rem 1rem; border-radius:10px; cursor:pointer; font-weight:800;
+  transition:background .14s, transform .14s, box-shadow .14s;
+}
+.btn.primary{ border-color:transparent; background:var(--accent); color:#0b1115; }
+.btn.primary:hover{ background:var(--accent-strong) }
+.btn:disabled{opacity:.5; cursor:not-allowed}
+/* pressione più visibile e più lunga */
+.btn:active,
+.btn.pressed{ transform:scale(.98); box-shadow:0 0 0 3px rgba(65,210,123,.16) inset }
+
+/* ========== ACCORDION ========== */
 .accordion{display:flex; flex-direction:column; gap:.7rem}
 .acc-item{border:1px solid var(--border); border-radius:14px; overflow:hidden; background:#131821;}
-.acc-hd{display:flex; align-items:center; justify-content:space-between; padding:1rem; cursor:pointer; font-weight:800}
-.acc-hd .t{color:var(--accent)}
+.acc-hd{display:flex; align-items:center; justify-content:space-between; padding:.9rem 1rem; cursor:pointer}
+.acc-hd .t{font-weight:800; color:var(--accent)}
 .acc-bd{padding:1rem; border-top:1px dashed var(--border); display:none}
 .acc-item.open .acc-bd{display:block}
 
-/* Società: logo e CTA uguali */
-.club-row{
-  display:flex; align-items:center; justify-content:center; gap:2.4rem;
-  padding:.6rem 1.2rem 1rem 1.2rem;
-}
+/* ========== KIT COLORI (restyling neutro) ========== */
+.kits{display:grid; grid-template-columns: 80px 1fr; gap:1rem; padding:1rem; background:var(--light); color:#0b1115; border-radius:16px;}
+.kit-row{display:flex; align-items:center; gap:1rem; flex-wrap:wrap}
+.kit-label{font-weight:800; color:#64748b; width:80px}
+.swatches{display:grid; grid-template-columns: repeat(5, 28px); gap:.5rem}
+.sw{width:28px; height:28px; border-radius:6px; border:2px solid rgba(0,0,0,.12); cursor:pointer}
+.sw.sel{outline:2px solid var(--accent)}
+
+/* ========== MODALE PREMATCH ========== */
+.overlay{position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:flex-end; justify-content:center; z-index:30}
+.sheet{width:100%; max-width:720px; background:var(--card); border-top-left-radius:16px; border-top-right-radius:16px; border:1px solid var(--border)}
+.sheet .hd{padding:1rem 1.2rem; font-size:1.3rem; font-weight:800}
+.sheet .bd{padding:1rem 1.2rem; display:flex; flex-direction:column; gap:1rem}
+.sheet .bar{display:flex; justify-content:flex-end; gap:.6rem; padding:0 1.2rem 1rem}
+
+/* riquadro chiaro dentro il dialog per i colori ospite */
+.kit-light{background:var(--light); color:#0b1115; border-radius:14px; padding:1rem; border:1px solid #e5eaf1}
+.kit-light .kit-label{color:#64748b}
+.kit-light .sw{border-color:rgba(0,0,0,.15)}
+
+/* ========== LOGHI / CTA PREMATCH (stessa dimensione) ========== */
+/* Proviamo a coprire i nomi più comuni che hai in pagina */
+.club-header, .club-hero { display:flex; align-items:center; justify-content:center; gap:28px; }
+
+.club-logo,
 .club-avatar,
-.cta-prematch{
-  width:80px; height:80px; border-radius:999px;
+.avatar,
+.logo-circle,
+.pm-cta,
+.pm-round,
+.pm-fab{
+  width:var(--circle-size);
+  height:var(--circle-size);
+  border-radius:999px;
   display:flex; align-items:center; justify-content:center;
   border:1px solid var(--border);
+  background:#0b1115;
+  overflow:hidden;
 }
-.club-avatar{ background:#0b0f14; }
-.club-avatar img{ width:70%; height:70%; object-fit:contain; border-radius:8px; opacity:.9 }
-.cta-prematch{ background:var(--accent); box-shadow:0 0 24px rgba(65,210,123,.35); }
-.cta-prematch img{ width:36px; height:36px; border-radius:6px; }
-.cta-label{ text-align:center; font-weight:800; margin-top:.4rem }
 
-/* Modal */
-.modal-ov{position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:flex-start; justify-content:center; z-index:30; padding-top:8vh}
-.modal{width:min(680px,94%); background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden}
-.modal .hd{padding:1rem 1.2rem; font-size:1.3rem; font-weight:800}
-.modal .bd{padding:1rem 1.2rem; display:flex; flex-direction:column; gap:1rem}
-.modal .ft{display:flex; gap:.6rem; justify-content:flex-end; padding:0 1.2rem 1rem}
-
-/* palette */
-.palette{display:grid; grid-template-columns: repeat(8,1fr); gap:8px; background:#fff; padding:10px; border-radius:12px}
-.dot{width:28px; height:28px; border-radius:8px; border:1px solid #252b35; cursor:pointer}
-.dot.selected{ outline:2px solid var(--accent); outline-offset:2px; }
-
-/* inputs */
-.input, .select{
-  width:100%; padding:10px; border-radius:10px; border:1px solid var(--border);
-  background:#0f141a; color:var(--text);
+/* se dentro c’è un <img>, riempiamolo bene */
+.club-logo img,
+.club-avatar img,
+.avatar img,
+.logo-circle img,
+.pm-cta img,
+.pm-round img,
+.pm-fab img{
+  width:70%; height:70%; object-fit:contain; display:block;
 }
-.textarea{
-  width:100%; min-height:84px; padding:10px; border-radius:10px; border:1px solid var(--border);
-  background:#0f141a; color:var(--text); resize:vertical;
+
+/* ========== BADGE (usato in vari CTA) ========== */
+.pm-badge{display:inline-flex; align-items:center; gap:.4rem}
+.pm-badge img{width:18px; height:18px; border-radius:4px; border:1px solid var(--border)}
+
+/* ========== MICRO-ANIMAZIONI (durata pressione più lunga) ========== */
+@keyframes pressFlash{
+  0%{filter:brightness(1)}
+  100%{filter:brightness(1.12)}
 }
-.checkbox{ display:flex; align-items:center; gap:.6rem; user-select:none }
+/* utility globale: applicabile via JS se serve */
+.pressed{
+  animation: pressFlash .40s ease;
+}
