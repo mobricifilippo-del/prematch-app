@@ -3,11 +3,11 @@
    ========================= */
 
 /* ---------- Config demo ---------- */
-const IS_VISITOR = true;
+const IS_VISITOR = true; // in produzione: true se l’utente sta visitando una società avversaria
 const LOGOS = {
-  light: "./images/logo-light.png",
-  dark: "./images/logo-dark.png",
-  icon: "./images/logo-icon.png",
+  light: "./images/logo-light.png", // per topbar su sfondo scuro
+  dark: "./images/logo-dark.png",   // per PDF/sfondi chiari
+  icon: "./images/logo-icon.png",   // tondo
 };
 
 /* ---------- Dati demo ---------- */
@@ -56,7 +56,13 @@ const DATA = {
 };
 
 /* ---------- Stato ---------- */
-const state = { sport:null, gender:null, region:null, league:null, club:null };
+const state = {
+  sport: null,
+  gender: null,
+  region: null,
+  league: null,
+  club: null,
+};
 
 /* ---------- Helpers DOM ---------- */
 const app = document.getElementById("app");
@@ -87,6 +93,16 @@ function sectionTitle(title, subtitle){
 function chip(text, active, onClick){
   return h("div", {class: "chip"+(active?" active":""), onclick:onClick}, text);
 }
+function colorDot(hex, selected, onClick){
+  return h("button", {
+    class:"color-dot"+(selected?" selected":""),
+    onclick:onClick,
+    style:{
+      width:"28px", height:"28px", borderRadius:"8px",
+      border:"1px solid #252b35", backgroundColor:hex, cursor:"pointer"
+    }
+  });
+}
 function gridCard(item, onClick){
   return h("div", {class:"card", onclick:onClick}, [
     h("img", {src:item.img, alt:item.name, onerror(){this.style.display="none"}}),
@@ -94,25 +110,26 @@ function gridCard(item, onClick){
   ]);
 }
 
-/* Logo topbar coerente */
+/* ---------- Topbar logo fix (usa logo-light) ---------- */
 (function fixBrandLogo(){
   const brand = document.querySelector(".brand img");
-  if (brand) { brand.src = LOGOS.light; brand.alt = "PreMatch"; }
+  if (brand) {
+    brand.src = LOGOS.light;
+    brand.alt = "PreMatch";
+  }
 })();
-
-/* ---------- Micro-ritardo (feedback) ---------- */
-const go = (fn) => setTimeout(fn, 160);
 
 /* ---------- Pagine ---------- */
 function pageSports(){
   clearMain();
   app.appendChild(sectionTitle("Scegli lo sport", "Seleziona per iniziare"));
+
   const grid = h("div", {class:"container grid"});
   DATA.sports.forEach(s=>{
     grid.appendChild(
       gridCard({img:s.img, name:s.name}, ()=>{
         state.sport = s.key;
-        go(pageGender);
+        pageGender();
       })
     );
   });
@@ -122,15 +139,16 @@ function pageSports(){
 function pageGender(){
   clearMain();
   app.appendChild(sectionTitle("Seleziona il genere",""));
+
   const box = h("div",{class:"container panel"});
   const row = h("div",{class:"chips"});
   DATA.genders.forEach(g=>{
     row.appendChild(
-      chip(g, state.gender===g, (e)=>{
+      chip(g, state.gender===g, ()=>{
         state.gender = g;
         [...row.children].forEach(c=>c.classList.remove("active"));
-        e.currentTarget.classList.add("active");
-        go(pageRegions);
+        event.currentTarget.classList.add("active");
+        pageRegions();
       })
     );
   });
@@ -144,15 +162,16 @@ function pageGender(){
 function pageRegions(){
   clearMain();
   app.appendChild(sectionTitle("Scegli la regione",""));
+
   const box = h("div",{class:"container panel"});
   const wrap = h("div",{class:"chips"});
   DATA.regions.forEach(r=>{
     wrap.appendChild(
-      chip(r, state.region===r, (e)=>{
+      chip(r, state.region===r, ()=>{
         state.region = r;
         [...wrap.children].forEach(c=>c.classList.remove("active"));
-        e.currentTarget.classList.add("active");
-        go(pageLeagues);
+        event.currentTarget.classList.add("active");
+        pageLeagues();
       })
     );
   });
@@ -166,16 +185,17 @@ function pageRegions(){
 function pageLeagues(){
   clearMain();
   app.appendChild(sectionTitle("Scegli il campionato", state.region||""));
+
   const leagues = DATA.leaguesBy[state.region] || [];
   const box = h("div",{class:"container panel"});
   const wrap = h("div",{class:"chips"});
   leagues.forEach(l=>{
     wrap.appendChild(
-      chip(l, state.league===l, (e)=>{
+      chip(l, state.league===l, ()=>{
         state.league = l;
         [...wrap.children].forEach(c=>c.classList.remove("active"));
-        e.currentTarget.classList.add("active");
-        go(pageClubs);
+        event.currentTarget.classList.add("active");
+        pageClubs();
       })
     );
   });
@@ -189,16 +209,17 @@ function pageLeagues(){
 function pageClubs(){
   clearMain();
   app.appendChild(sectionTitle("Scegli la società", state.league||""));
+
   const clubs = DATA.clubsByLeague[state.league] || ["Società Dimostrativa"];
   const box = h("div",{class:"container panel"});
   const wrap = h("div",{class:"chips"});
   clubs.forEach(c=>{
     wrap.appendChild(
-      chip(c, state.club===c, (e)=>{
+      chip(c, state.club===c, ()=>{
         state.club = c;
         [...wrap.children].forEach(x=>x.classList.remove("active"));
-        e.currentTarget.classList.add("active");
-        go(()=>pageClubProfile(c));
+        event.currentTarget.classList.add("active");
+        pageClubProfile(c);
       })
     );
   });
@@ -209,41 +230,34 @@ function pageClubs(){
   app.appendChild(box);
 }
 
-/* ---------- Società ---------- */
-function clubHero(club){
-  const wrap = h("div",{class:"container"});
-  const row = h("div",{class:"club-hero"});
-  // logo società
-  const logo = h("div",{class:"club-logo"},[
-    h("img",{src:club.logo||LOGOS.icon, alt:"Logo società"})
-  ]);
-  // CTA tonda PM
-  const cta = h("div",{style:{display:"flex", flexDirection:"column", alignItems:"center"}},[
-    h("button",{class:"club-cta", onclick:()=>openPrematchModal()},[
-      h("img",{src:LOGOS.icon, alt:"PM"})
-    ]),
-    h("div",{class:"club-cta-label"},"Crea PreMatch")
-  ]);
-  row.appendChild(logo);
-  row.appendChild(cta);
-  wrap.appendChild(row);
-  return wrap;
-}
-
+/* ----- Società ----- */
 function pageClubProfile(clubName){
   clearMain();
+
   const club = DATA.clubProfiles[clubName] || {
     logo: LOGOS.icon,
     uniforms: {casa:"#ffffff", trasferta:"#000000", terza:"#2ecc71"},
     gallery: [], sponsors: [], contacts:{email:"-", tel:"-"},
     matches: []
   };
+
   app.appendChild(sectionTitle(clubName, `${state.league||""} • ${state.gender||""} • ${state.region||""}`));
 
-  // Logo + CTA tonda affiancati
-  app.appendChild(clubHero(club));
+  /* --- NUOVO HEADER: logo a sinistra + bottone tondo a destra --- */
+  const headerRow = h("div",{class:"container cta-wrap"},[
+    h("div",{class:"club-avatar"},[
+      h("img",{src:club.logo||LOGOS.icon, alt:clubName})
+    ]),
+    IS_VISITOR ? h("div",{class:"cta-col"},[
+      h("button",{class:"round-cta", onclick:()=>openPrematchModal(club)},[
+        h("img",{src:LOGOS.icon, alt:"PM"})
+      ]),
+      h("div",{class:"cta-label"},"Crea PreMatch")
+    ]) : h("div")
+  ]);
+  app.appendChild(headerRow);
 
-  // Prossime partite (resta come prima)
+  // Prossime partite
   const panel = h("div",{class:"container panel"});
   panel.appendChild(h("div",{class:"h2", style:{fontWeight:"800", color:"var(--accent)"}}, "Prossime partite"));
   (club.matches.length?club.matches:[{home:"—",when:"—",where:"—"}]).forEach(m=>{
@@ -252,35 +266,28 @@ function pageClubProfile(clubName){
       h("div",{class:"meta"}, `${m.when} — ${m.where}`)
     ]));
   });
-
-  const actions = h("div",{class:"actions"},[
-    h("button",{class:"btn", onclick:()=>pageClubs()},"Indietro"),
-  ]);
   app.appendChild(panel);
+
+  // Azioni in fondo (solo Indietro: il CTA principale è in alto ora)
+  const actions = h("div",{class:"actions"},[
+    h("button",{class:"btn", onclick:()=>pageClubs()},"Indietro")
+  ]);
   app.appendChild(h("div",{class:"container"}, actions));
 }
 
-/* ----- Modale PreMatch (solo maglia) ----- */
+/* ----- Modal PreMatch & utilità esistenti ----- */
 function colorPalette(){ return ["#ffffff","#000000","#f1c40f","#e74c3c","#3498db","#2ecc71","#e67e22","#8e44ad"]; }
-function colorDot(hex, selected, onClick){
-  return h("button", {
-    class:"color-dot"+(selected?" selected":""),
-    onclick:onClick,
-    style:{ width:"28px", height:"28px", borderRadius:"8px",
-      border:"1px solid #252b35", backgroundColor:hex, cursor:"pointer" }
-  });
-}
 function colorSwatch(hex, big=false){
   return h("span", {style:{
-    display:"inline-block", width: big?"24px":"16px", height: big?"24px":"16px",
+    display:"inline-block",
+    width: big?"24px":"16px", height: big?"24px":"16px",
     borderRadius:"6px", border:"1px solid #d0d7de", background:hex
   }});
 }
 
-function openPrematchModal(){
+function openPrematchModal(club){
   const overlay = h("div",{style:{
-    position:"fixed", inset:0, background:"rgba(0,0,0,.6)", zIndex:1000,
-    display:"flex", justifyContent:"center", alignItems:"flex-start", paddingTop:"8vh"
+    position:"fixed", inset:0, background:"rgba(0,0,0,.6)", zIndex:1000, display:"flex", justifyContent:"center", alignItems:"flex-start", paddingTop:"8vh"
   }});
   const modal = h("div",{style:{
     width:"min(640px, 92%)", background:"#11161c", color:"var(--text)",
@@ -301,10 +308,10 @@ function openPrematchModal(){
     const row = h("div",{style:{marginBottom:"14px"}},[
       h("div",{class:"sub", style:{margin:"0 0 8px 0"}}, label),
       h("div",{style:{display:"grid", gridTemplateColumns:"repeat(8,1fr)", gap:"8px", background:"#fff", padding:"10px", borderRadius:"12px"}},
-        palette.map(hex => colorDot(hex, sel[key]===hex, (e)=>{
+        palette.map(hex => colorDot(hex, sel[key]===hex, ()=>{
           sel[key]=hex;
-          [...e.currentTarget.parentElement.children].forEach(b=>b.classList.remove("selected"));
-          e.currentTarget.classList.add("selected");
+          [...event.currentTarget.parentElement.children].forEach(b=>b.classList.remove("selected"));
+          event.currentTarget.classList.add("selected");
         }))
       )
     ]);
@@ -346,9 +353,13 @@ function confirmToast(){
   setTimeout(()=>{ t.remove(); }, 1800);
 }
 
-/* Avvio */
+/* ---------- Avvio ---------- */
 pageSports();
 
-/* Evidenza selezione colore */
-const extraCss = `.color-dot.selected{outline:2px solid var(--accent);outline-offset:2px;}`;
-document.head.appendChild(Object.assign(document.createElement("style"),{textContent:extraCss}));
+/* ---------- Stili interattivi aggiuntivi (inietta piccole regole) ---------- */
+const extraCss = `
+  .color-dot.selected { outline:2px solid var(--accent); outline-offset:2px; }
+`;
+const styleTag = document.createElement("style");
+styleTag.appendChild(document.createTextNode(extraCss));
+document.head.appendChild(styleTag);
