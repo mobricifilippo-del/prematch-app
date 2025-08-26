@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
 
-  <!-- Favicon / Icone -->
+  <!-- Favicons / Icon -->
   <link rel="icon" href="./images/logo-icon.png" sizes="32x32" />
   <link rel="apple-touch-icon" href="./images/logo-icon.png" />
 
-  <!-- CSS (versione per cache buster) -->
-  <link rel="stylesheet" href="./style.css?v=11" />
+  <!-- CSS (cache-bust) -->
+  <link rel="stylesheet" href="./style.css?v=9" />
 </head>
 <body>
   <header class="topbar">
@@ -18,10 +18,10 @@
       <img src="./images/logo-light.png" alt="PreMatch" />
       <span>PreMatch</span>
     </div>
-    <div class="auth">
-      <button class="btn small">Accedi</button>
-      <button class="btn small primary">Registrati</button>
-    </div>
+    <nav class="auth">
+      <button class="btn ghost" id="btnLogin">Accedi</button>
+      <button class="btn primary" id="btnSignup">Registrati</button>
+    </nav>
   </header>
 
   <main id="app"></main>
@@ -30,7 +30,7 @@
     <div>© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
   </footer>
 
-  <!-- App (versione per cache buster) -->
-  <script src="./app.js?v=11"></script>
+  <!-- App (cache-bust) -->
+  <script src="./app.js?v=9"></script>
 </body>
 </html>
