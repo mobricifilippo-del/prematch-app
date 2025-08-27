@@ -79,24 +79,58 @@ $$('.swatch').forEach(s=>{
   };
 });
 
+// ====== CERTIFICATO PREMATCH (1 pagina) ======
+function openPrematchCertificate(d){
+  const w = window.open('', '_blank');
+  const css = `
+  <style>
+    @page { size:A4; margin:18mm }
+    body{font:14px/1.35 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial;color:#111}
+    .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;color:#0a7b3f}
+    .badge{width:28px;height:28px;border-radius:8px;border:1px solid #3bb26e;padding:3px}
+    h1{font-size:22px;margin:12px 0 10px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .card{border:1px solid #e5e7eb;border-radius:10px;padding:12px;margin:8px 0}
+    .row{display:flex;gap:10px}
+    .dot{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-right:6px;border:1px solid #999;background:${d.colore}}
+    .muted{color:#666}
+    .ok{color:#0a7b3f;font-weight:700}
+    .footer{margin-top:16px;font-size:12px;color:#555}
+  </style>`;
+  const html = `
+  <div class="head">
+    <div class="brand"><img class="badge" src="images/logo-icon.png" /> PreMatch</div>
+    <div class="ok">PreMatch confermato ✓</div>
+  </div>
+  <h1>Certificato PreMatch</h1>
+  <div class="grid">
+    <div class="card"><strong>Tipo gara</strong><br>${d.amichevole?'Amichevole':'Campionato / Torneo'}</div>
+    <div class="card"><strong>Data & ora</strong><br>${d.data || '—'}</div>
+    <div class="card"><strong>Squadra di casa</strong><br>ASD Roma Nord</div>
+    <div class="card"><strong>Squadra ospite</strong><br>—</div>
+    <div class="card"><strong>Luogo</strong><br>${d.luogo || '—'}</div>
+    <div class="card"><strong>Colore maglia ospite</strong><br><span class="dot"></span>${d.colore}</div>
+  </div>
+  <div class="card"><strong>Messaggio</strong><br><span class="muted">${d.msg || '—'}</span></div>
+  <div class="footer">Generato con PreMatch — semplice, pulita, veloce.</div>`;
+  w.document.write(`<html><head><meta charset="utf-8">${css}</head><body>${html}</body></html>`);
+  w.document.close();
+  w.focus();
+  w.print();
+}
+
 // Conferma PreMatch
 $('#pmConferma').addEventListener('click', (e)=>{
   e.preventDefault();
-  state.prematch.data = $('#pmData').value;
+  state.prematch.data = $('#pmData').value ? new Date($('#pmData').value).toLocaleString() : '';
   state.prematch.luogo = $('#pmLuogo').value;
   state.prematch.amichevole = $('#pmAmichevole').checked;
   state.prematch.msg = $('#pmMsg').value.trim();
 
   dlg.close();
-  const am = state.prematch.amichevole ? ' (richiesta amichevole)' : '';
-  alert(
-`PreMatch creato${am} ✅
-
-Colore maglia: ${state.prematch.colore}
-Data/ora: ${state.prematch.data || '—'}
-Luogo: ${state.prematch.luogo || '—'}
-Messaggio: ${state.prematch.msg || '—'}`
-  );
+  // Apri direttamente il certificato su 1 pagina
+  openPrematchCertificate(state.prematch);
 });
 
 // Shortcut Allenatore dentro società
@@ -131,9 +165,8 @@ $('#previewConv').onclick = ()=>{
   prev.classList.remove('hidden');
 };
 
-// Stampa/Scarica PDF (usa stampa di sistema: Android salva in PDF)
+// Stampa/Scarica PDF Convocazione (usa stampa di sistema)
 $('#printConv').onclick = ()=>{
-  // apre la preview se non c'è
   if($('#convPreview').classList.contains('hidden')) $('#previewConv').click();
   window.print();
 };
