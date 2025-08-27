@@ -1,159 +1,148 @@
-:root{
-  --bg:#0f1215;
-  --panel:#161a1f;
-  --panel-2:#1b2026;
-  --text:#e6ecef;
-  --muted:#9aa7b3;
-  --brand:#35c46a;
-  --brand-2:#2da45a;
-  --stroke:#24303a;
-  --danger:#ff5858;
-  --press:rgba(53,196,106,.18);
+/* Reset base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
+body {
+  background-color: #111;
+  color: #fff;
+  line-height: 1.5;
 }
 
-/* header */
-.pm-header{
-  position:sticky; top:0; z-index:50;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:10px 14px; background:linear-gradient(180deg,#0f1215,#0f1215cc 70%,transparent);
-  border-bottom:1px solid var(--stroke);
-}
-.brand{display:flex; align-items:center; gap:10px}
-.brand-badge{
-  width:28px; height:28px; border-radius:8px;
-  display:inline-grid; place-items:center; font-weight:700;
-  background:var(--brand); color:#0a0f0c; letter-spacing:.5px;
-}
-.brand-text{font-weight:700; color:var(--brand)}
-.pm-header-right{display:flex; gap:10px; align-items:center}
-
-.chip{
-  border:1px solid var(--stroke);
-  background:var(--panel);
-  color:var(--text);
-  padding:10px 14px; border-radius:14px;
-  cursor:pointer; transition:transform .02s ease, box-shadow .15s ease, background .15s ease;
-  outline:none;
-}
-.chip:active{transform:scale(.98); background:var(--panel-2)}
-.chip.primary{background:var(--brand); color:#07250f; border-color:#18763b}
-.chip.primary:active{background:var(--brand-2)}
-.chip.ghost{background:transparent}
-.chip.toggle[aria-pressed="true"],
-.chip.toggle.active{background:var(--brand); color:#07250f; border-color:#18763b}
-
-.view{display:none; padding:18px 14px; max-width:980px; margin:0 auto}
-.view.active{display:block}
-.view-head h1{margin:.2rem 0 0; font-size:2rem}
-.view-head p{margin:.4rem 0 1rem; color:var(--muted)}
-
-.grid-cards{
-  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px;
-}
-.card{
-  background:var(--panel); border:1px solid var(--stroke); border-radius:16px; overflow:hidden;
-  position:relative; cursor:pointer;
-}
-.card .thumb{width:100%; height:150px; object-fit:cover; display:block}
-.card .title{padding:10px 12px; font-weight:700; color:var(--brand)}
-.card:active::after{
-  content:""; position:absolute; inset:0; background:var(--press);
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background-color: #111;
+  border-bottom: 1px solid #222;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.list-cards{display:grid; gap:10px}
-.item{
-  background:var(--panel); border:1px solid var(--stroke); border-radius:14px;
-  padding:14px; display:flex; align-items:center; justify-content:space-between;
-}
-.item .title{font-weight:600}
-.item .sub{color:var(--muted); font-size:.9rem}
-
-.chip-row, .chip-wrap{display:flex; gap:10px; flex-wrap:wrap}
-.footer-nav{margin-top:18px; display:flex; gap:10px}
-
-.pm-footer{
-  text-align:center; color:var(--muted);
-  border-top:1px solid var(--stroke); padding:20px 10px; margin-top:40px;
+.navbar-left {
+  display: flex;
+  align-items: center;
 }
 
-/* pagina società */
-.club-hero h1{margin:12px 0 4px; font-size:2.2rem}
-.meta{color:var(--muted)}
-.club-duo{display:flex; align-items:center; justify-content:center; gap:24px; margin:18px 0 6px}
-.circle{
-  width:152px; height:152px; border-radius:50%;
-  border:2px solid var(--stroke); background:radial-gradient(ellipse at 30% 30%, #12181d, #0e1317);
-  display:grid; place-items:center; overflow:hidden;
-}
-.circle img{width:90%; height:90%; object-fit:contain; opacity:.95}
-.circle.callout{
-  border-color:#1f3b29; box-shadow:0 0 0 10px #16261c inset, 0 0 30px rgba(53,196,106,.35);
-  background:linear-gradient(180deg,#30b761,#2aa453);
-}
-.circle.callout:active{transform:scale(.98)}
-.circle .circle-inner{display:grid; place-items:center; width:100%; height:100%}
-.circle .brand-badge{width:48px; height:48px; border-radius:12px; font-size:1rem}
-.circle-caption{text-align:center; margin:6px 0 12px; color:var(--muted); font-weight:600}
-
-.accordion{
-  background:var(--panel); border:1px solid var(--stroke); border-radius:14px;
-  margin:10px 0; overflow:hidden;
-}
-.accordion summary{
-  list-style:none; padding:14px; cursor:pointer; font-weight:600;
-}
-.accordion[open] summary{background:var(--panel-2)}
-.acc-body{padding:0 14px 14px; color:#dbe4ea}
-
-/* modals */
-.modal{border:none; padding:0; background:transparent}
-.modal::backdrop{background:rgba(0,0,0,.6)}
-.modal-card{
-  width:min(560px,92vw); background:var(--panel); border:1px solid var(--stroke);
-  border-radius:16px; padding:16px; margin:auto;
-}
-.modal-card h2{margin:.2rem 0 1rem}
-.label{display:block; font-size:.9rem; color:var(--muted); margin:10px 0 6px}
-.input{
-  width:100%; background:#0c0f12; border:1px solid var(--stroke); color:var(--text);
-  padding:12px 12px; border-radius:12px; outline:none;
-}
-.input:focus{border-color:#2f8a53; box-shadow:0 0 0 3px rgba(53,196,106,.18)}
-.color-row{display:flex; gap:10px; flex-wrap:wrap}
-.color-dot{
-  width:34px; height:34px; border-radius:10px; border:2px solid #fff; outline:2px solid var(--stroke);
-  cursor:pointer;
-}
-.color-dot.active{outline-color:var(--brand)}
-.check-row{margin:10px 0}
-.checkbox{display:flex; gap:8px; align-items:center; user-select:none}
-.modal-actions{display:flex; gap:10px; justify-content:flex-end; margin-top:16px}
-.summary{background:var(--panel-2); border:1px solid var(--stroke); border-radius:12px; padding:12px; color:#c4d4dc}
-
-/* form */
-.form{display:grid; gap:10px; max-width:520px}
-.callup-card{
-  background:var(--panel); border:1px solid var(--stroke); border-radius:14px; padding:12px;
-}
-.player{display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px dashed var(--stroke)}
-.player:last-child{border-bottom:none}
-
-/* PRINT */
-@media print{
-  body{background:#fff; color:#000}
-  .pm-header,.pm-footer,.footer-nav,dialog,.accordion, .brand-badge{display:none !important}
-  .view{display:block !important; padding:0}
-  #print-certificate{display:block}
+.logo {
+  height: 32px;
+  margin-right: 8px;
 }
 
-/* utility */
-.hidden{display:none !important}
+.brand {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #00ff84;
+}
+
+.navbar-right .btn {
+  background: #222;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.navbar-right .btn:hover {
+  background: #333;
+}
+
+.navbar-right .btn-primary {
+  background: #00ff84;
+  color: #111;
+  font-weight: bold;
+}
+
+.navbar-right .btn-primary:hover {
+  background: #00cc66;
+}
+
+/* Main content */
+main {
+  padding: 20px;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+p {
+  margin-bottom: 20px;
+  color: #bbb;
+}
+
+/* Grid cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.card {
+  background: #1a1a1a;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 255, 132, 0.3);
+}
+
+.card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+
+.card h3 {
+  padding: 10px;
+  color: #00ff84;
+  font-size: 1.1rem;
+}
+
+/* Pulsanti circolari (per PreMatch) */
+.circle-btn {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid #00ff84;
+  background: transparent;
+  color: #00ff84;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.circle-btn:hover {
+  background: #00ff84;
+  color: #111;
+  transform: scale(1.05);
+}
+
+/* Footer */
+footer {
+  margin-top: 40px;
+  padding: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #777;
+  border-top: 1px solid #222;
+}
