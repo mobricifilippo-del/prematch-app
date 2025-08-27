@@ -1,126 +1,66 @@
-// Helper per asset su gh-pages in sottocartella
-const BASE = (document.querySelector('meta[name="gh-base"]')?.content || '').replace(/\/?$/, '/');
-const asset = (p) => `${BASE}${p}?v=5`;
-
-// Carica tutte le immagini dichiarate con data-src
-function loadImages(root = document) {
-  root.querySelectorAll('img[data-src]').forEach(img => {
-    const src = img.getAttribute('data-src');
-    img.src = asset(src);
-    img.onerror = () => { img.removeAttribute('data-src'); img.alt = img.alt || 'immagine'; };
-  });
-}
-loadImages(document);
-
-// Stato
-const state = { sport:null, gender:null, region:null, league:null, club:null };
-
-// Navigazione fra "screen"
-const screens = [...document.querySelectorAll('.screen')];
-function go(id){
-  screens.forEach(s => s.classList.toggle('active', s.id === id));
-  window.scrollTo({top:0, behavior:'instant'});
+// helper: cambia vista
+function show(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'instant'});
 }
 
-// HOME – click sport con glow visibile
-document.querySelectorAll('.sport-card').forEach(btn=>{
+// stato scelto
+const state = { sport:null, genere:null, regione:null, campionato:null, club:null };
+
+//// HOME -> GENERE
+document.querySelectorAll('.card.sport').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     state.sport = btn.dataset.sport;
-    btn.classList.add('glow');
-    setTimeout(()=>{ btn.classList.remove('glow'); go('gender'); }, 180); // luce ben visibile
-  });
+    show('view-genere');
+  }, {passive:true});
 });
 
-// GENERE
-document.querySelectorAll('#gender .pill').forEach(p=>{
-  p.addEventListener('click', ()=>{
-    state.gender = p.dataset.gender;
-    buildRegions();          // prepara la tabella regioni
-    go('region');
-  });
+// GENERE -> FILTRI
+document.querySelectorAll('#view-genere .chip').forEach(ch=>{
+  ch.addEventListener('click', ()=>{
+    state.genere = ch.dataset.genere;
+    show('view-filtri');
+  }, {passive:true});
 });
 
-// REGIONE
-const REGIONS = ['Lazio','Lombardia','Sicilia','Piemonte','Veneto','Emilia-Romagna'];
-function buildRegions(){
-  const wrap = document.getElementById('regionList');
-  wrap.innerHTML = '';
-  REGIONS.forEach(r=>{
-    const row = document.createElement('button');
-    row.className = 'row';
-    row.innerHTML = `<span class="name">${r}</span><span class="chev">›</span>`;
-    row.addEventListener('click', ()=>{ state.region = r; buildLeagues(); go('league'); });
-    wrap.appendChild(row);
-  });
+// Abilita "Avanti" solo quando entrambi selezionati
+const selReg = document.getElementById('sel-regione');
+const selCamp = document.getElementById('sel-camp');
+const goSoc  = document.getElementById('go-societa');
+function toggleGo(){
+  goSoc.disabled = !(selReg.value && selCamp.value);
 }
+selReg.addEventListener('change', ()=>{ state.regione = selReg.value; toggleGo(); }, {passive:true});
+selCamp.addEventListener('change', ()=>{ state.campionato = selCamp.value; toggleGo(); }, {passive:true});
 
-// CAMPIONATI (mock)
-function buildLeagues(){
-  const wrap = document.getElementById('leagueList');
-  wrap.innerHTML = '';
-  const leagues = ['Eccellenza','Promozione','Prima Categoria'];
-  leagues.forEach(l=>{
-    const row = document.createElement('button');
-    row.className = 'row';
-    row.innerHTML = `<span class="name">${l}</span><span class="chev">›</span>`;
-    row.addEventListener('click', ()=>{ state.league = l; buildClubs(); go('clubs'); });
-    wrap.appendChild(row);
-  });
-}
+// FILTRI -> SOCIETÀ
+goSoc.addEventListener('click', ()=> show('view-societa'));
 
-// SOCIETÀ (mock) – due esempi
-function buildClubs(){
-  const wrap = document.getElementById('clubList');
-  wrap.innerHTML = '';
+// SOCIETÀ -> PAGINA CLUB
+document.querySelectorAll('.club').forEach(c=>{
+  c.addEventListener('click', ()=>{
+    state.club = c.dataset.club;
+    // Popola pagina club
+    document.getElementById('club-name').textContent = state.club;
+    const meta = `${state.campionato} • ${state.genere} • ${state.regione}`;
+    document.getElementById('club-meta').textContent = meta;
 
-  const clubs = [
-    { id:'roma-nord', name:'ASD Roma Nord', meta:`${state.league} • ${state.gender==='F'?'Femminile':'Maschile'} • ${state.region}`, logo:'images/clubs/roma-nord.png' },
-    { id:'virtus-marino', name:'Virtus Marino', meta:`${state.league} • ${state.gender==='F'?'Femminile':'Maschile'} • ${state.region}`, logo:'images/clubs/virtus-marino.png' }
-  ];
+    const img = c.querySelector('img').getAttribute('src');
+    const clubLogo = document.getElementById('club-logo');
+    clubLogo.src = img;
+    clubLogo.alt = `Logo ${state.club}`;
 
-  clubs.forEach(c=>{
-    const card = document.createElement('button');
-    card.className = 'club-card';
-    card.innerHTML = `
-      <img data-src="${c.logo}" alt="${c.name}" />
-      <div>
-        <h3 class="title">${c.name}</h3>
-        <div class="meta">${c.meta}</div>
-      </div>`;
-    card.addEventListener('click', ()=>openClub(c));
-    wrap.appendChild(card);
-  });
-
-  loadImages(wrap);
-}
-
-function openClub(c){
-  state.club = c.id;
-  document.getElementById('clubName').textContent = c.name;
-  document.getElementById('clubMeta').textContent = c.meta;
-  const logo = document.getElementById('clubLogo');
-  logo.setAttribute('data-src', c.logo);
-  loadImages(document.getElementById('clubPage'));
-  go('clubPage');
-}
-
-// PREMATCH (apre solo un placeholder)
-document.getElementById('btnPrematch').addEventListener('click', ()=>{
-  alert('Finestra PreMatch: qui aggiungeremo messaggio all’avversario + conferma.');
+    show('view-club');
+  }, {passive:true});
 });
 
-// Tasto Indietro (presente in ogni screen tranne home)
+// NAV "Indietro"
 document.querySelectorAll('[data-back]').forEach(b=>{
-  b.addEventListener('click', ()=>{
-    if (document.getElementById('clubPage').classList.contains('active')) return go('clubs');
-    if (document.getElementById('clubs').classList.contains('active')) return go('league');
-    if (document.getElementById('league').classList.contains('active')) return go('region');
-    if (document.getElementById('region').classList.contains('active')) return go('gender');
-    if (document.getElementById('gender').classList.contains('active')) return go('home');
-  });
+  b.addEventListener('click', ()=> show(b.dataset.back));
 });
 
-// Coach (placeholder)
-document.getElementById('btnCoach').addEventListener('click', ()=>{
-  alert('Allenatore: inserisci codice e vai alla convocazione.');
+// Pulsante PreMatch (placeholder)
+document.getElementById('btn-prematch').addEventListener('click', ()=>{
+  alert(`PreMatch creato per ${state.club}\n${state.campionato} • ${state.genere} • ${state.regione}`);
 });
