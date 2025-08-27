@@ -1,172 +1,100 @@
-/* ==========
-   Base / Reset
-   ========== */
+/* ========= VARIABILI ========= */
 :root{
-  --bg:#0f1115;
-  --panel:#161a20;
-  --text:#e6e7ea;
-  --muted:#9aa3af;
-  --brand:#22c55e;         /* verde PreMatch */
-  --brand-700:#16a34a;
-  --brand-500:#22c55e;
-  --brand-300:#86efac;
-  --ring: rgba(34,197,94,.9);
-  --ring-soft: rgba(34,197,94,.45);
+  --pm-green:#22c55e;
+  --pm-green-600:#16a34a;
+  --pm-green-700:#15803d;
+  --pm-bg:#0f1115;
+  --pm-card:#151821;
+  --pm-text:#e5e7eb;
+  --pm-muted:#9ca3af;
 
-  /* dimensioni cerchi (mobile / desktop) */
-  --circle: 152px;
-  --circle-lg: 180px;
+  /* dimensioni cerchi logo/pulsante (uguali) */
+  --circle-size: 164px;
+  --circle-shadow: 0 0 0 6px rgba(34,197,94,.15), 0 8px 24px rgba(0,0,0,.35);
 }
 
-@media (min-width: 480px){
-  :root{ --circle: var(--circle-lg); }
+/* ========= BASE ========= */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--pm-bg);color:var(--pm-text);
+  font:500 16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
 }
 
-*{ box-sizing:border-box; }
-html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; }
-
-/* ==========
-   Header
-   ========== */
+/* ========= HEADER ========= */
 .header{
-  position:sticky; top:0; z-index:20;
-  background:linear-gradient(180deg,#0f1115, #0f1115f2 70%, transparent);
-  backdrop-filter:saturate(120%) blur(6px);
-  padding:12px 16px;
-  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;background:rgba(13,16,22,.85);backdrop-filter:saturate(120%) blur(8px);
+  position:sticky;top:0;z-index:20;border-bottom:1px solid rgba(255,255,255,.06)
 }
-.brand{ display:flex; align-items:center; gap:10px; }
+.brand{
+  display:flex;align-items:center;gap:10px;
+}
 .brand-badge{
-  width:28px; height:28px; border-radius:6px; background:#0b0d10;
-  display:grid; place-items:center; overflow:hidden;
+  width:28px;height:28px;border-radius:8px;
+  background:#ffffff;               /* <-- ora il logo si vede su sfondo scuro */
+  display:grid;place-items:center;border:1px solid rgba(0,0,0,.06)
 }
-.brand-badge img{ max-width:100%; max-height:100%; display:block; }
+.brand-title{color:var(--pm-green);font-weight:800}
 
-.header-cta{ display:flex; gap:10px; }
+/* ========= CHIP / BOTTONI SCELTA ========= */
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 0}
+.chip{
+  appearance:none;border:1px solid rgba(255,255,255,.12);
+  background:transparent;color:var(--pm-text);
+  padding:10px 14px;border-radius:20px;font-weight:600;
+  transition:.18s ease;outline:none
+}
+.chip:active{transform:scale(.98)}
+.chip:hover{border-color:rgba(255,255,255,.22)}
+.chip--active,.chip:focus-visible{
+  background:var(--pm-green);color:#0b110c;border-color:var(--pm-green)
+}
+
+/* ========= CARD SPORT ========= */
+.sports{display:grid;gap:16px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.sport-card{
+  background:var(--pm-card);border:1px solid rgba(255,255,255,.06);
+  border-radius:18px;overflow:hidden;transition:transform .08s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.sport-card:active{transform:scale(.985)}
+.sport-card:hover{border-color:rgba(255,255,255,.16);box-shadow:0 6px 22px rgba(0,0,0,.28)}
+.sport-img{width:100%;height:170px;object-fit:cover;display:block}
+.sport-title{padding:12px 14px;font-weight:800;color:var(--pm-green)}
+
+/* ========= CERCHI LOGO & PREMATCH (uguali) ========= */
+.circle{
+  width:var(--circle-size);height:var(--circle-size);border-radius:50%;
+  background:radial-gradient(105% 105% at 50% 45%, #10151b 0%, #0c1016 100%);
+  border:1px solid rgba(255,255,255,.06);
+  display:grid;place-items:center;box-shadow:var(--circle-shadow)
+}
+.circle img{width:54%;height:54%;object-fit:contain;opacity:.92}
+
+.prematch-btn{
+  width:var(--circle-size);height:var(--circle-size);border-radius:50%;
+  background:var(--pm-green);color:#031407;border:none;cursor:pointer;
+  display:grid;place-items:center;font-weight:800;
+  box-shadow:0 0 0 6px rgba(34,197,94,.18), 0 12px 28px rgba(0,0,0,.4);
+  transition:transform .08s ease, filter .18s ease, box-shadow .18s ease
+}
+.prematch-btn:active{transform:scale(.97)}
+.prematch-btn:focus-visible{outline:3px solid var(--pm-green-700)}
+.prematch-caption{margin-top:10px;text-align:center;font-weight:800}
+
+/* ========= SEZIONI A FISARMONICA ========= */
+.accordion{margin-top:14px}
+.ac-item{background:var(--pm-card);border:1px solid rgba(255,255,255,.08);border-radius:14px;margin-bottom:10px}
+.ac-head{
+  padding:14px 16px;display:flex;align-items:center;justify-content:space-between;
+  font-weight:800
+}
+.ac-body{padding:0 16px 14px 16px;border-top:1px solid rgba(255,255,255,.06);display:none}
+.ac-item.open .ac-body{display:block}
+
+/* ========= CTA, PULSANTI MINORI ========= */
 .btn{
-  appearance:none; border:1px solid #20242c; background:#12161b; color:var(--text);
-  padding:10px 14px; border-radius:14px; font-weight:600; letter-spacing:.2px;
-  transition:transform .06s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+  background:transparent;border:1px solid rgba(255,255,255,.14);
+  color:var(--pm-text);padding:10px 14px;border-radius:14px;font-weight:700
 }
-.btn:hover{ background:#141920; border-color:#29303b; }
-.btn:active{ transform:scale(.98); }
-.btn--primary{
-  background:var(--brand); border-color:transparent; color:#0a0f0c;
-  box-shadow:0 6px 18px -6px var(--ring-soft);
-}
-.btn--primary:hover{ background:var(--brand-700); }
-
-/* ==========
-   Cards / griglie
-   ========== */
-.grid{ display:grid; gap:14px; }
-.grid--sports{ grid-template-columns:repeat(2,1fr); padding:0 16px 24px; }
-@media (min-width: 720px){ .grid--sports{ grid-template-columns:repeat(3,1fr); } }
-
-.card{
-  background:var(--panel); border:1px solid #1b2027; border-radius:18px; overflow:hidden;
-  transition:transform .08s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease;
-}
-.card:hover{ border-color:#273040; box-shadow:0 8px 22px -10px rgba(0,0,0,.5); transform:translateY(-1px); }
-.card__img{ width:100%; aspect-ratio:16/11; object-fit:cover; display:block; }
-.card__title{ padding:10px 14px 14px; color:var(--brand); font-weight:800; font-size:1.15rem; }
-
-/* ripple rapido ma visibile sui tap */
-.card:active{ box-shadow:0 0 0 6px rgba(255,255,255,.02) inset, 0 0 0 2px var(--ring) inset; }
-
-/* ==========
-   CLUB PAGE — cerchi uguali (logo + pulsante)
-   ========== */
-.club-hero{
-  display:flex; align-items:center; justify-content:flex-start; gap:22px;
-  padding:8px 16px 18px;
-}
-
-/* NB: includo più selettori per adattarmi al tuo markup attuale:
-   - .club-logo, .club-logo-circle, .club-badge : cerchio del logo società
-   - #createPreMatchBtn, .prematch-cta, .cta-prematch-circle : cerchio pulsante PreMatch
-   Usa quelli che hai già: questa regola li uniforma automaticamente. */
-.club-logo, .club-logo-circle, .club-badge,
-#createPreMatchBtn, .prematch-cta, .cta-prematch-circle{
-  width:var(--circle);
-  height:var(--circle);
-  border-radius:50%;
-  position:relative;
-  display:flex; align-items:center; justify-content:center;
-  flex:0 0 var(--circle);
-  background:#0c0f13;
-  border:1px solid #1b2027;
-  overflow:hidden;
-}
-
-/* logo società dentro al cerchio */
-.club-logo img, .club-badge img{
-  max-width:70%;
-  max-height:70%;
-  opacity:.95;
-  filter:drop-shadow(0 1px 0 rgba(255,255,255,.02));
-}
-
-/* ==========
-   Pulsante PreMatch — bordo/glow e feedback
-   ========== */
-#createPreMatchBtn, .prematch-cta, .cta-prematch-circle{
-  background:var(--brand); border-color:transparent;
-  box-shadow:0 10px 30px -10px var(--ring-soft);
-}
-#createPreMatchBtn::after, .prematch-cta::after, .cta-prematch-circle::after{
-  content:""; position:absolute; inset:-6px; border-radius:50%;
-  border:2px solid var(--ring);
-  box-shadow:0 0 22px var(--ring-soft), 0 0 6px rgba(34,197,94,.75) inset;
-  pointer-events:none;
-}
-#createPreMatchBtn:active, .prematch-cta:active, .cta-prematch-circle:active{
-  transform:scale(.985);
-}
-
-/* icona/logo dentro al pulsante */
-#createPreMatchBtn img, .prematch-cta img, .cta-prematch-circle img{
-  max-width:58%;
-  max-height:58%;
-  filter:drop-shadow(0 1px 0 rgba(0,0,0,.12));
-  opacity:.98;
-}
-
-/* didascalia sotto ai cerchi */
-.circle-caption{
-  text-align:center; font-weight:800; letter-spacing:.2px; color:var(--brand-300);
-  margin-top:10px;
-}
-
-/* ==========
-   Accordion sezioni
-   ========== */
-.accordion{
-  margin:10px 16px; border-radius:16px; overflow:hidden;
-  border:1px solid #1b2027; background:var(--panel);
-}
-.accordion + .accordion{ margin-top:12px; }
-.accordion__header{
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-  padding:16px; font-weight:700;
-}
-.accordion__chev{ opacity:.6; transition:transform .2s ease; }
-.accordion[open] .accordion__chev{ transform:rotate(180deg); }
-.accordion__content{ padding:0 16px 16px; color:var(--muted); }
-
-/* ==========
-   Bottoni secondari
-   ========== */
-.btn--ghost{
-  background:#12161b; border:1px solid #20242c; color:#c8ced6;
-}
-.btn--ghost:hover{ border-color:#2a313d; }
-
-/* ==========
-   Utility
-   ========== */
-.m-0{ margin:0; } .mt-8{ margin-top:8px; } .mt-12{ margin-top:12px; }
-.mt-16{ margin-top:16px; } .mt-20{ margin-top:20px; }
-.center{ text-align:center; }
-
-.hidden{ display:none !important; }
+.btn--primary{background:var(--pm-green);color:#0b110c;border-color:var(--pm-green)}
