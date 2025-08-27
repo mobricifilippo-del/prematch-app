@@ -58,3 +58,33 @@ h1{margin:8px 0 6px;font-size:32px}
 .acc-body{padding:12px 14px;border-top:1px solid #232a31;color:var(--muted)}
 
 .site-footer{padding:20px 16px;color:var(--muted);text-align:center;border-top:1px solid #1b1f23;margin-top:28px}
+/* HEADER */
+.topbar{
+  position: sticky; top:0; z-index:1000;
+  display:flex; align-items:center; gap:12px;
+  padding:12px 16px; background:#0f1216;
+}
+
+.brand{display:flex; align-items:center; gap:10px; min-width:0;}
+.brand-logo{width:28px; height:28px;}
+.brand-name{color:#a7f3d0; font-weight:700; font-size:18px; white-space:nowrap;}
+
+.actions{
+  margin-left:auto;                /* spinge i bottoni a destra */
+  display:flex; gap:10px; flex-wrap:nowrap;
+}
+
+/* Bottoni compatti su schermi piccoli */
+@media (max-width: 390px){
+  .actions .btn{padding:8px 10px; font-size:14px;}
+  .brand-name{font-size:16px;}
+}
+
+/* (Se già esistono .btn / .btn-primary / .btn-ghost, lasciale; altrimenti:) */
+.btn{display:inline-flex; align-items:center; justify-content:center;
+  border-radius:10px; padding:10px 14px; font-weight:600; text-decoration:none;
+  border:1px solid #2a2f36; color:#e5e7eb; background:#14181d;
+}
+.btn-ghost{background:transparent;}
+.btn-primary{background:#22c55e; border-color:#22c55e; color:#0b1117;}
+.btn:active{transform:scale(0.98);}
