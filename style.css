@@ -112,3 +112,64 @@ h1{font-size:38px;margin:10px 0 6px}
 
 /* UTIL */
 .hidden{display:none}
+/* ====== HOME: griglia sport fissa 2x3, stabile su mobile ====== */
+
+/* Header: logo a sinistra, bottoni a destra, riga singola */
+.header {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding:10px 16px;
+}
+.header-left { display:flex; align-items:center; gap:10px; }
+.header-right { display:flex; align-items:center; gap:10px; }
+.header .btn { white-space:nowrap; }
+
+/* Contenitore sezione home */
+.home-section { padding: 0 16px 24px; }
+
+/* Titoli */
+.home-section .title { font-size: 32px; line-height: 1.2; margin: 8px 0 4px; }
+.home-section .subtitle { color: #9aa3a8; margin-bottom: 12px; }
+
+/* Griglia 2 colonne fissa su mobile */
+.sports-grid {
+  display:grid;
+  grid-template-columns: 1fr 1fr;        /* 2 colonne */
+  gap: 16px;
+}
+
+/* Card sport */
+.sport-card {
+  background:#161819;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow: 0 0 0 1px #1e2326 inset;
+  transition: transform .08s ease-out, box-shadow .08s ease-out;
+}
+
+/* Immagine con rapporto stabile e copertura */
+.sport-card .thumb {
+  width:100%; aspect-ratio: 16 / 10;
+  object-fit: cover; display:block;
+}
+
+/* Nome sport */
+.sport-card .name {
+  padding:10px 14px 14px;
+  font-weight:700;
+  color:#38e07d; /* verde PreMatch */
+}
+
+/* Effetto “si accende” alla pressione */
+.sport-card:active {
+  transform: scale(.98);
+  box-shadow: 0 0 0 2px #38e07d inset;
+}
+
+/* Spazio inferiore della pagina per non finire sotto la navbar del telefono */
+.page-bottom-space { height: 72px; }
+
+/* Tablet/desktop: 3 colonne */
+@media (min-width: 820px) {
+  .sports-grid { grid-template-columns: repeat(3, 1fr); }
+  .home-section .title { font-size: 40px; }
+}
