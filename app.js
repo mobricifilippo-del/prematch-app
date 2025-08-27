@@ -1,172 +1,270 @@
-// Helpers
-const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
-const show = id => {
-  $$('.view').forEach(v=>v.classList.remove('active'));
-  $(id).classList.add('active');
-  window.scrollTo({top:0,behavior:'instant'});
-};
+/* =========================
+   PreMatch – Router semplice
+   Flusso: Sport → Genere → Regione → Campionato → Società → Pagina Società
+   ========================= */
 
-// Stato demo
 const state = {
   sport: null,
-  regione: null,
-  genere: null,
-  prematch: {
-    colore:"#ffffff", data:"", luogo:"", amichevole:false, msg:""
+  gender: null,
+  region: null,
+  league: null,
+  club: null,
+};
+
+/* ===== Mock dati minimi per demo ===== */
+const DATA = {
+  Calcio: {
+    Lazio: {
+      Maschile: {
+        "Eccellenza": ["ASD Roma Nord", "Virtus Marino"],
+        "Promozione": ["Atletico Appio"],
+      },
+      Femminile: {
+        "Eccellenza": ["ASD Roma Nord"],
+      }
+    },
+    Lombardia: { Maschile: { "Eccellenza": ["Lombardia FC"] }, Femminile: { "Eccellenza": ["Women Milano"] } },
+  },
+  Futsal: {
+    Lazio: { Maschile: { "Serie C1": ["Futsal Roma"] }, Femminile: { "Serie C1": ["Lady Five"] } }
   }
 };
 
-// NAV: Coach in header
-$('#coachNavBtn').addEventListener('click', ()=> show('#view-coach'));
-$('#registerBtn').addEventListener('click', ()=> alert('Demo: registrazione in arrivo'));
+/* ===== Helpers DOM ===== */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 
-// HOME → REGIONI con tap visibile
-$$('.sport-card').forEach(card=>{
-  card.addEventListener('click', ()=>{
-    state.sport = card.dataset.sport;
-    // feedback visibile 250ms
-    card.classList.add('pressed');
-    setTimeout(()=>{
-      card.classList.remove('pressed');
-      show('#view-regioni');
-    }, 250);
-  }, {passive:true});
+const views = {
+  home: $("#view-home"),
+  gender: $("#view-gender"),
+  region: $("#view-region"),
+  league: $("#view-league"),
+  clubs: $("#view-clubs"),
+  clubPage: $("#view-club"),
+};
+
+/* ========= Init ========= */
+document.addEventListener("DOMContentLoaded", () => {
+  wireHome();
+  wireGender();
+  wireRegion();
+  wireLeague();
+  wireClubs();
+  wireClubPage();
+  show("home");
 });
 
-// REGIONI
-$('#backFromRegioni').onclick = ()=> show('#view-home');
-$$('#view-regioni .chip').forEach(ch=>{
-  ch.addEventListener('click', ()=>{
-    $$('#view-regioni .chip').forEach(c=>c.classList.remove('active'));
-    ch.classList.add('active');
-    state.regione = ch.dataset.regione;
-    // avanti al genere
-    setTimeout(()=> show('#view-genere'), 150);
-  });
-});
-
-// GENERE
-$('#backFromGenere').onclick = ()=> show('#view-regioni');
-$$('#view-genere .chip').forEach(ch=>{
-  ch.addEventListener('click', ()=>{
-    $$('#view-genere .chip').forEach(c=>c.classList.remove('active'));
-    ch.classList.add('active');
-    state.genere = ch.dataset.genere;
-
-    // imposta intestazione società (demo)
-    $('#societaName').textContent = 'ASD Roma Nord';
-    $('#societaMeta').textContent = `Eccellenza • ${state.genere} • ${state.regione || 'Lazio'}`;
-    show('#view-societa');
-  });
-});
-
-// SOCIETÀ
-$('#backFromSocieta').onclick = ()=> show('#view-genere');
-
-// Apertura modale PreMatch
-const dlg = $('#prematchModal');
-$('#openPrematch').addEventListener('click', ()=> {
-  dlg.showModal();
-});
-
-// Swatches colore
-$$('.swatch').forEach(s=>{
-  s.onclick = ()=>{
-    $$('.swatch').forEach(x=>x.classList.remove('active'));
-    s.classList.add('active');
-    state.prematch.colore = s.dataset.color;
-  };
-});
-
-// ====== CERTIFICATO PREMATCH (1 pagina) ======
-function openPrematchCertificate(d){
-  const w = window.open('', '_blank');
-  const css = `
-  <style>
-    @page { size:A4; margin:18mm }
-    body{font:14px/1.35 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial;color:#111}
-    .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:800;color:#0a7b3f}
-    .badge{width:28px;height:28px;border-radius:8px;border:1px solid #3bb26e;padding:3px}
-    h1{font-size:22px;margin:12px 0 10px}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .card{border:1px solid #e5e7eb;border-radius:10px;padding:12px;margin:8px 0}
-    .row{display:flex;gap:10px}
-    .dot{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-right:6px;border:1px solid #999;background:${d.colore}}
-    .muted{color:#666}
-    .ok{color:#0a7b3f;font-weight:700}
-    .footer{margin-top:16px;font-size:12px;color:#555}
-  </style>`;
-  const html = `
-  <div class="head">
-    <div class="brand"><img class="badge" src="images/logo-icon.png" /> PreMatch</div>
-    <div class="ok">PreMatch confermato ✓</div>
-  </div>
-  <h1>Certificato PreMatch</h1>
-  <div class="grid">
-    <div class="card"><strong>Tipo gara</strong><br>${d.amichevole?'Amichevole':'Campionato / Torneo'}</div>
-    <div class="card"><strong>Data & ora</strong><br>${d.data || '—'}</div>
-    <div class="card"><strong>Squadra di casa</strong><br>ASD Roma Nord</div>
-    <div class="card"><strong>Squadra ospite</strong><br>—</div>
-    <div class="card"><strong>Luogo</strong><br>${d.luogo || '—'}</div>
-    <div class="card"><strong>Colore maglia ospite</strong><br><span class="dot"></span>${d.colore}</div>
-  </div>
-  <div class="card"><strong>Messaggio</strong><br><span class="muted">${d.msg || '—'}</span></div>
-  <div class="footer">Generato con PreMatch — semplice, pulita, veloce.</div>`;
-  w.document.write(`<html><head><meta charset="utf-8">${css}</head><body>${html}</body></html>`);
-  w.document.close();
-  w.focus();
-  w.print();
+/* ======= Show/hide ======= */
+function show(name){
+  Object.values(views).forEach(v => v?.classList.add("hidden"));
+  views[name]?.classList.remove("hidden");
 }
 
-// Conferma PreMatch
-$('#pmConferma').addEventListener('click', (e)=>{
-  e.preventDefault();
-  state.prematch.data = $('#pmData').value ? new Date($('#pmData').value).toLocaleString() : '';
-  state.prematch.luogo = $('#pmLuogo').value;
-  state.prematch.amichevole = $('#pmAmichevole').checked;
-  state.prematch.msg = $('#pmMsg').value.trim();
+/* ======= HOME ======= */
+function wireHome(){
+  // sport cards
+  $$("#view-home .sport-card").forEach(card => {
+    card.addEventListener("click", () => {
+      state.sport = card.dataset.sport;
+      show("gender");
+      highlightChips("#view-gender");
+    });
+  });
+}
 
-  dlg.close();
-  // Apri direttamente il certificato su 1 pagina
-  openPrematchCertificate(state.prematch);
-});
+/* ======= GENERE ======= */
+function wireGender(){
+  const box = $("#view-gender");
+  box?.addEventListener("click", (e)=>{
+    const btn = e.target.closest(".chip");
+    if(!btn) return;
+    state.gender = btn.dataset.value; // Maschile | Femminile
+    show("region");
+    renderRegions();
+  });
+}
 
-// Shortcut Allenatore dentro società
-$('#coachShortcut').onclick = ()=> show('#view-coach');
+function renderRegions(){
+  const wrap = $("#region-chips");
+  wrap.innerHTML = "";
+  const regions = Object.keys(DATA[state.sport] || {});
+  regions.forEach(r=>{
+    const b = document.createElement("button");
+    b.className = "chip";
+    b.textContent = r;
+    b.dataset.value = r;
+    b.addEventListener("click", ()=>{
+      state.region = r;
+      show("league");
+      renderLeagues();
+    });
+    wrap.appendChild(b);
+  });
+}
 
-// ALLENATORE
-const VALID_CODE = 'RN-2025'; // demo
-$('#coachEnter').onclick = ()=>{
-  const code = $('#coachCode').value.trim();
-  if(code === VALID_CODE){
-    $('#coachLogin').classList.add('hidden');
-    $('#convocazione').classList.remove('hidden');
-    // default data tra 3 giorni
-    const d = new Date(Date.now()+3*86400000);
-    d.setHours(18,0,0,0);
-    $('#convData').value = d.toISOString().slice(0,16);
-  }else{
-    alert('Codice non valido');
-  }
-};
+/* ======= CAMPIONATO ======= */
+function wireRegion(){ /* solo per back buttons se servono */ }
 
-// Anteprima convocazione
-$('#previewConv').onclick = ()=>{
-  const elenco = $('#convElenco').value.trim().split(/\n+/).filter(Boolean);
+function renderLeagues(){
+  const wrap = $("#league-chips");
+  wrap.innerHTML = "";
+  const leagues = Object.keys(
+    (DATA[state.sport]?.[state.region]?.[state.gender]) || {}
+  );
+  leagues.forEach(l=>{
+    const b = document.createElement("button");
+    b.className = "chip";
+    b.textContent = l;
+    b.dataset.value = l;
+    b.addEventListener("click", ()=>{
+      state.league = l;
+      show("clubs");
+      renderClubs();
+    });
+    wrap.appendChild(b);
+  });
+}
+
+/* ======= SOCIETÀ ======= */
+function wireLeague(){}
+
+function renderClubs(){
+  const list = $("#clubs-list");
+  list.innerHTML = "";
+  const clubs = (DATA[state.sport]?.[state.region]?.[state.gender]?.[state.league]) || [];
+  clubs.forEach(name=>{
+    const li = document.createElement("li");
+    li.className = "club-item";
+    li.innerHTML = `
+      <button class="club-row">
+        <div class="circle"><img src="assets/logo-pm.svg" alt=""></div>
+        <div class="club-meta">
+          <div class="club-name">${name}</div>
+          <div class="club-sub">${state.league} · ${state.gender} · ${state.region}</div>
+        </div>
+      </button>`;
+    li.querySelector(".club-row").addEventListener("click", ()=>{
+      state.club = name;
+      buildClubPage();
+      show("clubPage");
+    });
+    list.appendChild(li);
+  });
+}
+
+/* ======= PAGINA SOCIETÀ ======= */
+function wireClubs(){}
+
+function buildClubPage(){
+  $("#club-title").textContent = state.club;
+  $("#club-subtitle").textContent = `${state.league} • ${state.gender} • ${state.region}`;
+
+  // cerchio logo (uguale al pulsante)
+  $("#club-logo").innerHTML = `<div class="circle"><img src="assets/logo-pm.svg" alt=""></div>`;
+
+  // pulsante prematch (stessa dimensione del cerchio logo)
+  const btnWrap = $("#club-prematch");
+  btnWrap.innerHTML = `
+    <button class="prematch-btn" id="createPreMatchBtn">
+      <img src="assets/logo-pm-dark.svg" alt="" style="width:52%;height:52%">
+    </button>
+    <div class="prematch-caption">Crea PreMatch</div>`;
+  $("#createPreMatchBtn").addEventListener("click", openPreMatchModal);
+}
+
+function wireClubPage(){
+  // accordion
+  $$("#club .ac-head").forEach(h=>{
+    h.addEventListener("click", ()=>{
+      h.parentElement.classList.toggle("open");
+    });
+  });
+
+  // Allenatore — codice convocazioni (lasciato nella pagina Società)
+  const coachBtn = $("#coach-code-btn");
+  coachBtn?.addEventListener("click", ()=>{
+    const code = prompt("Inserisci il codice allenatore");
+    if(code && code.trim()){
+      // mock: vai a convocazioni (demo)
+      alert("Codice accettato ✅ Vai alla pagina Convocazioni (demo).");
+    }
+  });
+}
+
+/* ======= MODALE PREMATCH (demo semplice) ======= */
+function openPreMatchModal(){
   const html = `
-    <h3 style="margin:0 0 6px">Convocazione — ${$('#convCategoria').value}</h3>
-    <p style="margin:0 0 4px"><strong>${$('#convPartita').value}</strong></p>
-    <p style="margin:0 0 10px">${new Date($('#convData').value).toLocaleString()} — ${$('#convCampo').value}</p>
-    <ol>${elenco.map(x=>`<li>${x.replace(/^\d+\)\s*/,'')}</li>`).join('')}</ol>`;
-  const prev = $('#convPreview');
-  prev.innerHTML = html;
-  prev.classList.remove('hidden');
-};
+  <div class="modal">
+    <div class="modal-body">
+      <h3 style="margin:0 0 10px 0">Crea PreMatch</h3>
+      <div class="chips" id="kit-colors"></div>
+      <div style="margin-top:12px">
+        <label>Data & ora</label>
+        <input type="datetime-local" id="pm-dt" class="input">
+      </div>
+      <div style="margin-top:10px">
+        <label>Luogo</label>
+        <input type="text" id="pm-loc" class="input" placeholder="Via dello Sport 1, Città">
+      </div>
+      <div style="margin-top:10px">
+        <label>Messaggio (opzionale)</label>
+        <textarea id="pm-msg" class="input" rows="3" placeholder="Es. Buonasera mister, confermo divisa ospite verde…"></textarea>
+      </div>
+      <label style="display:flex;gap:8px;align-items:center;margin-top:10px">
+        <input type="checkbox" id="pm-friendly"> Richiedi amichevole
+      </label>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px">
+        <button class="btn" id="pm-cancel">Annulla</button>
+        <button class="btn btn--primary" id="pm-ok">Conferma</button>
+      </div>
+    </div>
+  </div>`;
 
-// Stampa/Scarica PDF Convocazione (usa stampa di sistema)
-$('#printConv').onclick = ()=>{
-  if($('#convPreview').classList.contains('hidden')) $('#previewConv').click();
-  window.print();
-};
+  document.body.insertAdjacentHTML("beforeend", html);
+
+  // colori maglia
+  const colors = ["#ffffff","#111111","#fbbf24","#ef4444","#60a5fa","#34d399","#f59e0b","#a855f7"];
+  const wrap = $("#kit-colors");
+  wrap.innerHTML = '<div style="font-weight:700;margin-right:6px">Maglia ospite:</div>';
+  colors.forEach(c=>{
+    const b = document.createElement("button");
+    b.className = "chip";
+    b.style.background = c;
+    b.style.borderColor = "rgba(0,0,0,.2)";
+    b.dataset.value = c;
+    b.addEventListener("click", ()=>{
+      $$("#kit-colors .chip").forEach(x=>x.classList.remove("chip--active"));
+      b.classList.add("chip--active");
+    });
+    wrap.appendChild(b);
+  });
+
+  $("#pm-cancel").onclick = closeModal;
+  $("#pm-ok").onclick = ()=>{
+    const color = $("#kit-colors .chip--active")?.dataset.value || "#ffffff";
+    const when = $("#pm-dt").value || "(da definire)";
+    const where = $("#pm-loc").value || "(campo da definire)";
+    const msg = $("#pm-msg").value || "";
+    const friendly = $("#pm-friendly").checked ? "Sì" : "No";
+
+    alert(
+      `PreMatch creato ✅\n\nSocietà: ${state.club}\nCampionato: ${state.league}\nGenere: ${state.gender}\nRegione: ${state.region}\nMaglia ospite: ${color}\nData/ora: ${when}\nCampo: ${where}\nAmichevole: ${friendly}\nMessaggio: ${msg}`
+    );
+    closeModal();
+  };
+}
+
+function closeModal(){
+  $(".modal")?.remove();
+}
+
+/* ===== piccole util ===== */
+function highlightChips(scope){
+  // mette la classe attiva quando clicchi (feedback visivo)
+  $$(scope+" .chip").forEach(ch=>{
+    ch.addEventListener("click", ()=>{
+      $$(scope+" .chip").forEach(x=>x.classList.remove("chip--active"));
+      ch.classList.add("chip--active");
+    }, {once:true});
+  });
+}
