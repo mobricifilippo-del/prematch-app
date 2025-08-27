@@ -1,198 +1,139 @@
-/* PreMatch – app.js (versione adattata alla tua index.html) */
-
-const AppState = {
-  sport: null,
-  region: null,
-  gender: null,
-  club: null,
-  coachCodeValid: "RMN-2025"
+// Helpers
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const show = id => {
+  $$('.view').forEach(v=>v.classList.remove('active'));
+  $(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
 };
 
-const $ = (s, r = document) => r.querySelector(s);
-const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+// Stato demo
+const state = {
+  sport: null,
+  regione: null,
+  genere: null,
+  prematch: {
+    colore:"#ffffff", data:"", luogo:"", amichevole:false, msg:""
+  }
+};
 
-function navigate(view) {
-  $("#app").innerHTML = "";
-  if (view === "home") renderHome();
-  if (view === "gender") renderGender();
-  if (view === "regions") renderRegions();
-  if (view === "clubs") renderClubs();
-  if (view === "club") renderClub();
-  if (view === "coach") renderCoach();
-}
+// NAV: Coach in header
+$('#coachNavBtn').addEventListener('click', ()=> show('#view-coach'));
+$('#registerBtn').addEventListener('click', ()=> alert('Demo: registrazione in arrivo'));
 
-function pressFeedback(el, cb, delay = 150) {
-  el.classList.add("pressed");
-  setTimeout(() => {
-    el.classList.remove("pressed");
-    cb?.();
-  }, delay);
-}
+// HOME → REGIONI con tap visibile
+$$('.sport-card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    state.sport = card.dataset.sport;
+    // feedback visibile 250ms
+    card.classList.add('pressed');
+    setTimeout(()=>{
+      card.classList.remove('pressed');
+      show('#view-regioni');
+    }, 250);
+  }, {passive:true});
+});
 
-/* ---------- RENDER ---------- */
-function renderHome() {
-  $("#app").innerHTML = `
-    <h1>Scegli lo sport</h1>
-    <p class="sub">Seleziona per iniziare</p>
-    <div class="grid">
-      <div class="card sport-card" data-sport="Calcio">
-        <img src="./images/calcio.jpg"/><div class="title">Calcio</div>
-      </div>
-      <div class="card sport-card" data-sport="Futsal">
-        <img src="./images/futsal.jpg"/><div class="title">Futsal</div>
-      </div>
-      <div class="card sport-card" data-sport="Basket">
-        <img src="./images/basket.jpg"/><div class="title">Basket</div>
-      </div>
-      <div class="card sport-card" data-sport="Volley">
-        <img src="./images/volley.jpg"/><div class="title">Volley</div>
-      </div>
-      <div class="card sport-card" data-sport="Rugby">
-        <img src="./images/rugby.jpg"/><div class="title">Rugby</div>
-      </div>
-      <div class="card sport-card" data-sport="Pallanuoto">
-        <img src="./images/pallanuoto.jpg"/><div class="title">Pallanuoto</div>
-      </div>
-    </div>`;
-  $$(".sport-card").forEach(c => c.addEventListener("click", () => {
-    pressFeedback(c, () => {
-      AppState.sport = c.dataset.sport;
-      navigate("gender");
-    });
-  }));
-}
-
-function renderGender() {
-  $("#app").innerHTML = `
-    <h1>Scegli il genere</h1>
-    <div class="chips">
-      <div id="btnMale" class="chip" data-gender="Maschile">Maschile</div>
-      <div id="btnFemale" class="chip" data-gender="Femminile">Femminile</div>
-    </div>`;
-  $$(".chip").forEach(btn => btn.addEventListener("click", () => {
-    pressFeedback(btn, () => {
-      AppState.gender = btn.dataset.gender;
-      navigate("regions");
-    });
-  }));
-}
-
-function renderRegions() {
-  $("#app").innerHTML = `
-    <h1>Scegli la regione</h1>
-    <div class="chips">
-      <div class="chip region-chip" data-region="Lazio">Lazio</div>
-      <div class="chip region-chip" data-region="Lombardia">Lombardia</div>
-      <div class="chip region-chip" data-region="Sicilia">Sicilia</div>
-      <div class="chip region-chip" data-region="Piemonte">Piemonte</div>
-      <div class="chip region-chip" data-region="Veneto">Veneto</div>
-      <div class="chip region-chip" data-region="Emilia-Romagna">Emilia-Romagna</div>
-    </div>`;
-  $$(".region-chip").forEach(ch => ch.addEventListener("click", () => {
-    pressFeedback(ch, () => {
-      AppState.region = ch.dataset.region;
-      navigate("clubs");
-    });
-  }));
-}
-
-function renderClubs() {
-  $("#app").innerHTML = `
-    <h1>Scegli la società</h1>
-    <div class="list">
-      <div class="row club-item" data-name="ASD Roma Nord" data-level="Eccellenza">ASD Roma Nord</div>
-      <div class="row club-item" data-name="Virtus Marino" data-level="Eccellenza">Virtus Marino</div>
-    </div>`;
-  $$(".club-item").forEach(r => r.addEventListener("click", () => {
-    pressFeedback(r, () => {
-      AppState.club = {
-        name: r.dataset.name,
-        level: r.dataset.level,
-        gender: AppState.gender,
-        region: AppState.region
-      };
-      navigate("club");
-    });
-  }));
-}
-
-function renderClub() {
-  const c = AppState.club;
-  $("#app").innerHTML = `
-    <h1 id="clubName">${c.name}</h1>
-    <p id="clubMeta">${c.level} • ${c.gender} • ${c.region}</p>
-    <div class="circles">
-      <div class="circle logo"><div class="logo-inner">LOGO</div></div>
-      <div id="btnPreMatch" class="circle prematch"><div class="pm-inner">PM</div></div>
-    </div>
-    <div class="pm-label">Crea PreMatch</div>
-    <button id="coachAccessBtn" class="btn">Allenatore</button>
-    <div class="accordion"><div class="ac-head">Informazioni</div></div>
-    <div class="accordion"><div class="ac-head">Galleria foto</div></div>
-    <div class="accordion"><div class="ac-head">Match in programma</div></div>`;
-  $("#btnPreMatch").onclick = () => openPreMatchModal();
-  $("#coachAccessBtn").onclick = () => {
-    const code = prompt("Inserisci il codice allenatore:");
-    if (code === AppState.coachCodeValid) navigate("coach");
-    else alert("Codice non valido");
-  };
-}
-
-function renderCoach() {
-  $("#app").innerHTML = `
-    <h1>Convocazioni</h1>
-    <ul id="convList"></ul>
-    <button id="convPrint" class="btn btn-primary">Stampa PDF</button>
-    <button class="btn" onclick="navigate('club')">Indietro</button>`;
-  const players = ["Rossi","Bianchi","Verdi","Neri","Gialli","Blu","Viola","Marroni","Rosa","Azzurri","Grigi"];
-  const list = $("#convList");
-  players.forEach((p,i)=>{
-    const li=document.createElement("li");
-    li.innerHTML=`<label class="conv-row"><input type="checkbox" class="conv-check" checked><span>${String(i+1).padStart(2,"0")} — ${p}</span></label>`;
-    list.appendChild(li);
+// REGIONI
+$('#backFromRegioni').onclick = ()=> show('#view-home');
+$$('#view-regioni .chip').forEach(ch=>{
+  ch.addEventListener('click', ()=>{
+    $$('#view-regioni .chip').forEach(c=>c.classList.remove('active'));
+    ch.classList.add('active');
+    state.regione = ch.dataset.regione;
+    // avanti al genere
+    setTimeout(()=> show('#view-genere'), 150);
   });
-  $("#convPrint").onclick = () => {
-    const selected = $$(".conv-check").map((cb,i)=>cb.checked?$$(".conv-row span")[i].textContent:null).filter(Boolean);
-    const html = `
-      <html><head><meta charset="utf-8"/><title>Convocazioni</title></head>
-      <body><h1>Convocazioni ${AppState.club?.name||""}</h1><ul>${selected.map(s=>`<li>${s}</li>`).join("")}</ul>
-      <script>window.onload=()=>window.print()</script></body></html>`;
-    const w=window.open("","_blank"); w.document.write(html); w.document.close();
-  };
-}
+});
 
-/* ---------- PREMATCH MODAL ---------- */
-function openPreMatchModal(){
-  const html=`
-  <div class="modal open" id="prematchModal">
-    <div class="backdrop" onclick="closePreMatchModal()"></div>
-    <div class="panel">
-      <h2>Crea PreMatch</h2>
-      <div class="kit">
-        <input type="radio" id="c1" name="kitColor" value="bianco" checked><label style="background:#fff" for="c1"></label>
-        <input type="radio" id="c2" name="kitColor" value="nero"><label style="background:#000" for="c2"></label>
-        <input type="radio" id="c3" name="kitColor" value="rosso"><label style="background:red" for="c3"></label>
-      </div>
-      <input id="pmDatetime" type="datetime-local" class="input" />
-      <input id="pmPlace" placeholder="Luogo" class="input" />
-      <textarea id="pmMessage" placeholder="Messaggio" class="input"></textarea>
-      <label><input type="checkbox" id="pmFriendly"> Richiedi amichevole</label>
-      <div class="actions">
-        <button class="btn" onclick="closePreMatchModal()">Annulla</button>
-        <button id="pmConfirm" class="btn btn-primary">Conferma</button>
-      </div>
-    </div>
-  </div>`;
-  document.body.insertAdjacentHTML("beforeend",html);
-  $("#pmConfirm").onclick=()=>{
-    const color=$('input[name="kitColor"]:checked').value;
-    const dt=$("#pmDatetime").value; const place=$("#pmPlace").value; const msg=$("#pmMessage").value;
-    const fr=$("#pmFriendly").checked;
-    alert(`PreMatch creato:\nColore: ${color}\nData: ${dt}\nLuogo: ${place}\nAmichevole: ${fr}\nMessaggio: ${msg}`);
-    closePreMatchModal();
-  };
-}
-function closePreMatchModal(){ $("#prematchModal")?.remove(); }
+// GENERE
+$('#backFromGenere').onclick = ()=> show('#view-regioni');
+$$('#view-genere .chip').forEach(ch=>{
+  ch.addEventListener('click', ()=>{
+    $$('#view-genere .chip').forEach(c=>c.classList.remove('active'));
+    ch.classList.add('active');
+    state.genere = ch.dataset.genere;
 
-/* ---------- START ---------- */
-document.addEventListener("DOMContentLoaded",()=>navigate("home"));
+    // imposta intestazione società (demo)
+    $('#societaName').textContent = 'ASD Roma Nord';
+    $('#societaMeta').textContent = `Eccellenza • ${state.genere} • ${state.regione || 'Lazio'}`;
+    show('#view-societa');
+  });
+});
+
+// SOCIETÀ
+$('#backFromSocieta').onclick = ()=> show('#view-genere');
+
+// Apertura modale PreMatch
+const dlg = $('#prematchModal');
+$('#openPrematch').addEventListener('click', ()=> {
+  dlg.showModal();
+});
+
+// Swatches colore
+$$('.swatch').forEach(s=>{
+  s.onclick = ()=>{
+    $$('.swatch').forEach(x=>x.classList.remove('active'));
+    s.classList.add('active');
+    state.prematch.colore = s.dataset.color;
+  };
+});
+
+// Conferma PreMatch
+$('#pmConferma').addEventListener('click', (e)=>{
+  e.preventDefault();
+  state.prematch.data = $('#pmData').value;
+  state.prematch.luogo = $('#pmLuogo').value;
+  state.prematch.amichevole = $('#pmAmichevole').checked;
+  state.prematch.msg = $('#pmMsg').value.trim();
+
+  dlg.close();
+  const am = state.prematch.amichevole ? ' (richiesta amichevole)' : '';
+  alert(
+`PreMatch creato${am} ✅
+
+Colore maglia: ${state.prematch.colore}
+Data/ora: ${state.prematch.data || '—'}
+Luogo: ${state.prematch.luogo || '—'}
+Messaggio: ${state.prematch.msg || '—'}`
+  );
+});
+
+// Shortcut Allenatore dentro società
+$('#coachShortcut').onclick = ()=> show('#view-coach');
+
+// ALLENATORE
+const VALID_CODE = 'RN-2025'; // demo
+$('#coachEnter').onclick = ()=>{
+  const code = $('#coachCode').value.trim();
+  if(code === VALID_CODE){
+    $('#coachLogin').classList.add('hidden');
+    $('#convocazione').classList.remove('hidden');
+    // default data tra 3 giorni
+    const d = new Date(Date.now()+3*86400000);
+    d.setHours(18,0,0,0);
+    $('#convData').value = d.toISOString().slice(0,16);
+  }else{
+    alert('Codice non valido');
+  }
+};
+
+// Anteprima convocazione
+$('#previewConv').onclick = ()=>{
+  const elenco = $('#convElenco').value.trim().split(/\n+/).filter(Boolean);
+  const html = `
+    <h3 style="margin:0 0 6px">Convocazione — ${$('#convCategoria').value}</h3>
+    <p style="margin:0 0 4px"><strong>${$('#convPartita').value}</strong></p>
+    <p style="margin:0 0 10px">${new Date($('#convData').value).toLocaleString()} — ${$('#convCampo').value}</p>
+    <ol>${elenco.map(x=>`<li>${x.replace(/^\d+\)\s*/,'')}</li>`).join('')}</ol>`;
+  const prev = $('#convPreview');
+  prev.innerHTML = html;
+  prev.classList.remove('hidden');
+};
+
+// Stampa/Scarica PDF (usa stampa di sistema: Android salva in PDF)
+$('#printConv').onclick = ()=>{
+  // apre la preview se non c'è
+  if($('#convPreview').classList.contains('hidden')) $('#previewConv').click();
+  window.print();
+};
