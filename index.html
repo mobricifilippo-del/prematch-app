@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PreMatch</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <!-- HEADER -->
   <header class="header">
     <div class="header-left">
-      <img src="images/logo-light.png" alt="PreMatch Logo" class="logo">
+      <img src="images/logo-light.png" alt="PreMatch Logo" class="logo"/>
       <span class="brand">PreMatch</span>
     </div>
     <div class="header-right">
@@ -20,7 +20,7 @@
     </div>
   </header>
 
-  <!-- HOME: scegli sport -->
+  <!-- HOME -->
   <section id="home" class="home-section">
     <h1 class="title">Scegli lo sport</h1>
     <p class="subtitle">Seleziona per iniziare</p>
@@ -51,7 +51,6 @@
         <div class="name">Pallanuoto</div>
       </div>
     </div>
-
     <div class="page-bottom-space"></div>
   </section>
 
@@ -83,9 +82,21 @@
     </div>
   </section>
 
+  <!-- CAMPIONATI -->
+  <section id="leagues" class="page hidden">
+    <h1 class="title">Seleziona il campionato</h1>
+    <div class="leagues-table">
+      <!-- popolato da JS in base allo sport scelto -->
+    </div>
+    <div class="button-row">
+      <button class="btn btn-dark" data-action="back">Indietro</button>
+    </div>
+  </section>
+
   <!-- SOCIETÀ -->
   <section id="clubs" class="page hidden">
     <h1 class="title">Società disponibili</h1>
+
     <div class="club-card">
       <img class="club-logo" src="images/clubs/roma-nord.png" alt="ASD Roma Nord">
       <div class="club-info">
@@ -94,6 +105,7 @@
         <button class="btn btn-green">Crea PreMatch</button>
       </div>
     </div>
+
     <div class="club-card">
       <img class="club-logo" src="images/clubs/virtus-marino.png" alt="Virtus Marino">
       <div class="club-info">
@@ -102,6 +114,7 @@
         <button class="btn btn-green">Crea PreMatch</button>
       </div>
     </div>
+
     <div class="button-row">
       <button class="btn btn-dark" data-action="back">Indietro</button>
     </div>
