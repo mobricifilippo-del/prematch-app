@@ -1,31 +1,114 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PreMatch</title>
-  <link rel="icon" href="logo-light.png"/>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- HEADER fisso, logo sempre visibile -->
-  <header class="pm-header">
-    <div class="pm-header-left">
-      <img src="logo-light.png" alt="PreMatch" class="pm-logo"/>
-      <span class="pm-brand">PreMatch</span>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <img src="images/logo-light.png" alt="PreMatch Logo" class="logo">
+      <span class="brand">PreMatch</span>
     </div>
-    <nav class="pm-header-right">
-      <button class="pm-btn pm-btn-ghost" id="nav-coach">Allenatore</button>
-      <button class="pm-btn pm-btn-ghost" id="nav-login">Login</button>
-      <button class="pm-btn pm-btn-primary" id="nav-register">Registrazione</button>
-    </nav>
+    <div class="header-right">
+      <button class="btn">Allenatore</button>
+      <button class="btn">Login</button>
+      <button class="btn btn-green">Registrazione</button>
+    </div>
   </header>
 
-  <!-- CONTENUTO -->
-  <main id="app"></main>
+  <!-- HOME: scegli sport -->
+  <section id="home" class="home-section">
+    <h1 class="title">Scegli lo sport</h1>
+    <p class="subtitle">Seleziona per iniziare</p>
 
-  <footer class="pm-footer">
-    © PreMatch — semplice, pulita, veloce. Privacy by design.
+    <div class="sports-grid">
+      <div class="sport-card" data-sport="calcio">
+        <img class="thumb" src="images/sports/calcio.jpg" alt="Calcio">
+        <div class="name">Calcio</div>
+      </div>
+      <div class="sport-card" data-sport="futsal">
+        <img class="thumb" src="images/sports/futsal.jpg" alt="Futsal">
+        <div class="name">Futsal</div>
+      </div>
+      <div class="sport-card" data-sport="basket">
+        <img class="thumb" src="images/sports/basket.jpg" alt="Basket">
+        <div class="name">Basket</div>
+      </div>
+      <div class="sport-card" data-sport="volley">
+        <img class="thumb" src="images/sports/volley.jpg" alt="Volley">
+        <div class="name">Volley</div>
+      </div>
+      <div class="sport-card" data-sport="rugby">
+        <img class="thumb" src="images/sports/rugby.jpg" alt="Rugby">
+        <div class="name">Rugby</div>
+      </div>
+      <div class="sport-card" data-sport="pallanuoto">
+        <img class="thumb" src="images/sports/pallanuoto.jpg" alt="Pallanuoto">
+        <div class="name">Pallanuoto</div>
+      </div>
+    </div>
+
+    <div class="page-bottom-space"></div>
+  </section>
+
+  <!-- GENERE -->
+  <section id="gender" class="page hidden">
+    <h1 class="title">Seleziona il genere</h1>
+    <div class="button-row">
+      <button class="btn" data-gender="M">Maschile</button>
+      <button class="btn" data-gender="F">Femminile</button>
+    </div>
+    <div class="button-row">
+      <button class="btn btn-dark" data-action="back">Indietro</button>
+    </div>
+  </section>
+
+  <!-- REGIONI -->
+  <section id="regions" class="page hidden">
+    <h1 class="title">Seleziona la regione</h1>
+    <div class="regions-table">
+      <button class="btn region">Lazio</button>
+      <button class="btn region">Lombardia</button>
+      <button class="btn region">Sicilia</button>
+      <button class="btn region">Piemonte</button>
+      <button class="btn region">Veneto</button>
+      <button class="btn region">Emilia-Romagna</button>
+    </div>
+    <div class="button-row">
+      <button class="btn btn-dark" data-action="back">Indietro</button>
+    </div>
+  </section>
+
+  <!-- SOCIETÀ -->
+  <section id="clubs" class="page hidden">
+    <h1 class="title">Società disponibili</h1>
+    <div class="club-card">
+      <img class="club-logo" src="images/clubs/roma-nord.png" alt="ASD Roma Nord">
+      <div class="club-info">
+        <h2>ASD Roma Nord</h2>
+        <p>Eccellenza · Femminile · Lazio</p>
+        <button class="btn btn-green">Crea PreMatch</button>
+      </div>
+    </div>
+    <div class="club-card">
+      <img class="club-logo" src="images/clubs/virtus-marino.png" alt="Virtus Marino">
+      <div class="club-info">
+        <h2>Virtus Marino</h2>
+        <p>Eccellenza · Femminile · Lazio</p>
+        <button class="btn btn-green">Crea PreMatch</button>
+      </div>
+    </div>
+    <div class="button-row">
+      <button class="btn btn-dark" data-action="back">Indietro</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
   </footer>
 
   <script src="app.js"></script>
