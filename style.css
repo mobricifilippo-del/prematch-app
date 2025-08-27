@@ -1,148 +1,57 @@
-/* Reset base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
+:root{
+  --bg:#0e0f10; --panel:#141414; --line:#222; --text:#e9ecef; --muted:#a7adb3;
+  --pm:#00ff84; --pm-dark:#00d173;
 }
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto}
 
-body {
-  background-color: #111;
-  color: #fff;
-  line-height: 1.5;
-}
+h1{font-size:36px;margin:22px 0 8px}
+p{color:var(--muted);margin:0 0 18px}
 
-/* Navbar */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-  background-color: #111;
-  border-bottom: 1px solid #222;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+#toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#222;border:1px solid var(--line);
+  color:#fff;padding:10px 14px;border-radius:10px;opacity:0;transition:opacity .25s;z-index:9999}
 
-.navbar-left {
-  display: flex;
-  align-items: center;
-}
+/* NAVBAR */
+.navbar{position:sticky;top:0;background:#0b0c0c;border-bottom:1px solid var(--line);z-index:50}
+.navbar-inner{max-width:1100px;margin:0 auto;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.navbar-left{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:28px;height:28px;display:block}
+.brand{font-weight:700;color:#24e28a;white-space:nowrap}
+.navbar-right{display:flex;gap:10px;flex-wrap:nowrap}
+.navbtn{background:#1a1b1c;color:#fff;border:1px solid var(--line);padding:9px 12px;border-radius:12px;cursor:pointer}
+.navbtn.primary{background:var(--pm);color:#0c1410;border:none;font-weight:700}
+.navbtn.primary:active{background:var(--pm-dark)}
+.navbtn:active{transform:scale(.98)}
 
-.logo {
-  height: 32px;
-  margin-right: 8px;
-}
+/* LAYOUT APP */
+#app{max-width:1100px;margin:0 auto;padding:16px 14px 40px}
 
-.brand {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #00ff84;
-}
+/* GRID CARDS SPORT */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media(min-width:720px){ .grid{grid-template-columns:repeat(3,1fr)} }
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  cursor:pointer;box-shadow:0 0 0 rgba(0,0,0,0);transition:box-shadow .2s, transform .12s}
+.card img{width:100%;height:170px;object-fit:cover;display:block}
+.card h3{margin:0;padding:12px 14px 14px;font-size:22px;color:var(--pm);font-weight:800}
+.card:active{transform:scale(.98)}
+.card.pressed{box-shadow:0 0 0 3px rgba(0,255,132,.25) inset}
 
-.navbar-right .btn {
-  background: #222;
-  color: #fff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  margin-left: 8px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
+/* BOTTONI GENERICI */
+.btn{background:#1a1b1c;color:#fff;border:1px solid var(--line);padding:10px 14px;border-radius:12px;cursor:pointer}
+.btn:hover{background:#202224}
+.btn-primary{background:var(--pm);color:#0c1410;border:none;font-weight:800}
+.btn-primary:hover{background:var(--pm-dark)}
+.btn.block{width:100%;text-align:left;background:#171819}
 
-.navbar-right .btn:hover {
-  background: #333;
-}
+/* CERCHIO PREMATCH */
+.circle-btn{width:120px;height:120px;border-radius:999px;background:var(--pm);border:none;color:#0c1410;font-weight:900;
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;box-shadow:0 8px 30px rgba(0,255,132,.18)}
+.circle-btn:active{transform:scale(.98)}
 
-.navbar-right .btn-primary {
-  background: #00ff84;
-  color: #111;
-  font-weight: bold;
-}
+/* MODALI */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000}
+.modal{background:#151515;border:1px solid var(--line);width:92%;max-width:520px;margin:10vh auto;border-radius:14px;padding:16px}
 
-.navbar-right .btn-primary:hover {
-  background: #00cc66;
-}
-
-/* Main content */
-main {
-  padding: 20px;
-}
-
-h1 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-}
-
-p {
-  margin-bottom: 20px;
-  color: #bbb;
-}
-
-/* Grid cards */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-
-.card {
-  background: #1a1a1a;
-  border-radius: 10px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  text-align: center;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 255, 132, 0.3);
-}
-
-.card img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  display: block;
-}
-
-.card h3 {
-  padding: 10px;
-  color: #00ff84;
-  font-size: 1.1rem;
-}
-
-/* Pulsanti circolari (per PreMatch) */
-.circle-btn {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 2px solid #00ff84;
-  background: transparent;
-  color: #00ff84;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
-}
-
-.circle-btn:hover {
-  background: #00ff84;
-  color: #111;
-  transform: scale(1.05);
-}
-
-/* Footer */
-footer {
-  margin-top: 40px;
-  padding: 20px;
-  text-align: center;
-  font-size: 0.9rem;
-  color: #777;
-  border-top: 1px solid #222;
-}
+/* piccoli elementi */
+.pill{border-radius:999px;padding:10px 16px;margin:6px}
