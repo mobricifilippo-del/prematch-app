@@ -1,210 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PreMatch</title>
-  <link rel="stylesheet" href="style.css?v=1001">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- HEADER -->
-  <header class="pm-header">
-    <div class="pm-header-left">
-      <div class="brand">
-        <span class="brand-badge">PM</span>
-        <span class="brand-text">PreMatch</span>
-      </div>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo-container">
+      <img src="https://i.ibb.co/z2KcF6Y/prematch-logo.png" alt="PreMatch Logo" class="logo">
+      <span class="brand">PreMatch</span>
     </div>
-    <nav class="pm-header-right">
-      <button class="chip" data-route="coach">Allenatore</button>
-      <button class="chip ghost">Login</button>
-      <button class="chip primary">Registrazione</button>
+    <nav class="menu">
+      <button class="menu-btn" onclick="vaiAllenatore()">Allenatore</button>
+      <button class="menu-btn" onclick="vaiLogin()">Login</button>
+      <button class="menu-btn green" onclick="vaiRegistrazione()">Registrazione</button>
     </nav>
   </header>
 
-  <!-- MAIN -->
-  <main id="app">
-    <!-- HOME: SPORT -->
-    <section id="view-sport" class="view active">
-      <div class="view-head">
-        <h1>Scegli lo sport</h1>
-        <p>Seleziona per iniziare</p>
-      </div>
-      <div class="grid-cards" id="sport-grid">
-        <!-- cards generate da JS -->
-      </div>
-    </section>
+  <!-- Contenitore principale -->
+  <main id="app"></main>
 
-    <!-- GENERE -->
-    <section id="view-gender" class="view">
-      <div class="view-head">
-        <h1>Seleziona il genere</h1>
-      </div>
-      <div class="chip-row" id="gender-row">
-        <button class="chip toggle" data-gender="maschile">Maschile</button>
-        <button class="chip toggle" data-gender="femminile">Femminile</button>
-      </div>
-      <div class="footer-nav">
-        <button class="chip ghost" data-back>Indietro</button>
-        <button class="chip primary" id="go-region" disabled>Avanti</button>
-      </div>
-    </section>
-
-    <!-- REGIONE -->
-    <section id="view-region" class="view">
-      <div class="view-head">
-        <h1>Scegli la regione</h1>
-      </div>
-      <div class="chip-wrap" id="region-wrap"></div>
-      <div class="footer-nav">
-        <button class="chip ghost" data-back>Indietro</button>
-        <button class="chip primary" id="go-league" disabled>Avanti</button>
-      </div>
-    </section>
-
-    <!-- CAMPIONATO -->
-    <section id="view-league" class="view">
-      <div class="view-head">
-        <h1>Scegli il campionato</h1>
-      </div>
-      <div class="list-cards" id="league-list"></div>
-      <div class="footer-nav">
-        <button class="chip ghost" data-back>Indietro</button>
-      </div>
-    </section>
-
-    <!-- SOCIETÀ -->
-    <section id="view-clubs" class="view">
-      <div class="view-head">
-        <h1>Scegli la società</h1>
-      </div>
-      <div class="list-cards" id="club-list"></div>
-      <div class="footer-nav">
-        <button class="chip ghost" data-back>Indietro</button>
-      </div>
-    </section>
-
-    <!-- PAGINA SOCIETÀ -->
-    <section id="view-club" class="view">
-      <div class="club-hero">
-        <h1 id="club-name">Società</h1>
-        <div id="club-meta" class="meta"></div>
-      </div>
-
-      <div class="club-duo">
-        <div class="circle" id="club-logo-circle" aria-label="Logo società">
-          <img id="club-logo" alt="Logo società">
-        </div>
-        <button class="circle callout" id="btn-create-prematch" aria-label="Crea PreMatch">
-          <div class="circle-inner">
-            <span class="brand-badge">PM</span>
-          </div>
-        </button>
-      </div>
-      <p class="circle-caption">Crea PreMatch</p>
-
-      <details class="accordion">
-        <summary>Informazioni</summary>
-        <div class="acc-body" id="club-info"></div>
-      </details>
-
-      <details class="accordion">
-        <summary>Galleria foto</summary>
-        <div class="acc-body" id="club-gallery"></div>
-      </details>
-
-      <details class="accordion">
-        <summary>Match in programma</summary>
-        <div class="acc-body" id="club-matches"></div>
-      </details>
-
-      <div class="footer-nav">
-        <button class="chip" id="coach-in-club">Allenatore</button>
-        <button class="chip ghost" data-back>Indietro</button>
-      </div>
-    </section>
-
-    <!-- CONVOCAZIONE (allenatore) -->
-    <section id="view-coach" class="view">
-      <div class="view-head">
-        <h1>Accesso allenatore</h1>
-        <p>Inserisci il codice fornito dalla società per gestire la convocazione.</p>
-      </div>
-      <div class="form">
-        <label class="label">Codice convocazione</label>
-        <input id="coach-code" class="input" placeholder="Es. RN-FEM-U17-2025">
-        <button class="chip primary" id="coach-enter">Entra</button>
-      </div>
-      <div class="footer-nav">
-        <button class="chip ghost" data-back>Indietro</button>
-      </div>
-    </section>
-
-    <!-- SCHERMATA CONVOCAZIONE DEMO -->
-    <section id="view-callup" class="view">
-      <div class="view-head">
-        <h1>Convocazione</h1>
-        <p id="callup-meta"></p>
-      </div>
-      <div class="callup-card" id="callup-list">
-        <!-- elenco giocatori demo -->
-      </div>
-      <div class="footer-nav">
-        <button class="chip" id="print-callup">Stampa PDF</button>
-        <button class="chip ghost" data-back>Indietro</button>
-      </div>
-    </section>
-
-    <!-- MODAL: CREA PREMATCH -->
-    <dialog id="modal-prematch" class="modal">
-      <form method="dialog" class="modal-card" id="prematch-form">
-        <h2>Crea PreMatch</h2>
-
-        <label class="label">Scegli colore maglia (ospite)</label>
-        <div class="color-row" id="color-row">
-          <!-- colori via JS -->
-        </div>
-
-        <label class="label">Data &amp; ora</label>
-        <input type="datetime-local" class="input" id="pm-datetime">
-
-        <label class="label">Luogo (indirizzo)</label>
-        <input class="input" id="pm-place" placeholder="Via dello Sport 1, Città">
-
-        <div class="check-row">
-          <label class="checkbox">
-            <input type="checkbox" id="pm-friendly">
-            <span>Richiedi amichevole</span>
-          </label>
-        </div>
-
-        <label class="label">Messaggio all’avversario (opzionale)</label>
-        <textarea class="input" id="pm-message" rows="3" placeholder="Es. Buonasera, va bene maglia bianca?"></textarea>
-
-        <div class="modal-actions">
-          <button class="chip ghost" value="cancel">Annulla</button>
-          <button class="chip primary" value="confirm" id="pm-confirm">Conferma</button>
-        </div>
-      </form>
-    </dialog>
-
-    <!-- MODAL: ESITO PREMATCH -->
-    <dialog id="modal-confirm" class="modal">
-      <div class="modal-card">
-        <h2>PreMatch creato ✅</h2>
-        <div id="pm-summary" class="summary"></div>
-        <div class="modal-actions">
-          <button class="chip" id="pm-print">Stampa PDF</button>
-          <button class="chip primary" id="pm-close">Chiudi</button>
-        </div>
-      </div>
-    </dialog>
-  </main>
-
-  <footer class="pm-footer">
-    © PreMatch — semplice, pulita, veloce. Privacy by design.
+  <footer>
+    <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
   </footer>
 
-  <script src="app.js?v=1001"></script>
+  <script src="app.js"></script>
 </body>
 </html>
