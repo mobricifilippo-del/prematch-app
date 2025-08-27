@@ -64,3 +64,15 @@ document.querySelectorAll('[data-back]').forEach(b=>{
 document.getElementById('btn-prematch').addEventListener('click', ()=>{
   alert(`PreMatch creato per ${state.club}\n${state.campionato} • ${state.genere} • ${state.regione}`);
 });
+// Gestione click sulle card sport
+document.querySelectorAll('.card-sport').forEach(card => {
+  card.addEventListener('click', () => {
+    // Aggiunge effetto visivo
+    card.classList.add('selected');
+
+    // Dopo 120ms passa allo step successivo (GENERE)
+    setTimeout(() => {
+      goTo('view-genere', { sport: card.dataset.sport });
+    }, 120);
+  }, { passive: true });
+});
