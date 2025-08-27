@@ -1,127 +1,94 @@
-/* PreMatch – style.css (build compatta) */
-
 :root{
-  --bg:#0f1417;
-  --card:#151b20;
-  --muted:#8aa0a8;
-  --green:#2ecc71;
-  --green-700:#1ea85a;
-  --green-900:#0f6c39;
-  --white:#eaf2f4;
-  --ink:#dfe8eb;
-  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --bg:#0f1115; --panel:#161a20; --text:#e8eef7;
+  --muted:#aeb7c3; --brand:#25d366; --brand-700:#1ab157;
+  --chip:#1f2530; --chip-brd:#2a3340; --ok:#22c55e;
+  --ring:0 0 0 8px rgba(37,211,102,.08);
 }
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.4 Inter,system-ui,Segoe UI,Roboto,Arial}
+img{max-width:100%;display:block}
+h1{font-size:2.2rem;margin:10px 0 6px}
+h2{margin:0 0 12px}
+.subtitle{color:var(--muted);margin:0 0 20px}
+.hidden{display:none}
 
-html,body{background:#0d1215;color:var(--ink);font-family:system-ui,-apple-system,Roboto,Arial,sans-serif;margin:0}
-.hidden{display:none!important}
-.container{max-width:960px;margin:0 auto;padding:16px}
+/* Topbar */
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:linear-gradient(#0f1115,#0f1115cc 50%,#0f111500)}
+.brand{display:flex;align-items:center;gap:8px}
+.brand-icon{width:28px;height:28px;border-radius:8px}
+.brand-name{font-weight:700;color:#68f197}
+.actions{display:flex;gap:10px}
 
-/* Header */
-.app-header{
-  position:sticky; top:0; z-index:10;
-  background:linear-gradient(180deg,#0d1215,#0d1215ee);
-  border-bottom:1px solid rgba(255,255,255,.04);
-  padding:10px 14px; display:flex; align-items:center; gap:12px;
-}
-.brand{display:flex; align-items:center; gap:10px}
-.brand-name{color:#40d081;font-weight:700}
-.auth-actions{margin-left:auto; display:flex; gap:10px}
-.btn{padding:10px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:#10161a;color:var(--ink)}
-.btn-primary{background:var(--green); border-color:var(--green-700); color:#0b2215; font-weight:700}
+/* Buttons */
+.btn{border:1px solid #2a3340;background:#1a2029;color:var(--text);padding:10px 14px;border-radius:14px}
+.btn.ghost{background:transparent}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#061107;font-weight:700}
 .btn:active{transform:scale(.98)}
 
-/* Screens */
-.screen{padding:20px}
-h1{font-size:34px; margin:8px 0 6px}
-.sub{color:var(--muted); margin-bottom:16px}
+/* Views */
+.view{display:none;padding:16px}
+.view.active{display:block}
 
-/* Sport cards */
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.card{
-  background:var(--card); border-radius:16px; overflow:hidden; box-shadow:var(--shadow);
-  border:1px solid rgba(255,255,255,.05); cursor:pointer; transition:transform .08s ease;
-}
-.card img{width:100%; display:block}
-.card .title{padding:12px 14px; font-weight:700; color:#5ce08e}
-.card.pressed{outline:3px solid #49d380aa; transform:scale(.995)}
+/* Sports grid */
+.sports-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.sport-card{background:var(--panel);border-radius:16px;overflow:hidden;border:1px solid #1f2632;position:relative}
+.sport-card img{height:150px;object-fit:cover}
+.sport-title{padding:10px 14px;font-weight:800;color:#5ff191}
+.sport-card:active{filter:brightness(1.05)}
+/* TAP feedback evidente + ritardo gestione in JS aggiunge .pressed */
+.sport-card.pressed{outline:3px solid var(--brand);box-shadow:var(--ring)}
 
-/* Chips (gender/regions) */
-.chips{display:flex; flex-wrap:wrap; gap:10px}
-.chip{
-  padding:10px 14px; border-radius:999px; border:1px solid rgba(255,255,255,.08);
-  background:#11181d; color:var(--ink); cursor:pointer; transition:all .12s ease;
-}
-.chip.active, .chip:active{
-  background:rgba(64,208,129,.12);
-  color:#4fe08e; border-color:#2ecc71;
-}
-.pressed{filter:brightness(1.25)}
+/* Chips (Regioni/Genere) */
+.chips{display:flex;flex-wrap:wrap;gap:12px;margin:10px 0 16px}
+.chip{background:var(--chip);border:1px solid var(--chip-brd);color:var(--text);padding:10px 14px;border-radius:999px}
+.chip.active{background:var(--brand);border-color:var(--brand);color:#061107;font-weight:700;box-shadow:var(--ring)}
 
-/* Club list rows */
-.list{display:flex; flex-direction:column; gap:10px}
-.row{
-  background:var(--card); border-radius:14px; padding:14px; border:1px solid rgba(255,255,255,.06);
-  display:flex; justify-content:space-between; align-items:center; cursor:pointer;
-}
-.row.pressed{outline:3px solid #49d38088}
+/* Società */
+.societa-head .meta{color:var(--muted);margin-top:4px}
+.societa-hero{display:flex;align-items:center;gap:24px;margin:18px 0 12px}
+.circle.same{--size:130px;width:var(--size);height:var(--size);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid #263040;background:#0e1217;position:relative}
+.circle.same img{width:60%;height:60%;object-fit:contain;opacity:.9}
+.circle.same.cta{background:var(--brand);border-color:#0d291a;box-shadow:0 0 0 6px rgba(37,211,102,.15)}
+.circle.same.cta::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(37,211,102,.5);animation:pulse 2s infinite}
+.cta-label{position:absolute;bottom:-30px;color:#aaf0c6;font-weight:800}
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:.1}}
 
-/* Club page – circles */
-.circles{display:flex; align-items:center; justify-content:space-between; gap:20px; margin:6px 0 18px}
-.circle{
-  width:180px; height:180px; border-radius:50%; border:2px solid rgba(64,208,129,.25);
-  background:#0f1417; display:flex; align-items:center; justify-content:center; position:relative;
-}
-.circle.logo{
-  /* logo società PIÙ GRANDE del bottone PreMatch */
-  width:190px; height:190px;
-}
-.circle .logo-inner{
-  width:70%; height:70%; border-radius:50%; background:#0e171a; display:flex; align-items:center; justify-content:center;
-  color:#39d07b; font-weight:800; border:1px solid rgba(64,208,129,.15);
-}
-.circle.prematch{
-  /* bottone leggermente più piccolo del logo */
-  width:170px; height:170px; cursor:pointer; box-shadow:0 0 0 6px rgba(64,208,129,.08), 0 10px 30px rgba(0,0,0,.35);
-}
-.circle.prematch .pm-inner{
-  width:64%; height:64%; border-radius:20px; background:#fff; display:flex; align-items:center; justify-content:center;
-  color:#12a254; font-weight:900;
-}
-.circle.prematch:hover{box-shadow:0 0 0 8px rgba(64,208,129,.16), 0 12px 36px rgba(0,0,0,.5)}
-.circle.prematch.pressed{transform:scale(.985); outline:4px solid #49d38088}
-.pm-label{text-align:center; margin-top:8px; font-weight:800}
+/* Accordion */
+.acc{background:var(--panel);border:1px solid #222b36;border-radius:16px;margin:14px 0}
+.acc>summary{cursor:pointer;padding:16px 18px;font-weight:700;list-style:none}
+.acc[open]>summary{color:#aaf0c6}
+.acc-body{padding:0 18px 16px}
+.gallery{display:flex;gap:10px}
+.gallery img{width:100px;height:60px;object-fit:cover;border-radius:10px;border:1px solid #2b3441}
 
-/* Accordions (info/gallery/matches) */
-.accordion{background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:14px; margin:10px 0; overflow:hidden}
-.ac-head{padding:14px 16px; display:flex; justify-content:space-between; align-items:center; font-weight:700}
-.ac-body{padding:0 16px 14px; color:var(--muted)}
+/* Inputs */
+.label{display:block;margin:12px 0 6px;color:#b9c3d1}
+.input{width:100%;border:1px solid #2a3340;background:#12161c;color:var(--text);padding:10px 12px;border-radius:12px}
+.mt{margin-top:10px}
+.grid.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.preview.card{background:#0f141a;border:1px dashed #2d3948;border-radius:12px;padding:12px;margin-top:10px}
 
-/* Modal PreMatch */
-.modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:50}
-.modal.open{display:flex}
-.modal .backdrop{position:absolute; inset:0; background:rgba(0,0,0,.55)}
-.modal .panel{
-  position:relative; background:#0f1417; border:1px solid rgba(255,255,255,.08);
-  border-radius:18px; padding:18px; width:min(560px,92%); box-shadow:var(--shadow)
-}
-.row2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-.kit{display:flex; gap:10px; flex-wrap:wrap}
-.kit input{display:none}
-.kit label{
-  width:44px; height:30px; border-radius:8px; border:2px solid #fff; display:inline-block; cursor:pointer;
-}
-.kit input:checked + label{box-shadow:0 0 0 3px #49d380aa}
-.input, select, textarea{
-  width:100%; background:#0d1417; border:1px solid rgba(255,255,255,.08); color:var(--ink); border-radius:12px;
-  padding:12px; outline:0;
-}
-textarea{min-height:80px; resize:vertical}
-.actions{display:flex; gap:10px; justify-content:flex-end; margin-top:10px}
+/* Dialog */
+#prematchModal{border:none;border-radius:18px;padding:0;max-width:560px;width:92%;background:#10151c;color:var(--text)}
+.pm-form{padding:18px}
+.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
+.swatches{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.swatch{width:30px;height:30px;border-radius:8px;border:2px solid #1f2632}
+.swatch[data-color="#ffffff"]{background:#fff}
+.swatch[data-color="#101114"]{background:#101114}
+.swatch[data-color="#f3c312"]{background:#f3c312}
+.swatch[data-color="#e85c52"]{background:#e85c52}
+.swatch[data-color="#4ea3ff"]{background:#4ea3ff}
+.swatch[data-color="#34c759"]{background:#34c759}
+.swatch[data-color="#ff8a34"]{background:#ff8a34}
+.swatch[data-color="#9b59b6"]{background:#9b59b6}
+.swatch.active{outline:3px solid var(--brand)}
+.inline-actions{display:flex;gap:10px;align-items:center;margin:14px 0}
 
-/* Coach page */
-.card{ }
-.conv-row{display:flex; gap:10px; align-items:center; padding:8px 0}
-.conv-row input{width:18px; height:18px}
-
-/* Footer */
-.footer{color:var(--muted); font-size:13px; padding:24px 16px}
+/* Fine stampa: togli sfondi scuri per PDF */
+@media print{
+  body{background:#fff;color:#000}
+  .topbar, .btn, .actions, .dialog-actions{display:none!important}
+  .view{display:block}
+  .circle.same, .acc, .sport-card{border:1px solid #bbb;box-shadow:none}
+}
