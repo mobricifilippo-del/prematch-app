@@ -2,217 +2,209 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PreMatch</title>
-  <link rel="icon" href="images/logo-icon.png">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=1001">
 </head>
 <body>
-  <!-- Header -->
-  <header class="topbar">
-    <div class="brand">
-      <img src="images/logo-icon.png" alt="PM" class="brand-icon" />
-      <span class="brand-name">PreMatch</span>
+  <!-- HEADER -->
+  <header class="pm-header">
+    <div class="pm-header-left">
+      <div class="brand">
+        <span class="brand-badge">PM</span>
+        <span class="brand-text">PreMatch</span>
+      </div>
     </div>
-    <nav class="actions">
-      <button class="btn ghost" id="coachNavBtn">Allenatore</button>
-      <button class="btn ghost">Login</button>
-      <button class="btn primary" id="registerBtn">Registrazione</button>
+    <nav class="pm-header-right">
+      <button class="chip" data-route="coach">Allenatore</button>
+      <button class="chip ghost">Login</button>
+      <button class="chip primary">Registrazione</button>
     </nav>
   </header>
 
+  <!-- MAIN -->
   <main id="app">
+    <!-- HOME: SPORT -->
+    <section id="view-sport" class="view active">
+      <div class="view-head">
+        <h1>Scegli lo sport</h1>
+        <p>Seleziona per iniziare</p>
+      </div>
+      <div class="grid-cards" id="sport-grid">
+        <!-- cards generate da JS -->
+      </div>
+    </section>
 
-    <!-- HOME: scegli sport -->
-    <section id="view-home" class="view active">
-      <h1>Scegli lo sport</h1>
-      <p class="subtitle">Seleziona per iniziare</p>
-
-      <div class="sports-grid">
-        <article class="sport-card" data-sport="calcio">
-          <img src="images/calcio.jpg" alt="Calcio">
-          <div class="sport-title">Calcio</div>
-        </article>
-        <article class="sport-card" data-sport="futsal">
-          <img src="images/futsal.jpg" alt="Futsal">
-          <div class="sport-title">Futsal</div>
-        </article>
-        <article class="sport-card" data-sport="basket">
-          <img src="images/basket.jpg" alt="Basket">
-          <div class="sport-title">Basket</div>
-        </article>
-        <article class="sport-card" data-sport="volley">
-          <img src="images/volley.jpg" alt="Volley">
-          <div class="sport-title">Volley</div>
-        </article>
-        <article class="sport-card" data-sport="rugby">
-          <img src="images/rugby.jpg" alt="Rugby">
-          <div class="sport-title">Rugby</div>
-        </article>
-        <article class="sport-card" data-sport="pallanuoto">
-          <img src="images/pallanuoto.jpg" alt="Pallanuoto">
-          <div class="sport-title">Pallanuoto</div>
-        </article>
+    <!-- GENERE -->
+    <section id="view-gender" class="view">
+      <div class="view-head">
+        <h1>Seleziona il genere</h1>
+      </div>
+      <div class="chip-row" id="gender-row">
+        <button class="chip toggle" data-gender="maschile">Maschile</button>
+        <button class="chip toggle" data-gender="femminile">Femminile</button>
+      </div>
+      <div class="footer-nav">
+        <button class="chip ghost" data-back>Indietro</button>
+        <button class="chip primary" id="go-region" disabled>Avanti</button>
       </div>
     </section>
 
     <!-- REGIONE -->
-    <section id="view-regioni" class="view">
-      <h1>Scegli la regione</h1>
-      <div class="chips">
-        <button class="chip" data-regione="Lazio">Lazio</button>
-        <button class="chip" data-regione="Lombardia">Lombardia</button>
-        <button class="chip" data-regione="Sicilia">Sicilia</button>
-        <button class="chip" data-regione="Piemonte">Piemonte</button>
-        <button class="chip" data-regione="Veneto">Veneto</button>
-        <button class="chip" data-regione="Emilia-Romagna">Emilia-Romagna</button>
+    <section id="view-region" class="view">
+      <div class="view-head">
+        <h1>Scegli la regione</h1>
       </div>
-      <button class="btn ghost" id="backFromRegioni">Indietro</button>
+      <div class="chip-wrap" id="region-wrap"></div>
+      <div class="footer-nav">
+        <button class="chip ghost" data-back>Indietro</button>
+        <button class="chip primary" id="go-league" disabled>Avanti</button>
+      </div>
     </section>
 
-    <!-- GENERE -->
-    <section id="view-genere" class="view">
-      <h1>Seleziona il genere</h1>
-      <div class="chips">
-        <button class="chip" data-genere="Maschile">Maschile</button>
-        <button class="chip" data-genere="Femminile">Femminile</button>
+    <!-- CAMPIONATO -->
+    <section id="view-league" class="view">
+      <div class="view-head">
+        <h1>Scegli il campionato</h1>
       </div>
-      <button class="btn ghost" id="backFromGenere">Indietro</button>
+      <div class="list-cards" id="league-list"></div>
+      <div class="footer-nav">
+        <button class="chip ghost" data-back>Indietro</button>
+      </div>
     </section>
 
     <!-- SOCIETÀ -->
-    <section id="view-societa" class="view">
-      <div class="societa-head">
-        <h1 id="societaName">ASD Roma Nord</h1>
-        <div class="meta" id="societaMeta">Eccellenza • Femminile • Lazio</div>
+    <section id="view-clubs" class="view">
+      <div class="view-head">
+        <h1>Scegli la società</h1>
+      </div>
+      <div class="list-cards" id="club-list"></div>
+      <div class="footer-nav">
+        <button class="chip ghost" data-back>Indietro</button>
+      </div>
+    </section>
+
+    <!-- PAGINA SOCIETÀ -->
+    <section id="view-club" class="view">
+      <div class="club-hero">
+        <h1 id="club-name">Società</h1>
+        <div id="club-meta" class="meta"></div>
       </div>
 
-      <div class="societa-hero">
-        <!-- Cerchio logo (sempre stessa misura del bottone) -->
-        <div class="circle same" id="clubCircle">
-          <img src="images/logo-icon.png" alt="Logo Società">
+      <div class="club-duo">
+        <div class="circle" id="club-logo-circle" aria-label="Logo società">
+          <img id="club-logo" alt="Logo società">
         </div>
-
-        <!-- Bottone PreMatch (stessa misura + alone) -->
-        <button id="openPrematch" class="circle same cta">
-          <img src="images/logo-icon.png" alt="PM">
-          <span class="cta-label">Crea PreMatch</span>
+        <button class="circle callout" id="btn-create-prematch" aria-label="Crea PreMatch">
+          <div class="circle-inner">
+            <span class="brand-badge">PM</span>
+          </div>
         </button>
       </div>
+      <p class="circle-caption">Crea PreMatch</p>
 
-      <!-- Accordion -->
-      <details class="acc">
+      <details class="accordion">
         <summary>Informazioni</summary>
-        <div class="acc-body">
-          <p><strong>Centro sportivo:</strong> Via dello Sport 1, Roma</p>
-          <p><strong>Contatti:</strong> info@asfromanord.it • 06 1234567</p>
-        </div>
+        <div class="acc-body" id="club-info"></div>
       </details>
 
-      <details class="acc">
+      <details class="accordion">
         <summary>Galleria foto</summary>
-        <div class="acc-body gallery">
-          <img src="images/calcio.jpg" alt="">
-          <img src="images/futsal.jpg" alt="">
-          <img src="images/volley.jpg" alt="">
-        </div>
+        <div class="acc-body" id="club-gallery"></div>
       </details>
 
-      <details class="acc">
+      <details class="accordion">
         <summary>Match in programma</summary>
-        <div class="acc-body">
-          <p>Prima Squadra — Dom 14:30 — Centro Sportivo Demo</p>
-          <p>Juniores — Lun 18:30 — Campo Test</p>
-        </div>
+        <div class="acc-body" id="club-matches"></div>
       </details>
 
-      <div class="inline-actions">
-        <button class="btn ghost" id="coachShortcut">Allenatore</button>
-        <button class="btn ghost" id="backFromSocieta">Indietro</button>
+      <div class="footer-nav">
+        <button class="chip" id="coach-in-club">Allenatore</button>
+        <button class="chip ghost" data-back>Indietro</button>
       </div>
     </section>
 
-    <!-- ALLENATORE: codice + convocazione -->
+    <!-- CONVOCAZIONE (allenatore) -->
     <section id="view-coach" class="view">
-      <h1>Area Allenatore</h1>
-
-      <div id="coachLogin">
-        <label class="label">Inserisci il codice società</label>
-        <input type="password" id="coachCode" class="input" placeholder="Es. RN-2025" />
-        <button class="btn primary" id="coachEnter">Entra</button>
-        <p class="muted">Usa il codice fornito dalla società per accedere alle convocazioni.</p>
+      <div class="view-head">
+        <h1>Accesso allenatore</h1>
+        <p>Inserisci il codice fornito dalla società per gestire la convocazione.</p>
       </div>
-
-      <div id="convocazione" class="hidden">
-        <h2>Convocazione</h2>
-        <div class="grid two">
-          <div>
-            <label class="label">Partita</label>
-            <input class="input" id="convPartita" value="ASD Roma Nord vs —" />
-          </div>
-          <div>
-            <label class="label">Categoria</label>
-            <input class="input" id="convCategoria" value="Eccellenza Femminile" />
-          </div>
-          <div>
-            <label class="label">Data & Ora</label>
-            <input class="input" type="datetime-local" id="convData" />
-          </div>
-          <div>
-            <label class="label">Campo</label>
-            <input class="input" id="convCampo" value="Centro Sportivo Demo" />
-          </div>
-        </div>
-
-        <label class="label mt">Giocatrici/Giocatori convocati (uno per riga)</label>
-        <textarea class="input" rows="8" id="convElenco" placeholder="1) Rossi&#10;2) Bianchi&#10;3) ..."></textarea>
-
-        <div class="inline-actions">
-          <button class="btn" id="previewConv">Anteprima</button>
-          <button class="btn primary" id="printConv">Stampa/Scarica PDF</button>
-        </div>
-
-        <div id="convPreview" class="preview card hidden"></div>
+      <div class="form">
+        <label class="label">Codice convocazione</label>
+        <input id="coach-code" class="input" placeholder="Es. RN-FEM-U17-2025">
+        <button class="chip primary" id="coach-enter">Entra</button>
+      </div>
+      <div class="footer-nav">
+        <button class="chip ghost" data-back>Indietro</button>
       </div>
     </section>
 
+    <!-- SCHERMATA CONVOCAZIONE DEMO -->
+    <section id="view-callup" class="view">
+      <div class="view-head">
+        <h1>Convocazione</h1>
+        <p id="callup-meta"></p>
+      </div>
+      <div class="callup-card" id="callup-list">
+        <!-- elenco giocatori demo -->
+      </div>
+      <div class="footer-nav">
+        <button class="chip" id="print-callup">Stampa PDF</button>
+        <button class="chip ghost" data-back>Indietro</button>
+      </div>
+    </section>
+
+    <!-- MODAL: CREA PREMATCH -->
+    <dialog id="modal-prematch" class="modal">
+      <form method="dialog" class="modal-card" id="prematch-form">
+        <h2>Crea PreMatch</h2>
+
+        <label class="label">Scegli colore maglia (ospite)</label>
+        <div class="color-row" id="color-row">
+          <!-- colori via JS -->
+        </div>
+
+        <label class="label">Data &amp; ora</label>
+        <input type="datetime-local" class="input" id="pm-datetime">
+
+        <label class="label">Luogo (indirizzo)</label>
+        <input class="input" id="pm-place" placeholder="Via dello Sport 1, Città">
+
+        <div class="check-row">
+          <label class="checkbox">
+            <input type="checkbox" id="pm-friendly">
+            <span>Richiedi amichevole</span>
+          </label>
+        </div>
+
+        <label class="label">Messaggio all’avversario (opzionale)</label>
+        <textarea class="input" id="pm-message" rows="3" placeholder="Es. Buonasera, va bene maglia bianca?"></textarea>
+
+        <div class="modal-actions">
+          <button class="chip ghost" value="cancel">Annulla</button>
+          <button class="chip primary" value="confirm" id="pm-confirm">Conferma</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- MODAL: ESITO PREMATCH -->
+    <dialog id="modal-confirm" class="modal">
+      <div class="modal-card">
+        <h2>PreMatch creato ✅</h2>
+        <div id="pm-summary" class="summary"></div>
+        <div class="modal-actions">
+          <button class="chip" id="pm-print">Stampa PDF</button>
+          <button class="chip primary" id="pm-close">Chiudi</button>
+        </div>
+      </div>
+    </dialog>
   </main>
 
-  <!-- MODALE PREMATCH -->
-  <dialog id="prematchModal">
-    <form method="dialog" class="pm-form">
-      <h3>Crea PreMatch</h3>
+  <footer class="pm-footer">
+    © PreMatch — semplice, pulita, veloce. Privacy by design.
+  </footer>
 
-      <label class="label">Scegli colore maglia (ospite)</label>
-      <div class="swatches">
-        <button type="button" class="swatch" data-color="#ffffff"></button>
-        <button type="button" class="swatch" data-color="#101114"></button>
-        <button type="button" class="swatch" data-color="#f3c312"></button>
-        <button type="button" class="swatch" data-color="#e85c52"></button>
-        <button type="button" class="swatch" data-color="#4ea3ff"></button>
-        <button type="button" class="swatch" data-color="#34c759"></button>
-        <button type="button" class="swatch" data-color="#ff8a34"></button>
-        <button type="button" class="swatch" data-color="#9b59b6"></button>
-      </div>
-
-      <label class="label">Data & ora</label>
-      <input class="input" type="datetime-local" id="pmData">
-
-      <label class="label">Luogo (indirizzo)</label>
-      <input class="input" id="pmLuogo" placeholder="Via dello Sport 1, Città">
-
-      <label class="label inline"><input type="checkbox" id="pmAmichevole"> Richiedi amichevole</label>
-
-      <label class="label">Messaggio (opzionale)</label>
-      <textarea class="input" rows="3" id="pmMsg" placeholder="Es. Buonasera mister, vi aspettiamo..."></textarea>
-
-      <menu class="dialog-actions">
-        <button class="btn ghost" value="cancel">Annulla</button>
-        <button class="btn primary" id="pmConferma" value="default">Conferma</button>
-      </menu>
-    </form>
-  </dialog>
-
-  <script src="app.js"></script>
+  <script src="app.js?v=1001"></script>
 </body>
 </html>
