@@ -1,99 +1,172 @@
+/* ==========
+   Base / Reset
+   ========== */
 :root{
-  --bg:#0f1115; --panel:#161a20; --text:#e8eef7;
-  --muted:#aeb7c3; --brand:#25d366; --brand-700:#1ab157;
-  --chip:#1f2530; --chip-brd:#2a3340; --ok:#22c55e;
-  --ring:0 0 0 8px rgba(37,211,102,.08);
+  --bg:#0f1115;
+  --panel:#161a20;
+  --text:#e6e7ea;
+  --muted:#9aa3af;
+  --brand:#22c55e;         /* verde PreMatch */
+  --brand-700:#16a34a;
+  --brand-500:#22c55e;
+  --brand-300:#86efac;
+  --ring: rgba(34,197,94,.9);
+  --ring-soft: rgba(34,197,94,.45);
+
+  /* dimensioni cerchi (mobile / desktop) */
+  --circle: 152px;
+  --circle-lg: 180px;
 }
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.4 Inter,system-ui,Segoe UI,Roboto,Arial}
-img{max-width:100%;display:block}
-h1{font-size:2.2rem;margin:10px 0 6px}
-h2{margin:0 0 12px}
-.subtitle{color:var(--muted);margin:0 0 20px}
-.hidden{display:none}
 
-/* Topbar */
-.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:linear-gradient(#0f1115,#0f1115cc 50%,#0f111500)}
-.brand{display:flex;align-items:center;gap:8px}
-/* >>> Logo sempre visibile: badge con sfondo, bordo e alone leggero */
-.brand-icon{
-  width:28px;height:28px;border-radius:8px;
-  padding:3px;background:#0f1a12;border:1px solid #295a3b;
-  box-shadow:0 0 0 2px rgba(37,211,102,.25);
+@media (min-width: 480px){
+  :root{ --circle: var(--circle-lg); }
 }
-.brand-name{font-weight:700;color:#68f197}
-.actions{display:flex;gap:10px}
 
-/* Buttons */
-.btn{border:1px solid #2a3340;background:#1a2029;color:var(--text);padding:10px 14px;border-radius:14px}
-.btn.ghost{background:transparent}
-.btn.primary{background:var(--brand);border-color:var(--brand);color:#061107;font-weight:700}
-.btn:active{transform:scale(.98)}
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; }
 
-/* Views */
-.view{display:none;padding:16px}
-.view.active{display:block}
-
-/* Sports grid */
-.sports-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.sport-card{background:var(--panel);border-radius:16px;overflow:hidden;border:1px solid #1f2632;position:relative}
-.sport-card img{height:150px;object-fit:cover}
-.sport-title{padding:10px 14px;font-weight:800;color:#5ff191}
-.sport-card:active{filter:brightness(1.05)}
-/* TAP feedback evidente + ritardo gestione in JS aggiunge .pressed */
-.sport-card.pressed{outline:3px solid var(--brand);box-shadow:var(--ring)}
-
-/* Chips (Regioni/Genere) */
-.chips{display:flex;flex-wrap:wrap;gap:12px;margin:10px 0 16px}
-.chip{background:var(--chip);border:1px solid var(--chip-brd);color:var(--text);padding:10px 14px;border-radius:999px}
-.chip.active{background:var(--brand);border-color:var(--brand);color:#061107;font-weight:700;box-shadow:var(--ring)}
-
-/* Società */
-.societa-head .meta{color:var(--muted);margin-top:4px}
-.societa-hero{display:flex;align-items:center;gap:24px;margin:18px 0 12px}
-.circle.same{--size:130px;width:var(--size);height:var(--size);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid #263040;background:#0e1217;position:relative}
-.circle.same img{width:60%;height:60%;object-fit:contain;opacity:.9}
-.circle.same.cta{background:var(--brand);border-color:#0d291a;box-shadow:0 0 0 6px rgba(37,211,102,.15)}
-.circle.same.cta::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(37,211,102,.5);animation:pulse 2s infinite}
-.cta-label{position:absolute;bottom:-30px;color:#aaf0c6;font-weight:800}
-@keyframes pulse{0%,100%{opacity:.45}50%{opacity:.1}}
-
-/* Accordion */
-.acc{background:var(--panel);border:1px solid #222b36;border-radius:16px;margin:14px 0}
-.acc>summary{cursor:pointer;padding:16px 18px;font-weight:700;list-style:none}
-.acc[open]>summary{color:#aaf0c6}
-.acc-body{padding:0 18px 16px}
-.gallery{display:flex;gap:10px}
-.gallery img{width:100px;height:60px;object-fit:cover;border-radius:10px;border:1px solid #2b3441}
-
-/* Inputs */
-.label{display:block;margin:12px 0 6px;color:#b9c3d1}
-.input{width:100%;border:1px solid #2a3340;background:#12161c;color:var(--text);padding:10px 12px;border-radius:12px}
-.mt{margin-top:10px}
-.grid.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.preview.card{background:#0f141a;border:1px dashed #2d3948;border-radius:12px;padding:12px;margin-top:10px}
-
-/* Dialog */
-#prematchModal{border:none;border-radius:18px;padding:0;max-width:560px;width:92%;background:#10151c;color:var(--text)}
-.pm-form{padding:18px}
-.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
-.swatches{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
-.swatch{width:30px;height:30px;border-radius:8px;border:2px solid #1f2632}
-.swatch[data-color="#ffffff"]{background:#fff}
-.swatch[data-color="#101114"]{background:#101114}
-.swatch[data-color="#f3c312"]{background:#f3c312}
-.swatch[data-color="#e85c52"]{background:#e85c52}
-.swatch[data-color="#4ea3ff"]{background:#4ea3ff}
-.swatch[data-color="#34c759"]{background:#34c759}
-.swatch[data-color="#ff8a34"]{background:#ff8a34}
-.swatch[data-color="#9b59b6"]{background:#9b59b6}
-.swatch.active{outline:3px solid var(--brand)}
-.inline-actions{display:flex;gap:10px;align-items:center;margin:14px 0}
-
-/* Fine stampa: togli sfondi scuri per PDF */
-@media print{
-  body{background:#fff;color:#000}
-  .topbar, .btn, .actions, .dialog-actions{display:none!important}
-  .view{display:block}
-  .circle.same, .acc, .sport-card{border:1px solid #bbb;box-shadow:none}
+/* ==========
+   Header
+   ========== */
+.header{
+  position:sticky; top:0; z-index:20;
+  background:linear-gradient(180deg,#0f1115, #0f1115f2 70%, transparent);
+  backdrop-filter:saturate(120%) blur(6px);
+  padding:12px 16px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
 }
+.brand{ display:flex; align-items:center; gap:10px; }
+.brand-badge{
+  width:28px; height:28px; border-radius:6px; background:#0b0d10;
+  display:grid; place-items:center; overflow:hidden;
+}
+.brand-badge img{ max-width:100%; max-height:100%; display:block; }
+
+.header-cta{ display:flex; gap:10px; }
+.btn{
+  appearance:none; border:1px solid #20242c; background:#12161b; color:var(--text);
+  padding:10px 14px; border-radius:14px; font-weight:600; letter-spacing:.2px;
+  transition:transform .06s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.btn:hover{ background:#141920; border-color:#29303b; }
+.btn:active{ transform:scale(.98); }
+.btn--primary{
+  background:var(--brand); border-color:transparent; color:#0a0f0c;
+  box-shadow:0 6px 18px -6px var(--ring-soft);
+}
+.btn--primary:hover{ background:var(--brand-700); }
+
+/* ==========
+   Cards / griglie
+   ========== */
+.grid{ display:grid; gap:14px; }
+.grid--sports{ grid-template-columns:repeat(2,1fr); padding:0 16px 24px; }
+@media (min-width: 720px){ .grid--sports{ grid-template-columns:repeat(3,1fr); } }
+
+.card{
+  background:var(--panel); border:1px solid #1b2027; border-radius:18px; overflow:hidden;
+  transition:transform .08s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.card:hover{ border-color:#273040; box-shadow:0 8px 22px -10px rgba(0,0,0,.5); transform:translateY(-1px); }
+.card__img{ width:100%; aspect-ratio:16/11; object-fit:cover; display:block; }
+.card__title{ padding:10px 14px 14px; color:var(--brand); font-weight:800; font-size:1.15rem; }
+
+/* ripple rapido ma visibile sui tap */
+.card:active{ box-shadow:0 0 0 6px rgba(255,255,255,.02) inset, 0 0 0 2px var(--ring) inset; }
+
+/* ==========
+   CLUB PAGE — cerchi uguali (logo + pulsante)
+   ========== */
+.club-hero{
+  display:flex; align-items:center; justify-content:flex-start; gap:22px;
+  padding:8px 16px 18px;
+}
+
+/* NB: includo più selettori per adattarmi al tuo markup attuale:
+   - .club-logo, .club-logo-circle, .club-badge : cerchio del logo società
+   - #createPreMatchBtn, .prematch-cta, .cta-prematch-circle : cerchio pulsante PreMatch
+   Usa quelli che hai già: questa regola li uniforma automaticamente. */
+.club-logo, .club-logo-circle, .club-badge,
+#createPreMatchBtn, .prematch-cta, .cta-prematch-circle{
+  width:var(--circle);
+  height:var(--circle);
+  border-radius:50%;
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  flex:0 0 var(--circle);
+  background:#0c0f13;
+  border:1px solid #1b2027;
+  overflow:hidden;
+}
+
+/* logo società dentro al cerchio */
+.club-logo img, .club-badge img{
+  max-width:70%;
+  max-height:70%;
+  opacity:.95;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.02));
+}
+
+/* ==========
+   Pulsante PreMatch — bordo/glow e feedback
+   ========== */
+#createPreMatchBtn, .prematch-cta, .cta-prematch-circle{
+  background:var(--brand); border-color:transparent;
+  box-shadow:0 10px 30px -10px var(--ring-soft);
+}
+#createPreMatchBtn::after, .prematch-cta::after, .cta-prematch-circle::after{
+  content:""; position:absolute; inset:-6px; border-radius:50%;
+  border:2px solid var(--ring);
+  box-shadow:0 0 22px var(--ring-soft), 0 0 6px rgba(34,197,94,.75) inset;
+  pointer-events:none;
+}
+#createPreMatchBtn:active, .prematch-cta:active, .cta-prematch-circle:active{
+  transform:scale(.985);
+}
+
+/* icona/logo dentro al pulsante */
+#createPreMatchBtn img, .prematch-cta img, .cta-prematch-circle img{
+  max-width:58%;
+  max-height:58%;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.12));
+  opacity:.98;
+}
+
+/* didascalia sotto ai cerchi */
+.circle-caption{
+  text-align:center; font-weight:800; letter-spacing:.2px; color:var(--brand-300);
+  margin-top:10px;
+}
+
+/* ==========
+   Accordion sezioni
+   ========== */
+.accordion{
+  margin:10px 16px; border-radius:16px; overflow:hidden;
+  border:1px solid #1b2027; background:var(--panel);
+}
+.accordion + .accordion{ margin-top:12px; }
+.accordion__header{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:16px; font-weight:700;
+}
+.accordion__chev{ opacity:.6; transition:transform .2s ease; }
+.accordion[open] .accordion__chev{ transform:rotate(180deg); }
+.accordion__content{ padding:0 16px 16px; color:var(--muted); }
+
+/* ==========
+   Bottoni secondari
+   ========== */
+.btn--ghost{
+  background:#12161b; border:1px solid #20242c; color:#c8ced6;
+}
+.btn--ghost:hover{ border-color:#2a313d; }
+
+/* ==========
+   Utility
+   ========== */
+.m-0{ margin:0; } .mt-8{ margin-top:8px; } .mt-12{ margin-top:12px; }
+.mt-16{ margin-top:16px; } .mt-20{ margin-top:20px; }
+.center{ text-align:center; }
+
+.hidden{ display:none !important; }
