@@ -4,136 +4,170 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PreMatch</title>
-
-  <!-- Hint per gh-pages: se pubblichi in /prematch, metti qui /prematch/ -->
-  <meta name="gh-base" content="" />
-
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="topbar-left">
-      <img class="logo" data-src="images/logo-light.png" alt="PreMatch" />
-      <span class="brand">PreMatch</span>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="brand">
+      <img src="logo-light.png" alt="PreMatch" class="brand-logo">
+      <span class="brand-text">PreMatch</span>
     </div>
-    <nav class="actions">
-      <button class="btn btn-ghost" id="btnCoach">Allenatore</button>
-      <button class="btn btn-ghost">Login</button>
-      <button class="btn btn-primary">Registrazione</button>
+    <nav class="nav-actions">
+      <button class="btn ghost" id="coachTop">Allenatore</button>
+      <button class="btn ghost">Login</button>
+      <button class="btn primary">Registrazione</button>
     </nav>
   </header>
 
-  <main id="view">
-    <!-- HOME: scelta sport -->
-    <section id="home" class="screen active">
-      <h1 class="title">Scegli lo sport</h1>
-      <p class="subtitle">Seleziona per iniziare</p>
+  <main id="app">
 
-      <div class="sports-grid">
-        <button class="sport-card" data-sport="calcio">
-          <div class="imgwrap"><img data-src="images/sports/calcio.jpg" alt="Calcio" /></div>
-          <div class="label">Calcio</div>
+    <!-- HOME: Scegli lo sport -->
+    <section class="view" id="view-sport">
+      <h1>Scegli lo sport</h1>
+      <p class="muted">Seleziona per iniziare</p>
+
+      <div class="grid sports">
+        <button class="card sport" data-sport="calcio">
+          <img src="images/calcio.jpg" alt="Calcio">
+          <span>Calcio</span>
         </button>
 
-        <button class="sport-card" data-sport="futsal">
-          <div class="imgwrap"><img data-src="images/sports/futsal.jpg" alt="Futsal" /></div>
-          <div class="label">Futsal</div>
+        <button class="card sport" data-sport="futsal">
+          <img src="images/futsal.jpg" alt="Futsal">
+          <span>Futsal</span>
         </button>
 
-        <button class="sport-card" data-sport="basket">
-          <div class="imgwrap"><img data-src="images/sports/basket.jpg" alt="Basket" /></div>
-          <div class="label">Basket</div>
+        <button class="card sport" data-sport="basket">
+          <img src="images/basket.jpg" alt="Basket">
+          <span>Basket</span>
         </button>
 
-        <button class="sport-card" data-sport="volley">
-          <div class="imgwrap"><img data-src="images/sports/volley.jpg" alt="Volley" /></div>
-          <div class="label">Volley</div>
+        <button class="card sport" data-sport="volley">
+          <img src="images/volley.jpg" alt="Volley">
+          <span>Volley</span>
         </button>
 
-        <button class="sport-card" data-sport="rugby">
-          <div class="imgwrap"><img data-src="images/sports/rugby.jpg" alt="Rugby" /></div>
-          <div class="label">Rugby</div>
+        <button class="card sport" data-sport="rugby">
+          <img src="images/rugby.jpg" alt="Rugby">
+          <span>Rugby</span>
         </button>
 
-        <button class="sport-card" data-sport="pallanuoto">
-          <div class="imgwrap"><img data-src="images/sports/pallanuoto.jpg" alt="Pallanuoto" /></div>
-          <div class="label">Pallanuoto</div>
+        <button class="card sport" data-sport="pallanuoto">
+          <img src="images/pallanuoto.jpg" alt="Pallanuoto">
+          <span>Pallanuoto</span>
         </button>
       </div>
     </section>
 
     <!-- GENERE -->
-    <section id="gender" class="screen">
-      <h1 class="title">Seleziona il genere</h1>
-      <div class="pill-row">
-        <button class="pill" data-gender="M">Maschile</button>
-        <button class="pill" data-gender="F">Femminile</button>
+    <section class="view hidden" id="view-genere">
+      <h1>Seleziona il genere</h1>
+      <div class="chips">
+        <button class="chip" data-genere="Maschile">Maschile</button>
+        <button class="chip" data-genere="Femminile">Femminile</button>
       </div>
-      <div class="footer-nav">
-        <button class="btn btn-ghost" data-back>Indietro</button>
-      </div>
-    </section>
-
-    <!-- REGIONE (tabella a comparsa sotto i pill) -->
-    <section id="region" class="screen">
-      <h1 class="title">Seleziona la regione</h1>
-      <div class="table-list" id="regionList"></div>
-      <div class="footer-nav">
-        <button class="btn btn-ghost" data-back>Indietro</button>
+      <div class="footer-actions">
+        <button class="btn ghost" data-back="view-sport">Indietro</button>
       </div>
     </section>
 
-    <!-- CAMPIONATO -->
-    <section id="league" class="screen">
-      <h1 class="title">Seleziona il campionato</h1>
-      <div class="table-list" id="leagueList"></div>
-      <div class="footer-nav">
-        <button class="btn btn-ghost" data-back>Indietro</button>
+    <!-- REGIONE + CAMPIONATO (a tendina, sulla stessa pagina) -->
+    <section class="view hidden" id="view-filtri">
+      <h1>Seleziona regione e campionato</h1>
+
+      <label class="field">
+        <span>Regione</span>
+        <select id="sel-regione">
+          <option value="" selected disabled>— scegli —</option>
+          <option>Lazio</option>
+          <option>Lombardia</option>
+          <option>Piemonte</option>
+          <option>Veneto</option>
+          <option>Emilia-Romagna</option>
+          <option>Sicilia</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Campionato</span>
+        <select id="sel-camp">
+          <option value="" selected disabled>— scegli —</option>
+          <option>Eccellenza</option>
+          <option>Promozione</option>
+          <option>Prima Categoria</option>
+          <option>Under 19</option>
+        </select>
+      </label>
+
+      <div class="footer-actions">
+        <button class="btn ghost" data-back="view-genere">Indietro</button>
+        <button class="btn primary" id="go-societa" disabled>Avanti</button>
       </div>
     </section>
 
-    <!-- SOCIETÀ (lista) -->
-    <section id="clubs" class="screen">
-      <h1 class="title">Scegli la società</h1>
-      <div class="card-list" id="clubList"></div>
-      <div class="footer-nav">
-        <button class="btn btn-ghost" data-back>Indietro</button>
+    <!-- SOCIETÀ -->
+    <section class="view hidden" id="view-societa">
+      <h1>Scegli la società</h1>
+      <div class="list clubs" id="clubs-list">
+        <!-- Esempi -->
+        <button class="club" data-club="ASD Roma Nord">
+          <img src="images/club-roma.jpg" alt="ASD Roma Nord">
+          <div class="club-info">
+            <strong>ASD Roma Nord</strong>
+            <span class="muted">Eccellenza • Femminile • Lazio</span>
+          </div>
+        </button>
+
+        <button class="club" data-club="Virtus Marino">
+          <img src="images/club-virtus.jpg" alt="Virtus Marino">
+          <div class="club-info">
+            <strong>Virtus Marino</strong>
+            <span class="muted">Eccellenza • Femminile • Lazio</span>
+          </div>
+        </button>
+      </div>
+
+      <div class="footer-actions">
+        <button class="btn ghost" data-back="view-filtri">Indietro</button>
       </div>
     </section>
 
     <!-- PAGINA SOCIETÀ -->
-    <section id="clubPage" class="screen">
+    <section class="view hidden" id="view-club">
       <div class="club-hero">
-        <div class="club-logo">
-          <img id="clubLogo" data-src="images/clubs/roma-nord.png" alt="Logo società" />
+        <div class="circle logo-wrap">
+          <img id="club-logo" alt="Logo società">
         </div>
-        <div>
-          <h1 id="clubName" class="title">ASD Roma Nord</h1>
-          <div id="clubMeta" class="meta">Eccellenza • Femminile • Lazio</div>
-        </div>
-      </div>
 
-      <div class="cta-row">
-        <button class="prematch-btn" id="btnPrematch">
+        <!-- PREMATCH più piccolo del logo -->
+        <button class="circle cta" id="btn-prematch">
           <span>PreMatch</span>
         </button>
       </div>
 
+      <h1 id="club-name">—</h1>
+      <p class="muted" id="club-meta">—</p>
+
       <details class="accordion">
         <summary>Informazioni</summary>
-        <div class="acc-body" id="clubInfo">Impianto: Via dello Sport 1</div>
+        <div class="acc-body">
+          Campo Sportivo Via dello Sport 1, Città • Orari segreteria: lun–ven 16–19
+        </div>
       </details>
 
-      <div class="footer-nav">
-        <button class="btn btn-ghost" data-back>Indietro</button>
+      <div class="footer-actions">
+        <button class="btn ghost" data-back="view-societa">Indietro</button>
       </div>
     </section>
+
   </main>
 
-  <footer class="copyright">
+  <footer class="site-footer">
     © PreMatch — semplice, pulita, veloce. Privacy by design.
   </footer>
 
-  <script src="app.js?v=5"></script>
+  <script src="app.js"></script>
 </body>
 </html>
