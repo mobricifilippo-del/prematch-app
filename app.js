@@ -76,3 +76,15 @@ document.querySelectorAll('.card-sport').forEach(card => {
     }, 120);
   }, { passive: true });
 });
+// Gestione click sulle card sport
+document.querySelectorAll('.card-sport').forEach(card => {
+  card.addEventListener('click', () => {
+    // evidenzia la card
+    card.classList.add('selected');
+
+    // dopo un attimo, vai alla pagina GENERE
+    setTimeout(() => {
+      goTo('view-genere', { sport: card.dataset.sport });
+    }, 150);
+  }, { passive: true });
+});
