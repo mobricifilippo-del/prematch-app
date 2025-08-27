@@ -1,27 +1,28 @@
 <!doctype html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>PreMatch</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="logo-light.png"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
-<body class="pm-body">
-  <!-- HEADER fisso: NON CAMBIA -->
+<body>
+  <!-- HEADER fisso, logo sempre visibile -->
   <header class="pm-header">
     <div class="pm-header-left">
-      <img src="logo-light.png" alt="PreMatch" class="pm-brand" />
-      <span class="pm-title">PreMatch</span>
+      <img src="logo-light.png" alt="PreMatch" class="pm-logo"/>
+      <span class="pm-brand">PreMatch</span>
     </div>
-    <nav class="pm-nav">
-      <button class="pm-btn pm-btn-ghost" data-nav="allenatore">Allenatore</button>
-      <button class="pm-btn pm-btn-ghost" data-nav="login">Login</button>
-      <button class="pm-btn pm-btn-primary" data-nav="registrazione">Registrazione</button>
+    <nav class="pm-header-right">
+      <button class="pm-btn pm-btn-ghost" id="nav-coach">Allenatore</button>
+      <button class="pm-btn pm-btn-ghost" id="nav-login">Login</button>
+      <button class="pm-btn pm-btn-primary" id="nav-register">Registrazione</button>
     </nav>
   </header>
 
-  <!-- APP -->
-  <main id="app" class="pm-app"></main>
+  <!-- CONTENUTO -->
+  <main id="app"></main>
 
   <footer class="pm-footer">
     © PreMatch — semplice, pulita, veloce. Privacy by design.
