@@ -88,3 +88,9 @@ h1{margin:8px 0 6px;font-size:32px}
 .btn-ghost{background:transparent;}
 .btn-primary{background:#22c55e; border-color:#22c55e; color:#0b1117;}
 .btn:active{transform:scale(0.98);}
+.card-sport{position:relative; cursor:pointer; transition:transform .05s;}
+.card-sport:active{transform:scale(0.99);}
+.card-sport.selected::after{
+  content:""; position:absolute; inset:0; border-radius:16px;
+  box-shadow:0 0 0 3px #22c55e inset;          /* alone verde evidente */
+}
