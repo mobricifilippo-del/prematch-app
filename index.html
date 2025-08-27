@@ -7,23 +7,102 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Navbar -->
-  <header class="navbar">
-    <div class="logo-container">
-      <img src="https://i.ibb.co/z2KcF6Y/prematch-logo.png" alt="PreMatch Logo" class="logo">
-      <span class="brand">PreMatch</span>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">
+      <img id="brandLogo" src="logo-light.png" alt="PreMatch">
+      <span class="logo-text">PreMatch</span>
     </div>
-    <nav class="menu">
-      <button class="menu-btn" onclick="vaiAllenatore()">Allenatore</button>
-      <button class="menu-btn" onclick="vaiLogin()">Login</button>
-      <button class="menu-btn green" onclick="vaiRegistrazione()">Registrazione</button>
+    <nav class="nav">
+      <button id="coachBtn">Allenatore</button>
+      <button id="loginBtn">Login</button>
+      <button id="registerBtn" class="primary">Registrazione</button>
     </nav>
   </header>
 
-  <!-- Contenitore principale -->
-  <main id="app"></main>
+  <!-- CONTENITORE PRINCIPALE -->
+  <main id="app">
+    <!-- Home page (scelta sport) -->
+    <section id="home" class="page active">
+      <h1>Scegli lo sport</h1>
+      <p>Seleziona per iniziare</p>
+      <div id="sportsContainer" class="card-grid">
+        <div class="card sport" data-sport="Calcio">
+          <img src="images/calcio.jpg" alt="Calcio">
+          <span>Calcio</span>
+        </div>
+        <div class="card sport" data-sport="Futsal">
+          <img src="images/futsal.jpg" alt="Futsal">
+          <span>Futsal</span>
+        </div>
+        <div class="card sport" data-sport="Basket">
+          <img src="images/basket.jpg" alt="Basket">
+          <span>Basket</span>
+        </div>
+        <div class="card sport" data-sport="Volley">
+          <img src="images/volley.jpg" alt="Volley">
+          <span>Volley</span>
+        </div>
+        <div class="card sport" data-sport="Rugby">
+          <img src="images/rugby.jpg" alt="Rugby">
+          <span>Rugby</span>
+        </div>
+        <div class="card sport" data-sport="Pallanuoto">
+          <img src="images/pallanuoto.jpg" alt="Pallanuoto">
+          <span>Pallanuoto</span>
+        </div>
+      </div>
+    </section>
 
-  <footer>
+    <!-- Pagina genere -->
+    <section id="genderPage" class="page hidden">
+      <h1>Seleziona il genere</h1>
+      <div class="button-group">
+        <button class="genderBtn" data-gender="Maschile">Maschile</button>
+        <button class="genderBtn" data-gender="Femminile">Femminile</button>
+      </div>
+    </section>
+
+    <!-- Pagina regioni -->
+    <section id="regionPage" class="page hidden">
+      <h1>Scegli la regione</h1>
+      <div class="button-group">
+        <button class="regionBtn" data-region="Lazio">Lazio</button>
+        <button class="regionBtn" data-region="Lombardia">Lombardia</button>
+        <button class="regionBtn" data-region="Sicilia">Sicilia</button>
+        <button class="regionBtn" data-region="Piemonte">Piemonte</button>
+        <button class="regionBtn" data-region="Veneto">Veneto</button>
+        <button class="regionBtn" data-region="Emilia-Romagna">Emilia-Romagna</button>
+      </div>
+    </section>
+
+    <!-- Pagina campionati -->
+    <section id="leaguePage" class="page hidden">
+      <h1>Scegli il campionato</h1>
+      <div class="button-group" id="leagueContainer"></div>
+    </section>
+
+    <!-- Pagina società -->
+    <section id="clubPage" class="page hidden">
+      <h1 id="clubName">Nome Società</h1>
+      <p id="clubDetails"></p>
+      <div class="club-actions">
+        <div class="club-logo">
+          <img src="logo-light.png" alt="Logo Società">
+        </div>
+        <button id="createPreMatchBtn" class="circle-button">Crea PreMatch</button>
+      </div>
+      <div class="info-buttons">
+        <button>Informazioni</button>
+        <button>Galleria foto</button>
+        <button>Match in programma</button>
+        <button id="coachAccessBtn">Allenatore</button>
+        <button id="backBtn">Indietro</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
     <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
   </footer>
 
