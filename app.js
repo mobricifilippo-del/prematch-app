@@ -1,242 +1,184 @@
-// ===== Dati demo stabili =====
-const DATA = {
-  sports: [
-    { id: "calcio", name: "Calcio", img: "images/calcio.jpg" },
-    { id: "futsal", name: "Futsal", img: "images/futsal.jpg" },
-    { id: "basket", name: "Basket", img: "images/basket.jpg" },
-    { id: "volley", name: "Volley", img: "images/volley.jpg" },
-    { id: "rugby", name: "Rugby", img: "images/rugby.jpg" },
-    { id: "pallanuoto", name: "Pallanuoto", img: "images/pallanuoto.jpg" },
-  ],
-  regions: ["Lazio","Lombardia","Sicilia","Piemonte","Veneto","Emilia-Romagna"],
-  campionati: {
-    Lazio: ["Eccellenza","Promozione"],
-    Lombardia: ["Eccellenza"],
-    Sicilia: ["Eccellenza"],
-    Piemonte: ["Eccellenza"],
-    Veneto: ["Eccellenza"],
-    "Emilia-Romagna": ["Eccellenza"],
-  },
-  societa: {
-    // campionato -> array società
-    "Lazio|Eccellenza|Femminile|Calcio": [
-      {
-        id:"virtus-marino",
-        nome:"Virtus Marino",
-        logo:"images/virtus.png",
-        citta:"Roma",
-        stadio:"Campo Test",
-        prossime:[]
-      },
-      {
-        id:"asd-roma-nord",
-        nome:"ASD Roma Nord",
-        logo:"images/pm-logo-round.png", // placeholder
-        citta:"Roma",
-        stadio:"Stadio Olimpico",
-        prossime:[]
-      }
-    ],
-    "Lazio|Eccellenza|Maschile|Calcio":[
-      {
-        id:"calcio-lazio",
-        nome:"Calcio Lazio",
-        logo:"images/pm-logo-round.png",
-        citta:"Roma",
-        stadio:"Campo A",
-        prossime:[]
-      }
-    ]
-  }
-};
+/* ===========
+   PREMATCH APP
+   =========== */
 
-// Stato di navigazione
+// Stato semplice in memoria
 const state = {
   sport: null,
   gender: null,
   region: null,
-  campionato: null,
 };
+
+// Dati statici (immagini locali in /images)
+const SPORTS = [
+  { id:'calcio',  name:'Calcio',   img:'images/calcio.jpg' },
+  { id:'futsal',  name:'Futsal',   img:'images/futsal.jpg' },
+  { id:'basket',  name:'Basket',   img:'images/basket.jpg' },
+  { id:'volley',  name:'Volley',   img:'images/volley.jpg' },
+  { id:'rugby',   name:'Rugby',    img:'images/rugby.jpg' },
+  { id:'palla',   name:'Pallanuoto', img:'images/pallanuoto.jpg' },
+];
+
+const REGIONS = ['Lazio','Lombardia','Sicilia','Piemonte','Veneto','Emilia-Romagna'];
+
+// Società esempio per demo
+const CLUBS = [
+  {
+    id:'roma-nord',
+    name:'ASD Roma Nord',
+    level:'Eccellenza',
+    gender:'Femminile',
+    region:'Lazio',
+    logo:'images/club_roma_nord.png'
+  },
+  {
+    id:'virtus-marino',
+    name:'Virtus Marino',
+    level:'Eccellenza',
+    gender:'Femminile',
+    region:'Lazio',
+    logo:'images/club_virtus_marino.png'
+  }
+];
 
 // Helpers
-const el = (html) => {
-  const t = document.createElement("template");
-  t.innerHTML = html.trim();
-  return t.content.firstElementChild;
-};
-const app = document.getElementById("app");
+const $ = (sel,scope=document)=>scope.querySelector(sel);
+const $$ = (sel,scope=document)=>[...scope.querySelectorAll(sel)];
+const app = $('#app');
 
-function resetBelow(key){
-  if(key === "sport"){ state.gender = state.region = state.campionato = null; }
-  if(key === "gender"){ state.region = state.campionato = null; }
-  if(key === "region"){ state.campionato = null; }
-}
+function mount(view){ app.innerHTML=''; app.appendChild(view); }
 
-// ====== VIEW: HOME (SPORT) ======
-function renderHome(){
-  state.sport = state.gender = state.region = state.campionato = null;
+/* -------------- Viste -------------- */
 
-  app.innerHTML = `
-    <section>
-      <h1 class="pm-section-title">Scegli lo sport</h1>
-      <p class="pm-subtitle">Seleziona per iniziare</p>
-      <div class="pm-grid" id="sportGrid"></div>
-    </section>
+// HOME: scelta sport
+function ViewHome(){
+  const el = document.createElement('div');
+  el.innerHTML = `
+    <h1>Scegli lo sport</h1>
+    <p class="pm-sub">Seleziona per iniziare</p>
+    <div class="grid">
+      ${SPORTS.map(s => `
+        <article class="card" data-id="${s.id}" tabindex="0" role="button" aria-label="${s.name}">
+          <img src="${s.img}" alt="${s.name}"/>
+          <div class="label">${s.name}</div>
+        </article>
+      `).join('')}
+    </div>
   `;
-
-  const grid = document.getElementById("sportGrid");
-  DATA.sports.forEach(s=>{
-    const card = el(`
-      <article class="pm-card" data-sport="${s.id}">
-        <img src="${s.img}" alt="${s.name}" loading="lazy"/>
-        <div class="cap"><span>${s.name}</span></div>
-      </article>
-    `);
-    card.addEventListener("click", ()=>{
-      state.sport = s.id;
-      renderGender();
+  // click -> Genere
+  $$('.card',el).forEach(c=>{
+    c.addEventListener('click',()=>{
+      state.sport = c.dataset.id;
+      mount(ViewGender());
+      window.scrollTo({top:0,behavior:'smooth'});
     });
-    grid.appendChild(card);
   });
+  return el;
 }
 
-// ====== VIEW: GENERE (con Regioni inline) ======
-function renderGender(){
-  resetBelow("sport");
-  app.innerHTML = `
-    <section>
-      <h1 class="pm-section-title">Seleziona il genere</h1>
-      <div class="pm-row pm-gender">
-        <button class="pm-btn pm-btn-chip ${state.gender==='Maschile'?'active':''}" id="g-m">Maschile</button>
-        <button class="pm-btn pm-btn-chip ${state.gender==='Femminile'?'active':''}" id="g-f">Femminile</button>
-        <button class="pm-btn pm-btn-chip" id="g-back">Indietro</button>
+// GENERE + Regioni inline
+function ViewGender(){
+  const el = document.createElement('div');
+  el.innerHTML = `
+    <h1>Seleziona il genere</h1>
+    <div class="choice-row">
+      <button class="pill" data-g="Maschile">Maschile</button>
+      <button class="pill" data-g="Femminile">Femminile</button>
+      <button class="pill" id="back-home">Indietro</button>
+    </div>
+    <div id="regionWrap" class="region-box hidden">
+      <div class="pm-sub">Scegli la regione</div>
+      <div class="region-grid">
+        ${REGIONS.map(r=>`<button class="region" data-r="${r}">${r}</button>`).join('')}
       </div>
-
-      <div id="regionWrap" style="display:${state.gender? 'block':'none'}">
-        <h2 class="pm-subtitle" style="margin:8px 0 12px">Scegli la regione</h2>
-        <div class="pm-regions" id="regionGrid"></div>
-      </div>
-    </section>
+    </div>
+    <div id="clubsWrap" class="hidden">
+      <div class="pm-sub" style="margin-top:12px">Società disponibili</div>
+      <div class="club-list" id="clubList"></div>
+    </div>
   `;
 
-  document.getElementById("g-m").onclick = ()=>{
-    state.gender = "Maschile"; renderGender(); renderRegions();
-  };
-  document.getElementById("g-f").onclick = ()=>{
-    state.gender = "Femminile"; renderGender(); renderRegions();
-  };
-  document.getElementById("g-back").onclick = renderHome;
-
-  if(state.gender) renderRegions();
-}
-
-function renderRegions(){
-  const grid = document.getElementById("regionGrid");
-  grid.innerHTML = "";
-  DATA.regions.forEach(r=>{
-    const b = el(`<button class="pm-btn pm-btn-chip">${r}</button>`);
-    b.addEventListener("click", ()=>{ state.region = r; renderCampionati(); });
-    grid.appendChild(b);
+  // attiva gender + mostra regioni inline
+  $$('.pill[data-g]',el).forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      $$('.pill[data-g]',el).forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      state.gender = btn.dataset.g;
+      $('#regionWrap',el).classList.remove('hidden');
+      $('#clubsWrap',el).classList.add('hidden');
+    });
   });
-}
 
-// ====== VIEW: CAMPIONATI ======
-function renderCampionati(){
-  resetBelow("region");
-  const list = (DATA.campionati[state.region] || []);
-  app.innerHTML = `
-    <section>
-      <h1 class="pm-section-title">${state.region}</h1>
-      <p class="pm-subtitle">Seleziona il campionato</p>
-      <div class="pm-list" id="campList"></div>
-      <div class="pm-row" style="margin-top:12px">
-        <button class="pm-btn pm-btn-chip" id="backToGender">Indietro</button>
-      </div>
-    </section>
-  `;
-  const l = document.getElementById("campList");
-  list.forEach(c=>{
-    const it = el(`<div class="pm-item">${c}</div>`);
-    it.onclick = ()=>{ state.campionato = c; renderSocietaList(); };
-    l.appendChild(it);
-  });
-  document.getElementById("backToGender").onclick = renderGender;
-}
-
-// ====== VIEW: LISTA SOCIETÀ ======
-function renderSocietaList(){
-  const key = `${state.region}|${state.campionato}|${state.gender}|${capitalize(state.sport)}`;
-  const list = DATA.societa[key] || [];
-
-  app.innerHTML = `
-    <section>
-      <h1 class="pm-section-title">${state.campionato}</h1>
-      <p class="pm-subtitle">${state.gender} • ${state.region} • ${capitalize(state.sport)}</p>
-      <div class="pm-list" id="socList"></div>
-      <div class="pm-row" style="margin-top:12px">
-        <button class="pm-btn pm-btn-chip" id="backToCamp">Indietro</button>
-      </div>
-    </section>
-  `;
-  const l = document.getElementById("socList");
-  list.forEach(s=>{
-    const it = el(`<div class="pm-item">${s.nome}</div>`);
-    it.onclick = ()=> renderSocietaPage(s);
-    l.appendChild(it);
-  });
-  document.getElementById("backToCamp").onclick = renderCampionati;
-}
-
-// ====== VIEW: PAGINA SOCIETÀ ======
-function renderSocietaPage(soc){
-  app.innerHTML = `
-    <section>
-      <div class="pm-soc-top">
-        <div class="pm-soc-logo">
-          <img src="${soc.logo || 'images/pm-logo-round.png'}" alt="${soc.nome}" onerror="this.src='images/pm-logo-round.png'"/>
-        </div>
-        <div>
-          <h1 class="pm-soc-name">${soc.nome}</h1>
-          <p class="pm-subtitle">${state.campionato} • ${state.gender} • ${state.region}</p>
-        </div>
-        <button class="pm-pm-btn" id="btnPrematch">Crea<br/>PreMatch</button>
-      </div>
-
-      <div class="pm-acc">
-        <details open>
-          <summary>Informazioni</summary>
-          <div class="acc-body">
-            <div>📍 <strong>Città:</strong> ${soc.citta || '—'}</div>
-            <div>🏟️ <strong>Impianto:</strong> ${soc.stadio || '—'}</div>
+  // region -> mostra club filtrati
+  $$('.region',el).forEach(r=>{
+    r.addEventListener('click',()=>{
+      state.region = r.dataset.r;
+      const list = $('#clubList',el);
+      const filtered = CLUBS.filter(c=>c.region===state.region && c.gender===state.gender);
+      list.innerHTML = filtered.map(c=>`
+        <div class="club-item" data-id="${c.id}">
+          <img src="${c.logo}" class="club-logo" alt="${c.name}"/>
+          <div>
+            <div style="font-weight:800">${c.name}</div>
+            <div style="color:var(--muted)">${c.level} • ${c.gender} • ${c.region}</div>
           </div>
-        </details>
-        <details>
-          <summary>Galleria foto</summary>
-          <div class="acc-body">In arrivo…</div>
-        </details>
-        <details>
-          <summary>Match in programma</summary>
-          <div class="acc-body">Nessun match programmato.</div>
-        </details>
+        </div>
+      `).join('') || `<div class="pm-sub">Nessuna società trovata.</div>`;
+      $('#clubsWrap',el).classList.remove('hidden');
+
+      $$('.club-item',el).forEach(ci=>{
+        ci.addEventListener('click',()=>{
+          const club = CLUBS.find(x=>x.id===ci.dataset.id);
+          mount(ViewClub(club));
+          window.scrollTo({top:0,behavior:'smooth'});
+        });
+      });
+    });
+  });
+
+  $('#back-home',el).addEventListener('click',()=>mount(ViewHome()));
+  return el;
+}
+
+// Pagina Società
+function ViewClub(club){
+  const el = document.createElement('div');
+  el.innerHTML = `
+    <h1>${club.name}</h1>
+    <p class="pm-sub">${club.level} • ${club.gender} • ${club.region}</p>
+
+    <div class="club-hero">
+      <div class="circle" aria-label="Logo società">
+        <img src="${club.logo}" alt="${club.name}"/>
       </div>
 
-      <div class="pm-row" style="margin-top:14px">
-        <button class="pm-btn pm-btn-chip" id="backToSocList">Indietro</button>
+      <button class="circle-btn" id="btn-prematch" aria-label="Crea PreMatch">
+        Crea<br/>PreMatch
+      </button>
+    </div>
+
+    <details class="acc">
+      <summary>Informazioni</summary>
+      <div class="acc-body">
+        <p>Indirizzo, contatti e dettagli società. (Demo)</p>
       </div>
-    </section>
+    </details>
+
+    <div class="choice-row" style="margin-top:12px">
+      <button class="pm-btn pm-btn-ghost" id="club-back">Indietro</button>
+    </div>
   `;
 
-  document.getElementById("backToSocList").onclick = renderSocietaList;
-  document.getElementById("btnPrematch").onclick = openPrematchModal;
+  $('#club-back',el).addEventListener('click',()=>mount(ViewGender()));
+  $('#btn-prematch',el).addEventListener('click',()=>alert('Finestra PreMatch (demo).\nInseriremo messaggio, colore maglia, data/ora, luogo, opzione amichevole, ecc.'));
+
+  return el;
 }
 
-// ====== MODAL PREMATCH (semplice placeholder) ======
-function openPrematchModal(){
-  alert("PreMatch: seleziona maglia, data/ora, luogo e messaggio all’avversario (UI in arrivo).");
-}
+/* --------- NAV TOP (demo) ---------- */
+$('#nav-coach')?.addEventListener('click',()=>alert('Area Allenatore (demo).'));
+$('#nav-login')?.addEventListener('click',()=>alert('Login (demo).'));
+$('#nav-register')?.addEventListener('click',()=>alert('Registrazione (demo).'));
 
-// Utils
-function capitalize(s){ return s ? s[0].toUpperCase()+s.slice(1) : s; }
-
-// Inizializza
-renderHome();
+/* BOOT */
+mount(ViewHome());
