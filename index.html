@@ -2,153 +2,146 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PreMatch</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="logo-light.png" />
 </head>
 <body>
-
-  <!-- HEADER -->
+  <!-- Header fisso -->
   <header class="topbar">
-    <a class="brand" href="#" id="nav-home">
+    <a class="brand" href="#" data-goto="view-home" aria-label="Home PreMatch">
+      <!-- LOGO BIANCO, PICCOLO -->
       <img src="logo-light.png" alt="PreMatch" class="brand-logo" />
       <span class="brand-text">PreMatch</span>
     </a>
-    <nav class="top-actions">
-      <button class="btn ghost" id="btn-allenatore">Allenatore</button>
-      <button class="btn ghost" id="btn-login">Login</button>
-      <button class="btn primary" id="btn-registrazione">Registrazione</button>
+    <nav class="topnav">
+      <button class="pill" type="button">Allenatore</button>
+      <button class="pill" type="button">Login</button>
+      <button class="pill solid" type="button">Registrazione</button>
     </nav>
   </header>
 
   <main id="app">
 
-    <!-- VIEW: SPORT (HOME) -->
-    <section id="view-sport" class="view active">
+    <!-- VIEW: HOME (sport) -->
+    <section id="view-home" class="view visible" aria-labelledby="home-title">
       <div class="page-header">
-        <h1>Scegli lo sport</h1>
+        <h1 id="home-title">Scegli lo sport</h1>
         <p class="subtitle">Seleziona per iniziare</p>
       </div>
 
-      <div class="grid-sport">
-        <!-- ATTENZIONE: solo qui ho cambiato i percorsi in images/... -->
-        <div class="card-sport" data-sport="calcio">
-          <img src="images/calcio.jpg" alt="Calcio" loading="lazy" />
+      <div class="sports-grid" id="sportsGrid">
+        <article class="sport-card card-sport" data-sport="Calcio" tabindex="0">
+          <div class="img-wrap"><img src="images/calcio.jpg" alt="Calcio" /></div>
           <h3>Calcio</h3>
-        </div>
+        </article>
 
-        <div class="card-sport" data-sport="futsal">
-          <img src="images/futsal.jpg" alt="Futsal" loading="lazy" />
+        <article class="sport-card card-sport" data-sport="Futsal" tabindex="0">
+          <div class="img-wrap"><img src="images/futsal.jpg" alt="Futsal" /></div>
           <h3>Futsal</h3>
-        </div>
+        </article>
 
-        <div class="card-sport" data-sport="basket">
-          <img src="images/basket.jpg" alt="Basket" loading="lazy" />
+        <article class="sport-card card-sport" data-sport="Basket" tabindex="0">
+          <div class="img-wrap"><img src="images/basket.jpg" alt="Basket" /></div>
           <h3>Basket</h3>
-        </div>
+        </article>
 
-        <div class="card-sport" data-sport="volley">
-          <img src="images/volley.jpg" alt="Volley" loading="lazy" />
+        <article class="sport-card card-sport" data-sport="Volley" tabindex="0">
+          <div class="img-wrap"><img src="images/volley.jpg" alt="Volley" /></div>
           <h3>Volley</h3>
-        </div>
+        </article>
 
-        <div class="card-sport" data-sport="rugby">
-          <img src="images/rugby.jpg" alt="Rugby" loading="lazy" />
+        <article class="sport-card card-sport" data-sport="Rugby" tabindex="0">
+          <div class="img-wrap"><img src="images/rugby.jpg" alt="Rugby" /></div>
           <h3>Rugby</h3>
-        </div>
+        </article>
 
-        <div class="card-sport" data-sport="pallanuoto">
-          <img src="images/pallanuoto.jpg" alt="Pallanuoto" loading="lazy" />
+        <article class="sport-card card-sport" data-sport="Pallanuoto" tabindex="0">
+          <div class="img-wrap"><img src="images/pallanuoto.jpg" alt="Pallanuoto" /></div>
           <h3>Pallanuoto</h3>
+        </article>
+      </div>
+    </section>
+
+    <!-- VIEW: FILTRI (genere -> regione -> campionato in cascata, stessa pagina) -->
+    <section id="view-filtri" class="view" aria-labelledby="filtri-title">
+      <button class="btn back" data-back>&larr; Indietro</button>
+
+      <div class="page-header">
+        <h1 id="filtri-title">Filtra la ricerca</h1>
+        <p class="subtitle" id="filtri-sport"></p>
+      </div>
+
+      <!-- GENERE -->
+      <div class="step">
+        <h2 class="step-title">Seleziona il genere</h2>
+        <div class="chips" id="step-genere">
+          <button class="chip" data-genere="Maschile">Maschile</button>
+          <button class="chip" data-genere="Femminile">Femminile</button>
         </div>
       </div>
-    </section>
 
-    <!-- VIEW: FILTRI (GENERE/REGIONE/CAMPIONATO A TENDINA) -->
-    <section id="view-filtri" class="view">
-      <button class="btn chip ghost back" data-back>&larr; Indietro</button>
-
-      <div class="page-header compact">
-        <h1>Seleziona il genere</h1>
+      <!-- REGIONE -->
+      <div class="step hidden" id="wrap-regione">
+        <h2 class="step-title">Regione</h2>
+        <div class="chips" id="step-regione">
+          <button class="chip" data-regione="Lazio">Lazio</button>
+          <button class="chip" data-regione="Lombardia">Lombardia</button>
+          <button class="chip" data-regione="Sicilia">Sicilia</button>
+          <button class="chip" data-regione="Piemonte">Piemonte</button>
+          <button class="chip" data-regione="Veneto">Veneto</button>
+          <button class="chip" data-regione="Emilia-Romagna">Emilia-Romagna</button>
+        </div>
       </div>
 
-      <div class="chips">
-        <button class="chip" data-genere="maschile">Maschile</button>
-        <button class="chip" data-genere="femminile">Femminile</button>
-      </div>
-
-      <div class="accordion">
-        <!-- Regione -->
-        <details id="acc-regione" class="acc">
-          <summary class="acc-title">Regione</summary>
-          <div class="acc-body chips">
-            <button class="chip" data-regione="Lazio">Lazio</button>
-            <button class="chip" data-regione="Lombardia">Lombardia</button>
-            <button class="chip" data-regione="Sicilia">Sicilia</button>
-            <button class="chip" data-regione="Piemonte">Piemonte</button>
-            <button class="chip" data-regione="Veneto">Veneto</button>
-            <button class="chip" data-regione="Emilia-Romagna">Emilia-Romagna</button>
-          </div>
-        </details>
-
-        <!-- Campionato -->
-        <details id="acc-campionato" class="acc">
-          <summary class="acc-title">Campionato</summary>
-          <div class="acc-body chips" id="chips-campionati">
-            <!-- popolato da app.js in base allo sport scelto -->
-          </div>
-        </details>
+      <!-- CAMPIONATO -->
+      <div class="step hidden" id="wrap-campionato">
+        <h2 class="step-title">Campionato</h2>
+        <div class="chips" id="step-campionato"><!-- popolato da JS --></div>
       </div>
     </section>
 
-    <!-- VIEW: ELENCO SOCIETÀ -->
-    <section id="view-societa-list" class="view">
-      <button class="btn chip ghost back" data-back>&larr; Indietro</button>
+    <!-- VIEW: LISTA SOCIETÀ -->
+    <section id="view-societa-list" class="view" aria-labelledby="list-title">
+      <button class="btn back" data-back>&larr; Indietro</button>
 
       <div class="page-header compact">
-        <h1 id="riepilogo-filtri">Sport • Genere • Regione • Campionato</h1>
+        <h1 id="list-title"></h1>
       </div>
 
-      <div id="lista-societa" class="list-societa">
-        <!-- cards società create da app.js -->
-      </div>
+      <ul id="societa-list" class="soc-list"><!-- render da JS --></ul>
     </section>
 
     <!-- VIEW: DETTAGLIO SOCIETÀ -->
-    <section id="view-societa" class="view">
-      <button class="btn chip ghost back" data-back>&larr; Indietro</button>
+    <section id="view-societa" class="view" aria-labelledby="societa-title">
+      <button class="btn back" data-back>&larr; Indietro</button>
 
-      <div class="societa-hero">
-        <div class="societa-logo-wrap">
-          <!-- il logo della società viene impostato da app.js -->
-          <img id="societa-logo" class="societa-logo" src="" alt="Logo società" />
+      <header class="club-header">
+        <div class="club-logo" id="clubLogo" aria-hidden="true">PM</div>
+        <div class="club-main">
+          <h1 id="societa-title">Nome società</h1>
+          <p class="meta"><span id="badge-cat"></span> • <span id="badge-gen"></span> • <span id="badge-reg"></span></p>
         </div>
-        <div>
-          <h1 id="societa-nome">Nome Società</h1>
-          <p class="muted" id="societa-meta">Categoria • Genere • Regione</p>
-        </div>
-
-        <button id="btn-prematch" class="btn round primary big">
-          <span>PM</span>
+        <button id="btn-prematch" class="pm-btn" type="button">
+          <span class="pm-circle"><b>PM</b></span>
+          <span class="pm-label">PreMatch</span>
         </button>
-      </div>
+      </header>
 
-      <div class="societa-actions">
-        <button class="btn pill" id="btn-info">Informazioni</button>
-        <button class="btn pill" id="btn-gallery">Galleria foto</button>
-        <button class="btn pill" id="btn-matches">Match in programma</button>
+      <div class="club-actions">
+        <button class="pill">Informazioni</button>
+        <button class="pill">Galleria foto</button>
+        <button class="pill">Match in programma</button>
       </div>
-
-      <div id="societa-content"><!-- contenuto dinamico --></div>
     </section>
 
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-foot">
     © PreMatch — semplice, pulita, veloce. Privacy by design.
   </footer>
 
-  <script src="app.js"></script>
+  <script src="app.js" defer></script>
 </body>
 </html>
