@@ -1,11 +1,32 @@
 /* =========================
    PreMatch DEMO – app.js
-   Flusso corretto:
-   Home (Sport) → Pagina Filtro con tendine:
-   Genere → Regione → Campionato → Società → Pagina Società
-   Evidenziazione stabile su click (chip/card)
+   Home (Sport) → Pagina FILTRI UNICA (Genere→Regione→Campionato)
+   → Elenco Società → Pagina Società
+   Con blocco “anti-legacy” per evitare vecchie navigazioni.
    ========================= */
 
+//////////////////// Anti-legacy: DISABILITA qualunque vecchia navigazione ////////////////////
+(function blockLegacyNavigation(){
+  // intercetta in CAPTURING *prima* di altri handler
+  document.addEventListener('click', (ev)=>{
+    const bad = ev.target.closest('[data-view],[data-go],a[href^="#view-"],a[href^="#/"],button[data-view]');
+    if (bad) {
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      ev.stopPropagation();
+    }
+  }, true);
+  // rimuovi attributi vecchi se presenti nel DOM
+  window.addEventListener('DOMContentLoaded', ()=>{
+    document.querySelectorAll('[data-view],[data-go]').forEach(el=>{
+      el.removeAttribute('data-view');
+      el.removeAttribute('data-go');
+      el.onclick = null;
+    });
+  });
+})();
+
+//////////////////// Dati demo ////////////////////
 const LOGOS = {
   light: "./images/logo-light.png",
   icon: "./images/logo-icon.png",
@@ -52,11 +73,10 @@ const DATA = {
   }
 };
 
-// ---- stato app
+//////////////////// Stato & helpers ////////////////////
 const state = { sport:null, gender:null, region:null, league:null, club:null };
 const app = document.getElementById("app");
 
-// ---- helper mini-UI
 function h(tag, attrs={}, children=[]) {
   const el = document.createElement(tag);
   Object.entries(attrs).forEach(([k,v])=>{
@@ -75,10 +95,10 @@ function title(t,sub){ return h("div",{class:"container"},[h("div",{class:"h1"},
 function toast(msg){
   const t=h("div",{class:"toast"},msg);
   document.body.appendChild(t);
-  setTimeout(()=>t.remove(),1400);
+  setTimeout(()=>t.remove(),1200);
 }
 
-// ===== Home (sport)
+//////////////////// Home (Sport) ////////////////////
 function pageSports(){
   clearMain();
   app.appendChild(title("Scegli lo sport","Seleziona per iniziare"));
@@ -86,11 +106,10 @@ function pageSports(){
   const grid=h("div",{class:"container grid"});
   DATA.sports.forEach(s=>{
     const card=h("div",{class:"card card-sport"+(state.sport===s.key?" selected":""),onclick:()=>{
-      // evidenzia e passa ai filtri in tendina
       document.querySelectorAll(".card-sport").forEach(c=>c.classList.remove("selected"));
-      card.classList.add("selected");
+      card.classList.add("selected");          // ACCENSIONE
       state.sport=s.key;
-      setTimeout(()=>pageFilters(),220);
+      setTimeout(()=>pageFilters(),200);       // vai alla pagina filtri (unica)
     }},[
       h("img",{src:s.img,alt:s.name,onerror(){this.style.display="none"}}),
       h("div",{class:"title"},s.name)
@@ -100,7 +119,7 @@ function pageSports(){
   app.appendChild(grid);
 }
 
-// ===== Pagina filtri con tendine (Genere → Regione → Campionato → Società)
+//////////////////// Pagina Filtri UNICA (tendine progressive) ////////////////////
 function pageFilters(){
   clearMain();
 
@@ -109,15 +128,12 @@ function pageFilters(){
 
   const wrap=h("div",{class:"container"});
 
-  // riepilogo breadcrumb in alto (es: Calcio • Femminile • Lazio • Eccellenza)
   const crumb=h("div",{class:"sub", style:{marginBottom:"12px", fontWeight:"800"}});
   wrap.appendChild(crumb);
 
-  // pannello filtri
   const panel=h("div",{class:"panel"});
   wrap.appendChild(panel);
 
-  // sezioni (mostrate in cascata)
   const secGen=h("div");
   const secReg=h("div");
   const secLea=h("div");
@@ -135,21 +151,18 @@ function pageFilters(){
   panel.appendChild(h("div",{class:"sub",style:{fontWeight:"800", marginTop:"10px"}}, "Società"));
   panel.appendChild(secClu);
 
-  // azioni
   wrap.appendChild(h("div",{class:"actions"},[
     h("button",{class:"btn",onclick:()=>{state.gender=null;state.region=null;state.league=null;state.club=null;pageSports();}},"Indietro")
   ]));
-
   app.appendChild(wrap);
 
-  // render funzioni locali
+  // Chips con evidenziazione stabile
   const chips = (list, current, onPick)=>{
     const box=h("div",{class:"chips"});
     list.forEach(val=>{
       const chip=h("div",{class:"chip"+(current===val?" active":""),onclick:()=>{
-        // attiva visivamente
         [...box.children].forEach(x=>x.classList.remove("active"));
-        chip.classList.add("active");
+        chip.classList.add("active");           // ACCENSIONE
         onPick(val);
       }},val);
       box.appendChild(chip);
@@ -165,10 +178,8 @@ function pageFilters(){
   function renderGen(){
     secGen.innerHTML="";
     secGen.appendChild(chips(DATA.genders, state.gender, (g)=>{
-      // scegliendo genere, reset passo successivi
       state.gender=g; state.region=null; state.league=null; state.club=null;
       renderAll();
-      // scroll leggero alla sezione successiva
       setTimeout(()=>secReg.scrollIntoView({behavior:"smooth",block:"center"}),60);
     }));
   }
@@ -226,7 +237,7 @@ function pageFilters(){
   renderAll();
 }
 
-// ===== Pagina società
+//////////////////// Pagina Società ////////////////////
 function pageClubProfile(name){
   clearMain();
   const sportName = (DATA.sports.find(x=>x.key===state.sport)||{}).name || "";
@@ -238,7 +249,6 @@ function pageClubProfile(name){
     matches:[]
   };
 
-  // Testata: logo sinistra + bottone PM tondo a destra
   const head=h("div",{class:"club-head"},[
     h("img",{src:profile.logo, alt:name, class:"club-logo"}),
     h("div",{style:{flex:1}}),
@@ -251,7 +261,6 @@ function pageClubProfile(name){
   ]);
   app.appendChild(head);
 
-  // Accordion info / gallery / match
   const acc=h("div",{class:"acc"});
   acc.appendChild(accItem("Informazioni", [
     pRow("Email", profile.contacts.email),
@@ -260,7 +269,7 @@ function pageClubProfile(name){
   acc.appendChild(accItem("Gallery", profile.gallery.length
     ? gridImgs(profile.gallery)
     : h("div",{class:"sub"},"Nessuna foto caricata.")
-  ));
+  )));
   acc.appendChild(accItem("Match in programma", (profile.matches.length
     ? listMatches(profile.matches)
     : h("div",{class:"sub"},"Nessuna partita programmata.")
@@ -274,7 +283,6 @@ function pageClubProfile(name){
   ]));
 }
 
-// --- componenti secondari
 function pRow(label,val){
   return h("div",{class:"row"},[
     h("div",{class:"team"},label),
@@ -310,5 +318,5 @@ function accItem(title, bodyEl){
   return item;
 }
 
-/* Avvio sull'home sport */
+//////////////////// Avvio ////////////////////
 pageSports();
