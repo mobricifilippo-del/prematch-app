@@ -2,36 +2,157 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
-
-  <!-- Favicons -->
-  <link rel="icon" href="./images/logo-icon.png" sizes="32x32" />
-  <link rel="apple-touch-icon" href="./images/logo-icon.png" />
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="./style.css?v=100" />
+  <link rel="stylesheet" href="style.css?v=10" />
+  <link rel="icon" href="immagini/logo-icon.png" sizes="32x32" />
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
-      <!-- usa SEMPRE il logo chiaro -->
-      <img src="./images/logo-light.png" alt="PreMatch" />
-      <span>PreMatch</span>
-    </div>
-    <nav class="nav">
-      <a class="link" href="#" onclick="return false;">Login</a>
-      <a class="link accent" href="#" onclick="return false;">Registrati</a>
+    <nav class="navbar">
+      <div class="brand">
+        <img src="immagini/logo-bianco.png" alt="PreMatch" />
+        <span>PreMatch</span>
+      </div>
+      <div class="nav-links">
+        <button class="link">Allenatore</button>
+        <button class="link">Login</button>
+        <button class="link primary">Registrazione</button>
+      </div>
     </nav>
   </header>
 
-  <main id="app"></main>
+  <main>
+    <!-- HOME -->
+    <section id="view-home" class="view active">
+      <div class="container">
+        <h1 class="h1">Scegli lo sport</h1>
+        <p class="sub">Seleziona per iniziare</p>
+
+        <div class="grid">
+          <div class="card-sport" data-sport="calcio">
+            <img src="immagini/calcio.jpg" alt="Calcio" />
+            <h3>Calcio</h3>
+          </div>
+          <div class="card-sport" data-sport="futsal">
+            <img src="immagini/futsal.jpg" alt="Futsal" />
+            <h3>Futsal</h3>
+          </div>
+          <div class="card-sport" data-sport="basket">
+            <img src="immagini/basket.jpg" alt="Basket" />
+            <h3>Basket</h3>
+          </div>
+          <div class="card-sport" data-sport="volley">
+            <img src="immagini/volley.jpg" alt="Volley" />
+            <h3>Volley</h3>
+          </div>
+          <div class="card-sport" data-sport="rugby">
+            <img src="immagini/rugby.jpg" alt="Rugby" />
+            <h3>Rugby</h3>
+          </div>
+          <div class="card-sport" data-sport="pallanuoto">
+            <img src="immagini/pallanuoto.jpg" alt="Pallanuoto" />
+            <h3>Pallanuoto</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILTRI (pagina unica con tendine) -->
+    <section id="view-filtri" class="view">
+      <div class="container">
+        <button class="btn-back" onclick="goTo('view-home')">Indietro</button>
+        <h1 class="h1">Filtri</h1>
+
+        <div class="panel" id="panel-genere">
+          <label>Genere</label>
+          <select id="select-genere">
+            <option value="">Seleziona</option>
+            <option value="Maschile">Maschile</option>
+            <option value="Femminile">Femminile</option>
+          </select>
+        </div>
+
+        <div class="panel" id="panel-regione">
+          <label>Regione</label>
+          <select id="select-regione">
+            <option value="">Seleziona</option>
+            <option value="Lazio">Lazio</option>
+            <option value="Lombardia">Lombardia</option>
+            <option value="Sicilia">Sicilia</option>
+            <option value="Piemonte">Piemonte</option>
+            <option value="Veneto">Veneto</option>
+            <option value="Emilia-Romagna">Emilia-Romagna</option>
+          </select>
+        </div>
+
+        <div class="panel" id="panel-campionato">
+          <label>Campionato</label>
+          <select id="select-campionato">
+            <option value="">Seleziona</option>
+            <!-- riempito da JS in base alla regione -->
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- LISTA SOCIETÀ -->
+    <section id="view-societa-list" class="view">
+      <div class="container">
+        <button class="btn-back" onclick="goTo('view-filtri')">Indietro</button>
+        <h1 class="h1" id="filtri-riepilogo"></h1>
+        <div id="societa-list" class="list"></div>
+      </div>
+    </section>
+
+    <!-- DETTAGLIO SOCIETÀ -->
+    <section id="view-societa" class="view">
+      <div class="container">
+        <button class="btn-back" onclick="goTo('view-societa-list')">Indietro</button>
+
+        <div class="societa-header">
+          <div class="societa-left">
+            <img id="societa-logo" class="societa-logo" alt="Logo società" />
+            <div class="societa-titoli">
+              <h2 id="societa-nome"></h2>
+              <p id="societa-info"></p>
+            </div>
+          </div>
+
+          <button id="btn-prematch" class="pm-round" title="Crea PreMatch">
+            <img src="immagini/logo-icon.png" alt="PM" />
+            <span>Crea PreMatch</span>
+          </button>
+        </div>
+
+        <div class="accordion">
+          <div class="acc">
+            <button class="acc-hd">Informazioni</button>
+            <div class="acc-bd" id="info-body">
+              Indirizzo centro sportivo, referenti, contatti…
+            </div>
+          </div>
+          <div class="acc">
+            <button class="acc-hd">Galleria foto</button>
+            <div class="acc-bd" id="gallery-body">
+              Nessuna foto caricata.
+            </div>
+          </div>
+          <div class="acc">
+            <button class="acc-hd">Match in programma</button>
+            <div class="acc-bd" id="matches-body">
+              Nessun match in programma.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <footer class="footer">
-    <div>© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
+    © PreMatch — semplice, pulita, veloce. Privacy by design.
   </footer>
 
-  <!-- JS -->
-  <script src="./app.js?v=100"></script>
+  <script src="app.js?v=10"></script>
 </body>
 </html>
