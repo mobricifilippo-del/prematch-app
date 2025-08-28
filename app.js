@@ -229,3 +229,88 @@ document.addEventListener('DOMContentLoaded', ()=>{
   bindGlobal();
   show('view-home');
 });
+// --- UTIL ---
+const qs  = (s,root=document) => root.querySelector(s);
+const qsa = (s,root=document) => [...root.querySelectorAll(s)];
+const enable = el => { el.classList.remove('is-disabled'); el.removeAttribute('disabled'); };
+const disable = el => { el.classList.add('is-disabled'); el.setAttribute('disabled',''); };
+
+// stato globale minimo
+window.state = window.state || { sport:null, genere:null, regione:null, campionato:null };
+
+// RIFERIMENTI UI (ID/Classi come da markup attuale)
+const ui = {
+  btnMaschile:   qs('#btn-maschile'),
+  btnFemminile:  qs('#btn-femminile'),
+  boxRegione:    qs('#box-regione'),      // <details id="box-regione">
+  regioneBtns:   qsa('#box-regione .pill'),
+  boxCampionato: qs('#box-campionato'),   // <details id="box-campionato">
+  campBtns:      qsa('#box-campionato .pill')
+};
+
+// evidenzia un pulsante “pill”
+function highlight(group, activeBtn) {
+  group.forEach(b => b.classList.toggle('selected', b === activeBtn));
+}
+
+// 1) GENERE -> abilita REGIONE
+function wireGenereStep() {
+  if (!ui.btnMaschile || !ui.btnFemminile) return;
+
+  const onPickGenere = (g, btn) => {
+    state.genere = g;
+    // evidenzia
+    [ui.btnMaschile, ui.btnFemminile].forEach(b => b.classList.toggle('selected', b === btn));
+    // abilita e apri REGIONE
+    if (ui.boxRegione) {
+      ui.boxRegione.open = true;
+      ui.boxRegione.classList.remove('is-disabled');
+      ui.regioneBtns.forEach(b => b.disabled = false);
+    }
+  };
+
+  ui.btnMaschile.addEventListener('click', () => onPickGenere('maschile', ui.btnMaschile), {passive:true});
+  ui.btnFemminile.addEventListener('click', () => onPickGenere('femminile', ui.btnFemminile), {passive:true});
+}
+
+// 2) REGIONE -> abilita CAMPIONATO
+function wireRegioneStep() {
+  if (!ui.regioneBtns.length) return;
+  ui.regioneBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.regione = btn.dataset.value;           // es. data-value="Lazio"
+      highlight(ui.regioneBtns, btn);
+      // abilita e apri CAMPIONATO
+      if (ui.boxCampionato) {
+        ui.boxCampionato.open = true;
+        ui.boxCampionato.classList.remove('is-disabled');
+        ui.campBtns.forEach(b => b.disabled = false);
+      }
+    }, {passive:true});
+  });
+}
+
+// 3) CAMPIONATO -> vai a lista SOCIETÀ
+function wireCampionatoStep() {
+  if (!ui.campBtns.length) return;
+  ui.campBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.campionato = btn.dataset.value;        // es. data-value="Eccellenza"
+      highlight(ui.campBtns, btn);
+      // qui genera la lista filtrata e naviga
+      renderSocietaList();                          // già esistente nella tua app
+      goTo('view-societa');                         // già esistente
+    }, {passive:true});
+  });
+}
+
+// inizializza questi step DOPO il render della pagina “genere”
+function initFiltroStep() {
+  wireGenereStep();
+  wireRegioneStep();
+  wireCampionatoStep();
+}
+
+// se usi goTo() per cambiare viste, richiama initFiltroStep quando entri nella pagina genere
+document.addEventListener('DOMContentLoaded', initFiltroStep);
+// e/o dentro la tua goTo(view) fai: if(view==='view-genere'){ initFiltroStep(); }
