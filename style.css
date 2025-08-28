@@ -1,150 +1,149 @@
-/* === RESET & BASE === */
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  font-family: Arial, sans-serif;
-  background:#111;
-  color:#fff;
+:root{
+  --pm-bg:#0f1214;
+  --pm-panel:#161a1d;
+  --pm-text:#e8eef2;
+  --pm-dim:#9aa6b2;
+  --pm-green:#1fe374;
+  --pm-green-2:#0ECF62;
+  --pm-ring: rgba(31,227,116,.35);
+  --pm-card:#1b2024;
+  --pm-card-2:#1e2429;
+  --pm-border:#232a31;
 }
 
-/* === HEADER === */
-header {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:10px 16px;
-  background:#000;
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--pm-bg);
+  color:var(--pm-text);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
 }
-.brand {
-  display:flex;
-  align-items:center;
-  gap:.6rem;
+
+/* NAVBAR */
+.navbar{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;background:rgba(0,0,0,.45);
+  backdrop-filter:saturate(140%) blur(8px);
+  border-bottom:1px solid var(--pm-border);
+}
+.brand{display:flex;align-items:center;gap:8px}
+.brand-logo{width:28px;height:28px;object-fit:contain}
+.brand-text{font-weight:700;letter-spacing:.2px}
+
+/* forza il colore del brand e blocca il viola/blu visitato */
+a{color:inherit;text-decoration:none}
+.brand, .brand:link, .brand:visited, .brand:hover, .brand:active{
+  color:var(--pm-green) !important;
   text-decoration:none;
 }
-.brand img {
-  width:28px; height:28px;
-  object-fit:contain;
-  display:block;
-}
-.brand-fallback {
-  width:28px; height:28px;
-  border-radius:6px;
-  background:#fff;
-  color:#111;
-  font-weight:800;
-  font-size:.85rem;
-  display:none;
-  align-items:center;
-  justify-content:center;
-}
-.brand-text { font-weight:700; color:#0f0; }
 
-nav button {
-  background:none;
-  border:none;
-  color:#fff;
-  padding:6px 12px;
-  border-radius:6px;
-  cursor:pointer;
+.nav-actions{margin-left:auto;display:flex;gap:10px}
+.btn{
+  border:1px solid var(--pm-border);
+  background:var(--pm-panel);
+  color:var(--pm-text);
+  padding:10px 14px;border-radius:12px;
 }
-nav .btn-primary {
-  background:#0f0;
-  color:#000;
+.btn-ghost{background:transparent}
+.btn-primary{
+  background:var(--pm-green);
+  color:#02260f;border-color:transparent;font-weight:700;
 }
+.btn-back{margin:8px 0}
 
-/* === MAIN VIEWS === */
-.view { display:none; padding:20px; }
-.view.active { display:block; }
+/* TITLES */
+.h1{font-size:clamp(28px,4.8vw,44px);margin:18px 16px 8px}
+.subtitle{color:var(--pm-dim);margin:0 16px 18px}
 
-/* === SPORTS GRID === */
-.sports-grid {
-  display:grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap:16px;
-  margin-top:20px;
+/* VIEWS */
+.view{padding:8px 12px 24px}
+.hidden{display:none}
+
+/* SPORT GRID */
+.grid-sport{
+  padding:6px;
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:14px;
 }
-.card-sport {
-  background:#1a1a1a;
-  border-radius:14px;
-  overflow:hidden;
-  cursor:pointer;
-  transition: transform .2s, border .2s;
-  border:2px solid transparent;
+.card-sport{
+  border-radius:18px;overflow:hidden;
+  background:var(--pm-card);
+  border:1px solid var(--pm-border);
+  box-shadow:0 0 0 0 transparent;
+  transition:box-shadow .18s, transform .06s, border-color .18s;
 }
-.card-sport.active {
-  border:2px solid #0f0;
-  transform:scale(1.02);
+.card-sport:active{transform:scale(.995)}
+.card-sport.selected{
+  box-shadow:0 0 0 8px var(--pm-ring) inset, 0 0 0 1px var(--pm-green);
+  border-color:var(--pm-green);
 }
-.card-image { width:100%; height:180px; }
-.card-image img {
-  width:100%; height:100%;
-  object-fit:cover;
-  object-position:center;
-  display:block;
-}
-.card-title {
-  padding:10px;
-  font-weight:bold;
-  color:#0f0;
+.card-img{height:172px;background:var(--pm-card-2)}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block}
+.card-title{
+  padding:14px 14px 18px;
+  font-weight:800;letter-spacing:.2px;
+  color:var(--pm-green);
+  background:linear-gradient(to bottom, var(--pm-card), var(--pm-card-2));
 }
 
-/* === BUTTONS === */
-.btn-group { margin:10px 0; display:flex; flex-wrap:wrap; gap:10px; }
-.btn-group button {
-  background:#222; color:#fff;
-  border:none; padding:8px 14px;
-  border-radius:8px; cursor:pointer;
-  transition: background .2s, border .2s;
+/* CHIPS + DROPDOWN */
+.chips{display:flex;gap:10px;padding:6px 4px 16px;margin:0 6px}
+.chip{
+  background:var(--pm-panel);
+  border:1px solid var(--pm-border);
+  color:var(--pm-text);
+  padding:10px 14px;border-radius:22px;
 }
-.btn-group button.active {
-  background:#0f0; color:#000;
-}
-.btn-back {
-  background:#111; border:1px solid #555;
-  color:#fff; padding:8px 14px;
-  border-radius:8px; cursor:pointer;
-  margin-bottom:12px;
-}
-.btn-back:hover { border-color:#0f0; }
-
-/* === CLUBS LIST === */
-#clubsList {
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-.club-card {
-  background:#1a1a1a;
-  padding:12px;
-  border-radius:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.club-info { font-size:.9rem; }
-.club-btn {
-  background:#0f0;
-  color:#000;
-  padding:10px 16px;
-  border:none;
-  border-radius:50%;
-  font-weight:bold;
-  cursor:pointer;
+.chip.active{
+  background:var(--pm-green);
+  color:#02260f;border-color:transparent;font-weight:700;
 }
 
-/* === FOOTER === */
-footer {
-  text-align:center;
-  padding:12px;
-  font-size:.8rem;
-  color:#888;
-}
-/* ---- Fix colore link brand (niente viola, niente sottolineatura) ---- */
-a { text-decoration: none; color: inherit; }
+.dd{margin:10px 6px;border:1px solid var(--pm-border);border-radius:14px;overflow:hidden}
+.dd[disabled]{opacity:.45;pointer-events:none}
+.dd > summary{cursor:pointer;padding:12px 14px;background:var(--pm-panel)}
+.dd-body{display:flex;flex-wrap:wrap;gap:10px;padding:10px 12px;background:var(--pm-card)}
+.dd-body .chip{margin:2px 0}
 
-.brand, .brand:link, .brand:visited, .brand:hover, .brand:active {
-  color: #00ff66;                 /* verde del brand */
-  text-decoration: none;
+/* LISTA SOCIETÀ */
+.list-societa{display:grid;gap:14px;margin:12px 6px}
+.card-club{
+  display:flex;align-items:center;gap:14px;
+  background:var(--pm-card);border:1px solid var(--pm-border);
+  border-radius:18px;padding:12px 14px;
 }
+.club-logo-sm{
+  width:62px;height:62px;border-radius:50%;
+  background:radial-gradient(ellipse at center, var(--pm-green-2), var(--pm-green) 60%, #0a2 100%);
+  box-shadow:0 0 0 4px var(--pm-ring), 0 0 0 1px var(--pm-green);
+}
+.card-club h3{margin:4px 0 2px}
+.meta{color:var(--pm-dim);font-size:14px}
 
-.brand-text { color: #00ff66 !important; }  /* forza il testo del brand */
-.brand img { display:block; }               /* evita spazi/line-height strani */
+/* SCHEDA */
+.club-hero{
+  display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;
+  margin:12px 6px 18px;padding:14px;border:1px solid var(--pm-border);
+  border-radius:18px;background:var(--pm-card);
+}
+.club-logo{width:92px;height:92px;border-radius:50%;
+  background:radial-gradient(ellipse at center, var(--pm-green-2), var(--pm-green) 60%, #0a2 100%);
+  box-shadow:0 0 0 6px var(--pm-ring), 0 0 0 1px var(--pm-green);
+}
+.club-info h2{margin:0 0 6px}
+.btn-pm{
+  width:84px;height:84px;border-radius:999px;font-weight:800;
+  background:var(--pm-green);color:#02260f;border:none;
+  box-shadow:0 0 18px var(--pm-ring);
+}
+.pill-actions{display:flex;gap:10px;margin:0 6px}
+.pill{background:var(--pm-panel);border:1px solid var(--pm-border);color:var(--pm-text);padding:10px 14px;border-radius:18px}
+
+/* FOOTER */
+.footer{
+  border-top:1px solid var(--pm-border);
+  color:var(--pm-dim);
+  padding:18px 16px;margin-top:24px
+}
