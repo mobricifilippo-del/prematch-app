@@ -1,83 +1,141 @@
 :root{
-  --bg:#0f1216;
-  --card:#171b21;
-  --muted:#8a94a6;
-  --text:#eaf0ff;
-  --accent:#41d27b;
-  --accent-strong:#24c36a;
-  --border:#252b35;
+  --bg:#0e0f11;
+  --panel:#15171a;
+  --muted:#9aa3ad;
+  --text:#e7ecef;
+  --green:#18d36e;
+  --green-2:#0fb95e;
+  --chip:#22262b;
+  --chip-on:#2e7d32;
+  --ring: rgba(24,211,110,.35);
 }
 
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font:16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
 
-/* Topbar */
-.topbar{position:sticky;top:0;z-index:10;background:#0b0f14;border-bottom:1px solid var(--border)}
-.navbar{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem}
-.brand{display:flex;align-items:center;gap:.55rem;font-weight:800}
-.brand img{width:26px;height:26px;border-radius:6px;border:1px solid var(--border)}
-.brand span{color:var(--accent)}
-.nav-links{display:flex;gap:.5rem}
-.link{background:#1a1f27;border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;border-radius:10px;font-weight:700;cursor:pointer}
-.link.primary{background:var(--accent);border-color:transparent;color:#0b0f14}
+/* HEADER */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:.5rem;
+  padding:.6rem .9rem;
+  background:#0b0c0e;
+  border-bottom:1px solid #121417;
+}
+.brand{display:flex; align-items:center; gap:.55rem; text-decoration:none; color:var(--text)}
+.brand-logo{width:28px; height:28px; display:block; object-fit:contain}
+.brand-text{font-weight:700; color:#86f5b4}
+.topnav{display:flex; gap:.5rem}
+.pill{
+  appearance:none; border:1px solid #2a2e33; background:#14171a; color:var(--text);
+  padding:.5rem .8rem; border-radius:999px; cursor:pointer;
+}
+.pill:hover{border-color:#3a4047}
+.pill.solid{background:var(--green); color:#001408; border-color:transparent; font-weight:700}
+.pill.solid:active{transform:translateY(1px)}
 
-/* Struttura */
-.container{max-width:1100px;margin:0 auto;padding:1.2rem}
-.h1{font-size:1.9rem;font-weight:900;margin:.4rem 0}
-.sub{color:var(--muted);margin:.2rem 0 1.2rem}
-.footer{padding:1.2rem;color:#9aa6bd;border-top:1px solid var(--border);text-align:center}
+/* VIEWS */
+main#app{max-width:920px; margin:0 auto; padding:1rem .9rem 5rem}
+.view{display:none; animation:fade .18s ease}
+.view.visible{display:block}
+@keyframes fade{from{opacity:.6; transform:translateY(4px)} to{opacity:1; transform:none}}
 
-.view{display:none}
-.view.active{display:block}
+.page-header{margin:1rem 0 1.2rem}
+.page-header.compact{margin:.5rem 0 1rem}
+h1{font-size:clamp(28px, 5.5vw, 44px); line-height:1.05; margin:.2rem 0}
+.subtitle{color:var(--muted); margin:0}
 
-/* Griglia home sport */
-.grid{display:grid;gap:1rem;grid-template-columns:repeat(2,1fr)}
-@media(min-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
+/* HOME – griglia sport */
+.sports-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:1rem;
+}
+@media (min-width:880px){
+  .sports-grid{grid-template-columns:repeat(3, minmax(0,1fr))}
+}
 
-.card-sport{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
-.card-sport:hover{transform:translateY(-2px);border-color:#2f3745;box-shadow:0 8px 24px rgba(0,0,0,.25)}
-.card-sport.selected{outline:3px solid var(--accent);outline-offset:2px}
-.card-sport img{width:100%;height:140px;object-fit:cover;display:block;background:#0b0f14}
-.card-sport h3{margin:.8rem;color:var(--accent)}
+.sport-card{
+  background:var(--panel);
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid #1d2126;
+  cursor:pointer;
+  outline:none;
+  transition:transform .08s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.sport-card .img-wrap{aspect-ratio:16/11; background:#0b0c0f}
+.sport-card img{width:100%; height:100%; object-fit:cover; display:block}
+.sport-card h3{margin:0; padding:.8rem 1rem; color:#73f3ad; font-size:1.15rem; font-weight:800; background:#14181c}
+.sport-card:hover{transform:translateY(-1px); border-color:#27303a; box-shadow:0 0 0 6px #0b1511}
+.sport-card.selected{box-shadow:0 0 0 8px var(--ring); border-color:var(--green)}
 
-/* Pannelli / tendine filtri */
-.panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem;margin:.9rem 0}
-.panel label{display:block;font-weight:800;margin-bottom:.4rem;color:var(--accent)}
-.panel.active{box-shadow:0 0 0 2px rgba(65,210,123,.2) inset;border-color:var(--accent)}
+/* STEP/CHIPS */
+.step{margin:1rem 0}
+.step-title{font-size:1.1rem; margin:.25rem 0 .5rem}
+.chips{display:flex; flex-wrap:wrap; gap:.5rem}
+.chip{
+  background:var(--chip); color:#eef; border:1px solid #2d333a;
+  padding:.55rem .9rem; border-radius:999px; cursor:pointer;
+  transition:transform .06s ease, box-shadow .12s ease, background .12s;
+}
+.chip:hover{border-color:#3a424a}
+.chip:active{transform:translateY(1px)}
+.chip.selected{background:linear-gradient(180deg,var(--green),var(--green-2)); color:#041b0f; border-color:transparent; box-shadow:0 0 0 6px var(--ring); font-weight:800}
+.hidden{display:none}
 
-select{width:100%;background:#12161c;border:1px solid var(--border);color:var(--text);padding:.6rem;border-radius:10px;font-weight:700}
+/* LISTA SOCIETÀ */
+.soc-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:.9rem}
+.soc-item{
+  display:flex; align-items:center; gap:.9rem; padding:.85rem;
+  background:var(--panel); border:1px solid #1d2126; border-radius:16px;
+}
+.soc-logo{width:56px; height:56px; border-radius:50%; background:#0f1114; border:1px solid #232830; display:grid; place-items:center; color:#9fb2a6; font-weight:900}
+.soc-body{flex:1 1 auto}
+.soc-title{margin:0; font-size:1.15rem}
+.soc-meta{margin:.15rem 0 0; color:var(--muted); font-size:.95rem}
+.soc-cta{display:flex; align-items:center; gap:.35rem}
+.pm-chip{display:flex; align-items:center; gap:.45rem}
+.pm-dot{width:54px; height:54px; border-radius:50%; display:grid; place-items:center;
+  background:radial-gradient(80% 80% at 30% 30%, #31ffa3 0%, #15d36c 70%, #0ea95b 100%);
+  border:4px solid #2b3a32; box-shadow:0 0 0 10px var(--ring);
+}
+.pm-cta{display:block; color:#9debbb; font-weight:800; font-size:.9rem}
 
-/* Pulsanti */
-.btn-back{background:none;border:2px solid var(--accent);color:var(--accent);padding:.48rem .8rem;border-radius:999px;font-weight:800;margin:.2rem 0}
-.btn{background:#141922;border:1px solid var(--border);color:var(--text);padding:.6rem .9rem;border-radius:10px;font-weight:700}
-.btn.primary{background:var(--accent);border-color:transparent;color:#0b0f14}
+/* DETTAGLIO SOCIETÀ */
+.club-header{display:grid; grid-template-columns:auto 1fr auto; gap:1rem; align-items:center; margin:.5rem 0 1rem}
+.club-logo{width:80px; height:80px; border-radius:50%; background:#0f1114; border:1px solid #232830; display:grid; place-items:center; color:#9fb2a6; font-weight:900; font-size:1.25rem}
+.club-main h1{margin:.15rem 0 .25rem; font-size:clamp(24px, 5vw, 40px)}
+.meta{margin:0; color:var(--muted)}
+.pm-btn{
+  display:flex; flex-direction:column; align-items:center; gap:.35rem;
+  background:transparent; border:none; cursor:pointer;
+}
+.pm-circle{
+  width:92px; height:92px; border-radius:50%;
+  display:grid; place-items:center; color:#00160b; font-weight:900;
+  background:radial-gradient(80% 80% at 30% 30%, #31ffa3 0%, #15d36c 70%, #0ea95b 100%);
+  border:6px solid #2b3a32; box-shadow:0 0 0 12px var(--ring);
+}
+.pm-btn:active .pm-circle{transform:translateY(1px)}
+.pm-label{color:#9debbb; font-weight:800}
+.club-actions{display:flex; flex-wrap:wrap; gap:.5rem; margin:.5rem 0 0}
 
-/* Lista società */
-.list .societa-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;margin:10px 0;display:flex;align-items:center;justify-content:space-between}
+/* BOTTONI VARI */
+.btn.back{
+  background:#111418; color:#e9f2ec; border:1px solid #27303a; border-radius:999px;
+  padding:.45rem .8rem; margin:.25rem 0 .75rem; cursor:pointer;
+}
+.btn.back:hover{border-color:#34404b}
+.btn.back:active{transform:translateY(1px)}
 
-/* Pagina società */
-.societa-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1rem}
-.societa-left{display:flex;align-items:center;gap:.8rem}
-.societa-logo{width:74px;height:74px;border-radius:999px;border:1px solid var(--border);object-fit:cover;background:#0b0f14}
-.societa-titoli h2{margin:.1rem 0 .2rem 0}
-.societa-titoli p{margin:0;color:var(--muted)}
-
-/* Bottone PreMatch tondo */
-.pm-round{display:flex;flex-direction:column;align-items:center;gap:.35rem;border:none;background:transparent;cursor:pointer}
-.pm-round img{width:74px;height:74px;border-radius:999px;border:2px solid var(--accent);background:#0e141b;padding:10px}
-.pm-round span{font-weight:800;color:var(--accent)}
-.pm-round:active img{box-shadow:0 0 0 4px rgba(65,210,123,.15)}
-
-/* Accordion */
-.accordion{display:flex;flex-direction:column;gap:.7rem;margin-top:1rem}
-.acc{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.acc-hd{width:100%;text-align:left;background:#121721;border:none;color:var(--text);padding:.9rem 1rem;font-weight:800;cursor:pointer}
-.acc-bd{padding:1rem;border-top:1px dashed var(--border)}
-
-/* Modale */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:flex-start;justify-content:center;padding-top:8vh;z-index:100}
-.modal{width:min(720px,94%);background:#0f141b;border:1px solid var(--border);border-radius:16px;overflow:hidden}
-.modal .hd{padding:1rem 1.2rem;border-bottom:1px solid var(--border);font-weight:900}
-.modal .bd{padding:1rem 1.2rem;display:flex;flex-direction:column;gap:.8rem}
-.modal .ft{padding:1rem 1.2rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.6rem}
-.input{width:100%;background:#131821;border:1px solid var(--border);color:var(--text);padding:.7rem;border-radius:10px}
+/* FOOTER */
+.site-foot{
+  max-width:920px; margin:2rem auto 5rem; padding:1rem .9rem; color:var(--muted)
+}
