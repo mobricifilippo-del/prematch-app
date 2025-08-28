@@ -1,155 +1,140 @@
-:root{
-  --bg:#0f1113;
-  --panel:#15181b;
-  --muted:#98a2b3;
-  --text:#e8eef6;
-  --green:#22c55e;
-  --green-2:#16a34a;
-  --outline:#2e7d32;
-}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-img{display:block;max-width:100%}
-
-.topbar{
-  position:sticky;top:0;z-index:50;
-  display:flex;align-items:center;gap:.75rem;
-  padding:.75rem 1rem;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);
-  border-bottom:1px solid #1e242a;
-}
-.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:#fff}
-.logo img{height:24px;width:auto}
-.logo span{font-weight:700;letter-spacing:.2px}
-.nav{margin-left:auto;display:flex;gap:.5rem}
-
-.btn{
-  border:1px solid #2b3036;background:#1a1f24;color:#e8eef6;
-  padding:.5rem .9rem;border-radius:.8rem;font-weight:600
-}
-.btn-ghost{background:#171a1e}
-.btn-primary{background:var(--green);border-color:var(--green-2);color:#04210e}
-.btn:hover{filter:brightness(1.1)}
-.btn:active,.pill:active{transform:scale(.98)}
-
-.btn-back{
-  margin:.25rem 0 1rem 0;background:#0d1115;border-color:#3b3f45;color:#cbd5e1
+/* === RESET & BASE === */
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: Arial, sans-serif;
+  background:#111;
+  color:#fff;
 }
 
-main{padding:1rem;max-width:980px;margin:0 auto}
-.view{display:none}
-.view.active{display:block}
-
-h1{font-size:2.2rem;margin:.5rem 0 0.25rem}
-.subtitle{color:var(--muted);margin:.25rem 0 1rem}
-
-.grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:1rem
+/* === HEADER === */
+header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 16px;
+  background:#000;
 }
-.card{
-  background:var(--panel);border-radius:1rem;overflow:hidden;
-  border:1px solid #23272c;box-shadow:0 0 0 0 rgba(34,197,94,0);
-  transition:box-shadow .18s,border-color .18s,transform .08s
-}
-.card-img{height:180px;overflow:hidden}
-.card-title{
-  padding:.85rem 1rem;font-weight:800;color:#6ef2a0;
-  background:#121518;border-top:1px solid #1e2227
-}
-.card:hover{transform:translateY(-1px)}
-.card.selected{
-  box-shadow:0 0 0 3px rgba(34,197,94,.35) inset,0 0 0 2px var(--outline);
-  border-color:var(--outline)
-}
-
-.pill-row{display:flex;gap:.5rem;margin:.5rem 0 1rem}
-.pill{
-  background:#171a1e;border:1px solid #2a2f35;color:#e8eef6;
-  padding:.5rem .9rem;border-radius:999px;font-weight:700
-}
-.pill.active{background:#11331d;border-color:#2a7a43;color:#8bffd0;box-shadow:0 0 0 2px rgba(34,197,94,.25) inset}
-
-.accordion{background:#0f1418;border:1px solid #2a2f35;border-radius:.8rem;margin:.5rem 0}
-.accordion[disabled]{opacity:.45;pointer-events:none}
-.accordion summary{
-  list-style:none;cursor:pointer;padding:.9rem 1rem;font-weight:700
-}
-.accordion[open] summary{border-bottom:1px solid #242a30}
-.accordion-content{padding:.8rem 1rem}
-.accordion-content .pill{margin:.25rem .4rem .4rem 0}
-
-.clubs{display:flex;flex-direction:column;gap:.85rem;margin-top:.5rem}
-.club-row{
-  display:flex;align-items:center;gap:.9rem;
-  background:#12161a;border:1px solid #252b31;border-radius:1rem;padding:.8rem 1rem
-}
-.club-logo{
-  width:64px;height:64px;border-radius:50%;background:#0f1418;border:1px solid #2a2f35;
-  display:flex;align-items:center;justify-content:center;color:#9be9bd;font-weight:900
-}
-.club-main{flex:1}
-.club-main .name{font-size:1.2rem;font-weight:800}
-.meta{color:#a8b3bf}
-
-.pm-pill{
-  width:84px;height:84px;border-radius:50%;
-  background:var(--green);border:6px solid #224a2b;color:#03200c;font-weight:900;
-  display:flex;align-items:center;justify-content:center;flex-direction:column
-}
-.pm-pill small{color:#04210e;font-weight:800;margin-top:2px}
-
-.club-hero{
-  display:flex;align-items:center;gap:1rem;margin:.5rem 0 1rem
-}
-.pm-big{
-  margin-left:auto;width:120px;height:120px;border-radius:50%;
-  background:var(--green);border:8px solid #224a2b;color:#03200c;font-weight:900;font-size:1.2rem
-}
-
-.actions-row{display:flex;gap:.5rem;margin:.5rem 0}
-.chip{background:#171a1e;border:1px solid #2a2f35;color:#e8eef6;padding:.5rem .9rem;border-radius:999px}
-
-.foot{
-  color:#a0abb9;border-top:1px solid #1e242a;padding:1.2rem;text-align:center;margin-top:2rem
-}
-/* === BRAND / LOGO ======================================================== */
 .brand {
-  display: flex;
-  align-items: center;
-  gap: .6rem;
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  text-decoration:none;
 }
 .brand img {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  display: block;
+  width:28px; height:28px;
+  object-fit:contain;
+  display:block;
 }
 .brand-fallback {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #111;
-  font-weight: 800;
-  font-size: .85rem;
-  display: none;
-  align-items: center;
-  justify-content: center;
+  width:28px; height:28px;
+  border-radius:6px;
+  background:#fff;
+  color:#111;
+  font-weight:800;
+  font-size:.85rem;
+  display:none;
+  align-items:center;
+  justify-content:center;
 }
-.brand-text {
-  font-weight: 700;
+.brand-text { font-weight:700; color:#0f0; }
+
+nav button {
+  background:none;
+  border:none;
+  color:#fff;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+}
+nav .btn-primary {
+  background:#0f0;
+  color:#000;
 }
 
-/* === CARD SPORT: immagine centrata e ritaglio pulito ===================== */
-.card-sport .card-image,
-.card-sport img {
-  width: 100%;
-  height: 180px;           /* altezza uniforme delle anteprime */
+/* === MAIN VIEWS === */
+.view { display:none; padding:20px; }
+.view.active { display:block; }
+
+/* === SPORTS GRID === */
+.sports-grid {
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:16px;
+  margin-top:20px;
+}
+.card-sport {
+  background:#1a1a1a;
+  border-radius:14px;
+  overflow:hidden;
+  cursor:pointer;
+  transition: transform .2s, border .2s;
+  border:2px solid transparent;
+}
+.card-sport.active {
+  border:2px solid #0f0;
+  transform:scale(1.02);
+}
+.card-image { width:100%; height:180px; }
+.card-image img {
+  width:100%; height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+}
+.card-title {
+  padding:10px;
+  font-weight:bold;
+  color:#0f0;
 }
 
-.card-sport img {
-  display: block;
-  object-fit: cover;       /* riempie il box senza deformarsi */
-  object-position: center; /* centrata sempre */
-  border-top-left-radius: 14px;
-  border-top-right-radius: 14px;
+/* === BUTTONS === */
+.btn-group { margin:10px 0; display:flex; flex-wrap:wrap; gap:10px; }
+.btn-group button {
+  background:#222; color:#fff;
+  border:none; padding:8px 14px;
+  border-radius:8px; cursor:pointer;
+  transition: background .2s, border .2s;
+}
+.btn-group button.active {
+  background:#0f0; color:#000;
+}
+.btn-back {
+  background:#111; border:1px solid #555;
+  color:#fff; padding:8px 14px;
+  border-radius:8px; cursor:pointer;
+  margin-bottom:12px;
+}
+.btn-back:hover { border-color:#0f0; }
+
+/* === CLUBS LIST === */
+#clubsList {
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.club-card {
+  background:#1a1a1a;
+  padding:12px;
+  border-radius:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.club-info { font-size:.9rem; }
+.club-btn {
+  background:#0f0;
+  color:#000;
+  padding:10px 16px;
+  border:none;
+  border-radius:50%;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* === FOOTER === */
+footer {
+  text-align:center;
+  padding:12px;
+  font-size:.8rem;
+  color:#888;
 }
