@@ -1,7 +1,9 @@
 /* =========================
    PreMatch DEMO – app.js
-   Flusso: Sport → Genere → Regione → Campionato → Società → Pagina Società
-   Evidenziazione stabile su click
+   Flusso corretto:
+   Home (Sport) → Pagina Filtro con tendine:
+   Genere → Regione → Campionato → Società → Pagina Società
+   Evidenziazione stabile su click (chip/card)
    ========================= */
 
 const LOGOS = {
@@ -50,9 +52,11 @@ const DATA = {
   }
 };
 
+// ---- stato app
 const state = { sport:null, gender:null, region:null, league:null, club:null };
 const app = document.getElementById("app");
 
+// ---- helper mini-UI
 function h(tag, attrs={}, children=[]) {
   const el = document.createElement(tag);
   Object.entries(attrs).forEach(([k,v])=>{
@@ -68,18 +72,25 @@ function h(tag, attrs={}, children=[]) {
 }
 function clearMain(){ app.innerHTML=""; }
 function title(t,sub){ return h("div",{class:"container"},[h("div",{class:"h1"},t),h("div",{class:"sub"},sub||"")]); }
+function toast(msg){
+  const t=h("div",{class:"toast"},msg);
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),1400);
+}
 
+// ===== Home (sport)
 function pageSports(){
   clearMain();
-  app.appendChild(title("Scegli lo sport",""));
+  app.appendChild(title("Scegli lo sport","Seleziona per iniziare"));
 
   const grid=h("div",{class:"container grid"});
   DATA.sports.forEach(s=>{
     const card=h("div",{class:"card card-sport"+(state.sport===s.key?" selected":""),onclick:()=>{
+      // evidenzia e passa ai filtri in tendina
       document.querySelectorAll(".card-sport").forEach(c=>c.classList.remove("selected"));
       card.classList.add("selected");
       state.sport=s.key;
-      setTimeout(()=>pageGender(),220);
+      setTimeout(()=>pageFilters(),220);
     }},[
       h("img",{src:s.img,alt:s.name,onerror(){this.style.display="none"}}),
       h("div",{class:"title"},s.name)
@@ -89,84 +100,137 @@ function pageSports(){
   app.appendChild(grid);
 }
 
-function chips(list, current, onPick){
-  const wrap=h("div",{class:"chips"});
-  list.forEach(val=>{
-    const c=h("div",{class:"chip"+(current===val?" active":""),onclick:()=>{
-      [...wrap.children].forEach(x=>x.classList.remove("active"));
-      c.classList.add("active");
-      onPick(val);
-    }},val);
-    wrap.appendChild(c);
-  });
-  return wrap;
-}
-
-function pageGender(){
+// ===== Pagina filtri con tendine (Genere → Regione → Campionato → Società)
+function pageFilters(){
   clearMain();
-  app.appendChild(title("Seleziona il genere",""));
 
-  const box=h("div",{class:"container panel"});
-  box.appendChild(chips(DATA.genders, state.gender, (g)=>{
-    state.gender=g;
-    setTimeout(()=>pageRegions(),220);
-  }));
-  box.appendChild(h("div",{class:"actions"},[
-    h("button",{class:"btn",onclick:()=>pageSports()},"Indietro")
+  const sportName = (DATA.sports.find(x=>x.key===state.sport)||{}).name || "";
+  app.appendChild(title(`${sportName}`,"Seleziona genere, regione e campionato"));
+
+  const wrap=h("div",{class:"container"});
+
+  // riepilogo breadcrumb in alto (es: Calcio • Femminile • Lazio • Eccellenza)
+  const crumb=h("div",{class:"sub", style:{marginBottom:"12px", fontWeight:"800"}});
+  wrap.appendChild(crumb);
+
+  // pannello filtri
+  const panel=h("div",{class:"panel"});
+  wrap.appendChild(panel);
+
+  // sezioni (mostrate in cascata)
+  const secGen=h("div");
+  const secReg=h("div");
+  const secLea=h("div");
+  const secClu=h("div");
+
+  panel.appendChild(h("div",{class:"sub",style:{fontWeight:"800"}}, "Genere"));
+  panel.appendChild(secGen);
+
+  panel.appendChild(h("div",{class:"sub",style:{fontWeight:"800", marginTop:"10px"}}, "Regione"));
+  panel.appendChild(secReg);
+
+  panel.appendChild(h("div",{class:"sub",style:{fontWeight:"800", marginTop:"10px"}}, "Campionato"));
+  panel.appendChild(secLea);
+
+  panel.appendChild(h("div",{class:"sub",style:{fontWeight:"800", marginTop:"10px"}}, "Società"));
+  panel.appendChild(secClu);
+
+  // azioni
+  wrap.appendChild(h("div",{class:"actions"},[
+    h("button",{class:"btn",onclick:()=>{state.gender=null;state.region=null;state.league=null;state.club=null;pageSports();}},"Indietro")
   ]));
-  app.appendChild(box);
+
+  app.appendChild(wrap);
+
+  // render funzioni locali
+  const chips = (list, current, onPick)=>{
+    const box=h("div",{class:"chips"});
+    list.forEach(val=>{
+      const chip=h("div",{class:"chip"+(current===val?" active":""),onclick:()=>{
+        // attiva visivamente
+        [...box.children].forEach(x=>x.classList.remove("active"));
+        chip.classList.add("active");
+        onPick(val);
+      }},val);
+      box.appendChild(chip);
+    });
+    return box;
+  };
+
+  function renderCrumb(){
+    const parts=[sportName, state.gender, state.region, state.league].filter(Boolean);
+    crumb.textContent = parts.length ? parts.join(" • ") : "";
+  }
+
+  function renderGen(){
+    secGen.innerHTML="";
+    secGen.appendChild(chips(DATA.genders, state.gender, (g)=>{
+      // scegliendo genere, reset passo successivi
+      state.gender=g; state.region=null; state.league=null; state.club=null;
+      renderAll();
+      // scroll leggero alla sezione successiva
+      setTimeout(()=>secReg.scrollIntoView({behavior:"smooth",block:"center"}),60);
+    }));
+  }
+
+  function renderReg(){
+    secReg.innerHTML="";
+    const disabled = !state.gender;
+    secReg.style.opacity = disabled? ".45" : "1";
+    if(disabled){ return; }
+    secReg.appendChild(chips(DATA.regions, state.region, (r)=>{
+      state.region=r; state.league=null; state.club=null;
+      renderAll();
+      setTimeout(()=>secLea.scrollIntoView({behavior:"smooth",block:"center"}),60);
+    }));
+  }
+
+  function renderLea(){
+    secLea.innerHTML="";
+    const disabled = !state.region;
+    secLea.style.opacity = disabled? ".45" : "1";
+    if(disabled){ return; }
+    const leagues = DATA.leaguesBy[state.region]||[];
+    secLea.appendChild(chips(leagues, state.league, (l)=>{
+      state.league=l; state.club=null;
+      renderAll();
+      setTimeout(()=>secClu.scrollIntoView({behavior:"smooth",block:"center"}),60);
+    }));
+  }
+
+  function renderClu(){
+    secClu.innerHTML="";
+    const disabled = !state.league;
+    secClu.style.opacity = disabled? ".45" : "1";
+    if(disabled){ return; }
+    const clubs = DATA.clubsByLeague[state.league] || [];
+    const list=h("div",{});
+    clubs.forEach(name=>{
+      const row=h("div",{class:"row",onclick:()=>{ state.club=name; pageClubProfile(name); }},[
+        h("div",{class:"team"},name),
+        h("div",{class:"meta"},"PreMatch ›")
+      ]);
+      list.appendChild(row);
+    });
+    secClu.appendChild(list);
+  }
+
+  function renderAll(){
+    renderCrumb();
+    renderGen();
+    renderReg();
+    renderLea();
+    renderClu();
+  }
+
+  renderAll();
 }
 
-function pageRegions(){
-  clearMain();
-  app.appendChild(title("Scegli la regione",""));
-
-  const box=h("div",{class:"container panel"});
-  box.appendChild(chips(DATA.regions, state.region, (r)=>{
-    state.region=r;
-    setTimeout(()=>pageLeagues(),220);
-  }));
-  box.appendChild(h("div",{class:"actions"},[
-    h("button",{class:"btn",onclick:()=>pageGender()},"Indietro")
-  ]));
-  app.appendChild(box);
-}
-
-function pageLeagues(){
-  clearMain();
-  app.appendChild(title("Scegli il campionato", state.region||""));
-  const leagues = DATA.leaguesBy[state.region] || [];
-
-  const box=h("div",{class:"container panel"});
-  box.appendChild(chips(leagues, state.league, (l)=>{
-    state.league=l;
-    setTimeout(()=>pageClubs(),220);
-  }));
-  box.appendChild(h("div",{class:"actions"},[
-    h("button",{class:"btn",onclick:()=>pageRegions()},"Indietro")
-  ]));
-  app.appendChild(box);
-}
-
-function pageClubs(){
-  clearMain();
-  app.appendChild(title("Scegli la società", state.league||""));
-  const clubs = DATA.clubsByLeague[state.league] || ["Società Demo"];
-
-  const box=h("div",{class:"container panel"});
-  box.appendChild(chips(clubs, state.club, (c)=>{
-    state.club=c;
-    setTimeout(()=>pageClubProfile(c),220);
-  }));
-  box.appendChild(h("div",{class:"actions"},[
-    h("button",{class:"btn",onclick:()=>pageLeagues()},"Indietro")
-  ]));
-  app.appendChild(box);
-}
-
+// ===== Pagina società
 function pageClubProfile(name){
   clearMain();
-  app.appendChild(title(name, `${state.league||""} • ${state.gender||""} • ${state.region||""}`));
+  const sportName = (DATA.sports.find(x=>x.key===state.sport)||{}).name || "";
+  app.appendChild(title(name, `${sportName} • ${state.league||""} • ${state.gender||""} • ${state.region||""}`));
 
   const profile = DATA.clubProfiles[name] || {
     logo: LOGOS.icon,
@@ -174,7 +238,7 @@ function pageClubProfile(name){
     matches:[]
   };
 
-  // Testata: logo sinistra + bottone tondo uguale
+  // Testata: logo sinistra + bottone PM tondo a destra
   const head=h("div",{class:"club-head"},[
     h("img",{src:profile.logo, alt:name, class:"club-logo"}),
     h("div",{style:{flex:1}}),
@@ -187,7 +251,7 @@ function pageClubProfile(name){
   ]);
   app.appendChild(head);
 
-  // Accordion: Info / Gallery / Match
+  // Accordion info / gallery / match
   const acc=h("div",{class:"acc"});
   acc.appendChild(accItem("Informazioni", [
     pRow("Email", profile.contacts.email),
@@ -205,11 +269,12 @@ function pageClubProfile(name){
 
   app.appendChild(h("div",{class:"container"},[
     h("div",{class:"actions"},[
-      h("button",{class:"btn",onclick:()=>pageClubs()},"Indietro")
+      h("button",{class:"btn",onclick:()=>pageFilters()},"Indietro")
     ])
   ]));
 }
 
+// --- componenti secondari
 function pRow(label,val){
   return h("div",{class:"row"},[
     h("div",{class:"team"},label),
@@ -244,11 +309,6 @@ function accItem(title, bodyEl){
   item.appendChild(hd); item.appendChild(bd);
   return item;
 }
-function toast(msg){
-  const t=h("div",{class:"toast"},msg);
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(),1600);
-}
 
-/* Avvio */
+/* Avvio sull'home sport */
 pageSports();
