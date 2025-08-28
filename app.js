@@ -1,132 +1,123 @@
-/* ======= MINI ROUTER ======= */
-const views = {
-  home: document.getElementById('view-home'),
-  filtri: document.getElementById('view-filtri'),
-  societa: document.getElementById('view-societa'),
-};
-let STATE = {
+// ----------------------------
+// DATI DI ESEMPIO (società)
+// sport, genere, regione, campionato, nome, logo
+const SOCIETA = [
+  ["Calcio","Femminile","Lazio","Eccellenza","ASD Roma Nord","images/roma-nord.png"],
+  ["Calcio","Femminile","Lazio","Eccellenza","Virtus Marino","images/virtus-marino.png"],
+  // Aggiungi altri se vuoi
+];
+
+// stato UI
+const state = {
   sport: null,
   genere: null,
   regione: null,
   campionato: null,
+  societaSelezionata: null,
 };
 
-function goTo(which) {
-  Object.values(views).forEach(v => v.classList.remove('is-active'));
-  if (views[which]) views[which].classList.add('is-active');
-  // scroll top
-  window.scrollTo({ top: 0, behavior: 'instant' });
-}
-
-/* ======= DATI DEMO (adatta liberamente) ======= */
-const CAMPIONATI = {
-  calcio:   ['Eccellenza','Promozione','Prima Categoria'],
-  futsal:   ['A2 Élite','C1','C2'],
-  basket:   ['C Gold','C Silver'],
-  volley:   ['Serie C','Serie D'],
-  rugby:    ['Serie B','Serie C'],
-  pallanuoto:['Serie B','Serie C']
+// util
+const $ = sel => document.querySelector(sel);
+const goTo = (name) => {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('view--active'));
+  const id = name.startsWith('view-') ? name : `view-${name}`;
+  const el = document.getElementById(id);
+  if (el) el.classList.add('view--active');
+  window.scrollTo({top:0, behavior:"instant"});
 };
+const cap = s => s ? (s[0].toUpperCase()+s.slice(1).toLowerCase()) : s;
 
-const SOCIETA = [
-  // sport, genere, regione, campionato, nome, logo
-  ['calcio','femminile','Lazio','Eccellenza','ASD Roma Nord','images/logo-sample-roma-nord.png'],
-  ['calcio','femminile','Lazio','Eccellenza','Virtus Marino','images/logo-sample-virtus-marino.png'],
-  ['futsal','maschile','Lombardia','C1','Futsal Milano','images/logo-sample-generic.png'],
-];
-
-/* ======= NAVBAR ======= */
-document.querySelector('[data-nav="home"]')?.addEventListener('click', (e)=>{
+// NAV
+document.querySelectorAll('[data-nav="home"]').forEach(n => n.addEventListener('click', e => {
   e.preventDefault();
   goTo('home');
+}));
+
+// BACK
+document.querySelectorAll('[data-back]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const to = btn.getAttribute('data-back');
+    goTo(to);
+  });
 });
 
-/* ======= HOME: Scelta Sport ======= */
+// HOME: click sport
 document.querySelectorAll('.card-sport').forEach(card=>{
-  card.addEventListener('click', ()=> {
+  card.addEventListener('click', () => {
     const sport = card.dataset.sport;
-    STATE = { sport, genere:null, regione:null, campionato:null };
+    state.sport = sport;
+    // micro feedback
     card.classList.add('selected');
-    setTimeout(()=> {
-      // reset selezioni pagina filtri
-      document.querySelectorAll('[data-genere]').forEach(c=>c.classList.remove('chip--active'));
-      document.getElementById('box-regione').classList.add('box--hidden');
-      document.getElementById('box-campionato').classList.add('box--hidden');
-      document.getElementById('select-regione').value = '';
-      document.getElementById('select-campionato').innerHTML = `<option value="" selected>Scegli…</option>`;
-      goTo('filtri');
-      setTimeout(()=>card.classList.remove('selected'),140);
-    }, 120);
+    setTimeout(()=> card.classList.remove('selected'), 150);
+
+    // aggiorno titolo filtri e reset
+    $('#filters-title').textContent = sport;
+    resetFiltersKeepSport();
+    goTo('filters');
   }, {passive:true});
 });
 
-/* ======= FILTRI ======= */
-// Indietro a home
-document.querySelector('#view-filtri [data-back="home"]')
-  .addEventListener('click', ()=> goTo('home'));
+function resetFiltersKeepSport(){
+  state.genere = state.regione = state.campionato = null;
+  const g = $('#sel-genere');
+  const r = $('#sel-regione');
+  const c = $('#sel-campionato');
+  g.value = ""; r.value = ""; c.value = "";
+  r.disabled = true; c.disabled = true;
+  $('#btn-cerca').disabled = true;
+}
 
-// Scegli Genere → mostra Regione
-document.querySelectorAll('[data-genere]').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('[data-genere]').forEach(b=>b.classList.remove('chip--active'));
-    btn.classList.add('chip--active');
-    STATE.genere = btn.dataset.genere;
-    document.getElementById('box-regione').classList.remove('box--hidden');
-  });
+// FILTRI: logica tendine + auto enable
+$('#sel-genere').addEventListener('change', (e)=>{
+  state.genere = e.target.value;
+  $('#sel-regione').disabled = !state.genere;
+  tryEnableSearch();
 });
 
-// Regione → mostra Campionato con lista in base allo sport selezionato
-document.getElementById('select-regione').addEventListener('change', (e)=>{
-  STATE.regione = e.target.value || null;
-
-  const selCamp = document.getElementById('select-campionato');
-  selCamp.innerHTML = `<option value="" selected>Scegli…</option>`;
-
-  if (!STATE.sport) return;
-
-  (CAMPIONATI[STATE.sport] || []).forEach(c=>{
-    const opt = document.createElement('option');
-    opt.value = c; opt.textContent = c;
-    selCamp.appendChild(opt);
-  });
-
-  document.getElementById('box-campionato').classList.remove('box--hidden');
+$('#sel-regione').addEventListener('change', (e)=>{
+  state.regione = e.target.value;
+  $('#sel-campionato').disabled = !state.regione;
+  tryEnableSearch();
 });
 
-// Campionato → vai alla pagina Società
-document.getElementById('select-campionato').addEventListener('change',(e)=>{
-  const val = e.target.value;
-  if (!val) return;
-  STATE.campionato = val;
+$('#sel-campionato').addEventListener('change', (e)=>{
+  state.campionato = e.target.value;
+  tryEnableSearch();
+});
+
+function tryEnableSearch(){
+  const ok = state.genere && state.regione && state.campionato;
+  $('#btn-cerca').disabled = !ok;
+  if (ok) {
+    // vai diretto all’elenco senza far premere un altro bottone? Se vuoi:
+    // renderSocieta(); goTo('societa');
+  }
+}
+
+$('#btn-cerca').addEventListener('click', ()=>{
   renderSocieta();
   goTo('societa');
 });
 
-/* ======= SOCIETÀ ======= */
-document.querySelector('#view-societa [data-back="filtri"]')
-  .addEventListener('click', ()=> goTo('filtri'));
-
+// RENDER LISTA SOCIETÀ
 function renderSocieta(){
-  const title = document.getElementById('soc-title');
-  title.textContent = `${cap(STATE.sport)} • ${cap(STATE.genere)} • ${STATE.regione} • ${STATE.campionato}`;
+  const box = $('#soc-list');
+  box.innerHTML = "";
 
-  const box = document.getElementById('soc-list');
-  box.innerHTML = '';
+  // breadcrumb
+  $('#societa-breadcrumb').textContent = `${state.sport} • ${state.genere} • ${state.regione} • ${state.campionato}`;
 
-  const results = SOCIETA.filter(s =>
-    s[0]===STATE.sport &&
-    s[1]===STATE.genere &&
-    s[2]===STATE.regione &&
-    s[3]===STATE.campionato
+  const results = SOCIETA.filter(row =>
+    row[0] === state.sport &&
+    row[1] === state.genere &&
+    row[2] === state.regione &&
+    row[3] === state.campionato
   );
 
-  if (!results.length){
-    const empty = document.createElement('div');
-    empty.className = 'soc-item';
-    empty.innerHTML = `<div class="soc-body">
-        <div class="soc-name">Nessuna società registrata</div>
-        <div class="soc-meta">Appena si iscrivono compariranno qui.</div>
-      </div>`;
+  if (results.length === 0){
+    const empty = document.createElement('p');
+    empty.className = 'lead';
+    empty.textContent = "Nessuna società trovata.";
     box.appendChild(empty);
     return;
   }
@@ -135,7 +126,7 @@ function renderSocieta(){
     const el = document.createElement('div');
     el.className = 'soc-item';
     el.innerHTML = `
-      <div class="badge"><img src="${logo}" alt="${nome}" onerror="this.src='images/logo-sample-generic.png'"/></div>
+      <div class="badge"><img src="${logo}" alt="${nome}" onerror="this.style.display='none';this.parentNode.classList.add('badge--empty');"/></div>
       <div class="soc-body">
         <div class="soc-name">${nome}</div>
         <div class="soc-meta">${campionato} • ${cap(genere)} • ${regione}</div>
@@ -144,16 +135,47 @@ function renderSocieta(){
         <button class="pm-btn" data-pm="${nome}">PM</button>
         <div class="pm-label">PreMatch</div>
       </div>`;
-    box.appendChild(el);
-  });
 
-  // azione PM
-  box.querySelectorAll('[data-pm]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      // qui aprirai la convocazione / generazione PDF ecc.
-      alert(`PreMatch per ${btn.dataset.pm}`);
+    // open detail on name/body click
+    el.querySelector('.soc-body').addEventListener('click', ()=>{
+      showSocietaDetail(nome,logo,`${campionato} • ${cap(genere)} • ${regione}`);
     });
+
+    // PM button demo
+    el.querySelector('.pm-btn').addEventListener('click', ()=>{
+      // qui potrai aprire direttamente la convocazione; per ora vai al dettaglio
+      showSocietaDetail(nome,logo,`${campionato} • ${cap(genere)} • ${regione}`);
+    });
+
+    box.appendChild(el);
   });
 }
 
-function cap(s){ return !s ? '' : s[0].toUpperCase()+s.slice(1); }
+// DETTAGLIO SOCIETÀ
+function showSocietaDetail(nome,logo,meta){
+  state.societaSelezionata = nome;
+  $('#detail-name').textContent = nome;
+  const img = $('#detail-logo');
+  img.style.display = 'block';
+  img.src = logo || '';
+  img.onerror = function(){
+    this.style.display = 'none';
+    this.parentNode.classList.add('badge--empty');
+  };
+  $('#detail-meta').textContent = meta;
+  goTo('societa-detail');
+}
+
+// PM dal dettaglio (demo)
+$('#btn-pm-detail').addEventListener('click', ()=>{
+  alert(`PreMatch creato (demo) per ${state.societaSelezionata || 'società'}.`);
+});
+
+// NAV placeholder
+document.querySelectorAll('[data-nav]').forEach(btn=>{
+  btn.addEventListener('click', (e)=>{
+    const dest = btn.getAttribute('data-nav');
+    if (dest === 'home'){ goTo('home'); }
+    else alert(`${dest} (demo)`);
+  });
+});
