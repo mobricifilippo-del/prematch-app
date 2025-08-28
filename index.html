@@ -9,25 +9,28 @@
 <body>
   <!-- HEADER -->
   <header class="topbar">
-    <a href="#" class="logo">
-      <img id="brandLogo" src="logo-light.png" alt="PreMatch">
-      <span>PreMatch</span>
-    </a>
-    <nav>
-      <button>Allenatore</button>
-      <button>Login</button>
+    <!-- LOGO -->
+    <img id="brandLogo" src="images/logo-light.png" alt="PreMatch" class="logo">
+
+    <!-- NOME BRAND -->
+    <span class="brand-name">PreMatch</span>
+
+    <!-- MENU -->
+    <nav class="topnav">
+      <button class="btn-nav">Allenatore</button>
+      <button class="btn-nav">Login</button>
       <button class="btn-primary">Registrazione</button>
     </nav>
   </header>
 
-  <!-- VIEWS -->
+  <!-- VISTE -->
   <main id="app">
 
-    <!-- HOME: Scegli Sport -->
-    <section id="view-home" class="view active">
+    <!-- HOME SPORT -->
+    <section id="view-sport" class="view active">
       <h1>Scegli lo sport</h1>
       <p>Seleziona per iniziare</p>
-      <div class="sports-grid">
+      <div class="sport-grid">
         <div class="card-sport" data-sport="calcio">
           <img src="images/calcio.jpg" alt="Calcio">
           <span>Calcio</span>
@@ -55,50 +58,47 @@
       </div>
     </section>
 
-    <!-- GENERE -->
+    <!-- GENERE/REGIONE/CAMPIONATO -->
     <section id="view-genere" class="view">
-      <button class="btn-back" onclick="goTo('view-home')">← Indietro</button>
+      <button class="btn-back" onclick="goTo('view-sport')">← Indietro</button>
       <h1>Seleziona il genere</h1>
-      <div class="gender-options">
-        <button class="gender-btn" data-genere="Maschile">Maschile</button>
-        <button class="gender-btn" data-genere="Femminile">Femminile</button>
+      <div class="btn-group">
+        <button class="btn-choice" data-genere="Maschile">Maschile</button>
+        <button class="btn-choice" data-genere="Femminile">Femminile</button>
       </div>
+
       <details>
         <summary>Regione</summary>
-        <div class="regioni-list">
-          <button class="regione-btn" data-regione="Lazio">Lazio</button>
-          <button class="regione-btn" data-regione="Lombardia">Lombardia</button>
-          <button class="regione-btn" data-regione="Sicilia">Sicilia</button>
-          <button class="regione-btn" data-regione="Piemonte">Piemonte</button>
-          <button class="regione-btn" data-regione="Veneto">Veneto</button>
-          <button class="regione-btn" data-regione="Emilia-Romagna">Emilia-Romagna</button>
+        <div class="scroll-x">
+          <button class="btn-choice" data-regione="Lazio">Lazio</button>
+          <button class="btn-choice" data-regione="Lombardia">Lombardia</button>
+          <button class="btn-choice" data-regione="Sicilia">Sicilia</button>
+          <button class="btn-choice" data-regione="Piemonte">Piemonte</button>
+          <button class="btn-choice" data-regione="Veneto">Veneto</button>
+          <button class="btn-choice" data-regione="Emilia-Romagna">Emilia-Romagna</button>
         </div>
       </details>
+
       <details>
         <summary>Campionato</summary>
-        <div class="campionati-list">
-          <button class="campionato-btn" data-campionato="Eccellenza">Eccellenza</button>
-          <button class="campionato-btn" data-campionato="Serie A">Serie A</button>
-          <button class="campionato-btn" data-campionato="Serie B">Serie B</button>
+        <div class="scroll-x">
+          <button class="btn-choice" data-campionato="Eccellenza">Eccellenza</button>
+          <button class="btn-choice" data-campionato="Promozione">Promozione</button>
+          <button class="btn-choice" data-campionato="Serie C">Serie C</button>
         </div>
       </details>
     </section>
 
-    <!-- LISTA SOCIETÀ -->
+    <!-- SOCIETÀ -->
     <section id="view-societa" class="view">
       <button class="btn-back" onclick="goTo('view-genere')">← Indietro</button>
-      <h1 id="societa-titolo">Società</h1>
+      <h1 id="titolo-societa"></h1>
       <div id="lista-societa" class="societa-list"></div>
-    </section>
-
-    <!-- DETTAGLI SOCIETÀ -->
-    <section id="view-dettagli" class="view">
-      <button class="btn-back" onclick="goTo('view-societa')">← Indietro</button>
-      <div id="dettagli-societa"></div>
     </section>
 
   </main>
 
+  <!-- FOOTER -->
   <footer>
     <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
   </footer>
