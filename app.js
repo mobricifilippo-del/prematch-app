@@ -1,207 +1,159 @@
-/* =======================
-   STATE + DATA
-======================= */
-const state = {
+/* ======= MINI ROUTER ======= */
+const views = {
+  home: document.getElementById('view-home'),
+  filtri: document.getElementById('view-filtri'),
+  societa: document.getElementById('view-societa'),
+};
+let STATE = {
   sport: null,
   genere: null,
   regione: null,
   campionato: null,
-  societa: null
 };
 
-const sports = [
-  { key:'calcio', name:'Calcio', img:'images/calcio.jpg' },
-  { key:'futsal', name:'Futsal', img:'images/futsal.jpg' },
-  { key:'basket', name:'Basket', img:'images/basket.jpg' },
-  { key:'volley', name:'Volley', img:'images/volley.jpg' },
-  { key:'rugby', name:'Rugby', img:'images/rugby.jpg' },
-  { key:'pallanuoto', name:'Pallanouto', img:'images/pallanuoto.jpg' }
+function goTo(which) {
+  Object.values(views).forEach(v => v.classList.remove('is-active'));
+  if (views[which]) views[which].classList.add('is-active');
+  // scroll top
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+/* ======= DATI DEMO (adatta liberamente) ======= */
+const CAMPIONATI = {
+  calcio:   ['Eccellenza','Promozione','Prima Categoria'],
+  futsal:   ['A2 Élite','C1','C2'],
+  basket:   ['C Gold','C Silver'],
+  volley:   ['Serie C','Serie D'],
+  rugby:    ['Serie B','Serie C'],
+  pallanuoto:['Serie B','Serie C']
+};
+
+const SOCIETA = [
+  // sport, genere, regione, campionato, nome, logo
+  ['calcio','femminile','Lazio','Eccellenza','ASD Roma Nord','images/logo-sample-roma-nord.png'],
+  ['calcio','femminile','Lazio','Eccellenza','Virtus Marino','images/logo-sample-virtus-marino.png'],
+  ['futsal','maschile','Lombardia','C1','Futsal Milano','images/logo-sample-generic.png'],
 ];
 
-const regioni = ['Lazio','Lombardia','Sicilia','Piemonte','Veneto','Emilia-Romagna'];
+/* ======= NAVBAR ======= */
+document.querySelector('[data-nav="home"]')?.addEventListener('click', (e)=>{
+  e.preventDefault();
+  goTo('home');
+});
 
-const campionati = [
-  'Eccellenza','Promozione','Prima Categoria'
-];
+/* ======= HOME: Scelta Sport ======= */
+document.querySelectorAll('.card-sport').forEach(card=>{
+  card.addEventListener('click', ()=> {
+    const sport = card.dataset.sport;
+    STATE = { sport, genere:null, regione:null, campionato:null };
+    card.classList.add('selected');
+    setTimeout(()=> {
+      // reset selezioni pagina filtri
+      document.querySelectorAll('[data-genere]').forEach(c=>c.classList.remove('chip--active'));
+      document.getElementById('box-regione').classList.add('box--hidden');
+      document.getElementById('box-campionato').classList.add('box--hidden');
+      document.getElementById('select-regione').value = '';
+      document.getElementById('select-campionato').innerHTML = `<option value="" selected>Scegli…</option>`;
+      goTo('filtri');
+      setTimeout(()=>card.classList.remove('selected'),140);
+    }, 120);
+  }, {passive:true});
+});
 
-const dbSocieta = [
-  { id:1, nome:'ASD Roma Nord', sport:'calcio', genere:'Femminile', regione:'Lazio', campionato:'Eccellenza', logo:'' },
-  { id:2, nome:'Virtus Marino', sport:'calcio', genere:'Femminile', regione:'Lazio', campionato:'Eccellenza', logo:'' }
-];
+/* ======= FILTRI ======= */
+// Indietro a home
+document.querySelector('#view-filtri [data-back="home"]')
+  .addEventListener('click', ()=> goTo('home'));
 
-/* =======================
-   HELPERS
-======================= */
-const $ = sel => document.querySelector(sel);
-function show(id){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('view--active'));
-  $('#'+id).classList.add('view--active');
-  window.scrollTo(0,0);
-}
-
-/* =======================
-   MOUNT: HOME SPORT
-======================= */
-function mountSport(){
-  const grid = $('#sport-grid');
-  grid.innerHTML = '';
-  sports.forEach(s=>{
-    const card = document.createElement('article');
-    card.className = 'card card-sport';
-    card.dataset.sport = s.key;
-    card.innerHTML = `
-      <img class="card__img" src="${s.img}" alt="${s.name}" loading="lazy">
-      <div class="card__name">${s.name}</div>
-    `;
-    // tap: illumina e poi vai
-    card.onclick = () => {
-      card.classList.add('selected');
-      setTimeout(()=>{
-        state.sport = s.key;
-        openGenere();
-      },120);
-    };
-    grid.appendChild(card);
+// Scegli Genere → mostra Regione
+document.querySelectorAll('[data-genere]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('[data-genere]').forEach(b=>b.classList.remove('chip--active'));
+    btn.classList.add('chip--active');
+    STATE.genere = btn.dataset.genere;
+    document.getElementById('box-regione').classList.remove('box--hidden');
   });
-}
+});
 
-/* =======================
-   GENERE
-======================= */
-function openGenere(){
-  show('view-genere');
-  $('#gen-m').onclick = ()=>{ state.genere='Maschile'; openRegioni(); };
-  $('#gen-f').onclick = ()=>{ state.genere='Femminile'; openRegioni(); };
-  $('#back-from-genere').onclick = ()=>{ state.genere=null; show('view-sport'); };
-}
+// Regione → mostra Campionato con lista in base allo sport selezionato
+document.getElementById('select-regione').addEventListener('change', (e)=>{
+  STATE.regione = e.target.value || null;
 
-/* =======================
-   REGIONI
-======================= */
-function openRegioni(){
-  show('view-regioni');
-  const row = $('#regioni-row');
-  row.innerHTML = '';
-  regioni.forEach(r=>{
-    const b = document.createElement('button');
-    b.className = 'chip';
-    b.textContent = r;
-    b.onclick = ()=>{ state.regione=r; openCampionati(); };
-    row.appendChild(b);
+  const selCamp = document.getElementById('select-campionato');
+  selCamp.innerHTML = `<option value="" selected>Scegli…</option>`;
+
+  if (!STATE.sport) return;
+
+  (CAMPIONATI[STATE.sport] || []).forEach(c=>{
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    selCamp.appendChild(opt);
   });
-  $('#back-from-regioni').onclick = ()=>{
-    state.regione=null;
-    openGenere();
-  };
-}
 
-/* =======================
-   CAMPIONATI
-======================= */
-function openCampionati(){
-  show('view-campionati');
-  const row = $('#campionati-row');
-  row.innerHTML = '';
-  campionati.forEach(c=>{
-    const b = document.createElement('button');
-    b.className = 'chip';
-    b.textContent = c;
-    b.onclick = ()=>{ state.campionato=c; openSocieta(); };
-    row.appendChild(b);
-  });
-  $('#back-from-campionati').onclick = ()=>{
-    state.campionato=null;
-    openRegioni();
-  };
-}
+  document.getElementById('box-campionato').classList.remove('box--hidden');
+});
 
-/* =======================
-   SOCIETÀ LIST
-======================= */
-function openSocieta(){
-  show('view-societa');
-  const list = $('#societa-list');
-  list.innerHTML = '';
+// Campionato → vai alla pagina Società
+document.getElementById('select-campionato').addEventListener('change',(e)=>{
+  const val = e.target.value;
+  if (!val) return;
+  STATE.campionato = val;
+  renderSocieta();
+  goTo('societa');
+});
 
-  const results = dbSocieta.filter(x =>
-    x.sport===state.sport &&
-    x.genere===state.genere &&
-    x.regione===state.regione &&
-    x.campionato===state.campionato
+/* ======= SOCIETÀ ======= */
+document.querySelector('#view-societa [data-back="filtri"]')
+  .addEventListener('click', ()=> goTo('filtri'));
+
+function renderSocieta(){
+  const title = document.getElementById('soc-title');
+  title.textContent = `${cap(STATE.sport)} • ${cap(STATE.genere)} • ${STATE.regione} • ${STATE.campionato}`;
+
+  const box = document.getElementById('soc-list');
+  box.innerHTML = '';
+
+  const results = SOCIETA.filter(s =>
+    s[0]===STATE.sport &&
+    s[1]===STATE.genere &&
+    s[2]===STATE.regione &&
+    s[3]===STATE.campionato
   );
 
-  results.forEach(soc=>{
-    const el = document.createElement('div');
-    el.className = 'item';
-    el.innerHTML = `
-      <div class="item__l">
-        <div class="logo"><img alt="" /><span class="fb">PM</span></div>
-        <div>
-          <div style="font-weight:800">${soc.nome}</div>
-          <div class="muted" style="font-size:13px">${soc.campionato} • ${soc.genere} • ${soc.regione}</div>
-        </div>
-      </div>
-      <div class="chip">Apri</div>
-    `;
-
-    // gestisci logo rotondo
-    const img = el.querySelector('.logo img');
-    const fb  = el.querySelector('.logo .fb');
-    if (soc.logo && soc.logo.trim()!==''){
-      img.src = soc.logo; img.style.display='block'; fb.style.display='none';
-    } else {
-      img.removeAttribute('src'); img.style.display='none'; fb.textContent='PM'; fb.style.display='block';
-    }
-
-    el.onclick = ()=>{ state.societa=soc; openScheda(); };
-    list.appendChild(el);
-  });
-
-  $('#back-from-societa').onclick = ()=>{
-    state.societa=null;
-    openCampionati();
-  };
-}
-
-/* =======================
-   PAGINA SOCIETÀ
-======================= */
-function openScheda(){
-  show('view-scheda');
-  const soc = state.societa;
-  $('#club-nome').textContent = soc.nome;
-  $('#club-path').textContent = `${soc.campionato} • ${soc.genere} • ${soc.regione}`;
-
-  const img = $('#club-logo-img');
-  const fb  = $('#club-logo-fb');
-  if (soc.logo && soc.logo.trim()!==''){
-    img.src = soc.logo; img.alt = soc.nome;
-    img.style.display='block'; fb.style.display='none';
-  } else {
-    img.removeAttribute('src'); img.style.display='none';
-    fb.textContent='PM'; fb.style.display='flex';
+  if (!results.length){
+    const empty = document.createElement('div');
+    empty.className = 'soc-item';
+    empty.innerHTML = `<div class="soc-body">
+        <div class="soc-name">Nessuna società registrata</div>
+        <div class="soc-meta">Appena si iscrivono compariranno qui.</div>
+      </div>`;
+    box.appendChild(empty);
+    return;
   }
 
-  // CTA PreMatch (placeholder)
-  $('#cta-prematch').onclick = ()=>{
-    alert(`PreMatch creato per: ${soc.nome}`);
-  };
+  results.forEach(([sport,genere,regione,campionato,nome,logo])=>{
+    const el = document.createElement('div');
+    el.className = 'soc-item';
+    el.innerHTML = `
+      <div class="badge"><img src="${logo}" alt="${nome}" onerror="this.src='images/logo-sample-generic.png'"/></div>
+      <div class="soc-body">
+        <div class="soc-name">${nome}</div>
+        <div class="soc-meta">${campionato} • ${cap(genere)} • ${regione}</div>
+      </div>
+      <div class="pm-wrap">
+        <button class="pm-btn" data-pm="${nome}">PM</button>
+        <div class="pm-label">PreMatch</div>
+      </div>`;
+    box.appendChild(el);
+  });
 
-  $('#back-from-scheda').onclick = ()=>{
-    openSocieta();
-  };
+  // azione PM
+  box.querySelectorAll('[data-pm]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      // qui aprirai la convocazione / generazione PDF ecc.
+      alert(`PreMatch per ${btn.dataset.pm}`);
+    });
+  });
 }
 
-/* =======================
-   NAV Header
-======================= */
-$('#brand-home').onclick = (e)=>{ e.preventDefault(); show('view-sport'); };
-$('#btn-allenatore').onclick = ()=> alert('Area allenatore: inserisci codice convocazione');
-$('#btn-login').onclick = ()=> alert('Login coming soon');
-$('#btn-register').onclick = ()=> alert('Registrazione coming soon');
-
-/* =======================
-   BOOT
-======================= */
-mountSport();
-show('view-sport');
+function cap(s){ return !s ? '' : s[0].toUpperCase()+s.slice(1); }
