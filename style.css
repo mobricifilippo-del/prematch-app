@@ -111,3 +111,45 @@ h1{font-size:2.2rem;margin:.5rem 0 0.25rem}
 .foot{
   color:#a0abb9;border-top:1px solid #1e242a;padding:1.2rem;text-align:center;margin-top:2rem
 }
+/* === BRAND / LOGO ======================================================== */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+.brand img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+}
+.brand-fallback {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111;
+  font-weight: 800;
+  font-size: .85rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.brand-text {
+  font-weight: 700;
+}
+
+/* === CARD SPORT: immagine centrata e ritaglio pulito ===================== */
+.card-sport .card-image,
+.card-sport img {
+  width: 100%;
+  height: 180px;           /* altezza uniforme delle anteprime */
+}
+
+.card-sport img {
+  display: block;
+  object-fit: cover;       /* riempie il box senza deformarsi */
+  object-position: center; /* centrata sempre */
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
