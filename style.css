@@ -1,155 +1,159 @@
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* ---------- Reset & base ---------- */
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; }
 body {
-  font-family: Arial, sans-serif;
-  background-color: #121212;
-  color: #ffffff;
-  line-height: 1.5;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background:#0f1113;
+  color:#e8ecef;
 }
 
-/* Header */
-header {
-  display: flex;
-  align-items: center;
-  padding: 10px 16px;
-  background-color: #1e1e1e;
-  border-bottom: 1px solid #2a2a2a;
+/* ---------- Header ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 16px;
+  background:#0f1113;
+  border-bottom:1px solid #1b1f24;
 }
 
-.logo {
-  height: 32px;      /* logo piccolo e proporzionato */
-  width: auto;
-  margin-right: 8px;
-  vertical-align: middle;
+.brand { display:flex; align-items:center; gap:10px; }
+#brandLogo { width:34px; height:34px; object-fit:contain; }
+.brand-name { font-weight:700; color:#cfe7d9; }
+
+.menu { display:flex; gap:10px; }
+.menu button {
+  background:#1b1f24; color:#cfe7d9; border:1px solid #26303a;
+  padding:8px 12px; border-radius:12px;
+}
+.menu .btn-primary {
+  background:#1dd46b; color:#0f1113; border:1px solid #1dd46b; font-weight:700;
 }
 
-.brand-name {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #00ff88;        /* verde acceso */
-  margin-right: auto;    /* spinge i bottoni a destra */
-  text-decoration: none; /* no blu/viola */
-}
+/* ---------- Layout ---------- */
+main#app { padding: 18px 16px 32px; }
+.view { display:none; }
+.view.active { display:block; }
 
-header nav {
-  display: flex;
-  gap: 8px;
-}
+h2 { font-size: clamp(24px, 5vw, 42px); margin:6px 0 12px; }
+p  { color:#9fb0be; }
 
-header nav button {
-  background: #2a2a2a;
-  color: #ffffff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-header nav button:hover {
-  background: #00ff88;
-  color: #000;
-}
-
-/* Pulsante evidenziato (es. Registrazione) */
-header nav .highlight {
-  background: #00ff88;
-  color: #000;
-  font-weight: bold;
-}
-
-/* Titoli */
-h1, h2, h3 {
-  margin-bottom: 12px;
-  color: #ffffff;
-}
-
-h1 {
-  font-size: 1.6rem;
-}
-
-h2 {
-  font-size: 1.3rem;
-  margin-top: 20px;
-}
-
-/* Container principale */
-.container {
-  padding: 16px;
-}
-
-/* Card sport */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 16px;
-  margin-top: 16px;
+/* ---------- Grid sport ---------- */
+.grid-sport {
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:14px;
+  margin-top:14px;
 }
 
 .card-sport {
-  background: #1e1e1e;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: transform 0.2s, border-color 0.2s;
+  background:#15191e;
+  border:1px solid #232a31;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow: 0 0 0 0 rgba(29,212,107,0);
+  transition: box-shadow .2s ease, border-color .2s ease, transform .05s ease;
 }
-
 .card-sport img {
-  width: 100%;
-  height: 100px;
-  object-fit: cover;
-  display: block;
+  width:100%; height:180px; display:block; object-fit:cover;
 }
-
 .card-sport p {
-  padding: 8px;
-  text-align: center;
-  font-weight: bold;
-  color: #00ff88;
+  margin:10px 12px;
+  font-weight:800;
+  color:#70f0aa;
 }
-
-.card-sport:hover {
-  transform: scale(1.02);
-}
-
+.card-sport:active { transform: scale(.995); }
 .card-sport.selected {
-  border-color: #00ff88; /* effetto accensione */
+  border-color:#1dd46b;
+  box-shadow: 0 0 0 3px rgba(29,212,107,.25);
 }
 
-/* Bottoni generali */
-button {
-  background: #2a2a2a;
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  margin: 5px 0;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s;
+/* ---------- Buttons / pills ---------- */
+.btn-group { display:flex; gap:10px; margin:10px 0 14px; flex-wrap:wrap; }
+.btn-option {
+  background:#15191e;
+  color:#cfe7d9;
+  border:1px solid #26303a;
+  padding:10px 14px;
+  border-radius:999px;
+}
+.btn-option.selected {
+  background:#1dd46b;
+  color:#0f1113;
+  border-color:#1dd46b;
+  font-weight:700;
 }
 
-button:hover {
-  background: #00ff88;
-  color: #000;
+/* ---------- Back button ---------- */
+.back-btn {
+  margin:6px 0 12px;
+  background:#15191e;
+  border:1px solid #26303a;
+  color:#cfe7d9;
+  padding:10px 14px;
+  border-radius:12px;
 }
 
-button.selected {
-  background: #00ff88;
-  color: #000;
+/* ---------- Details (Regione / Campionato) ---------- */
+details {
+  background:#111418;
+  border:1px solid #222a31;
+  border-radius:14px;
+  margin:10px 0;
+  padding:4px 8px 10px;
+}
+details > summary {
+  list-style:none;
+  cursor:pointer;
+  padding:10px 6px;
+  color:#cfe7d9;
+  font-weight:700;
+}
+details[open] > summary { color:#70f0aa; }
+
+.scroll-x {
+  overflow-x:auto;
+  display:flex;
+  gap:10px;
+  padding:6px 2px 2px;
 }
 
-/* Footer */
-footer {
-  text-align: center;
-  padding: 16px;
-  font-size: 0.85rem;
-  color: #aaa;
-  border-top: 1px solid #2a2a2a;
-  margin-top: 40px;
+/* ---------- Lista società ---------- */
+.societa-list { display:flex; flex-direction:column; gap:14px; margin-top:10px; }
+.societa-card {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding:12px;
+  background:#15191e; border:1px solid #232a31; border-radius:16px;
+}
+.societa-left { display:flex; align-items:center; gap:12px; }
+.logo-circle {
+  width:56px; height:56px; border-radius:50%;
+  background:#0f1113 center/cover no-repeat;
+  border:2px solid #26303a;
+}
+.societa-txt .name { font-weight:800; color:#e8ecef; }
+.societa-txt .meta { color:#9fb0be; font-size:14px; margin-top:2px; }
+
+.badge-pm {
+  width:78px; height:78px; border-radius:50%;
+  display:grid; place-items:center;
+  background: radial-gradient(ellipse at center, #1dd46b 0%, #14b85b 70%);
+  color:#0f1113; font-weight:900;
+  box-shadow: inset 0 0 0 6px rgba(20,184,91,.25);
+}
+.badge-link {
+  display:block; margin-top:6px; text-align:center;
+  color:#9bf2bd; font-weight:700; font-size:14px;
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  color:#9fb0be;
+  border-top:1px solid #1b1f24;
+  padding:16px;
+  text-align:left;
 }
