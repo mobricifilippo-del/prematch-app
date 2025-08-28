@@ -7,126 +7,112 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- NAV -->
-  <header class="nav">
-    <a class="brand" href="#" id="nav-home">
-      <!-- usa un file reale che esiste nella cartella /images -->
-      <img id="brandLogo" src="images/logo-light.png" alt="PreMatch" />
-      <span>PreMatch</span>
+  <!-- HEADER (presente in tutte le view) -->
+  <header class="topbar">
+    <a href="#" id="brand-home" class="brand">
+      <img src="images/logo-light.png" alt="PreMatch" class="brand__logo" />
+      <span class="brand__name">PreMatch</span>
     </a>
-    <nav class="nav-actions">
+    <nav class="topbar__actions">
       <button class="chip" id="btn-allenatore">Allenatore</button>
       <button class="chip" id="btn-login">Login</button>
       <button class="chip chip--primary" id="btn-register">Registrazione</button>
     </nav>
   </header>
 
-  <!-- CONTENUTO -->
   <main id="app">
 
     <!-- VIEW: SPORT -->
-    <section id="view-sport" class="view">
-      <h1>Scegli lo sport</h1>
-      <p class="subtitle">Seleziona per iniziare</p>
+    <section id="view-sport" class="view view--active">
+      <div class="container">
+        <h1 class="title-xl">Scegli lo sport</h1>
+        <p class="subtitle">Seleziona per iniziare</p>
 
-      <div class="grid-sport">
-        <!-- Ogni card ha classe card-sport + data-sport -->
-        <article class="card card-sport" data-sport="calcio">
-          <img src="images/calcio.jpg" alt="Calcio" />
-          <h3>Calcio</h3>
-        </article>
-
-        <article class="card card-sport" data-sport="futsal">
-          <img src="images/futsal.jpg" alt="Futsal" />
-          <h3>Futsal</h3>
-        </article>
-
-        <article class="card card-sport" data-sport="basket">
-          <img src="images/basket.jpg" alt="Basket" />
-          <h3>Basket</h3>
-        </article>
-
-        <article class="card card-sport" data-sport="volley">
-          <img src="images/volley.jpg" alt="Volley" />
-          <h3>Volley</h3>
-        </article>
-
-        <article class="card card-sport" data-sport="rugby">
-          <img src="images/rugby.jpg" alt="Rugby" />
-          <h3>Rugby</h3>
-        </article>
-
-        <article class="card card-sport" data-sport="pallanuoto">
-          <img src="images/pallanuoto.jpg" alt="Pallanuoto" />
-          <h3>Pallanuoto</h3>
-        </article>
+        <div class="grid grid--cards" id="sport-grid">
+          <!-- Le card vengono create da JS -->
+        </div>
       </div>
     </section>
 
     <!-- VIEW: GENERE -->
-    <section id="view-genere" class="view hidden">
-      <h1>Seleziona il genere</h1>
-      <div class="chips-row">
-        <button class="chip chip--soft" data-genere="Maschile">Maschile</button>
-        <button class="chip chip--soft" data-genere="Femminile">Femminile</button>
+    <section id="view-genere" class="view">
+      <div class="container">
+        <h1 class="title-xl">Seleziona il genere</h1>
+        <div class="chips-row">
+          <button class="chip chip--pill" id="gen-m">Maschile</button>
+          <button class="chip chip--pill" id="gen-f">Femminile</button>
+        </div>
+        <div class="footer-actions">
+          <button class="chip chip--ghost" id="back-from-genere">Indietro</button>
+        </div>
       </div>
-      <button class="chip chip--ghost" id="back-from-genere">Indietro</button>
     </section>
 
-    <!-- VIEW: REGIONI -->
-    <section id="view-regioni" class="view hidden">
-      <h1>Seleziona la regione</h1>
-      <div class="chips-row" id="regioni-list"></div>
-      <button class="chip chip--ghost" id="back-from-regioni">Indietro</button>
+    <!-- VIEW: REGIONE -->
+    <section id="view-regioni" class="view">
+      <div class="container">
+        <h1 class="title-xl">Seleziona la regione</h1>
+        <div class="chips-row" id="regioni-row"></div>
+        <div class="footer-actions">
+          <button class="chip chip--ghost" id="back-from-regioni">Indietro</button>
+        </div>
+      </div>
     </section>
 
-    <!-- VIEW: CAMPIONATI -->
-    <section id="view-campionati" class="view hidden">
-      <h1>Seleziona il campionato</h1>
-      <div class="chips-row" id="campionati-list"></div>
-      <button class="chip chip--ghost" id="back-from-campionati">Indietro</button>
+    <!-- VIEW: CAMPIONATO -->
+    <section id="view-campionati" class="view">
+      <div class="container">
+        <h1 class="title-xl">Seleziona il campionato</h1>
+        <div class="chips-row" id="campionati-row"></div>
+        <div class="footer-actions">
+          <button class="chip chip--ghost" id="back-from-campionati">Indietro</button>
+        </div>
+      </div>
     </section>
 
     <!-- VIEW: SOCIETÀ -->
-    <section id="view-societa" class="view hidden">
-      <h1 id="societa-title">Società</h1>
-
-      <div class="club">
-        <div class="club-avatar">
-          <!-- immagine reale se presente -->
-          <img id="club-logo" alt="Logo società" />
-          <!-- fallback cerchio con PM -->
-          <div id="club-fallback" class="club-fallback">PM</div>
-        </div>
-
-        <div class="club-right">
-          <div class="pm-btn-wrap">
-            <button id="btn-create-pm" class="pm-btn" title="Crea PreMatch">PM</button>
-          </div>
+    <section id="view-societa" class="view">
+      <div class="container">
+        <h1 class="title-xl">Scegli la società</h1>
+        <div id="societa-list" class="list"></div>
+        <div class="footer-actions">
+          <button class="chip chip--ghost" id="back-from-societa">Indietro</button>
         </div>
       </div>
-
-      <p class="club-meta" id="club-meta"></p>
-
-      <div class="actions-row">
-        <button class="chip chip--soft">Informazioni</button>
-        <button class="chip chip--soft">Galleria foto</button>
-        <button class="chip chip--soft">Match in programma</button>
-      </div>
-
-      <button class="chip chip--ghost" id="back-from-societa">Indietro</button>
     </section>
 
-    <!-- VIEW: CREA PREMATCH (demo) -->
-    <section id="view-createpm" class="view hidden">
-      <h1>Crea PreMatch</h1>
-      <p>Stub di test: qui comparirà la maschera di creazione / convocazione.</p>
-      <button class="chip chip--ghost" id="back-from-createpm">Indietro</button>
+    <!-- VIEW: PAGINA SOCIETÀ -->
+    <section id="view-scheda" class="view">
+      <div class="container">
+        <div class="club">
+          <div class="club__logo">
+            <img id="club-logo-img" class="club__logo-img" alt="" />
+            <div id="club-logo-fb" class="club__logo-fallback">PM</div>
+          </div>
+          <div class="club__meta">
+            <h2 id="club-nome" class="title-xxl"></h2>
+            <p id="club-path" class="muted"></p>
+          </div>
+          <button id="cta-prematch" class="cta-pm" aria-label="Crea PreMatch">
+            <span>PM</span>
+          </button>
+        </div>
+
+        <div class="buttons-row">
+          <button class="chip">Informazioni</button>
+          <button class="chip">Galleria foto</button>
+          <button class="chip">Match in programma</button>
+        </div>
+
+        <div class="footer-actions">
+          <button class="chip chip--ghost" id="back-from-scheda">Indietro</button>
+        </div>
+      </div>
     </section>
 
   </main>
 
-  <footer class="site-foot">
+  <footer class="footer">
     © PreMatch — semplice, pulita, veloce. Privacy by design.
   </footer>
 
