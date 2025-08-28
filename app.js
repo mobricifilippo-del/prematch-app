@@ -1,316 +1,136 @@
-/* ============ UTIL ============ */
-const qs  = (s, el=document)=>el.querySelector(s);
-const qsa = (s, el=document)=>[...el.querySelectorAll(s)];
-const byId = id => document.getElementById(id);
+// Stato globale
+const AppState = { sport:null, genere:null, regione:null, campionato:null };
 
-const state = {
-  sport: null,
-  genere: null,
-  regione: null,
-  campionato: null,
-  club: null
-};
-
-/* ============ DATA (demo) ============ */
-const REGIONI = ["Lazio", "Lombardia", "Sicilia", "Piemonte", "Veneto", "Emilia-Romagna"];
-
-const CAMPIONATI = {
-  Lazio: ["Eccellenza","Promozione"],
-  Lombardia: ["Eccellenza"],
-  Sicilia: ["Eccellenza"],
-  Piemonte: ["Eccellenza"],
-  Veneto: ["Eccellenza"],
-  "Emilia-Romagna": ["Eccellenza"]
-};
-
-// Demo club
-const CLUBS = [
-  { id:"roma-nord",  nome:"ASD Roma Nord",  sport:"calcio", genere:"femminile", regione:"Lazio", campionato:"Eccellenza" },
-  { id:"virtus-marino", nome:"Virtus Marino", sport:"calcio", genere:"femminile", regione:"Lazio", campionato:"Eccellenza" },
-];
-
-/* ============ NAV ============ */
-function show(viewId){
-  qsa('.view').forEach(v=>v.classList.add('hidden'));
-  byId(viewId).classList.remove('hidden');
-  window.scrollTo({top:0, behavior:"instant"});
+// Utility: cambio vista
+function goTo(id, stateDelta={}){
+  Object.assign(AppState, stateDelta);
+  document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
 }
 
-function goTo(viewId, payload = {}){
-  Object.assign(state, payload);
-  switch(viewId){
-    case 'view-genere':
-      renderGenere();
-      break;
-    case 'view-societa':
-      renderSocieta();
-      break;
-    case 'view-scheda':
-      renderScheda();
-      break;
-  }
-  show(viewId);
-}
-
-/* ============ RENDER: GENERE + TENDINE ============ */
-function renderGenere(){
-  // reset scelte successive
-  state.genere = state.genere ?? null;
-  state.regione = null;
-  state.campionato = null;
-
-  // attiva/disattiva chip genere
-  qsa('#chips-genere .chip').forEach(ch => {
-    ch.classList.toggle('active', ch.dataset.genere === state.genere);
-  });
-
-  // popola Regioni
-  const regBox = byId('reg-list'); regBox.innerHTML = '';
-  REGIONI.forEach(r => {
-    const b = document.createElement('button');
-    b.className = 'chip';
-    b.textContent = r;
-    b.addEventListener('click', () => {
-      state.regione = r;
-      // attiva selezione visiva
-      qsa('#reg-list .chip').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
-
-      // abilita campionati per regione scelta
-      buildCampionati();
-    });
-    regBox.appendChild(b);
-  });
-
-  // abilita dettagli regione
-  const ddReg = byId('dd-regione');
-  ddReg.disabled = false;
-  ddReg.open = true;
-
-  // svuota/lock campionato
-  const ddCamp = byId('dd-campionato');
-  byId('camp-list').innerHTML = '';
-  ddCamp.disabled = true;
-  ddCamp.open = false;
-}
-
-function buildCampionati(){
-  const ddCamp = byId('dd-campionato');
-  const box = byId('camp-list');
-  box.innerHTML = '';
-
-  const arr = CAMPIONATI[state.regione] || [];
-  arr.forEach(c => {
-    const b = document.createElement('button');
-    b.className = 'chip';
-    b.textContent = c;
-    b.addEventListener('click', () => {
-      qsa('#camp-list .chip').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
-      state.campionato = c;
-      // tutte le scelte fatte -> vai alla lista società
-      goTo('view-societa');
-    });
-    box.appendChild(b);
-  });
-
-  ddCamp.disabled = false;
-  ddCamp.open = true;
-}
-
-/* ============ RENDER: LISTA SOCIETÀ ============ */
-function renderSocieta(){
-  const title = [
-    capitalize(state.sport),
-    '•',
-    capitalize(state.genere),
-    '•',
-    state.regione,
-    '•',
-    state.campionato
-  ].join(' ');
-  byId('societatitle').textContent = title;
-
-  const list = byId('societa-list');
-  list.innerHTML = '';
-
-  const results = CLUBS.filter(c =>
-    c.sport===state.sport &&
-    c.genere===state.genere &&
-    c.regione===state.regione &&
-    c.campionato===state.campionato
-  );
-
-  results.forEach(c => {
-    const item = document.createElement('button');
-    item.className = 'card-club';
-    item.innerHTML = `
-      <div class="club-logo-sm" aria-hidden="true"></div>
-      <div class="flex">
-        <h3>${c.nome}</h3>
-        <div class="meta">${c.campionato} • ${capitalize(c.genere)} • ${c.regione}</div>
-      </div>
-      <div class="btn btn-primary">PreMatch</div>
-    `;
-    item.addEventListener('click', ()=>{
-      state.club = c;
-      goTo('view-scheda');
-    });
-    list.appendChild(item);
-  });
-}
-
-/* ============ RENDER: SCHEDA SOCIETÀ ============ */
-function renderScheda(){
-  const c = state.club;
-  if(!c){ goTo('view-societa'); return; }
-
-  byId('club-name').textContent = c.nome;
-  byId('club-meta').textContent = `${c.campionato} • ${capitalize(c.genere)} • ${c.regione}`;
-  // logo è un cerchio “PM” (come placeholder estetico)
-  byId('club-logo').textContent = '';
-
-  byId('btn-pm').onclick = () => {
-    alert('PreMatch creato (demo)');
-  };
-}
-
-/* ============ HOME: click sport ============ */
-function bindSportClicks(){
-  qsa('.card-sport').forEach(card=>{
+// HOME: click sport
+function bindSportCards(){
+  document.querySelectorAll('.card-sport').forEach(card=>{
     card.addEventListener('click', ()=>{
-      qsa('.card-sport').forEach(c=>c.classList.remove('selected'));
+      document.querySelectorAll('.card-sport').forEach(c=>c.classList.remove('selected'));
       card.classList.add('selected');
-
-      setTimeout(()=>{
-        goTo('view-genere', { sport: card.dataset.sport });
-      }, 130);
-    }, {passive:true});
+      setTimeout(()=> goTo('view-genere', { sport: card.dataset.sport }), 120);
+    }, { passive:true });
   });
 }
 
-/* ============ EVENTI GLOBALI ============ */
-function bindGlobal(){
-  // brand click -> home
-  qsa('[data-nav="home"], .brand').forEach(el=>{
-    el.addEventListener('click', (e)=>{ e.preventDefault(); show('view-home'); });
+// GENERE → REGIONE → CAMPIONATO
+function initFiltroStep(){
+  const btnMaschile = document.getElementById('btn-maschile');
+  const btnFemminile = document.getElementById('btn-femminile');
+  const boxRegione = document.getElementById('box-regione');
+  const boxCampionato = document.getElementById('box-campionato');
+
+  const regioneBtns = boxRegione.querySelectorAll('.pill');
+  const campBtns    = boxCampionato.querySelectorAll('.pill');
+
+  // Reset selezioni quando entri nella view
+  const resetStep = ()=>{
+    [btnMaschile, btnFemminile].forEach(b=>b.classList.remove('selected'));
+    regioneBtns.forEach(b=>b.classList.remove('selected'));
+    campBtns.forEach(b=>b.classList.remove('selected'));
+    boxRegione.classList.add('disabled');
+    boxCampionato.classList.add('disabled');
+  };
+
+  // Mostra “Genere” all’apertura view
+  const observer = new MutationObserver(()=>{
+    if(!document.getElementById('view-genere').classList.contains('hidden')){
+      resetStep();
+      // se il genere era già scelto, evidenzialo
+      if(AppState.genere === 'Maschile') btnMaschile.classList.add('selected');
+      if(AppState.genere === 'Femminile') btnFemminile.classList.add('selected');
+      if(AppState.genere) boxRegione.classList.remove('disabled');
+    }
+  });
+  observer.observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']});
+
+  // GENERE
+  [btnMaschile, btnFemminile].forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      [btnMaschile, btnFemminile].forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      AppState.genere = btn.textContent.trim();
+      boxRegione.classList.remove('disabled');
+    });
+  });
+
+  // REGIONE
+  regioneBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      regioneBtns.forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      AppState.regione = btn.dataset.value || btn.textContent.trim();
+      boxCampionato.classList.remove('disabled');
+    });
+  });
+
+  // CAMPIONATO
+  campBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      campBtns.forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      AppState.campionato = btn.dataset.value || btn.textContent.trim();
+      renderSocietaList();         // crea la lista
+      goTo('view-societa');        // mostra la lista
+    });
   });
 
   // back
-  qsa('[data-back]').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      // semplice: torna sempre alla vista precedente logica
-      if(!state.genere) { show('view-home'); return; }
-      if(byId('view-scheda').classList.contains('hidden')===false){
-        show('view-societa'); return;
-      }
-      show('view-home');
-    });
-  });
-
-  // scelta genere
-  qsa('#chips-genere .chip').forEach(ch=>{
-    ch.addEventListener('click', ()=>{
-      qsa('#chips-genere .chip').forEach(x=>x.classList.remove('active'));
-      ch.classList.add('active');
-      state.genere = ch.dataset.genere;
-      // quando scelgo il genere, abilito subito la sezione Regioni
-      renderGenere();
-    });
-  });
+  document.getElementById('btn-back').addEventListener('click', ()=> goTo('view-home'));
 }
 
-/* ============ HELPERS ============ */
-function capitalize(s){ return (s??'').charAt(0).toUpperCase() + (s??'').slice(1); }
+// LISTA SOCIETÀ (mock/demo)
+function renderSocietaList(){
+  const title = document.getElementById('societa-title');
+  title.textContent = `${AppState.sport} • ${AppState.genere} • ${AppState.regione} • ${AppState.campionato}`;
 
-/* ============ BOOT ============ */
+  const list = document.getElementById('societa-list');
+  list.innerHTML = '';
+
+  // Demo: due società
+  const data = [
+    { name:'ASD Roma Nord',   comp:'Eccellenza', regione:'Lazio' },
+    { name:'Virtus Marino',   comp:'Eccellenza', regione:'Lazio' }
+  ];
+
+  data.forEach(club=>{
+    const card = document.createElement('div'); card.className='card-soc';
+    card.innerHTML = `
+      <div class="soc-left">
+        <div class="soc-logo">PM</div>
+        <div>
+          <div class="soc-name">${club.name}</div>
+          <div class="badge">${club.comp} • ${AppState.genere} • ${club.regione}</div>
+        </div>
+      </div>
+      <button class="btn-pm">PM</button>
+    `;
+    card.addEventListener('click', ()=> {
+      // qui in futuro apri la pagina società
+      alert('Apri pagina società: '+club.name);
+    }, { passive:true });
+
+    list.appendChild(card);
+  });
+
+  document.getElementById('btn-back-soc').onclick = ()=> goTo('view-genere');
+}
+
+// Brand click → Home
+function bindBrand(){
+  const brand = document.getElementById('brand-link');
+  brand.addEventListener('click', (e)=>{ e.preventDefault(); goTo('view-home'); }, { passive:false });
+}
+
+// Init
 document.addEventListener('DOMContentLoaded', ()=>{
-  bindSportClicks();
-  bindGlobal();
-  show('view-home');
+  bindBrand();
+  bindSportCards();
+  initFiltroStep();
 });
-// --- UTIL ---
-const qs  = (s,root=document) => root.querySelector(s);
-const qsa = (s,root=document) => [...root.querySelectorAll(s)];
-const enable = el => { el.classList.remove('is-disabled'); el.removeAttribute('disabled'); };
-const disable = el => { el.classList.add('is-disabled'); el.setAttribute('disabled',''); };
-
-// stato globale minimo
-window.state = window.state || { sport:null, genere:null, regione:null, campionato:null };
-
-// RIFERIMENTI UI (ID/Classi come da markup attuale)
-const ui = {
-  btnMaschile:   qs('#btn-maschile'),
-  btnFemminile:  qs('#btn-femminile'),
-  boxRegione:    qs('#box-regione'),      // <details id="box-regione">
-  regioneBtns:   qsa('#box-regione .pill'),
-  boxCampionato: qs('#box-campionato'),   // <details id="box-campionato">
-  campBtns:      qsa('#box-campionato .pill')
-};
-
-// evidenzia un pulsante “pill”
-function highlight(group, activeBtn) {
-  group.forEach(b => b.classList.toggle('selected', b === activeBtn));
-}
-
-// 1) GENERE -> abilita REGIONE
-function wireGenereStep() {
-  if (!ui.btnMaschile || !ui.btnFemminile) return;
-
-  const onPickGenere = (g, btn) => {
-    state.genere = g;
-    // evidenzia
-    [ui.btnMaschile, ui.btnFemminile].forEach(b => b.classList.toggle('selected', b === btn));
-    // abilita e apri REGIONE
-    if (ui.boxRegione) {
-      ui.boxRegione.open = true;
-      ui.boxRegione.classList.remove('is-disabled');
-      ui.regioneBtns.forEach(b => b.disabled = false);
-    }
-  };
-
-  ui.btnMaschile.addEventListener('click', () => onPickGenere('maschile', ui.btnMaschile), {passive:true});
-  ui.btnFemminile.addEventListener('click', () => onPickGenere('femminile', ui.btnFemminile), {passive:true});
-}
-
-// 2) REGIONE -> abilita CAMPIONATO
-function wireRegioneStep() {
-  if (!ui.regioneBtns.length) return;
-  ui.regioneBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.regione = btn.dataset.value;           // es. data-value="Lazio"
-      highlight(ui.regioneBtns, btn);
-      // abilita e apri CAMPIONATO
-      if (ui.boxCampionato) {
-        ui.boxCampionato.open = true;
-        ui.boxCampionato.classList.remove('is-disabled');
-        ui.campBtns.forEach(b => b.disabled = false);
-      }
-    }, {passive:true});
-  });
-}
-
-// 3) CAMPIONATO -> vai a lista SOCIETÀ
-function wireCampionatoStep() {
-  if (!ui.campBtns.length) return;
-  ui.campBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.campionato = btn.dataset.value;        // es. data-value="Eccellenza"
-      highlight(ui.campBtns, btn);
-      // qui genera la lista filtrata e naviga
-      renderSocietaList();                          // già esistente nella tua app
-      goTo('view-societa');                         // già esistente
-    }, {passive:true});
-  });
-}
-
-// inizializza questi step DOPO il render della pagina “genere”
-function initFiltroStep() {
-  wireGenereStep();
-  wireRegioneStep();
-  wireCampionatoStep();
-}
-
-// se usi goTo() per cambiare viste, richiama initFiltroStep quando entri nella pagina genere
-document.addEventListener('DOMContentLoaded', initFiltroStep);
-// e/o dentro la tua goTo(view) fai: if(view==='view-genere'){ initFiltroStep(); }
