@@ -138,3 +138,13 @@ footer {
   font-size:.8rem;
   color:#888;
 }
+/* ---- Fix colore link brand (niente viola, niente sottolineatura) ---- */
+a { text-decoration: none; color: inherit; }
+
+.brand, .brand:link, .brand:visited, .brand:hover, .brand:active {
+  color: #00ff66;                 /* verde del brand */
+  text-decoration: none;
+}
+
+.brand-text { color: #00ff66 !important; }  /* forza il testo del brand */
+.brand img { display:block; }               /* evita spazi/line-height strani */
