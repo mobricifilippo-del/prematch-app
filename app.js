@@ -1,163 +1,173 @@
-// app.js
+// ------------ Stato ------------
+const state = {
+  sport: null,
+  genere: null,
+  regione: null,
+  campionato: null,
+  history: ['view-home'],
+  club: null,
+};
 
-// funzione cambio pagina
-function goTo(viewId, data = {}) {
-  document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-  const view = document.getElementById(viewId);
-  if (view) {
-    view.classList.remove('hidden');
-    view.scrollTop = 0;
-  }
+// Dati di esempio per le società (puoi espandere)
+const CLUBS = {
+  'calcio|Femminile|Lazio|Eccellenza': [
+    { id: 'roma-nord', nome: 'ASD Roma Nord', regione: 'Lazio', campionato: 'Eccellenza', genere: 'Femminile' },
+    { id: 'virtus-marino', nome: 'Virtus Marino', regione: 'Lazio', campionato: 'Eccellenza', genere: 'Femminile' },
+  ],
+};
 
-  // reset dropdowns se siamo nella pagina filtri
-  if (viewId === 'view-filtri') {
-    setupFiltri(data.sport);
-  }
+const REGIONI = ['Lazio','Lombardia','Sicilia','Piemonte','Veneto','Emilia-Romagna'];
+const CAMPIONATI = ['Eccellenza','Promozione','Serie C'];
+
+// ------------ Router ------------
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  state.history.push(id);
+}
+function goTo(id){ showView(id); }
+function goBackFromFilters(){
+  // torna alla home e resetta filtri tranne sport
+  state.genere = state.regione = state.campionato = null;
+  showView('view-home');
 }
 
-// gestisci logo home
-document.querySelector('.logo-link').addEventListener('click', (e) => {
-  e.preventDefault();
-  goTo('view-home');
-});
-
-// GESTIONE SPORT
-document.querySelectorAll('.card-sport').forEach(card => {
-  card.addEventListener('click', () => {
-    document.querySelectorAll('.card-sport').forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
-    setTimeout(() => {
-      goTo('view-filtri', { sport: card.dataset.sport });
-    }, 150);
-  });
-});
-
-// FILTRI A TENDINA
-function setupFiltri(sport) {
-  const titolo = document.getElementById('filtri-titolo');
-  titolo.textContent = `Seleziona per ${sport}`;
-
-  const genereBtns = document.querySelectorAll('#filtri-genere button');
-  const regioneSelect = document.getElementById('filtri-regione');
-  const campionatoSelect = document.getElementById('filtri-campionato');
-  const avantiBtn = document.getElementById('filtri-avanti');
-
-  let genere = null, regione = null, campionato = null;
-
-  // reset
-  genereBtns.forEach(b => b.classList.remove('selected'));
-  regioneSelect.innerHTML = `<option value="">-- scegli regione --</option>`;
-  campionatoSelect.innerHTML = `<option value="">-- scegli campionato --</option>`;
-  regioneSelect.parentElement.classList.add('hidden');
-  campionatoSelect.parentElement.classList.add('hidden');
-  avantiBtn.classList.add('hidden');
-
-  // dati demo
-  const regioni = ["Lazio", "Lombardia", "Sicilia", "Piemonte", "Veneto", "Emilia-Romagna"];
-  const campionati = ["Eccellenza", "Serie A", "Serie B"];
-
-  // genere click
-  genereBtns.forEach(btn => {
-    btn.onclick = () => {
-      genereBtns.forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      genere = btn.dataset.genere;
-      regioneSelect.parentElement.classList.remove('hidden');
-
-      // popola regioni
-      regioneSelect.innerHTML = `<option value="">-- scegli regione --</option>`;
-      regioni.forEach(r => {
-        const opt = document.createElement('option');
-        opt.value = r;
-        opt.textContent = r;
-        regioneSelect.appendChild(opt);
-      });
-    };
-  });
-
-  // regione change
-  regioneSelect.onchange = () => {
-    regione = regioneSelect.value;
-    if (regione) {
-      campionatoSelect.parentElement.classList.remove('hidden');
-      campionatoSelect.innerHTML = `<option value="">-- scegli campionato --</option>`;
-      campionati.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c;
-        opt.textContent = c;
-        campionatoSelect.appendChild(opt);
-      });
-    }
-  };
-
-  // campionato change
-  campionatoSelect.onchange = () => {
-    campionato = campionatoSelect.value;
-    if (campionato) {
-      avantiBtn.classList.remove('hidden');
-    }
-  };
-
-  // avanti
-  avantiBtn.onclick = () => {
-    goTo('view-societa', { sport, genere, regione, campionato });
-    renderSocieta(sport, genere, regione, campionato);
-  };
+// ------------ UI helpers ------------
+function setPressed(el){
+  el.classList.add('selected','active');
+  setTimeout(()=>el.classList.remove('active'),150);
+}
+function setActivePill(btn, groupSelector){
+  document.querySelectorAll(groupSelector+' .pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
 }
 
-// SOCIETÀ
-function renderSocieta(sport, genere, regione, campionato) {
-  const container = document.getElementById('societa-list');
-  container.innerHTML = "";
+// ------------ HOME: click sport ------------
+function initSportCards(){
+  document.querySelectorAll('.card-sport').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      setPressed(card);
+      state.sport = card.dataset.sport;
+      // prepara filtri
+      prepareFilters();
+      setTimeout(()=>goTo('view-filter'),140);
+    }, {passive:true});
+  });
+}
 
-  const titolo = document.getElementById('societa-titolo');
-  titolo.textContent = `${sport} • ${genere} • ${regione} • ${campionato}`;
+// ------------ FILTRI ------------
+function prepareFilters(){
+  // reset attivi
+  document.querySelectorAll('#genderRow .pill').forEach(p=>p.classList.remove('active'));
+  // abilita regione/campionato solo dopo genere
+  document.getElementById('regioneBox').setAttribute('disabled','');
+  document.getElementById('campionatoBox').setAttribute('disabled','');
+  document.getElementById('regioniList').innerHTML = '';
+  document.getElementById('campionatiList').innerHTML = '';
+}
 
-  // dati demo
-  const societa = [
-    { nome: "ASD Roma Nord", logo: "images/logo1.png" },
-    { nome: "Virtus Marino", logo: "images/logo2.png" }
-  ];
+function initFilters(){
+  // genere
+  document.querySelectorAll('#genderRow .pill').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      setActivePill(btn,'#genderRow');
+      state.genere = btn.dataset.gender;
+      // popola regioni e apri tendina
+      const list = document.getElementById('regioniList');
+      list.innerHTML = '';
+      REGIONI.forEach(r=>{
+        const b = document.createElement('button');
+        b.className = 'pill';
+        b.textContent = r;
+        b.addEventListener('click', ()=>{
+          setActivePill(b, '#regioniList');
+          state.regione = r;
+          // abilita campionati
+          const cBox = document.getElementById('campionatoBox');
+          cBox.removeAttribute('disabled');
+          const clist = document.getElementById('campionatiList');
+          clist.innerHTML = '';
+          CAMPIONATI.forEach(c=>{
+            const bc = document.createElement('button');
+            bc.className = 'pill';
+            bc.textContent = c;
+            bc.addEventListener('click', ()=>{
+              setActivePill(bc, '#campionatiList');
+              state.campionato = c;
+              // vai alla lista società
+              buildClubs();
+              goTo('view-clubs');
+            }, {passive:true});
+            clist.appendChild(bc);
+          });
+          // apri campionati
+          cBox.open = true;
+        }, {passive:true});
+        list.appendChild(b);
+      });
+      const rBox = document.getElementById('regioneBox');
+      rBox.removeAttribute('disabled');
+      rBox.open = true;
+    }, {passive:true});
+  });
+}
 
-  societa.forEach(s => {
-    const card = document.createElement('div');
-    card.className = "societa-card";
+// ------------ LISTA SOCIETÀ ------------
+function buildClubs(){
+  const key = `${state.sport}|${state.genere}|${state.regione}|${state.campionato}`;
+  const items = CLUBS[key] || [];
+  const cont = document.getElementById('clubsContainer');
+  cont.innerHTML = '';
 
-    card.innerHTML = `
-      <img src="${s.logo}" alt="${s.nome}" class="societa-logo">
-      <div class="societa-info">
-        <h3>${s.nome}</h3>
-        <p>${campionato} • ${genere} • ${regione}</p>
-      </div>
-      <button class="btn-prematch">PreMatch</button>
-    `;
+  document.getElementById('breadcrumb').textContent =
+    `${capitalize(state.sport)} • ${state.genere} • ${state.regione} • ${state.campionato}`;
 
-    container.appendChild(card);
+  items.forEach(club=>{
+    const row = document.createElement('div');
+    row.className = 'club-row';
 
-    // click sulla card -> pagina dettaglio
-    card.addEventListener('click', (e) => {
-      if (!e.target.classList.contains('btn-prematch')) {
-        goTo('view-societa-dettaglio', { societa: s });
-        renderSocietaDettaglio(s);
-      }
+    const logo = document.createElement('div');
+    logo.className = 'club-logo';
+    logo.innerHTML = '<span>PM</span>';
+
+    const main = document.createElement('div');
+    main.className = 'club-main';
+    main.innerHTML = `<div class="name">${club.nome}</div>
+                      <div class="meta">${club.campionato} • ${club.genere} • ${club.regione}</div>`;
+
+    const pm = document.createElement('button');
+    pm.className = 'pm-pill';
+    pm.innerHTML = '<div>PM</div><small>PreMatch</small>';
+    pm.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      alert(`Crea PreMatch per ${club.nome}`);
     });
+
+    row.appendChild(logo);
+    row.appendChild(main);
+    row.appendChild(pm);
+
+    row.addEventListener('click', ()=>{
+      state.club = club;
+      openClub(club);
+      goTo('view-club');
+    });
+
+    cont.appendChild(row);
   });
 }
 
-// SOCIETÀ DETTAGLIO
-function renderSocietaDettaglio(s) {
-  const container = document.getElementById('societa-dettaglio');
-  container.innerHTML = `
-    <div class="societa-dettaglio-card">
-      <img src="${s.logo}" alt="${s.nome}" class="societa-logo-big">
-      <h2>${s.nome}</h2>
-      <p>Informazioni società...</p>
-      <button class="btn-prematch">Crea PreMatch</button>
-    </div>
-  `;
+function openClub(club){
+  document.getElementById('clubName').textContent = club.nome;
+  document.getElementById('clubMeta').textContent = `${club.campionato} • ${club.genere} • ${club.regione}`;
+  document.getElementById('pmCreate').onclick = ()=>alert(`Crea PreMatch per ${club.nome}`);
 }
 
-// bottone indietro
-document.querySelectorAll('.btn-indietro').forEach(btn => {
-  btn.addEventListener('click', () => history.back());
+// ------------ Utils ------------
+function capitalize(s){ return (s||'').charAt(0).toUpperCase()+s.slice(1); }
+
+// ------------ Boot ------------
+document.addEventListener('DOMContentLoaded', ()=>{
+  initSportCards();
+  initFilters();
 });
