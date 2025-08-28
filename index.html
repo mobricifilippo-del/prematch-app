@@ -1,58 +1,36 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Favicons -->
+  <link rel="icon" href="./images/logo-icon.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="./images/logo-icon.png" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./style.css?v=7" />
 </head>
 <body>
-
-  <!-- Barra superiore -->
   <header class="topbar">
     <div class="brand">
-      <img src="images/logo-light.png" alt="PreMatch Logo">
+      <img src="./images/logo-light.png" alt="PreMatch" />
       <span>PreMatch</span>
     </div>
     <nav class="auth-links">
-      <a href="#">Allenatore</a>
-      <a href="#">Login</a>
-      <a href="#" class="highlight">Registrazione</a>
+      <a href="#" class="login">Login</a>
+      <a href="#" class="register">Registrati</a>
     </nav>
   </header>
 
-  <!-- Home: scelta sport -->
-  <section id="view-sport" class="view active">
-    <h2>Scegli lo sport</h2>
-    <p>Seleziona per iniziare</p>
-    <div class="sport-grid">
-      <div class="card-sport" data-sport="calcio">
-        <img src="images/calcio.jpg" alt="Calcio">
-        <h3>Calcio</h3>
-      </div>
-      <div class="card-sport" data-sport="futsal">
-        <img src="images/futsal.jpg" alt="Futsal">
-        <h3>Futsal</h3>
-      </div>
-      <div class="card-sport" data-sport="basket">
-        <img src="images/basket.jpg" alt="Basket">
-        <h3>Basket</h3>
-      </div>
-      <div class="card-sport" data-sport="volley">
-        <img src="images/volley.jpg" alt="Volley">
-        <h3>Volley</h3>
-      </div>
-      <div class="card-sport" data-sport="rugby">
-        <img src="images/rugby.jpg" alt="Rugby">
-        <h3>Rugby</h3>
-      </div>
-      <div class="card-sport" data-sport="pallanuoto">
-        <img src="images/pallanuoto.jpg" alt="Pallanuoto">
-        <h3>Pallanuoto</h3>
-      </div>
-    </div>
-  </section>
+  <main id="app"></main>
 
-  <script src="app.js"></script>
+  <footer class="footer">
+    <div>© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
+  </footer>
+
+  <!-- JS -->
+  <script src="./app.js?v=7"></script>
 </body>
 </html>
