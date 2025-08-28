@@ -1,156 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PreMatch</title>
-  <link rel="stylesheet" href="style.css" />
+
+  <!-- Favicons -->
+  <link rel="icon" href="./images/logo-icon.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="./images/logo-icon.png" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./style.css?v=100" />
 </head>
 <body>
-  <!-- NAV -->
-  <header class="nav">
-    <a class="brand" href="#" data-nav="home" aria-label="PreMatch Home">
-      <img src="/logo-light.png" alt="PreMatch" class="brand__logo" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex';"/>
-      <span class="brand__text" style="display:none;">PreMatch</span>
-    </a>
-    <nav class="nav__actions">
-      <button class="chip chip--ghost" data-nav="allenatore">Allenatore</button>
-      <button class="chip chip--ghost" data-nav="login">Login</button>
-      <button class="chip chip--primary" data-nav="registrazione">Registrazione</button>
+  <header class="topbar">
+    <div class="brand">
+      <!-- usa SEMPRE il logo chiaro -->
+      <img src="./images/logo-light.png" alt="PreMatch" />
+      <span>PreMatch</span>
+    </div>
+    <nav class="nav">
+      <a class="link" href="#" onclick="return false;">Login</a>
+      <a class="link accent" href="#" onclick="return false;">Registrati</a>
     </nav>
   </header>
 
-  <main>
-    <!-- HOME: SPORT -->
-    <section id="view-home" class="view view--active">
-      <div class="container">
-        <h1 class="h1">Scegli lo sport</h1>
-        <p class="lead">Seleziona per iniziare</p>
-        <div class="grid-sport" id="grid-sport">
-          <!-- cards generate via JS se vuoi; qui le metto anche inline per certezza -->
-          <article class="card-sport" data-sport="Calcio">
-            <div class="card-sport__img"><img src="images/calcio.jpg" alt="Calcio"/></div>
-            <h3 class="card-sport__title">Calcio</h3>
-          </article>
+  <main id="app"></main>
 
-          <article class="card-sport" data-sport="Futsal">
-            <div class="card-sport__img"><img src="images/futsal.jpg" alt="Futsal"/></div>
-            <h3 class="card-sport__title">Futsal</h3>
-          </article>
+  <footer class="footer">
+    <div>© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
+  </footer>
 
-          <article class="card-sport" data-sport="Basket">
-            <div class="card-sport__img"><img src="images/basket.jpg" alt="Basket"/></div>
-            <h3 class="card-sport__title">Basket</h3>
-          </article>
-
-          <article class="card-sport" data-sport="Volley">
-            <div class="card-sport__img"><img src="images/volley.jpg" alt="Volley"/></div>
-            <h3 class="card-sport__title">Volley</h3>
-          </article>
-
-          <article class="card-sport" data-sport="Rugby">
-            <div class="card-sport__img"><img src="images/rugby.jpg" alt="Rugby"/></div>
-            <h3 class="card-sport__title">Rugby</h3>
-          </article>
-
-          <article class="card-sport" data-sport="Pallanuoto">
-            <div class="card-sport__img"><img src="images/pallanuoto.jpg" alt="Pallanuoto"/></div>
-            <h3 class="card-sport__title">Pallanuoto</h3>
-          </article>
-        </div>
-      </div>
-      <footer class="legal">© PreMatch — semplice, pulita, veloce. Privacy by design.</footer>
-    </section>
-
-    <!-- FILTRI: GENERE / REGIONE / CAMPIONATO (tendine nella stessa pagina) -->
-    <section id="view-filters" class="view">
-      <div class="container">
-        <div class="bar">
-          <button class="chip chip--ghost" data-back="home">Indietro</button>
-        </div>
-
-        <h1 class="h1" id="filters-title">Filtri</h1>
-
-        <div class="filters">
-          <div class="field">
-            <label for="sel-genere">Genere</label>
-            <select id="sel-genere">
-              <option value="" selected disabled>Scegli il genere</option>
-              <option value="Maschile">Maschile</option>
-              <option value="Femminile">Femminile</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="sel-regione">Regione</label>
-            <select id="sel-regione" disabled>
-              <option value="" selected disabled>Scegli la regione</option>
-              <option>Lazio</option>
-              <option>Lombardia</option>
-              <option>Sicilia</option>
-              <option>Piemonte</option>
-              <option>Veneto</option>
-              <option>Emilia-Romagna</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="sel-campionato">Campionato</label>
-            <select id="sel-campionato" disabled>
-              <option value="" selected disabled>Scegli il campionato</option>
-              <option>Eccellenza</option>
-              <option>Promozione</option>
-              <option>Serie C</option>
-            </select>
-          </div>
-
-          <button id="btn-cerca" class="btn" disabled>Cerca società</button>
-        </div>
-      </div>
-      <footer class="legal">© PreMatch — semplice, pulita, veloce. Privacy by design.</footer>
-    </section>
-
-    <!-- LISTA SOCIETÀ -->
-    <section id="view-societa" class="view">
-      <div class="container">
-        <div class="bar">
-          <button class="chip chip--ghost" data-back="filters">Indietro</button>
-        </div>
-
-        <h2 class="h2" id="societa-breadcrumb"></h2>
-
-        <div id="soc-list" class="soc-list"></div>
-      </div>
-      <footer class="legal">© PreMatch — semplice, pulita, veloce. Privacy by design.</footer>
-    </section>
-
-    <!-- DETTAGLIO SOCIETÀ -->
-    <section id="view-societa-detail" class="view">
-      <div class="container">
-        <div class="bar">
-          <button class="chip chip--ghost" data-back="societa">Indietro</button>
-        </div>
-
-        <div class="soc-detail">
-          <div class="badge badge--big">
-            <img id="detail-logo" src="" alt="Logo società" onerror="this.style.display='none';this.parentNode.classList.add('badge--empty');"/>
-          </div>
-          <h1 id="detail-name" class="h1"></h1>
-          <p id="detail-meta" class="lead"></p>
-
-          <div class="soc-actions">
-            <button class="btn btn--ghost">Informazioni</button>
-            <button class="btn btn--ghost">Galleria foto</button>
-            <button class="btn btn--ghost">Match in programma</button>
-            <button class="btn" id="btn-pm-detail">PreMatch</button>
-          </div>
-        </div>
-      </div>
-      <footer class="legal">© PreMatch — semplice, pulita, veloce. Privacy by design.</footer>
-    </section>
-
-  </main>
-
-  <script src="app.js" defer></script>
+  <!-- JS -->
+  <script src="./app.js?v=100"></script>
 </body>
 </html>
