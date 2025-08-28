@@ -9,97 +9,94 @@
 <body>
   <!-- HEADER -->
   <header class="topbar">
-    <!-- LOGO -->
-    <img id="brandLogo" src="images/logo-light.png" alt="PreMatch" class="logo">
-
-    <!-- NOME BRAND -->
-    <span class="brand-name">PreMatch</span>
-
-    <!-- MENU -->
-    <nav class="topnav">
-      <button class="btn-nav">Allenatore</button>
-      <button class="btn-nav">Login</button>
+    <div class="brand">
+      <img id="brandLogo" src="logo-light.png" alt="PreMatch Logo">
+      <span class="brand-name">PreMatch</span>
+    </div>
+    <nav class="menu">
+      <button>Allenatore</button>
+      <button>Login</button>
       <button class="btn-primary">Registrazione</button>
     </nav>
   </header>
 
-  <!-- VISTE -->
+  <!-- VIEWS -->
   <main id="app">
-
     <!-- HOME SPORT -->
     <section id="view-sport" class="view active">
-      <h1>Scegli lo sport</h1>
+      <h2>Scegli lo sport</h2>
       <p>Seleziona per iniziare</p>
-      <div class="sport-grid">
+      <div class="grid-sport">
         <div class="card-sport" data-sport="calcio">
           <img src="images/calcio.jpg" alt="Calcio">
-          <span>Calcio</span>
+          <p>Calcio</p>
         </div>
         <div class="card-sport" data-sport="futsal">
           <img src="images/futsal.jpg" alt="Futsal">
-          <span>Futsal</span>
+          <p>Futsal</p>
         </div>
         <div class="card-sport" data-sport="basket">
           <img src="images/basket.jpg" alt="Basket">
-          <span>Basket</span>
+          <p>Basket</p>
         </div>
         <div class="card-sport" data-sport="volley">
           <img src="images/volley.jpg" alt="Volley">
-          <span>Volley</span>
+          <p>Volley</p>
         </div>
         <div class="card-sport" data-sport="rugby">
           <img src="images/rugby.jpg" alt="Rugby">
-          <span>Rugby</span>
+          <p>Rugby</p>
         </div>
         <div class="card-sport" data-sport="pallanuoto">
           <img src="images/pallanuoto.jpg" alt="Pallanuoto">
-          <span>Pallanuoto</span>
+          <p>Pallanuoto</p>
         </div>
       </div>
     </section>
 
-    <!-- GENERE/REGIONE/CAMPIONATO -->
+    <!-- GENERE -->
     <section id="view-genere" class="view">
-      <button class="btn-back" onclick="goTo('view-sport')">← Indietro</button>
-      <h1>Seleziona il genere</h1>
-      <div class="btn-group">
-        <button class="btn-choice" data-genere="Maschile">Maschile</button>
-        <button class="btn-choice" data-genere="Femminile">Femminile</button>
+      <button class="back-btn" onclick="goBack()">← Indietro</button>
+      <h2>Seleziona il genere</h2>
+      <div class="btn-group" id="genere-options">
+        <button class="btn-option" data-genere="maschile">Maschile</button>
+        <button class="btn-option" data-genere="femminile">Femminile</button>
       </div>
 
-      <details>
+      <details id="regioni-block">
         <summary>Regione</summary>
-        <div class="scroll-x">
-          <button class="btn-choice" data-regione="Lazio">Lazio</button>
-          <button class="btn-choice" data-regione="Lombardia">Lombardia</button>
-          <button class="btn-choice" data-regione="Sicilia">Sicilia</button>
-          <button class="btn-choice" data-regione="Piemonte">Piemonte</button>
-          <button class="btn-choice" data-regione="Veneto">Veneto</button>
-          <button class="btn-choice" data-regione="Emilia-Romagna">Emilia-Romagna</button>
+        <div class="scroll-x" id="regioni-options">
+          <button class="btn-option" data-regione="Lazio">Lazio</button>
+          <button class="btn-option" data-regione="Lombardia">Lombardia</button>
+          <button class="btn-option" data-regione="Sicilia">Sicilia</button>
+          <button class="btn-option" data-regione="Piemonte">Piemonte</button>
+          <button class="btn-option" data-regione="Veneto">Veneto</button>
+          <button class="btn-option" data-regione="Emilia-Romagna">Emilia-Romagna</button>
         </div>
       </details>
 
-      <details>
+      <details id="campionati-block">
         <summary>Campionato</summary>
-        <div class="scroll-x">
-          <button class="btn-choice" data-campionato="Eccellenza">Eccellenza</button>
-          <button class="btn-choice" data-campionato="Promozione">Promozione</button>
-          <button class="btn-choice" data-campionato="Serie C">Serie C</button>
+        <div class="scroll-x" id="campionati-options">
+          <button class="btn-option" data-campionato="Serie A">Serie A</button>
+          <button class="btn-option" data-campionato="Serie B">Serie B</button>
+          <button class="btn-option" data-campionato="Serie C">Serie C</button>
         </div>
       </details>
     </section>
 
-    <!-- SOCIETÀ -->
+    <!-- SOCIETA -->
     <section id="view-societa" class="view">
-      <button class="btn-back" onclick="goTo('view-genere')">← Indietro</button>
-      <h1 id="titolo-societa"></h1>
-      <div id="lista-societa" class="societa-list"></div>
+      <button class="back-btn" onclick="goBack()">← Indietro</button>
+      <h2>Società registrate</h2>
+      <div id="lista-societa" class="societa-list">
+        <!-- Riempita da JS -->
+      </div>
     </section>
-
   </main>
 
   <!-- FOOTER -->
-  <footer>
+  <footer class="footer">
     <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
   </footer>
 
