@@ -13,7 +13,39 @@ const societa = [
   { nome: "ASD Roma Nord", sport: "calcio", genere: "femminile", regione: "Lazio", campionato: "Eccellenza", sigla: "RN" },
   { nome: "Virtus Marino", sport: "calcio", genere: "femminile", regione: "Lazio", campionato: "Eccellenza", sigla: "VM" }
 ];
+function renderSocietaDetail() {
+  const s = state.societaSelezionata;
+  const detail = document.getElementById("societa-detail");
 
+  // Fallback se per qualche motivo non c'è (es. reload)
+  if (!s) {
+    detail.innerHTML = `<p>Seleziona una società dall’elenco.</p>`;
+    return;
+  }
+
+  detail.innerHTML = `
+    <div class="club-hero">
+      <div class="club-left">
+        <div class="societa-logo-lg" aria-hidden="true">${(s.sigla || s.nome.slice(0,2)).toUpperCase()}</div>
+        <div class="club-title">
+          <h1>${s.nome}</h1>
+          <div class="meta-chips">
+            <span class="chip">${s.campionato}</span>
+            <span class="chip">${s.genere}</span>
+            <span class="chip">${s.regione}</span>
+          </div>
+        </div>
+      </div>
+      <div class="pm-badge">PM</div>
+    </div>
+
+    <div class="action-row">
+      <button class="pill-btn">Informazioni</button>
+      <button class="pill-btn">Galleria foto</button>
+      <button class="pill-btn">Match in programma</button>
+    </div>
+  `;
+}
 // NAVIGAZIONE
 function goTo(viewId) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -60,22 +92,7 @@ function renderSocietaList() {
   `).join("");
 }
 
-function renderSocietaDetail() {
-  const s = state.societaSelezionata;
-  const detail = document.getElementById("societa-detail");
-  detail.innerHTML = `
-    <div class="societa-card">
-      <div class="societa-logo">${s.sigla}</div>
-      <div>
-        <h2>${s.nome}</h2>
-        <p>${s.campionato} • ${s.genere} • ${s.regione}</p>
-      </div>
-    </div>
-    <div class="choices">
-      <button>Informazioni</button>
-      <button>Galleria foto</button>
-      <button>Match in programma</button>
-    </div>
+
   `;
 }
 
