@@ -14,26 +14,27 @@ const societa = [
   { nome: "Virtus Marino", sport: "calcio", genere: "femminile", regione: "Lazio", campionato: "Eccellenza", sigla: "VM" }
 ];
 
-// Navigazione
+// NAVIGAZIONE
 function goTo(viewId) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById(viewId).classList.add('active');
 
-  if (viewId === "view-societa-list") {
-    renderSocietaList();
-  }
-  if (viewId === "view-societa-detail") {
-    renderSocietaDetail();
-  }
+  if (viewId === "view-societa-list") renderSocietaList();
+  if (viewId === "view-societa-detail") renderSocietaDetail();
 }
 
-// Render liste
+// RENDER
 function renderFiltri() {
+  // regioni
   const regDiv = document.getElementById("regioni");
   regDiv.innerHTML = regioni.map(r => `<button data-regione="${r}">${r}</button>`).join("");
 
+  // campionati
   const campDiv = document.getElementById("campionati");
   campDiv.innerHTML = campionati.map(c => `<button data-campionato="${c}">${c}</button>`).join("");
+
+  // mantieni eventuali selezioni già fatte
+  syncSelectionsUI();
 }
 
 function renderSocietaList() {
@@ -78,18 +79,43 @@ function renderSocietaDetail() {
   `;
 }
 
-// Eventi
-document.addEventListener("DOMContentLoaded", () => {
+/* --------- UTILITY: sincronizza stato -> UI --------- */
+function syncSelectionsUI() {
+  // Genere
+  document.querySelectorAll("#genere button").forEach(b => {
+    b.classList.toggle('active', b.dataset.genere === state.genere);
+  });
+  // Regione
+  document.querySelectorAll("#regioni button").forEach(b => {
+    b.classList.toggle('active', b.dataset.regione === state.regione);
+  });
+  // Campionato
+  document.querySelectorAll("#campionati button").forEach(b => {
+    b.classList.toggle('active', b.dataset.campionato === state.campionato);
+  });
   // Sport
+  document.querySelectorAll(".card-sport").forEach(c => {
+    c.classList.toggle('active', c.dataset.sport === state.sport);
+  });
+}
+
+/* ----------------- EVENTI ----------------- */
+document.addEventListener("DOMContentLoaded", () => {
+  // SPORT: selezione + highlight
   document.querySelectorAll(".card-sport").forEach(c => {
     c.addEventListener("click", () => {
       state.sport = c.dataset.sport;
+
+      // accensione card selezionata
+      document.querySelectorAll(".card-sport").forEach(x => x.classList.remove("active"));
+      c.classList.add("active");
+
       renderFiltri();
       goTo("view-filtri");
     });
   });
 
-  // Generi
+  // GENERE
   document.getElementById("genere").addEventListener("click", e => {
     if (e.target.dataset.genere) {
       state.genere = e.target.dataset.genere;
@@ -98,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Regioni
+  // REGIONI
   document.getElementById("regioni").addEventListener("click", e => {
     if (e.target.dataset.regione) {
       state.regione = e.target.dataset.regione;
@@ -107,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Campionati
+  // CAMPIONATI (dopo click accende e va all’elenco)
   document.getElementById("campionati").addEventListener("click", e => {
     if (e.target.dataset.campionato) {
       state.campionato = e.target.dataset.campionato;
@@ -117,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Elenco società → dettaglio
+  // ELENCO → DETTAGLIO
   document.querySelector(".societa-container").addEventListener("click", e => {
     const nome = e.target.dataset.societa;
     if (nome) {
@@ -126,10 +152,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Pulsanti indietro
+  // INDIETRO
   document.querySelectorAll(".back-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       goTo(btn.dataset.go);
+      // quando torniamo indietro manteniamo l’accensione coerente
+      syncSelectionsUI();
     });
   });
 });
