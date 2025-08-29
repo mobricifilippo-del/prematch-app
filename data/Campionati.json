@@ -1,0 +1,22 @@
+{
+  "calcio": {
+    "maschile": {
+      "Lazio": ["Eccellenza", "Promozione", "Prima Categoria"],
+      "Lombardia": ["Eccellenza", "Promozione"],
+      "Sicilia": ["Eccellenza"],
+      "Piemonte": ["Eccellenza"]
+    },
+    "femminile": {
+      "Lazio": ["Eccellenza", "Serie C"],
+      "Lombardia": ["Serie C"]
+    }
+  },
+  "futsal": {
+    "maschile": {
+      "Lazio": ["Serie A2", "Serie B"]
+    },
+    "femminile": {
+      "Lazio": ["Serie A", "Serie B"]
+    }
+  }
+}
