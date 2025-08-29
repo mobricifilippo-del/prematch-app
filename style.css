@@ -5,6 +5,7 @@ body {
   color: #eee;
 }
 
+/* NAVBAR */
 header.navbar {
   display: flex;
   justify-content: space-between;
@@ -41,15 +42,14 @@ nav .btn-primary {
   color: #fff;
 }
 
+/* VISTE */
 .view {
   display: none;
   padding: 20px;
 }
+.view.active { display: block; }
 
-.view.active {
-  display: block;
-}
-
+/* HOME – griglia sport */
 .grid-sport {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -63,12 +63,11 @@ nav .btn-primary {
   overflow: hidden;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  border: 2px solid transparent;
 }
 
-.card-sport:hover {
-  transform: scale(1.03);
-}
+.card-sport:hover { transform: scale(1.03); }
 
 .card-sport img {
   width: 100%;
@@ -82,6 +81,13 @@ nav .btn-primary {
   color: #4caf50;
 }
 
+/* >>> ACCENSIONE CARD SPORT */
+.card-sport.active {
+  border-color: #00c853;
+  box-shadow: 0 0 0 3px rgba(0,200,83,.25);
+}
+
+/* FILTRI */
 .choices {
   display: flex;
   flex-wrap: wrap;
@@ -101,11 +107,14 @@ nav .btn-primary {
   background: #333;
   color: #eee;
   cursor: pointer;
+  transition: background .15s ease, color .15s ease, box-shadow .15s ease;
 }
 
+/* >>> ACCENSIONE BOTTONI FILTRI */
 .choices button.active {
   background: #00c853;
-  color: #fff;
+  color: #000;
+  box-shadow: 0 0 0 3px rgba(0,200,83,.25);
 }
 
 .back-btn {
@@ -117,6 +126,7 @@ nav .btn-primary {
   margin-bottom: 15px;
 }
 
+/* ELENCO & DETTAGLIO SOCIETA */
 .societa-card {
   background: #1e1e1e;
   border-radius: 12px;
