@@ -1,200 +1,234 @@
-/* ==========================
-   Stato di navigazione
-========================== */
+// ------------------------------
+// Stato globale
+// ------------------------------
 const state = {
   sport: null,
   genere: null,
   regione: null,
   campionato: null,
-  history: ["view-sport"]
+  societaSelezionata: null,
 };
 
-/* Piccolo DB demo per le società */
-const DB = [
+// Piccolo helper per cambio vista
+function goTo(id, push = true) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('is-active'));
+  document.getElementById(id).classList.add('is-active');
+  if (push) history.pushState({ view: id }, '', location.pathname + '#' + id);
+}
+
+// Router indietro
+window.addEventListener('popstate', (e) => {
+  const id = (e.state && e.state.view) || 'view-home';
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('is-active'));
+  document.getElementById(id).classList.add('is-active');
+});
+
+// Header: logo sempre Home
+document.getElementById('go-home').addEventListener('click', (e) => {
+  e.preventDefault();
+  resetFiltri();
+  goTo('view-home');
+});
+
+// Back
+document.querySelectorAll('[data-back]').forEach(btn => {
+  btn.addEventListener('click', () => history.back());
+});
+
+// Effetto “accensione” breve
+function flashActive(el) {
+  el.classList.add('is-active');
+  setTimeout(() => el.classList.remove('is-active'), 160);
+}
+
+// ------------------------------
+// Dati minimi di esempio
+// ------------------------------
+const CAMPIONATI = {
+  Calcio: ['Eccellenza', 'Promozione', 'Juniores'],
+  Futsal: ['Serie A', 'Serie B'],
+  Basket: ['Serie C'],
+  Volley: ['Serie C'],
+  Rugby: ['Serie B'],
+  Pallanuoto: ['Serie A2']
+};
+
+const SOCIETA = [
   {
-    sport: "calcio",
-    genere: "femminile",
-    regione: "Lazio",
-    campionato: "Eccellenza",
-    societa: [
-      {
-        nome: "ASD Roma Nord",
-        meta: "Eccellenza • Femminile • Lazio",
-        logo: "images/logo-roma-nord.png" // se assente usa cerchio neutro
-      },
-      {
-        nome: "Virtus Marino",
-        meta: "Eccellenza • Femminile • Lazio",
-        logo: "images/logo-virtus-marino.png"
-      }
-    ]
+    id: 'roma-nord',
+    nome: 'ASD Roma Nord',
+    sport: 'Calcio',
+    genere: 'Femminile',
+    regione: 'Lazio',
+    campionato: 'Eccellenza',
+    logo: 'https://placehold.co/200x200/1a1f24/9ee7bf?text=PM',
+    meta: 'Eccellenza • Femminile • Lazio'
+  },
+  {
+    id: 'virtus-marino',
+    nome: 'Virtus Marino',
+    sport: 'Calcio',
+    genere: 'Femminile',
+    regione: 'Lazio',
+    campionato: 'Eccellenza',
+    logo: 'https://placehold.co/200x200/1a1f24/9ee7bf?text=VM',
+    meta: 'Eccellenza • Femminile • Lazio'
   }
 ];
 
-/* --------------------------
-   Utilità di navigazione
--------------------------- */
-const views = ["view-sport", "view-genere", "view-societa"];
+// ------------------------------
+// HOME → click Sport
+// ------------------------------
+document.querySelectorAll('.card-sport').forEach(card => {
+  card.addEventListener('click', () => {
+    flashActive(card);
+    state.sport = (card.dataset.sport || '').toLowerCase();
+    // Normalizzo la chiave per CAMPIONATI
+    const sportKey = card.querySelector('p')?.textContent.trim() || 'Calcio';
+    state.sportLabel = sportKey;
 
-function show(id) {
-  views.forEach(v => {
-    const el = document.getElementById(v);
-    if (!el) return;
-    el.classList.toggle("active", v === id);
-  });
-  const last = state.history[state.history.length - 1];
-  if (last !== id) state.history.push(id);
+    // reset filtri
+    resetFiltri(false);
+    // abilito Regione solo dopo genere
+    document.getElementById('box-regione').setAttribute('disabled','');
+    document.getElementById('box-campionato').setAttribute('disabled','');
+
+    goTo('view-filtri');
+  }, { passive: true });
+});
+
+// ------------------------------
+// FILTRI
+// ------------------------------
+const rowGenere = document.getElementById('row-genere');
+const boxRegione = document.getElementById('box-regione');
+const boxCampionato = document.getElementById('box-campionato');
+const rowCampionati = document.getElementById('row-campionati');
+const crumb = document.getElementById('filtri-breadcrumb');
+const listaSocieta = document.getElementById('lista-societa');
+
+// 1) Genere
+rowGenere.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-genere]');
+  if (!btn) return;
+  flashActive(btn);
+  state.genere = btn.dataset.genere;
+
+  // abilita regione e apri
+  boxRegione.removeAttribute('disabled');
+  boxRegione.open = true;
+
+  // chiudi campionato e lista
+  boxCampionato.setAttribute('disabled','');
+  boxCampionato.open = false;
+  listaSocieta.innerHTML = '';
+  updateCrumb();
+});
+
+// 2) Regione
+boxRegione.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-regione]');
+  if (!btn) return;
+  flashActive(btn);
+  state.regione = btn.dataset.regione;
+
+  // genera campionati in base allo sport scelto
+  const arr = CAMPIONATI[state.sportLabel] || [];
+  rowCampionati.innerHTML = arr.map(c => `<button class="chip" data-campionato="${c}">${c}</button>`).join('');
+
+  // abilita campionato e apri
+  boxCampionato.removeAttribute('disabled');
+  boxCampionato.open = true;
+  listaSocieta.innerHTML = '';
+  updateCrumb();
+});
+
+// 3) Campionato
+boxCampionato.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-campionato]');
+  if (!btn) return;
+  flashActive(btn);
+  state.campionato = btn.dataset.campionato;
+  updateCrumb();
+
+  // mostra società
+  renderSocieta();
+});
+
+// Render breadcrumb
+function updateCrumb() {
+  const parts = [];
+  if (state.sportLabel) parts.push(state.sportLabel);
+  if (state.genere) parts.push(state.genere);
+  if (state.regione) parts.push(state.regione);
+  if (state.campionato) parts.push(state.campionato);
+  crumb.textContent = parts.join(' • ');
 }
 
-function goBack() {
-  // non togliere la prima voce
-  if (state.history.length > 1) state.history.pop();
-  const prev = state.history[state.history.length - 1] || "view-sport";
-  show(prev);
-}
-
-/* --------------------------
-   Inizializzazione HOME
--------------------------- */
-function initSportCards() {
-  document.querySelectorAll(".card-sport").forEach(card => {
-    card.addEventListener("click", () => {
-      // accensione rapida
-      document.querySelectorAll(".card-sport").forEach(c => c.classList.remove("selected"));
-      card.classList.add("selected");
-
-      // set stato + vai a Genere
-      state.sport = card.dataset.sport;
-      state.genere = state.regione = state.campionato = null;
-
-      // reset selezioni nella view-genere
-      document.querySelectorAll("#genere-options .btn-option").forEach(b => b.classList.remove("selected"));
-      document.getElementById("regioni-block").open = false;
-      document.getElementById("campionati-block").open = false;
-      document.querySelectorAll("#regioni-options .btn-option, #campionati-options .btn-option")
-        .forEach(b => b.classList.remove("selected"));
-
-      setTimeout(() => show("view-genere"), 120);
-    }, { passive: true });
-  });
-}
-
-/* --------------------------
-   Scelte Genere/Regione/Campionato
--------------------------- */
-function initFilters() {
-  // Genere
-  document.querySelectorAll("#genere-options .btn-option").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll("#genere-options .btn-option").forEach(b => b.classList.remove("selected"));
-      btn.classList.add("selected");
-      state.genere = btn.dataset.genere;
-
-      // apri RegionI
-      const reg = document.getElementById("regioni-block");
-      reg.open = true;
-      reg.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, { passive: true });
-  });
-
-  // Regione
-  document.querySelectorAll("#regioni-options .btn-option").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll("#regioni-options .btn-option").forEach(b => b.classList.remove("selected"));
-      btn.classList.add("selected");
-      state.regione = btn.dataset.regione;
-
-      // apri Campionati
-      const camp = document.getElementById("campionati-block");
-      camp.open = true;
-      camp.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, { passive: true });
-  });
-
-  // Campionato -> genera elenco società e vai alla pagina società
-  document.querySelectorAll("#campionati-options .btn-option").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll("#campionati-options .btn-option").forEach(b => b.classList.remove("selected"));
-      btn.classList.add("selected");
-      state.campionato = btn.dataset.campionato;
-
-      renderSocieta();
-      show("view-societa");
-    }, { passive: true });
-  });
-}
-
-/* --------------------------
-   Render elenco società
--------------------------- */
+// Render lista società
 function renderSocieta() {
-  const box = document.getElementById("lista-societa");
-  box.innerHTML = "";
-
-  // semplice filtro dal mini DB
-  const match = DB.find(
-    r =>
-      r.sport === state.sport &&
-      r.genere === state.genere &&
-      r.regione === state.regione &&
-      r.campionato === state.campionato
+  const res = SOCIETA.filter(s =>
+    s.sport.toLowerCase() === state.sportLabel?.toLowerCase() &&
+    (!state.genere || s.genere === state.genere) &&
+    (!state.regione || s.regione === state.regione) &&
+    (!state.campionato || s.campionato === state.campionato)
   );
 
-  const list = match?.societa ?? [];
-
-  if (!list.length) {
-    const empty = document.createElement("p");
-    empty.textContent = "Nessuna società disponibile per questi filtri.";
-    box.appendChild(empty);
+  if (!res.length) {
+    listaSocieta.innerHTML = `<p class="meta">Nessuna società trovata per i filtri selezionati.</p>`;
     return;
   }
 
-  list.forEach(s => {
-    const card = document.createElement("div");
-    card.className = "societa-card";
-
-    const left = document.createElement("div");
-    left.className = "societa-left";
-
-    const logo = document.createElement("div");
-    logo.className = "logo-circle";
-    if (s.logo) logo.style.backgroundImage = `url('${s.logo}')`;
-
-    const txt = document.createElement("div");
-    txt.className = "societa-txt";
-    txt.innerHTML = `<div class="name">${s.nome}</div><div class="meta">${s.meta}</div>`;
-
-    left.appendChild(logo);
-    left.appendChild(txt);
-
-    const right = document.createElement("div");
-    right.style.textAlign = "center";
-    const pm = document.createElement("div");
-    pm.className = "badge-pm";
-    pm.textContent = "PM";
-    const link = document.createElement("a");
-    link.href = "#";
-    link.className = "badge-link";
-    link.textContent = "PreMatch";
-
-    right.appendChild(pm);
-    right.appendChild(link);
-
-    card.appendChild(left);
-    card.appendChild(right);
-
-    box.appendChild(card);
-  });
+  listaSocieta.innerHTML = res.map(s => `
+    <a class="card-club" href="#" data-club="${s.id}">
+      <div class="club-left">
+        <img class="club-logo-sm" src="${s.logo}" alt="${s.nome}" />
+        <div>
+          <div class="club-name">${s.nome}</div>
+          <div class="meta">${s.meta}</div>
+        </div>
+      </div>
+      <div class="badge">PM</div>
+    </a>
+  `).join('');
 }
 
-/* --------------------------
-   Avvio
--------------------------- */
-document.addEventListener("DOMContentLoaded", () => {
-  initSportCards();
-  initFilters();
-  show("view-sport"); // assicura che parta dalla home
+// Click su società
+listaSocieta.addEventListener('click', (e) => {
+  const a = e.target.closest('[data-club]');
+  if (!a) return;
+  e.preventDefault();
+  flashActive(a);
+
+  const id = a.dataset.club;
+  const club = SOCIETA.find(x => x.id === id);
+  if (!club) return;
+
+  state.societaSelezionata = club;
+
+  document.getElementById('club-logo').src = club.logo;
+  document.getElementById('club-nome').textContent = club.nome;
+  document.getElementById('club-meta').textContent = club.meta;
+
+  goTo('view-societa');
 });
 
-/* esponi back sul global per i bottoni inline */
-window.goBack = goBack;
+// ------------------------------
+// Utils
+// ------------------------------
+function resetFiltri(resetSportAlso = true) {
+  if (resetSportAlso) {
+    state.sport = null; state.sportLabel = null;
+  }
+  state.genere = null; state.regione = null; state.campionato = null;
+  crumb.textContent = '';
+  listaSocieta.innerHTML = '';
+  // chiudi/azzera box
+  boxRegione.open = false; boxCampionato.open = false;
+}
+
+// Logo white fallback se qualcosa non carica
+const brandLogo = document.getElementById('brandLogo');
+brandLogo.addEventListener('error', () => {
+  brandLogo.style.background = '#ffffff';
+});
