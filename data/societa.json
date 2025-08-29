@@ -1,0 +1,29 @@
+[
+  {
+    "id": "roma-nord",
+    "nome": "ASD Roma Nord",
+    "sport": "calcio",
+    "genere": "femminile",
+    "regione": "Lazio",
+    "campionato": "Eccellenza",
+    "logo": "images/roma-nord.png"
+  },
+  {
+    "id": "virtus-marino",
+    "nome": "Virtus Marino",
+    "sport": "calcio",
+    "genere": "femminile",
+    "regione": "Lazio",
+    "campionato": "Eccellenza",
+    "logo": "images/virtus-marino.png"
+  },
+  {
+    "id": "laus-futsal",
+    "nome": "Laus Futsal",
+    "sport": "futsal",
+    "genere": "maschile",
+    "regione": "Lazio",
+    "campionato": "Serie B",
+    "logo": "images/futsal.jpg"
+  }
+]
