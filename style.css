@@ -1,257 +1,143 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #121212;
-  color: #eee;
+:root {
+  --bg:#0f1216;
+  --card:#171b21;
+  --muted:#8a94a6;
+  --text:#eaf0ff;
+  --accent:#41d27b;
+  --accent-strong:#21c063;
+  --border:#252b35;
 }
 
-/* NAVBAR */
-header.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #000;
-  padding: 10px 15px;
+* { box-sizing:border-box; }
+html, body {
+  margin:0; padding:0;
+  background:var(--bg); color:var(--text);
+  font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: bold;
-  color: #0f0;
+/* ----- TOPBAR ----- */
+.topbar {
+  position:sticky; top:0; z-index:10;
+  background:linear-gradient(180deg, rgba(15,18,22,.95), rgba(15,18,22,.7));
+  backdrop-filter: blur(6px);
+  border-bottom:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+  padding:0 .8rem;
+}
+.brand { display:flex; align-items:center; gap:.6rem; font-weight:800; }
+.brand img { width:28px; height:28px; border-radius:6px; border:1px solid var(--border); }
+.brand span { color:var(--accent); }
+
+/* ----- LOGIN/REGISTER LINKS ----- */
+.auth-links { display:flex; gap:1rem; }
+.auth-links a {
+  text-decoration:none;
+  font-weight:600;
+  color:var(--text);
+  font-size:.95rem;
+}
+.auth-links a.highlight {
+  color:var(--accent);
 }
 
-.brand img {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+/* ----- FOOTER ----- */
+.footer {
+  padding:1.2rem;
+  border-top:1px solid var(--border);
+  color:var(--muted);
+  font-size:.9rem;
+  text-align:center;
 }
 
-nav button {
-  margin-left: 6px;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 12px;
-  background: #222;
-  color: #eee;
-}
+/* ----- CONTAINER ----- */
+.container { max-width:1000px; margin:0 auto; padding:1.2rem; }
+.h1 { font-size:1.9rem; font-weight:800; margin:.6rem 0 0; }
+.sub { color:var(--muted); margin:.2rem 0 1.4rem; }
 
-nav .btn-primary {
-  background: #00c853;
-  color: #fff;
-}
-
-/* VISTE */
-.view {
-  display: none;
-  padding: 20px;
-}
-.view.active { display: block; }
-
-/* HOME – griglia sport */
+/* ----- GRID SPORT ----- */
 .grid-sport {
-  display: grid;
+  display:grid; gap:1rem;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-top: 20px;
+}
+@media(min-width:900px) {
+  .grid-sport { grid-template-columns: repeat(3,1fr); }
 }
 
 .card-sport {
-  background: #1e1e1e;
-  border-radius: 12px;
-  overflow: hidden;
-  text-align: center;
-  cursor: pointer;
-  transition: transform .2s, box-shadow .2s, border-color .2s;
-  border: 2px solid transparent;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+  cursor:pointer;
+  transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
 }
-
-.card-sport:hover { transform: scale(1.03); }
-
+.card-sport:hover {
+  transform: translateY(-2px);
+  border-color:#2f3745;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
 .card-sport img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
+  width:100%; height:140px; object-fit:cover; display:block;
+  background:#0b0f14;
+}
+.card-sport .title {
+  padding:.9rem 1rem;
+  font-weight:700;
+  color:var(--accent);
+  text-align:center;
+}
+.card-sport.selected {
+  outline:2px solid var(--accent);
+  outline-offset:2px;
 }
 
-.card-sport p {
-  margin: 10px;
-  font-weight: bold;
-  color: #4caf50;
+/* ----- CHIP BUTTONS ----- */
+.chips { display:flex; flex-wrap:wrap; gap:.6rem; margin:.5rem 0 1.2rem; }
+.chip {
+  padding:.5rem .8rem;
+  border:1px solid var(--border);
+  border-radius:999px;
+  cursor:pointer;
+  background:#12161c;
+  color:var(--text);
+  font-weight:600;
+  transition: all .15s ease;
+}
+.chip:hover { border-color:#30394a; }
+.chip.active {
+  border-color:var(--accent);
+  color:var(--accent);
+  box-shadow: 0 0 0 2px rgba(65,210,123,.15) inset;
 }
 
-/* >>> ACCENSIONE CARD SPORT */
-.card-sport.active {
-  border-color: #00c853;
-  box-shadow: 0 0 0 3px rgba(0,200,83,.25);
+/* ----- PANEL ----- */
+.panel {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:1rem;
 }
 
-/* FILTRI */
-.choices {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 10px 0;
+/* ----- BUTTONS ----- */
+.actions { display:flex; gap:.6rem; margin:1rem 0; }
+.btn {
+  border:1px solid var(--border);
+  background:#141922;
+  color:var(--text);
+  padding:.65rem 1rem;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:700;
+  transition: all .15s ease;
 }
+.btn.primary {
+  border-color:transparent;
+  background:var(--accent);
+  color:#0b1115;
+}
+.btn.primary:hover { background:var(--accent-strong); }
+.btn:disabled { opacity:.5; cursor:not-allowed; }
 
-.scroll-x {
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-.choices button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 20px;
-  background: #333;
-  color: #eee;
-  cursor: pointer;
-  transition: background .15s ease, color .15s ease, box-shadow .15s ease;
-}
-
-/* >>> ACCENSIONE BOTTONI FILTRI */
-.choices button.active {
-  background: #00c853;
-  color: #000;
-  box-shadow: 0 0 0 3px rgba(0,200,83,.25);
-}
-
-.back-btn {
-  background: #333;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 10px;
-  color: #eee;
-  margin-bottom: 15px;
-}
-
-/* ELENCO & DETTAGLIO SOCIETA */
-.societa-card {
-  background: #1e1e1e;
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.club-hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 20px 0 24px;
-}
-.societa-logo {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: #00c853;
-  color: #000;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 0.9em;
-  color: #aaa;
-}
-/* ===== SOCIETA' (DETTAGLIO) ===== */
-
-
-.club-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  min-width: 0; /* per truncation titolo */
-}
-
-.societa-logo-lg {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: linear-gradient(135deg,#00c853,#4caf50);
-  color: #000;
-  font-weight: 800;
-  display: grid;
-  place-items: center;
-  flex: 0 0 72px;
-  box-shadow: 0 2px 10px rgba(0, 200, 83, .25);
-}
-
-.club-title {
-  min-width: 0;
-}
-.club-title h1 {
-  font-size: 32px;
-  line-height: 1.05;
-  margin: 0;
-  color: #fff;
-  word-break: break-word;
-}
-.meta-chips {
-  margin-top: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.meta-chips .chip {
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: #1f1f1f;
-  color: #cfd8dc;
-  font-size: 13px;
-  border: 1px solid #2a2a2a;
-}
-
-.pm-badge {
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  background: #00c853;
-  color: #000;
-  display: grid;
-  place-items: center;
-  font-weight: 900;
-  box-shadow: 0 2px 12px rgba(0,200,83,.35);
-  flex: 0 0 76px;
-}
-
-.action-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 14px;
-}
-.pill-btn {
-  border: none;
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: #262626;
-  color: #eaeaea;
-  font-weight: 600;
-}
-.pill-btn:hover { background:#2f2f2f; }
-/* Correzione layout pagina società */
-#societa-detail .card,
-#societa-detail .section {
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-  padding: 0 !important;
-}
-
-.club-hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 20px 0 24px;
-}
-/* utility per nascondere sezioni */
-.hidden { display: none !important; }
+/* ----- HIDDEN ----- */
+.hidden { display:none; }
