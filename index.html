@@ -1,74 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PreMatch</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- Header fisso con logo bianco -->
-  <header class="topbar">
-    <div class="brand" id="go-home">
-      <img id="brandLogo" src="logo-light.png" alt="PreMatch" />
+  <header>
+    <div class="brand">
+      <img src="logo-light.png" alt="PreMatch" id="brandLogo">
       <span>PreMatch</span>
     </div>
-    <nav class="actions">
-      <button class="chip ghost">Allenatore</button>
-      <button class="chip ghost">Login</button>
-      <button class="chip primary">Registrazione</button>
+    <nav>
+      <button>Allenatore</button>
+      <button>Login</button>
+      <button class="btn-registrazione">Registrazione</button>
     </nav>
   </header>
 
   <main id="app">
-
-    <!-- HOME (griglia sport) -->
-    <section id="view-home" class="view is-active">
-      <h1>Scegli lo sport</h1>
-      <p class="subtitle">Seleziona per iniziare</p>
-
-      <div class="grid-sport" id="grid-sport">
-        <div class="card-sport" data-sport="calcio">
-          <img src="images/calcio.jpg" alt="Calcio" />
-          <p>Calcio</p>
-        </div>
-        <div class="card-sport" data-sport="futsal">
-          <img src="images/futsal.jpg" alt="Futsal" />
-          <p>Futsal</p>
-        </div>
-        <div class="card-sport" data-sport="basket">
-          <img src="images/basket.jpg" alt="Basket" />
-          <p>Basket</p>
-        </div>
-        <div class="card-sport" data-sport="volley">
-          <img src="images/volley.jpg" alt="Volley" />
-          <p>Volley</p>
-        </div>
-        <div class="card-sport" data-sport="rugby">
-          <img src="images/rugby.jpg" alt="Rugby" />
-          <p>Rugby</p>
-        </div>
-        <div class="card-sport" data-sport="pallanuoto">
-          <img src="images/pallanuoto.jpg" alt="Pallanuoto" />
-          <p>Pallanuoto</p>
+    <!-- HOME -->
+    <div id="view-home" class="view">
+      <div class="page">
+        <h1>Scegli lo sport</h1>
+        <p>Seleziona per iniziare</p>
+        <div class="sport-grid">
+          <div class="card-sport" data-sport="calcio">
+            <img src="images/calcio.jpg" alt="Calcio"><p>Calcio</p>
+          </div>
+          <div class="card-sport" data-sport="futsal">
+            <img src="images/futsal.jpg" alt="Futsal"><p>Futsal</p>
+          </div>
+          <div class="card-sport" data-sport="basket">
+            <img src="images/basket.jpg" alt="Basket"><p>Basket</p>
+          </div>
+          <div class="card-sport" data-sport="volley">
+            <img src="images/volley.jpg" alt="Volley"><p>Volley</p>
+          </div>
+          <div class="card-sport" data-sport="rugby">
+            <img src="images/rugby.jpg" alt="Rugby"><p>Rugby</p>
+          </div>
+          <div class="card-sport" data-sport="pallanuoto">
+            <img src="images/pallanuoto.jpg" alt="Pallanuoto"><p>Pallanuoto</p>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- FILTRI (genere → regione → campionato) -->
-    <section id="view-filtri" class="view">
-      <button class="back" data-back>&larr; Indietro</button>
-      <h1>Seleziona il genere</h1>
+    <!-- GENERE / REGIONE / CAMPIONATO -->
+    <div id="view-filtri" class="view hidden">
+      <div class="page">
+        <button class="btn-back">← Indietro</button>
+        <h1>Seleziona il genere</h1>
+        <div class="chips">
+          <button class="chip" data-genere="Maschile">Maschile</button>
+          <button class="chip" data-genere="Femminile">Femminile</button>
+        </div>
 
-      <div class="pill-row" id="row-genere">
-        <button class="chip" data-genere="Maschile">Maschile</button>
-        <button class="chip" data-genere="Femminile">Femminile</button>
-      </div>
-
-      <details id="box-regione" class="box" disabled>
-        <summary>Regione</summary>
-        <div class="pill-row">
+        <h2>Regione</h2>
+        <div class="chips scroll-x">
           <button class="chip" data-regione="Lazio">Lazio</button>
           <button class="chip" data-regione="Lombardia">Lombardia</button>
           <button class="chip" data-regione="Sicilia">Sicilia</button>
@@ -76,41 +67,36 @@
           <button class="chip" data-regione="Veneto">Veneto</button>
           <button class="chip" data-regione="Emilia-Romagna">Emilia-Romagna</button>
         </div>
-      </details>
 
-      <details id="box-campionato" class="box" disabled>
-        <summary>Campionato</summary>
-        <div class="pill-row" id="row-campionati"><!-- riempito via JS --></div>
-      </details>
-
-      <h2 id="filtri-breadcrumb" class="crumb"></h2>
-      <div id="lista-societa" class="list-societa"><!-- riempito via JS --></div>
-    </section>
-
-    <!-- SOCIETA' -->
-    <section id="view-societa" class="view">
-      <button class="back" data-back>&larr; Indietro</button>
-
-      <div class="club-header">
-        <img class="club-logo" id="club-logo" src="" alt="Logo società" />
-        <div class="club-names">
-          <h1 id="club-nome">Società</h1>
-          <p class="meta" id="club-meta"></p>
+        <h2>Campionato</h2>
+        <div class="chips scroll-x">
+          <button class="chip" data-campionato="Eccellenza">Eccellenza</button>
+          <button class="chip" data-campionato="Promozione">Promozione</button>
+          <button class="chip" data-campionato="Juniores">Juniores</button>
         </div>
-        <div class="badge">PM</div>
       </div>
+    </div>
 
-      <div class="cta-row">
-        <button class="chip ghost">Informazioni</button>
-        <button class="chip ghost">Galleria foto</button>
-        <button class="chip ghost">Match in programma</button>
+    <!-- LISTA SOCIETÀ -->
+    <div id="view-societa-list" class="view hidden">
+      <div class="page">
+        <button class="btn-back">← Indietro</button>
+        <h1 id="titolo-elenco"></h1>
+        <div class="societa-container"></div>
       </div>
-    </section>
+    </div>
 
+    <!-- DETTAGLIO SOCIETÀ -->
+    <div id="view-societa-detail" class="view hidden">
+      <div class="page">
+        <button class="btn-back">← Indietro</button>
+        <div id="societa-detail"></div>
+      </div>
+    </div>
   </main>
 
-  <footer class="site-foot">
-    © PreMatch — semplice, pulita, veloce. Privacy by design.
+  <footer>
+    <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
   </footer>
 
   <script src="app.js"></script>
