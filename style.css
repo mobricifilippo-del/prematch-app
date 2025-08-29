@@ -253,3 +253,5 @@ footer {
   gap: 16px;
   padding: 20px 0 24px;
 }
+/* utility per nascondere sezioni */
+.hidden { display: none !important; }
