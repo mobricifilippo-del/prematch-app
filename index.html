@@ -1,87 +1,77 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Favicons -->
+  <link rel="icon" href="./images/logo-icon.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="./images/logo-icon.png" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./style.css?v=9" />
 </head>
 <body>
-  <header class="navbar">
+  <!-- HEADER -->
+  <header class="topbar">
     <div class="brand">
-      <img id="brandLogo" src="images/logo-light.png" alt="PreMatch">
+      <img id="brandLogo" src="./images/logo-light.png" alt="PreMatch" />
       <span>PreMatch</span>
     </div>
-    <nav>
-      <button>Allenatore</button>
-      <button>Login</button>
-      <button class="btn-primary">Registrazione</button>
+    <nav class="auth-links">
+      <a href="#" id="loginBtn">Login</a>
+      <a href="#" id="registerBtn" class="highlight">Registrati</a>
     </nav>
   </header>
 
-  <!-- HOME -->
-  <div id="view-home" class="view active">
-    <h1>Scegli lo sport</h1>
-    <p>Seleziona per iniziare</p>
-    <div class="grid-sport">
-      <div class="card-sport" data-sport="calcio">
-        <img src="images/calcio.jpg" alt="Calcio">
-        <p>Calcio</p>
+  <!-- HOME SPORT -->
+  <main id="app">
+    <section id="home">
+      <div class="container">
+        <h1 class="h1">Scegli lo sport</h1>
+        <p class="sub">Seleziona per iniziare il percorso</p>
+        <div class="grid-sport" id="sportGrid">
+          <div class="card-sport" data-sport="calcio">
+            <img src="./images/calcio.jpg" alt="Calcio" />
+            <div class="title">Calcio</div>
+          </div>
+          <div class="card-sport" data-sport="futsal">
+            <img src="./images/futsal.jpg" alt="Futsal" />
+            <div class="title">Futsal</div>
+          </div>
+          <div class="card-sport" data-sport="basket">
+            <img src="./images/basket.jpg" alt="Basket" />
+            <div class="title">Basket</div>
+          </div>
+          <div class="card-sport" data-sport="volley">
+            <img src="./images/volley.jpg" alt="Volley" />
+            <div class="title">Volley</div>
+          </div>
+          <div class="card-sport" data-sport="rugby">
+            <img src="./images/rugby.jpg" alt="Rugby" />
+            <div class="title">Rugby</div>
+          </div>
+          <div class="card-sport" data-sport="pallanuoto">
+            <img src="./images/pallanuoto.jpg" alt="Pallanuoto" />
+            <div class="title">Pallanuoto</div>
+          </div>
+        </div>
       </div>
-      <div class="card-sport" data-sport="futsal">
-        <img src="images/futsal.jpg" alt="Futsal">
-        <p>Futsal</p>
-      </div>
-      <div class="card-sport" data-sport="basket">
-        <img src="images/basket.jpg" alt="Basket">
-        <p>Basket</p>
-      </div>
-      <div class="card-sport" data-sport="volley">
-        <img src="images/volley.jpg" alt="Volley">
-        <p>Volley</p>
-      </div>
-      <div class="card-sport" data-sport="rugby">
-        <img src="images/rugby.jpg" alt="Rugby">
-        <p>Rugby</p>
-      </div>
-      <div class="card-sport" data-sport="pallanuoto">
-        <img src="images/pallanuoto.jpg" alt="Pallanuoto">
-        <p>Pallanuoto</p>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- FILTRI -->
-  <div id="view-filtri" class="view">
-    <button class="back-btn" data-go="view-home">← Indietro</button>
-    <h2>Seleziona il genere</h2>
-    <div class="choices" id="genere">
-      <button data-genere="maschile">Maschile</button>
-      <button data-genere="femminile">Femminile</button>
-    </div>
-    <h3>Regione</h3>
-    <div class="choices scroll-x" id="regioni"></div>
-    <h3>Campionato</h3>
-    <div class="choices scroll-x" id="campionati"></div>
-  </div>
+    <!-- SEZIONI SUCCESSIVE -->
+    <section id="filtri" class="hidden"></section>
+    <section id="societa-list" class="hidden"></section>
+    <section id="societa-detail" class="hidden"></section>
+  </main>
 
-  <!-- ELENCO SOCIETA -->
-  <div id="view-societa-list" class="view">
-    <button class="back-btn" data-go="view-filtri">← Indietro</button>
-    <h2 id="titolo-elenco"></h2>
-    <div class="societa-container"></div>
-  </div>
-
-  <!-- DETTAGLIO SOCIETA -->
-  <div id="view-societa-detail" class="view">
-    <button class="back-btn" data-go="view-societa-list">← Indietro</button>
-    <div id="societa-detail"></div>
-  </div>
-
-  <footer>
-    <p>© PreMatch — semplice, pulita, veloce. Privacy by design.</p>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div>© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
   </footer>
 
-  <script src="app.js"></script>
+  <!-- SCRIPT -->
+  <script src="./app.js?v=9"></script>
 </body>
 </html>
