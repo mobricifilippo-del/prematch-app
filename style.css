@@ -83,3 +83,22 @@ h2{font-size:1.2rem;margin:1.25rem 0 .5rem}
   .grid-sport{grid-template-columns:repeat(3,minmax(0,1fr))}
   .card-sport img{height:200px}
 }
+/* Mostra/nascondi step */
+.hidden { display: none !important; }
+
+/* Badge PM perfettamente tondo */
+.badge-pm {
+  width: 78px;            /* puoi regolare 64–84 */
+  aspect-ratio: 1 / 1;    /* garantisce quadrato -> bordo tondo perfetto */
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  box-shadow: 0 0 0 6px rgba(80, 200, 120, 0.15); /* alone esterno soft (opzionale) */
+}
+
+/* Se il badge è dentro un wrapper, evita stiramenti */
+.badge-pm img,
+.badge-pm span {
+  user-select: none;
+}
