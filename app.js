@@ -440,3 +440,8 @@ function toast(text){
 
 /* ---------- Avvio ---------- */
 pageHome();
+// Header: azione "Allenatore"
+document.getElementById("coachBtn")?.addEventListener("click", (e) => {
+  e.preventDefault();
+  openCoachAccess();
+}, { passive: true });
