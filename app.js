@@ -6,133 +6,130 @@ const state = {
   societaSelezionata: null
 };
 
-// MOCK DATABASE
-const dbSocieta = [
-  { nome: "ASD Roma Nord", sigla: "RN", sport: "calcio", genere: "Femminile", regione: "Lazio", campionato: "Eccellenza" },
-  { nome: "Virtus Marino", sigla: "VM", sport: "calcio", genere: "Femminile", regione: "Lazio", campionato: "Eccellenza" },
-  { nome: "Milano Basket", sigla: "MB", sport: "basket", genere: "Maschile", regione: "Lombardia", campionato: "Serie A" }
+// Mock data
+const regioni = ["Lazio", "Lombardia", "Sicilia", "Piemonte", "Veneto", "Emilia-Romagna"];
+const campionati = ["Eccellenza", "Promozione", "Juniores"];
+const societa = [
+  { nome: "ASD Roma Nord", sport: "calcio", genere: "femminile", regione: "Lazio", campionato: "Eccellenza", sigla: "RN" },
+  { nome: "Virtus Marino", sport: "calcio", genere: "femminile", regione: "Lazio", campionato: "Eccellenza", sigla: "VM" }
 ];
 
+// Navigazione
 function goTo(viewId) {
-  document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
-  document.getElementById(viewId).classList.remove("hidden");
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(viewId).classList.add('active');
 
-  switch (viewId) {
-    case "view-societa-list": {
-      const cont = document.querySelector("#view-societa-list .societa-container");
-      const titolo = document.getElementById("titolo-elenco");
-      if (titolo) {
-        const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
-        titolo.textContent = `${cap(state.sport)} • ${cap(state.genere)} • ${state.regione} • ${state.campionato}`;
-      }
-      renderSocietaList(cont, getSocietaFiltrate({
-        sport: state.sport,
-        genere: state.genere,
-        regione: state.regione,
-        campionato: state.campionato
-      }));
-      window.scrollTo(0,0);
-      break;
-    }
-    case "view-societa-detail": {
-      const cont = document.getElementById("societa-detail");
-      renderSocietaDetail(cont, state.societaSelezionata);
-      window.scrollTo(0,0);
-      break;
-    }
+  if (viewId === "view-societa-list") {
+    renderSocietaList();
+  }
+  if (viewId === "view-societa-detail") {
+    renderSocietaDetail();
   }
 }
 
-function getSocietaFiltrate({ sport, genere, regione, campionato }) {
-  return dbSocieta.filter(s =>
-    (!sport || s.sport === sport) &&
-    (!genere || s.genere === genere) &&
-    (!regione || s.regione === regione) &&
-    (!campionato || s.campionato === campionato)
-  ).sort((a, b) => a.nome.localeCompare(b.nome));
+// Render liste
+function renderFiltri() {
+  const regDiv = document.getElementById("regioni");
+  regDiv.innerHTML = regioni.map(r => `<button data-regione="${r}">${r}</button>`).join("");
+
+  const campDiv = document.getElementById("campionati");
+  campDiv.innerHTML = campionati.map(c => `<button data-campionato="${c}">${c}</button>`).join("");
 }
 
-function renderSocietaList(container, lista) {
-  container.innerHTML = "";
-  if (lista.length === 0) {
-    container.innerHTML = "<p>Nessuna società trovata.</p>";
-    return;
-  }
-  lista.forEach(s => {
-    const card = document.createElement("div");
-    card.className = "societa-card";
-    card.innerHTML = `
-      <div class="logo-cerchio">${s.sigla}</div>
-      <div class="societa-info">
-        <h3><a href="#" class="societa-link">${s.nome}</a></h3>
-        <p>${s.campionato} • ${s.genere} • ${s.regione}</p>
+function renderSocietaList() {
+  const cont = document.querySelector(".societa-container");
+  const titolo = document.getElementById("titolo-elenco");
+  titolo.textContent = `${state.sport} • ${state.genere} • ${state.regione} • ${state.campionato}`;
+
+  const lista = societa.filter(s =>
+    s.sport === state.sport &&
+    s.genere === state.genere &&
+    s.regione === state.regione &&
+    s.campionato === state.campionato
+  );
+
+  cont.innerHTML = lista.map(s => `
+    <div class="societa-card" data-societa="${s.nome}">
+      <div class="societa-logo">${s.sigla}</div>
+      <div>
+        <a href="#" data-societa="${s.nome}">${s.nome}</a><br>
+        <small>${s.campionato} • ${s.genere} • ${s.regione}</small>
       </div>
-      <div class="badge-pm">PM</div>
-    `;
-    card.querySelector(".societa-link").addEventListener("click", e => {
-      e.preventDefault();
-      state.societaSelezionata = s;
-      goTo("view-societa-detail");
-    });
-    container.appendChild(card);
-  });
+    </div>
+  `).join("");
 }
 
-function renderSocietaDetail(container, s) {
-  if (!s) return;
-  container.innerHTML = `
+function renderSocietaDetail() {
+  const s = state.societaSelezionata;
+  const detail = document.getElementById("societa-detail");
+  detail.innerHTML = `
     <div class="societa-card">
-      <div class="logo-cerchio">${s.sigla}</div>
-      <div class="societa-info">
+      <div class="societa-logo">${s.sigla}</div>
+      <div>
         <h2>${s.nome}</h2>
         <p>${s.campionato} • ${s.genere} • ${s.regione}</p>
       </div>
-      <div class="badge-pm">PM</div>
     </div>
-    <div class="chips">
-      <button class="chip">Informazioni</button>
-      <button class="chip">Galleria foto</button>
-      <button class="chip">Match in programma</button>
+    <div class="choices">
+      <button>Informazioni</button>
+      <button>Galleria foto</button>
+      <button>Match in programma</button>
     </div>
   `;
 }
 
-// EVENTI
-document.addEventListener("click", e => {
+// Eventi
+document.addEventListener("DOMContentLoaded", () => {
   // Sport
-  const sportCard = e.target.closest(".card-sport");
-  if (sportCard) {
-    state.sport = sportCard.dataset.sport;
-    goTo("view-filtri");
-  }
+  document.querySelectorAll(".card-sport").forEach(c => {
+    c.addEventListener("click", () => {
+      state.sport = c.dataset.sport;
+      renderFiltri();
+      goTo("view-filtri");
+    });
+  });
 
-  // Genere
-  const g = e.target.closest("[data-genere]");
-  if (g) {
-    state.genere = g.dataset.genere;
-  }
+  // Generi
+  document.getElementById("genere").addEventListener("click", e => {
+    if (e.target.dataset.genere) {
+      state.genere = e.target.dataset.genere;
+      document.querySelectorAll("#genere button").forEach(b => b.classList.remove("active"));
+      e.target.classList.add("active");
+    }
+  });
 
-  // Regione
-  const r = e.target.closest("[data-regione]");
-  if (r) {
-    state.regione = r.dataset.regione;
-  }
+  // Regioni
+  document.getElementById("regioni").addEventListener("click", e => {
+    if (e.target.dataset.regione) {
+      state.regione = e.target.dataset.regione;
+      document.querySelectorAll("#regioni button").forEach(b => b.classList.remove("active"));
+      e.target.classList.add("active");
+    }
+  });
 
-  // Campionato
-  const c = e.target.closest("[data-campionato]");
-  if (c) {
-    state.campionato = c.dataset.campionato;
-    goTo("view-societa-list");
-  }
+  // Campionati
+  document.getElementById("campionati").addEventListener("click", e => {
+    if (e.target.dataset.campionato) {
+      state.campionato = e.target.dataset.campionato;
+      document.querySelectorAll("#campionati button").forEach(b => b.classList.remove("active"));
+      e.target.classList.add("active");
+      goTo("view-societa-list");
+    }
+  });
 
-  // Back
-  if (e.target.classList.contains("btn-back")) {
-    history.back();
-  }
-});
+  // Elenco società → dettaglio
+  document.querySelector(".societa-container").addEventListener("click", e => {
+    const nome = e.target.dataset.societa;
+    if (nome) {
+      state.societaSelezionata = societa.find(s => s.nome === nome);
+      goTo("view-societa-detail");
+    }
+  });
 
-// GESTIONE BACK NATIVE
-window.addEventListener("popstate", () => {
-  // per semplicità torno sempre a home
-  goTo("view-home");
+  // Pulsanti indietro
+  document.querySelectorAll(".back-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      goTo(btn.dataset.go);
+    });
+  });
 });
