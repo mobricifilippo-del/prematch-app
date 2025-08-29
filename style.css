@@ -1,104 +1,174 @@
-:root{
-  --bg:#0f1214; --card:#171b1e; --muted:#7c8a95; --text:#e8f0f4;
-  --brand:#20c26a; --brand-d:#189553; --chip:#20262a; --ring:#2e7d4f;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f1512;
+  color: #fff;
 }
 
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial}
-img{display:block;max-width:100%}
-h1{font-size:2.4rem;margin:0 0 .25rem}
-h2{font-size:1.2rem;margin:1.25rem 0 .5rem}
-.subtitle{color:var(--muted);margin:.25rem 0 1rem}
-
-.topbar{
-  position:sticky;top:0;z-index:1000;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:.6rem .9rem;background:#0b0e10;border-bottom:1px solid #101416;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #000;
+  padding: 0.5rem 1rem;
 }
-.brand{display:flex;align-items:center;gap:.55rem;cursor:pointer}
-.brand img{width:28px;height:28px;border-radius:6px;object-fit:contain;background:transparent}
-.brand span{font-weight:700}
-.actions{display:flex;gap:.5rem}
 
-.chip{
-  background:var(--chip);border:1px solid #2b3338;color:var(--text);
-  padding:.45rem .8rem;border-radius:999px;cursor:pointer
+header .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.chip.primary{background:var(--brand);border-color:var(--brand);color:#06130b;font-weight:700}
-.chip.ghost{background:#151a1d}
-.chip.is-active{outline:3px solid var(--ring);outline-offset:2px}
 
-.view{display:none;max-width:980px;margin:0 auto;padding:1rem .9rem 2rem}
-.view.is-active{display:block}
-
-.grid-sport{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;
+header .brand img {
+  height: 32px;
 }
-.card-sport{
-  background:var(--card);border-radius:16px;overflow:hidden;border:1px solid #232a2f;
-  cursor:pointer;transition:transform .08s ease;
+
+header .brand span {
+  font-weight: bold;
+  color: #22c55e;
 }
-.card-sport:active{transform:scale(.985)}
-.card-sport img{width:100%;height:180px;object-fit:cover}
-.card-sport p{margin:0;padding:.8rem 1rem;font-weight:800;color:#7beeaa}
-.card-sport.is-active{box-shadow:0 0 0 4px var(--ring) inset;border-color:var(--ring)}
 
-.box{
-  background:#121619;border:1px solid #21282d;border-radius:14px;margin:1rem 0;overflow:hidden
+nav button {
+  margin-left: 8px;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #222;
+  color: white;
 }
-.box[disabled]{opacity:.55;pointer-events:none}
-.box>summary{
-  list-style:none;cursor:pointer;padding:1rem 1.1rem;font-weight:700;
-  border-bottom:1px solid #1a2025
+
+nav .btn-registrazione {
+  background: #22c55e;
+  color: #000;
+  font-weight: bold;
 }
-.box[open]>summary{border-bottom-color:#252d33}
-.box .pill-row{padding:.8rem 1rem 1rem}
 
-.pill-row{display:flex;flex-wrap:wrap;gap:.5rem}
-
-.crumb{color:var(--muted);min-height:1.2rem;margin-top:.5rem}
-
-.list-societa{display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem}
-.card-club{
-  display:flex;align-items:center;justify-content:space-between;
-  background:var(--card);border:1px solid #232a2f;border-radius:16px;padding:.9rem
+.view.hidden {
+  display: none;
 }
-.club-left{display:flex;align-items:center;gap:.8rem}
-.club-logo-sm{width:56px;height:56px;border-radius:50%;background:#0d1114;object-fit:cover}
-.club-name{font-weight:800}
-.meta{color:var(--muted);margin:.15rem 0 0;font-size:.95rem}
-.badge{width:78px;height:78px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:900;color:#03240f;border:6px solid #193b29}
 
-.back{margin:.2rem 0 1rem;border-radius:999px;border:1px solid #2b3338;background:#151a1d;color:var(--text);padding:.5rem .9rem}
-.back.is-active{outline:3px solid var(--ring);outline-offset:2px}
-
-.club-header{display:flex;align-items:center;gap:1rem;margin:.5rem 0 1rem}
-.club-logo{width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid #283136;background:#0d1114}
-
-.cta-row{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.6rem}
-
-.site-foot{max-width:980px;margin:2rem auto 4rem;padding:0 .9rem;color:var(--muted);font-size:.95rem}
-
-@media (min-width:900px){
-  .grid-sport{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .card-sport img{height:200px}
+.page {
+  padding: 1rem;
 }
-/* Mostra/nascondi step */
-.hidden { display: none !important; }
 
-/* Badge PM perfettamente tondo */
-.badge-pm {
-  width: 78px;            /* puoi regolare 64–84 */
-  aspect-ratio: 1 / 1;    /* garantisce quadrato -> bordo tondo perfetto */
+h1, h2 {
+  margin: 1rem 0 0.5rem;
+}
+
+.sport-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.card-sport {
+  background: #111;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: center;
+  border: 2px solid transparent;
+}
+
+.card-sport img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.card-sport p {
+  margin: 0.5rem;
+  font-weight: bold;
+  color: #22c55e;
+}
+
+.card-sport.active {
+  border: 2px solid #22c55e;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 16px;
+}
+
+.scroll-x {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.chip {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: #222;
+  color: white;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.chip.active {
+  background: #22c55e;
+  color: #000;
+  font-weight: bold;
+}
+
+.societa-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #111;
+  padding: 1rem;
+  border-radius: 12px;
+  margin: 0.5rem 0;
+}
+
+.societa-info h3 {
+  margin: 0;
+  color: #22c55e;
+}
+
+.societa-info p {
+  margin: 0.2rem 0 0;
+  font-size: 0.9rem;
+  color: #bbb;
+}
+
+/* CERCHI PERFETTI */
+.badge-pm,
+.logo-cerchio {
+  width: 64px;
+  height: 64px;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-weight: 700;
-  box-shadow: 0 0 0 6px rgba(80, 200, 120, 0.15); /* alone esterno soft (opzionale) */
+  padding: 0;
+  box-sizing: content-box;
+  flex: 0 0 auto;
 }
 
-/* Se il badge è dentro un wrapper, evita stiramenti */
-.badge-pm img,
-.badge-pm span {
-  user-select: none;
+.badge-pm {
+  background: #22c55e;
+  color: #062013;
+  font-weight: 800;
+  font-size: 18px;
+  box-shadow: inset 0 0 0 6px #122019,
+              0 0 0 2px rgba(34,197,94,.35);
+}
+
+.logo-cerchio {
+  background: #0f1512;
+  color: #9BE8B3;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+@media (max-width: 480px) {
+  .badge-pm, .logo-cerchio {
+    width: 56px;
+    height: 56px;
+    font-size: 16px;
+  }
 }
