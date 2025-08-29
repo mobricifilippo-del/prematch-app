@@ -178,3 +178,31 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+// --- NAV: Home (sport) -> Filtri ---
+const state = window.state || { sport:null, genere:null, regione:null, campionato:null };
+const secHome   = document.getElementById('home');
+const secFiltri = document.getElementById('filtri');
+
+function goToFiltri() {
+  if (!secHome || !secFiltri) return;
+  secHome.classList.add('hidden');
+  secFiltri.classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+
+// Delego il click su tutte le card sport
+document.addEventListener('click', (e) => {
+  const card = e.target.closest('.card-sport');
+  if (!card) return;
+
+  // segna lo sport scelto
+  state.sport = card.dataset.sport || null;
+
+  // effetto “acceso” sulla card selezionata
+  document.querySelectorAll('.card-sport.active')
+    .forEach(el => el.classList.remove('active'));
+  card.classList.add('active');
+
+  // vai alla pagina filtri
+  goToFiltri();
+});
