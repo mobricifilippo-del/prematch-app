@@ -121,12 +121,16 @@ function pageHome(){
 
   const grid = h("div",{class:"container grid-sport", id:"sportGrid"});
   DATA.sports.forEach(s=>{
-    const card = cardSport(s, ()=>{
-      // effetto accensione prima di navigare
-      card.classList.add("selected");
-      state.sport = s.key;
-      setTimeout(()=> pageGender(), 130);
-    });
+    function cardSport(item, onClick){
+  return h("div", {
+    class:"card-sport",
+    "data-sport": item.key,
+    onclick: onClick            // <— aggancio il tap qui
+  }, [
+    h("img",{src:item.img, alt:item.name, onerror(){this.style.display="none"}}),
+    h("div",{class:"title"}, item.name)
+  ]);
+}
     grid.appendChild(card);
   });
   app.appendChild(grid);
