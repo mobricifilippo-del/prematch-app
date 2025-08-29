@@ -8,7 +8,72 @@ const state = {
   campionato: null,
   societaSelezionata: null,
 };
+// ====== DATI ESTERNI OPZIONALI (con fallback) ======
+const datastore = { campionati: null, societa: null };
 
+// Carica i JSON se presenti; se mancano o danno errore, si va di fallback
+async function loadExternalData() {
+  try {
+    const [campRes, socRes] = await Promise.allSettled([
+      fetch('data/campionati.json', { cache: 'no-store' }),
+      fetch('data/societa.json', { cache: 'no-store' })
+    ]);
+
+    if (campRes.status === 'fulfilled' && campRes.value.ok) {
+      datastore.campionati = await campRes.value.json();
+      console.log('Campionati JSON caricati');
+    }
+
+    if (socRes.status === 'fulfilled' && socRes.value.ok) {
+      datastore.societa = await socRes.value.json();
+      console.log('Società JSON caricate');
+    }
+  } catch (e) {
+    console.warn('JSON opzionali non disponibili. Uso fallback interno.', e);
+  }
+}
+
+// Ritorna la lista campionati per (sport, genere, regione) dal JSON oppure null
+function getCampionatiFromJSON(sport, genere, regione) {
+  const j = datastore.campionati;
+  if (!j) return null;
+  if (!j[sport]) return null;
+  if (!j[sport][genere]) return null;
+  const arr = j[sport][genere][regione];
+  return Array.isArray(arr) ? arr : null;
+}
+
+// Filtra società dal JSON altrimenti null (ci penserà il fallback interno)
+function getSocietaFromJSON({ sport, genere, regione, campionato }) {
+  const arr = datastore.societa;
+  if (!arr) return null;
+  return arr.filter(s =>
+    s.sport === sport &&
+    s.genere === genere &&
+    s.regione === regione &&
+    s.campionato === campionato
+  );
+}
+
+// Wrapper di comodo: prova JSON, altrimenti usa i tuoi dati interni attuali
+// - replaceCampionatiFallback: funzione tua che restituisce array campionati fallback
+// - replaceSocietaFallback: funzione tua che restituisce array società fallback
+function chooseCampionati({ sport, genere, regione }, replaceCampionatiFallback) {
+  const fromJson = getCampionatiFromJSON(sport, genere, regione);
+  if (fromJson && fromJson.length) return fromJson;
+  return replaceCampionatiFallback({ sport, genere, regione }) || [];
+}
+
+function chooseSocieta(state, replaceSocietaFallback) {
+  const fromJson = getSocietaFromJSON(state);
+  if (fromJson && fromJson.length) return fromJson;
+  return replaceSocietaFallback(state) || [];
+}
+
+// Avvia il caricamento dei JSON opzionali senza bloccare l’app
+document.addEventListener('DOMContentLoaded', () => {
+  loadExternalData(); // non aspettiamo: se arrivano bene, altrimenti fallback
+});
 // Piccolo helper per cambio vista
 function goTo(id, push = true) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('is-active'));
