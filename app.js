@@ -445,3 +445,8 @@ document.getElementById("coachBtn")?.addEventListener("click", (e) => {
   e.preventDefault();
   openCoachAccess();
 }, { passive: true });
+// Handler per bottone Allenatore
+document.getElementById("coachBtn").addEventListener("click", () => {
+  alert("Sezione allenatore in arrivo!"); 
+  // 👆 per ora mostra solo un alert, ma qui puoi aprire una pagina o sezione dedicata
+});
