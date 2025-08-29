@@ -237,3 +237,19 @@ footer {
   font-weight: 600;
 }
 .pill-btn:hover { background:#2f2f2f; }
+/* Correzione layout pagina società */
+#societa-detail .card,
+#societa-detail .section {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.club-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0 24px;
+}
