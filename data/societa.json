@@ -1,29 +1,20 @@
 [
-  {
-    "id": "roma-nord",
-    "nome": "ASD Roma Nord",
-    "sport": "calcio",
-    "genere": "femminile",
-    "regione": "Lazio",
-    "campionato": "Eccellenza",
-    "logo": "images/roma-nord.png"
-  },
-  {
-    "id": "virtus-marino",
-    "nome": "Virtus Marino",
-    "sport": "calcio",
-    "genere": "femminile",
-    "regione": "Lazio",
-    "campionato": "Eccellenza",
-    "logo": "images/virtus-marino.png"
-  },
-  {
-    "id": "laus-futsal",
-    "nome": "Laus Futsal",
-    "sport": "futsal",
-    "genere": "maschile",
-    "regione": "Lazio",
-    "campionato": "Serie B",
-    "logo": "images/futsal.jpg"
-  }
+  { "sport": "calcio",   "genere": "femminile", "regione": "Lazio",         "campionato": "Eccellenza", "nome": "ASD Roma Nord",   "sigla": "RN" },
+  { "sport": "calcio",   "genere": "femminile", "regione": "Lazio",         "campionato": "Eccellenza", "nome": "Virtus Marino",   "sigla": "VM" },
+  { "sport": "calcio",   "genere": "femminile", "regione": "Lombardia",     "campionato": "Eccellenza", "nome": "Pro Milano",      "sigla": "PM" },
+  { "sport": "calcio",   "genere": "femminile", "regione": "Sicilia",       "campionato": "Promozione", "nome": "Siracusa Women",  "sigla": "SW" },
+  { "sport": "calcio",   "genere": "maschile",  "regione": "Lazio",         "campionato": "Juniores",   "nome": "Latina U19",      "sigla": "LU" },
+
+  { "sport": "futsal",   "genere": "femminile", "regione": "Piemonte",      "campionato": "Eccellenza", "nome": "Torino Futsal",   "sigla": "TF" },
+  { "sport": "futsal",   "genere": "maschile",  "regione": "Veneto",        "campionato": "Promozione", "nome": "Padova Five",     "sigla": "PF" },
+
+  { "sport": "basket",   "genere": "femminile", "regione": "Emilia-Romagna","campionato": "Eccellenza", "nome": "Reggio Girls",    "sigla": "RG" },
+  { "sport": "basket",   "genere": "maschile",  "regione": "Lombardia",     "campionato": "Juniores",   "nome": "Bergamo U19",     "sigla": "BU" },
+
+  { "sport": "volley",   "genere": "femminile", "regione": "Veneto",        "campionato": "Promozione", "nome": "Venezia Volley",   "sigla": "VV" },
+  { "sport": "volley",   "genere": "maschile",  "regione": "Lazio",         "campionato": "Eccellenza", "nome": "Ostia Volley",     "sigla": "OV" },
+
+  { "sport": "rugby",    "genere": "maschile",  "regione": "Lazio",         "campionato": "Eccellenza", "nome": "Rugby Tivoli",     "sigla": "RT" },
+
+  { "sport": "pallanuoto","genere": "femminile","regione": "Sicilia",       "campionato": "Eccellenza", "nome": "Catania PN",       "sigla": "CP" }
 ]
