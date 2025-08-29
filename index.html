@@ -1,73 +1,119 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PreMatch</title>
-
-  <!-- Favicons -->
-  <link rel="icon" href="./images/logo-icon.png" sizes="32x32" />
-  <link rel="apple-touch-icon" href="./images/logo-icon.png" />
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="./style.css?v=9" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- HEADER -->
-<nav class="topnav">
-  <a class="brand"><img src="images/logo-light.png" alt="PreMatch"/></a>
-  <button id="coachBtn" class="link">Allenatore</button>
-  <a class="link" href="#" id="loginLink">Login</a>
-  <a class="btn primary" href="#" id="signupLink">Registrazione</a>
-</nav>
 
-  <!-- HOME SPORT -->
-  <main id="app">
-    <section id="home">
-      <div class="container">
-        <h1 class="h1">Scegli lo sport</h1>
-        <p class="sub">Seleziona per iniziare il percorso</p>
-        <div class="grid-sport" id="sportGrid">
-          <div class="card-sport" data-sport="calcio">
-            <img src="./images/calcio.jpg" alt="Calcio" />
-            <div class="title">Calcio</div>
-          </div>
-          <div class="card-sport" data-sport="futsal">
-            <img src="./images/futsal.jpg" alt="Futsal" />
-            <div class="title">Futsal</div>
-          </div>
-          <div class="card-sport" data-sport="basket">
-            <img src="./images/basket.jpg" alt="Basket" />
-            <div class="title">Basket</div>
-          </div>
-          <div class="card-sport" data-sport="volley">
-            <img src="./images/volley.jpg" alt="Volley" />
-            <div class="title">Volley</div>
-          </div>
-          <div class="card-sport" data-sport="rugby">
-            <img src="./images/rugby.jpg" alt="Rugby" />
-            <div class="title">Rugby</div>
-          </div>
-          <div class="card-sport" data-sport="pallanuoto">
-            <img src="./images/pallanuoto.jpg" alt="Pallanuoto" />
-            <div class="title">Pallanuoto</div>
-          </div>
+  <!-- HEADER -->
+  <header class="site-header">
+    <nav class="topnav container">
+      <a class="brand" href="#" id="brandLink" aria-label="PreMatch">
+        <img id="brandLogo" src="images/logo-light.png" alt="PreMatch" />
+        <span class="brand-text">PreMatch</span>
+      </a>
+      <div class="nav-actions">
+        <button id="coachBtn" class="link" type="button">Allenatore</button>
+        <a class="link" href="#" id="loginLink">Login</a>
+        <a class="btn primary" href="#" id="signupLink">Registrazione</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <!-- HOME: griglia sport -->
+    <section id="home" aria-labelledby="homeTitle">
+      <h1 id="homeTitle">Scegli lo sport</h1>
+      <p class="subtitle">Seleziona per iniziare il percorso</p>
+
+      <div id="sportGrid" class="grid-sport">
+        <div class="card-sport" data-sport="calcio" tabindex="0" role="button" aria-label="Calcio">
+          <img src="images/calcio.jpg" alt="Calcio" loading="lazy" />
+          <p>Calcio</p>
+        </div>
+
+        <div class="card-sport" data-sport="futsal" tabindex="0" role="button" aria-label="Futsal">
+          <img src="images/futsal.jpg" alt="Futsal" loading="lazy" />
+          <p>Futsal</p>
+        </div>
+
+        <div class="card-sport" data-sport="basket" tabindex="0" role="button" aria-label="Basket">
+          <img src="images/basket.jpg" alt="Basket" loading="lazy" />
+          <p>Basket</p>
+        </div>
+
+        <div class="card-sport" data-sport="volley" tabindex="0" role="button" aria-label="Volley">
+          <img src="images/volley.jpg" alt="Volley" loading="lazy" />
+          <p>Volley</p>
+        </div>
+
+        <div class="card-sport" data-sport="rugby" tabindex="0" role="button" aria-label="Rugby">
+          <img src="images/rugby.jpg" alt="Rugby" loading="lazy" />
+          <p>Rugby</p>
+        </div>
+
+        <div class="card-sport" data-sport="pallanuoto" tabindex="0" role="button" aria-label="Pallanuoto">
+          <img src="images/pallanuoto.jpg" alt="Pallanuoto" loading="lazy" />
+          <p>Pallanuoto</p>
         </div>
       </div>
     </section>
 
-    <!-- SEZIONI SUCCESSIVE -->
-    <section id="filtri" class="hidden"></section>
-    <section id="societa-list" class="hidden"></section>
-    <section id="societa-detail" class="hidden"></section>
+    <!-- FILTRI (genere, regione, campionato) -->
+    <section id="filtri" class="hidden" aria-labelledby="filtriTitle">
+      <button class="backBtn" type="button" data-back="home">← Indietro</button>
+
+      <h2 id="filtriTitle">Seleziona il genere</h2>
+      <div class="filter-group" role="group" aria-label="Genere">
+        <button class="filter-btn" data-genere="Maschile" type="button">Maschile</button>
+        <button class="filter-btn" data-genere="Femminile" type="button">Femminile</button>
+      </div>
+
+      <h3>Regione</h3>
+      <div class="filter-group scroll-x" role="group" aria-label="Regione">
+        <button class="filter-btn" data-regione="Lazio" type="button">Lazio</button>
+        <button class="filter-btn" data-regione="Lombardia" type="button">Lombardia</button>
+        <button class="filter-btn" data-regione="Sicilia" type="button">Sicilia</button>
+        <button class="filter-btn" data-regione="Piemonte" type="button">Piemonte</button>
+        <button class="filter-btn" data-regione="Veneto" type="button">Veneto</button>
+        <button class="filter-btn" data-regione="Emilia-Romagna" type="button">Emilia-Romagna</button>
+      </div>
+
+      <h3>Campionato</h3>
+      <div class="filter-group" role="group" aria-label="Campionato">
+        <button class="filter-btn" data-campionato="Eccellenza" type="button">Eccellenza</button>
+        <button class="filter-btn" data-campionato="Promozione" type="button">Promozione</button>
+        <button class="filter-btn" data-campionato="Juniores" type="button">Juniores</button>
+      </div>
+    </section>
+
+    <!-- LISTA SOCIETÀ -->
+    <section id="societa-list" class="hidden" aria-labelledby="listTitle">
+      <button class="backBtn" type="button" data-back="filtri">← Indietro</button>
+      <h2 id="listTitle">Società registrate</h2>
+      <div id="breadcrumb" class="breadcrumb"></div>
+      <div id="societaContainer" class="list-societa"></div>
+    </section>
+
+    <!-- DETTAGLIO SOCIETÀ -->
+    <section id="societa-detail" class="hidden" aria-labelledby="detailTitle">
+      <button class="backBtn" type="button" data-back="societa-list">← Indietro</button>
+      <div id="societaDetail" class="societa-detail"></div>
+    </section>
+
   </main>
 
   <!-- FOOTER -->
-  <footer class="footer">
-    <div>© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
+  <footer class="site-footer">
+    <div class="container">
+      © PreMatch — semplice, pulita, veloce. Privacy by design.
+    </div>
   </footer>
 
-  <!-- SCRIPT -->
-  <script src="./app.js?v=9"></script>
+  <script src="app.js"></script>
 </body>
 </html>
