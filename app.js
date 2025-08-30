@@ -1,182 +1,181 @@
-/* =========================
-   PreMatch Web App - app.js
-   ========================= */
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-/* ---------- Dati demo ---------- */
-const DATA = {
-  sports: [
-    { key: "calcio", name: "Calcio", img: "./images/calcio.jpg" },
-    { key: "basket", name: "Basket", img: "./images/basket.jpg" },
-    { key: "volley", name: "Volley", img: "./images/volley.jpg" },
-  ],
-  genders: ["Maschile", "Femminile"],
-  regions: ["Lazio", "Lombardia", "Sicilia"],
-  leaguesBy: {
-    "Lazio": ["Eccellenza", "Promozione"],
-    "Lombardia": ["Serie D", "Serie C Silver"],
-    "Sicilia": ["Prima Categoria", "Promozione"],
-  },
-  clubsByLeague: {
-    "Eccellenza": ["ASD Roma Nord", "Virtus Marino"],
-    "Promozione": ["Borghesiana FC", "Atletico Ostia"],
-    "Serie D": ["Lario Basket"],
-    "Serie C Silver": ["Brixia Basket"],
-    "Prima Categoria": ["Siracusa Calcio"],
+  // Stato dell'app
+  const state = {
+    sport: null,
+    genere: null,
+    regione: null,
+    campionato: null,
+    societa: [] // popolata quando si entra in lista
+  };
+
+  // Dati demo per la lista (basta per vedere il flusso)
+  const DB = {
+    calcio: {
+      "Lazio": {
+        "Eccellenza": [
+          { id: "roma-nord", nome: "ASD Roma Nord", sigla: "RN" },
+          { id: "virtus-marino", nome: "Virtus Marino", sigla: "VM" }
+        ],
+        "Promozione": [{ id: "ostia-2000", nome: "Ostia 2000", sigla: "OS" }],
+        "Juniores": [{ id: "torpignattara", nome: "Torpignattara", sigla: "TP" }]
+      }
+    },
+    basket: {},
+    futsal: {},
+    volley: {},
+    rugby: {},
+    pallanuoto: {}
+  };
+
+  /* --------- helpers --------- */
+  function showSection(id) {
+    $$("#app .section").forEach(s => s.classList.add("hidden"));
+    $("#" + id).classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "instant" });
   }
-};
 
-/* ---------- Stato ---------- */
-const state = {
-  sport: null,
-  gender: null,
-  region: null,
-  league: null,
-  club: null,
-};
+  function setActive(containerSel, item) {
+    $$(containerSel + " .active").forEach(x => x.classList.remove("active"));
+    if (item) item.classList.add("active");
+  }
 
-/* ---------- Helpers ---------- */
-function h(tag, attrs = {}, children = []) {
-  const el = document.createElement(tag);
-  Object.entries(attrs).forEach(([k,v])=>{
-    if (k === "class") el.className = v;
-    else if (k === "onclick") el.addEventListener("click", v);
-    else el.setAttribute(k,v);
+  function breadcrumb() {
+    const parts = [state.sport, state.genere, state.regione, state.campionato]
+      .filter(Boolean)
+      .map(x => capitalize(x));
+    $("#breadcrumb").textContent = parts.join(" • ");
+  }
+
+  function capitalize(s) {
+    if (!s) return s;
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+
+  /* --------- rendering --------- */
+  function renderSocietaList() {
+    const box = $("#elencoSocieta");
+    box.innerHTML = "";
+
+    const sport = state.sport;
+    const reg = state.regione;
+    const camp = state.campionato;
+
+    const arr =
+      DB[sport] &&
+      DB[sport][reg] &&
+      DB[sport][reg][camp]
+        ? DB[sport][reg][camp].slice().sort((a, b) => a.nome.localeCompare(b.nome))
+        : [];
+
+    state.societa = arr;
+
+    if (!arr.length) {
+      box.innerHTML = `<div class="soc-sub">Nessuna società trovata.</div>`;
+      return;
+    }
+
+    arr.forEach(s => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "soc-card";
+      card.setAttribute("data-societa-id", s.id);
+      card.innerHTML = `
+        <div class="badge">${s.sigla || s.nome.substring(0,2).toUpperCase()}</div>
+        <div class="soc-info">
+          <p class="soc-title">${s.nome}</p>
+          <p class="soc-sub">${state.campionato} • ${state.genere} • ${state.regione}</p>
+        </div>
+      `;
+      box.appendChild(card);
+    });
+  }
+
+  function renderSocietaDetail(id) {
+    const s = state.societa.find(x => x.id === id);
+    const box = $("#schedaSocieta");
+    if (!s) {
+      box.innerHTML = `<p>Società non trovata.</p>`;
+      return;
+    }
+    box.innerHTML = `
+      <div class="profile-head">
+        <div class="profile-badge">${s.sigla || s.nome.substring(0,2).toUpperCase()}</div>
+        <div>
+          <h2 class="profile-title">${s.nome}</h2>
+          <p class="profile-meta">${state.campionato} • ${state.genere} • ${state.regione}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  /* --------- eventi --------- */
+  document.addEventListener("click", (e) => {
+    // 1) SPORT
+    const sportCard = e.target.closest(".card-sport");
+    if (sportCard) {
+      e.preventDefault();
+      state.sport = sportCard.dataset.sport;
+      setActive("#sportGrid", sportCard);
+      showSection("filtri");
+      return;
+    }
+
+    // 2) GENERE
+    const g = e.target.closest("[data-genere]");
+    if (g) {
+      e.preventDefault();
+      state.genere = g.dataset.genere;
+      setActive("#filtri", g);
+      return;
+    }
+
+    // 3) REGIONE
+    const r = e.target.closest("[data-regione]");
+    if (r) {
+      e.preventDefault();
+      state.regione = r.dataset.regione;
+      setActive("#regioni", r);
+      return;
+    }
+
+    // 4) CAMPIONATO → vai a lista se tutto selezionato
+    const c = e.target.closest("[data-campionato]");
+    if (c) {
+      e.preventDefault();
+      state.campionato = c.dataset.campionato;
+      setActive("#campionati", c);
+
+      if (state.sport && state.genere && state.regione && state.campionato) {
+        breadcrumb();
+        renderSocietaList();
+        showSection("societa-list");
+      }
+      return;
+    }
+
+    // 5) BACK
+    const back = e.target.closest("[data-back]");
+    if (back) {
+      e.preventDefault();
+      showSection(back.dataset.back);
+      return;
+    }
+
+    // 6) SOCIETÀ -> dettaglio
+    const soc = e.target.closest("[data-societa-id]");
+    if (soc) {
+      e.preventDefault();
+      const id = soc.dataset.societaId;
+      renderSocietaDetail(id);
+      showSection("societa-detail");
+      return;
+    }
   });
-  (Array.isArray(children)?children:[children]).forEach(c=>{
-    if(typeof c==="string") el.appendChild(document.createTextNode(c));
-    else if(c) el.appendChild(c);
-  });
-  return el;
-}
 
-function clearMain(){ document.getElementById("app").innerHTML = ""; }
-function sectionTitle(title, subtitle){
-  return h("div",{class:"container"},[
-    h("div",{class:"h1"},title),
-    h("div",{class:"sub"},subtitle||"")
-  ]);
-}
-
-function chip(text, active, onClick){
-  return h("div",{class:"chip"+(active?" active":""),onclick:onClick},text);
-}
-
-function gridCard(item, onClick){
-  return h("div",{class:"card card-sport", "data-sport":item.key, onclick:onClick},[
-    h("img",{src:item.img,alt:item.name,onerror(){this.style.display="none"}}),
-    h("div",{class:"title"},item.name)
-  ]);
-}
-
-/* ---------- Pagine ---------- */
-function pageSports(){
-  clearMain();
-  const app = document.getElementById("app");
-  app.appendChild(sectionTitle("Scegli lo sport","Seleziona per iniziare"));
-
-  const grid = h("div",{class:"container grid",id:"sportGrid"});
-  DATA.sports.forEach(s=>{
-    grid.appendChild(gridCard(s, ()=>{
-      document.querySelectorAll(".card-sport").forEach(c=>c.classList.remove("selected"));
-      event.currentTarget.classList.add("selected");
-      setTimeout(()=>{ 
-        state.sport=s.key; 
-        pageGender(); 
-      },200);
-    }));
-  });
-  app.appendChild(grid);
-}
-
-function pageGender(){
-  clearMain();
-  const app = document.getElementById("app");
-  app.appendChild(sectionTitle("Seleziona il genere",""));
-
-  const box = h("div",{class:"container panel"});
-  const wrap = h("div",{class:"chips"});
-  DATA.genders.forEach(g=>{
-    wrap.appendChild(chip(g,state.gender===g,()=>{
-      [...wrap.children].forEach(c=>c.classList.remove("active"));
-      event.currentTarget.classList.add("active");
-      state.gender=g;
-      setTimeout(()=>pageRegions(),200);
-    }));
-  });
-  box.appendChild(wrap);
-  app.appendChild(box);
-}
-
-function pageRegions(){
-  clearMain();
-  const app = document.getElementById("app");
-  app.appendChild(sectionTitle("Scegli la regione",""));
-
-  const box = h("div",{class:"container panel"});
-  const wrap = h("div",{class:"chips"});
-  DATA.regions.forEach(r=>{
-    wrap.appendChild(chip(r,state.region===r,()=>{
-      [...wrap.children].forEach(c=>c.classList.remove("active"));
-      event.currentTarget.classList.add("active");
-      state.region=r;
-      setTimeout(()=>pageLeagues(),200);
-    }));
-  });
-  box.appendChild(wrap);
-  app.appendChild(box);
-}
-
-function pageLeagues(){
-  clearMain();
-  const app = document.getElementById("app");
-  app.appendChild(sectionTitle("Scegli il campionato",state.region||""));
-
-  const leagues = DATA.leaguesBy[state.region] || [];
-  const box = h("div",{class:"container panel"});
-  const wrap = h("div",{class:"chips"});
-  leagues.forEach(l=>{
-    wrap.appendChild(chip(l,state.league===l,()=>{
-      [...wrap.children].forEach(c=>c.classList.remove("active"));
-      event.currentTarget.classList.add("active");
-      state.league=l;
-      setTimeout(()=>pageClubs(),200);
-    }));
-  });
-  box.appendChild(wrap);
-  app.appendChild(box);
-}
-
-function pageClubs(){
-  clearMain();
-  const app = document.getElementById("app");
-  app.appendChild(sectionTitle("Scegli la società",state.league||""));
-
-  const clubs = DATA.clubsByLeague[state.league]||["Società demo"];
-  const box = h("div",{class:"container panel"});
-  const wrap = h("div",{class:"chips"});
-  clubs.forEach(c=>{
-    wrap.appendChild(chip(c,state.club===c,()=>{
-      [...wrap.children].forEach(x=>x.classList.remove("active"));
-      event.currentTarget.classList.add("active");
-      state.club=c;
-      setTimeout(()=>pageClubDetail(c),200);
-    }));
-  });
-  box.appendChild(wrap);
-  app.appendChild(box);
-}
-
-function pageClubDetail(clubName){
-  clearMain();
-  const app = document.getElementById("app");
-  app.appendChild(sectionTitle(clubName, `${state.league||""} • ${state.region||""}`));
-
-  const box = h("div",{class:"container panel"},[
-    h("div",{class:"sub"},"Informazioni della società "+clubName),
-    h("button",{class:"btn primary",onclick:()=>alert("PreMatch richiesto!")}, "Crea PreMatch")
-  ]);
-  app.appendChild(box);
-}
-
-/* ---------- Start ---------- */
-pageSports();
+  /* --------- bootstrap --------- */
+  // Mostra home all'avvio
+  showSection("home");
+})();
