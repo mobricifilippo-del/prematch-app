@@ -4,132 +4,135 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PreMatch</title>
-  <link rel="preload" as="image" href="images/calcio.jpg">
-  <link rel="stylesheet" href="style.css?v=1.0.0" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-row">
-      <a href="#" id="brand" class="brand">
-        <img id="brandLogo" src="logo-light.png" alt="PreMatch" />
-        <span class="brand-title">PreMatch</span>
-      </a>
-      <nav class="topnav">
-        <a href="#" id="loginLink" class="link">Login</a>
-        <button id="coachBtn" class="link" type="button">Allenatore</button>
-        <a href="#" id="signupLink" class="btn primary">Registrazione</a>
-      </nav>
-    </div>
+  <!-- HEADER -->
+  <header class="header">
+    <a class="brand" href="#" id="brandLink">
+      <img id="brandLogo" src="images/logo-light.png" alt="PreMatch" />
+      <span class="brand-text">PreMatch</span>
+    </a>
+
+    <nav class="nav">
+      <a class="link" href="#" id="loginLink">Login</a>
+      <a class="link" href="#" id="coachLink">Allenatore</a>
+      <span class="grow"></span>
+      <a class="btn primary" href="#" id="signupLink">Registrazione</a>
+    </nav>
   </header>
 
   <main id="app">
-    <!-- HOME -->
-    <section id="home" class="section">
-      <div class="container">
-        <h1 class="page-title">Scegli lo sport</h1>
-        <p class="subtitle">Seleziona per iniziare il percorso</p>
 
-        <div id="sportGrid" class="grid-sport">
-          <button class="card-sport" data-sport="calcio" type="button">
-            <div class="img-wrap"><img src="images/calcio.jpg" alt="Calcio"></div>
-            <div class="card-title">Calcio</div>
-          </button>
+    <!-- HOME: scelta sport -->
+    <section id="home" class="page active">
+      <header class="page-head">
+        <h1>Scegli lo sport</h1>
+        <p class="sub">Seleziona per iniziare il percorso</p>
+      </header>
 
-          <button class="card-sport" data-sport="futsal" type="button">
-            <div class="img-wrap"><img src="images/futsal.jpg" alt="Futsal"></div>
-            <div class="card-title">Futsal</div>
-          </button>
+      <div id="sportGrid" class="grid-sport">
+        <!-- 6 card sport (immagini in /images) -->
+        <button class="card-sport" data-sport="calcio">
+          <img src="images/calcio.jpg" alt="Calcio" />
+          <div class="card-title">Calcio</div>
+        </button>
 
-          <button class="card-sport" data-sport="basket" type="button">
-            <div class="img-wrap"><img src="images/basket.jpg" alt="Basket"></div>
-            <div class="card-title">Basket</div>
-          </button>
+        <button class="card-sport" data-sport="futsal">
+          <img src="images/futsal.jpg" alt="Futsal" />
+          <div class="card-title">Futsal</div>
+        </button>
 
-          <button class="card-sport" data-sport="volley" type="button">
-            <div class="img-wrap"><img src="images/volley.jpg" alt="Volley"></div>
-            <div class="card-title">Volley</div>
-          </button>
+        <button class="card-sport" data-sport="basket">
+          <img src="images/basket.jpg" alt="Basket" />
+          <div class="card-title">Basket</div>
+        </button>
 
-          <button class="card-sport" data-sport="rugby" type="button">
-            <div class="img-wrap"><img src="images/rugby.jpg" alt="Rugby"></div>
-            <div class="card-title">Rugby</div>
-          </button>
+        <button class="card-sport" data-sport="volley">
+          <img src="images/volley.jpg" alt="Volley" />
+          <div class="card-title">Volley</div>
+        </button>
 
-          <button class="card-sport" data-sport="pallanuoto" type="button">
-            <div class="img-wrap"><img src="images/pallanuoto.jpg" alt="Pallanuoto"></div>
-            <div class="card-title">Pallanuoto</div>
-          </button>
-        </div>
+        <button class="card-sport" data-sport="rugby">
+          <img src="images/rugby.jpg" alt="Rugby" />
+          <div class="card-title">Rugby</div>
+        </button>
+
+        <button class="card-sport" data-sport="pallanuoto">
+          <img src="images/pallanuoto.jpg" alt="Pallanuoto" />
+          <div class="card-title">Pallanuoto</div>
+        </button>
       </div>
     </section>
 
-    <!-- FILTRI -->
-    <section id="filtri" class="section hidden">
-      <div class="container">
-        <button class="link back" data-back="home" type="button">← Indietro</button>
+    <!-- FILTRI: tendine nella stessa pagina -->
+    <section id="filtri" class="page hidden">
+      <button class="back" id="backToHome">← Indietro</button>
 
-        <h2 class="section-title">Seleziona il genere</h2>
-        <div class="segmented">
-          <button class="pill" data-genere="Maschile" type="button">Maschile</button>
-          <button class="pill" data-genere="Femminile" type="button">Femminile</button>
+      <header class="page-head">
+        <h2>Seleziona il genere</h2>
+      </header>
+
+      <!-- GENERE -->
+      <div class="block">
+        <div class="chips" id="genereChips">
+          <button class="chip" data-genere="m">Maschile</button>
+          <button class="chip" data-genere="f">Femminile</button>
         </div>
+      </div>
 
-        <div class="panel">
-          <div class="panel-title">Regione</div>
-          <div id="regioni" class="chip-row scroll-x">
-            <button class="chip" data-regione="Lazio" type="button">Lazio</button>
-            <button class="chip" data-regione="Lombardia" type="button">Lombardia</button>
-            <button class="chip" data-regione="Sicilia" type="button">Sicilia</button>
-            <button class="chip" data-regione="Piemonte" type="button">Piemonte</button>
-            <button class="chip" data-regione="Veneto" type="button">Veneto</button>
-            <button class="chip" data-regione="Emilia-Romagna" type="button">Emilia-Romagna</button>
-          </div>
+      <!-- REGIONE (tendina orizzontale scorrevole) -->
+      <div class="block">
+        <div class="block-title">Regione</div>
+        <div class="chips scroll-x" id="regioneChips">
+          <!-- riempita da JS -->
         </div>
+      </div>
 
-        <div class="panel">
-          <div class="panel-title">Campionato</div>
-          <div id="campionati" class="chip-row">
-            <button class="chip" data-campionato="Eccellenza" type="button">Eccellenza</button>
-            <button class="chip" data-campionato="Promozione" type="button">Promozione</button>
-            <button class="chip" data-campionato="Juniores" type="button">Juniores</button>
-          </div>
+      <!-- CAMPIONATO -->
+      <div class="block">
+        <div class="block-title">Campionato</div>
+        <div class="chips" id="campionatoChips">
+          <!-- riempita da JS -->
         </div>
       </div>
     </section>
 
     <!-- LISTA SOCIETÀ -->
-    <section id="societa-list" class="section hidden">
-      <div class="container">
-        <button class="link back" data-back="filtri" type="button">← Indietro</button>
-        <h2 id="breadcrumb" class="section-title"></h2>
-        <div id="elencoSocieta" class="list"></div>
+    <section id="societa-list" class="page hidden">
+      <button class="back" id="backToFiltri">← Indietro</button>
+      <header class="page-head">
+        <h2 id="crumbs">Società</h2>
+      </header>
+
+      <div id="cardsSocieta" class="stack">
+        <!-- riempita da JS -->
       </div>
     </section>
 
     <!-- DETTAGLIO SOCIETÀ -->
-    <section id="societa-detail" class="section hidden">
-      <div class="container">
-        <button class="link back" data-back="societa-list" type="button">← Indietro</button>
+    <section id="societa-detail" class="page hidden">
+      <button class="back" id="backToList">← Indietro</button>
 
-        <div id="schedaSocieta" class="card profile">
-          <!-- compilato da JS -->
-        </div>
+      <div class="societa-card">
+        <div class="avatar" id="socAvatar">PM</div>
+        <h2 id="socName">Società</h2>
+        <p class="meta" id="socMeta"></p>
 
-        <div class="actions">
-          <button class="pill" type="button">Informazioni</button>
-          <button class="pill" type="button">Galleria foto</button>
-          <button class="pill" type="button">Match in programma</button>
+        <div class="pillbar">
+          <button class="pill">Informazioni</button>
+          <button class="pill">Galleria foto</button>
+          <button class="pill">Match in programma</button>
         </div>
       </div>
     </section>
+
   </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      © PreMatch — semplice, pulita, veloce. Privacy by design.
-    </div>
+  <footer class="site-foot">
+    © PreMatch — semplice, pulita, veloce. Privacy by design.
   </footer>
 
-  <script defer src="app.js?v=1.0.0"></script>
+  <script src="app.js"></script>
 </body>
 </html>
