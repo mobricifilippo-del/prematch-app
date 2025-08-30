@@ -1,181 +1,185 @@
-(() => {
-  const $ = (s, r = document) => r.querySelector(s);
-  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+// Stato dell’app
+const state = {
+  sport: null,
+  genere: null,
+  regione: null,
+  campionato: null,
+};
 
-  // Stato dell'app
-  const state = {
-    sport: null,
-    genere: null,
-    regione: null,
-    campionato: null,
-    societa: [] // popolata quando si entra in lista
-  };
+// Dati di esempio (puoi sostituirli poi con i reali / API)
+const REGIONI = ["Lazio","Lombardia","Sicilia","Piemonte","Veneto","Emilia-Romagna"];
+const CAMPIONATI_BY_SPORT = {
+  calcio: ["Eccellenza","Promozione","Juniores"],
+  futsal: ["A1","A2","B"],
+  basket: ["Serie A","Serie B","Under 19"],
+  volley: ["Serie B1","Serie B2","Serie C"],
+  rugby: ["Top10","Serie A","Under 18"],
+  pallanuoto: ["A1","A2","B"]
+};
 
-  // Dati demo per la lista (basta per vedere il flusso)
-  const DB = {
-    calcio: {
-      "Lazio": {
-        "Eccellenza": [
-          { id: "roma-nord", nome: "ASD Roma Nord", sigla: "RN" },
-          { id: "virtus-marino", nome: "Virtus Marino", sigla: "VM" }
-        ],
-        "Promozione": [{ id: "ostia-2000", nome: "Ostia 2000", sigla: "OS" }],
-        "Juniores": [{ id: "torpignattara", nome: "Torpignattara", sigla: "TP" }]
-      }
-    },
-    basket: {},
-    futsal: {},
-    volley: {},
-    rugby: {},
-    pallanuoto: {}
-  };
+// Un piccolo DB demo
+const SOCIETA = [
+  // calcio
+  { nome:"ASD Roma Nord", sport:"calcio", genere:"f", regione:"Lazio", campionato:"Eccellenza", sigla:"RN" },
+  { nome:"Virtus Marino", sport:"calcio", genere:"f", regione:"Lazio", campionato:"Eccellenza", sigla:"VM" },
+  { nome:"Torino FC Women", sport:"calcio", genere:"f", regione:"Piemonte", campionato:"Eccellenza", sigla:"TO" },
+  // basket
+  { nome:"Basket Milano", sport:"basket", genere:"m", regione:"Lombardia", campionato:"Serie B", sigla:"BM" },
+  { nome:"Stella Azzurra", sport:"basket", genere:"m", regione:"Lazio", campionato:"Serie B", sigla:"SA" },
+  // volley
+  { nome:"Volley Siracusa", sport:"volley", genere:"f", regione:"Sicilia", campionato:"Serie C", sigla:"VS" },
+];
 
-  /* --------- helpers --------- */
-  function showSection(id) {
-    $$("#app .section").forEach(s => s.classList.add("hidden"));
-    $("#" + id).classList.remove("hidden");
-    window.scrollTo({ top: 0, behavior: "instant" });
-  }
+// ---------- UTIL ----------
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
 
-  function setActive(containerSel, item) {
-    $$(containerSel + " .active").forEach(x => x.classList.remove("active"));
-    if (item) item.classList.add("active");
-  }
+function show(sectionId){
+  $$(".page").forEach(p => p.classList.add("hidden"));
+  $(`#${sectionId}`).classList.remove("hidden");
+  $(`#${sectionId}`).classList.add("active");
+}
 
-  function breadcrumb() {
-    const parts = [state.sport, state.genere, state.regione, state.campionato]
-      .filter(Boolean)
-      .map(x => capitalize(x));
-    $("#breadcrumb").textContent = parts.join(" • ");
-  }
+// ---------- INIZIO ----------
+window.addEventListener("DOMContentLoaded", () => {
+  // Header → torna alla home
+  $("#brandLink").addEventListener("click", (e)=>{ e.preventDefault(); resetToHome(); });
 
-  function capitalize(s) {
-    if (!s) return s;
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  }
+  // HOME: click sugli sport
+  $("#sportGrid").addEventListener("click", (e) => {
+    const card = e.target.closest(".card-sport");
+    if(!card) return;
 
-  /* --------- rendering --------- */
-  function renderSocietaList() {
-    const box = $("#elencoSocieta");
-    box.innerHTML = "";
+    // attiva highlight
+    $$("#sportGrid .card-sport").forEach(c => c.classList.remove("active"));
+    card.classList.add("active");
 
-    const sport = state.sport;
-    const reg = state.regione;
-    const camp = state.campionato;
+    state.sport = card.dataset.sport;
+    state.genere = state.regione = state.campionato = null;
 
-    const arr =
-      DB[sport] &&
-      DB[sport][reg] &&
-      DB[sport][reg][camp]
-        ? DB[sport][reg][camp].slice().sort((a, b) => a.nome.localeCompare(b.nome))
-        : [];
+    // prepara chips regione/campionato
+    renderRegioni();
+    renderCampionati();
 
-    state.societa = arr;
-
-    if (!arr.length) {
-      box.innerHTML = `<div class="soc-sub">Nessuna società trovata.</div>`;
-      return;
-    }
-
-    arr.forEach(s => {
-      const card = document.createElement("button");
-      card.type = "button";
-      card.className = "soc-card";
-      card.setAttribute("data-societa-id", s.id);
-      card.innerHTML = `
-        <div class="badge">${s.sigla || s.nome.substring(0,2).toUpperCase()}</div>
-        <div class="soc-info">
-          <p class="soc-title">${s.nome}</p>
-          <p class="soc-sub">${state.campionato} • ${state.genere} • ${state.regione}</p>
-        </div>
-      `;
-      box.appendChild(card);
-    });
-  }
-
-  function renderSocietaDetail(id) {
-    const s = state.societa.find(x => x.id === id);
-    const box = $("#schedaSocieta");
-    if (!s) {
-      box.innerHTML = `<p>Società non trovata.</p>`;
-      return;
-    }
-    box.innerHTML = `
-      <div class="profile-head">
-        <div class="profile-badge">${s.sigla || s.nome.substring(0,2).toUpperCase()}</div>
-        <div>
-          <h2 class="profile-title">${s.nome}</h2>
-          <p class="profile-meta">${state.campionato} • ${state.genere} • ${state.regione}</p>
-        </div>
-      </div>
-    `;
-  }
-
-  /* --------- eventi --------- */
-  document.addEventListener("click", (e) => {
-    // 1) SPORT
-    const sportCard = e.target.closest(".card-sport");
-    if (sportCard) {
-      e.preventDefault();
-      state.sport = sportCard.dataset.sport;
-      setActive("#sportGrid", sportCard);
-      showSection("filtri");
-      return;
-    }
-
-    // 2) GENERE
-    const g = e.target.closest("[data-genere]");
-    if (g) {
-      e.preventDefault();
-      state.genere = g.dataset.genere;
-      setActive("#filtri", g);
-      return;
-    }
-
-    // 3) REGIONE
-    const r = e.target.closest("[data-regione]");
-    if (r) {
-      e.preventDefault();
-      state.regione = r.dataset.regione;
-      setActive("#regioni", r);
-      return;
-    }
-
-    // 4) CAMPIONATO → vai a lista se tutto selezionato
-    const c = e.target.closest("[data-campionato]");
-    if (c) {
-      e.preventDefault();
-      state.campionato = c.dataset.campionato;
-      setActive("#campionati", c);
-
-      if (state.sport && state.genere && state.regione && state.campionato) {
-        breadcrumb();
-        renderSocietaList();
-        showSection("societa-list");
-      }
-      return;
-    }
-
-    // 5) BACK
-    const back = e.target.closest("[data-back]");
-    if (back) {
-      e.preventDefault();
-      showSection(back.dataset.back);
-      return;
-    }
-
-    // 6) SOCIETÀ -> dettaglio
-    const soc = e.target.closest("[data-societa-id]");
-    if (soc) {
-      e.preventDefault();
-      const id = soc.dataset.societaId;
-      renderSocietaDetail(id);
-      showSection("societa-detail");
-      return;
-    }
+    show("filtri");
   });
 
-  /* --------- bootstrap --------- */
-  // Mostra home all'avvio
-  showSection("home");
-})();
+  // FILTRI: back
+  $("#backToHome").addEventListener("click", () => resetToHome());
+
+  // GENERE
+  $("#genereChips").addEventListener("click", (e) => {
+    const chip = e.target.closest(".chip");
+    if(!chip) return;
+    // attiva selezione esclusiva
+    $$("#genereChips .chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    state.genere = chip.dataset.genere;
+    maybeListSocieta();
+  });
+
+  // REGIONE
+  $("#regioneChips").addEventListener("click", (e) => {
+    const chip = e.target.closest(".chip");
+    if(!chip) return;
+    $$("#regioneChips .chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    state.regione = chip.dataset.regione;
+    maybeListSocieta();
+  });
+
+  // CAMPIONATO
+  $("#campionatoChips").addEventListener("click", (e) => {
+    const chip = e.target.closest(".chip");
+    if(!chip) return;
+    $$("#campionatoChips .chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    state.campionato = chip.dataset.campionato;
+    maybeListSocieta();
+  });
+
+  // LISTA: back
+  $("#backToFiltri").addEventListener("click", () => show("filtri"));
+  // DETTAGLIO: back
+  $("#backToList").addEventListener("click", () => show("societa-list"));
+});
+
+// ---------- RENDER ----------
+function renderRegioni(){
+  const box = $("#regioneChips");
+  box.innerHTML = REGIONI.map(r =>
+    `<button class="chip" data-regione="${r}">${r}</button>`
+  ).join("");
+}
+function renderCampionati(){
+  const box = $("#campionatoChips");
+  const arr = CAMPIONATI_BY_SPORT[state.sport] || [];
+  box.innerHTML = arr.map(c =>
+    `<button class="chip" data-campionato="${c}">${c}</button>`
+  ).join("");
+}
+
+function maybeListSocieta(){
+  if(!state.genere || !state.regione || !state.campionato) return;
+
+  // Filtra e ordina A→Z
+  const list = SOCIETA
+    .filter(s =>
+      s.sport===state.sport &&
+      s.genere===state.genere &&
+      s.regione===state.regione &&
+      s.campionato===state.campionato
+    )
+    .sort((a,b) => a.nome.localeCompare(b.nome,'it'));
+
+  // Crumbs
+  const sportName = state.sport.charAt(0).toUpperCase()+state.sport.slice(1);
+  const gen = state.genere==='m'?'Maschile':'Femminile';
+  $("#crumbs").textContent = `${sportName} • ${gen} • ${state.regione} • ${state.campionato}`;
+
+  // Cards
+  const wrap = $("#cardsSocieta");
+  if(list.length===0){
+    wrap.innerHTML = `<div class="card"><div class="left"><div class="badge">—</div><div><div class="title">Nessuna società trovata</div><div class="meta">Modifica filtri</div></div></div></div>`;
+  }else{
+    wrap.innerHTML = list.map(s => `
+      <button class="card" data-soc="${s.nome}">
+        <div class="left">
+          <div class="badge">${(s.sigla||s.nome.slice(0,2)).toUpperCase()}</div>
+          <div>
+            <div class="title">${s.nome}</div>
+            <div class="meta">${s.campionato} • ${s.genere==='m'?'Maschile':'Femminile'} • ${s.regione}</div>
+          </div>
+        </div>
+        <span class="meta">PM</span>
+      </button>
+    `).join("");
+  }
+
+  // Click card società → dettaglio
+  wrap.onclick = (e)=>{
+    const card = e.target.closest(".card");
+    if(!card) return;
+    const nome = card.dataset.soc;
+    const s = SOCIETA.find(x => x.nome===nome);
+    if(!s) return;
+    renderSocietaDetail(s);
+    show("societa-detail");
+  };
+
+  show("societa-list");
+}
+
+function renderSocietaDetail(s){
+  $("#socName").textContent = s.nome;
+  $("#socMeta").textContent = `${s.campionato} • ${s.genere==='m'?'Maschile':'Femminile'} • ${s.regione}`;
+  $("#socAvatar").textContent = (s.sigla || s.nome.slice(0,2)).toUpperCase();
+}
+
+function resetToHome(){
+  // pulizia stato + UI
+  state.sport = state.genere = state.regione = state.campionato = null;
+  $$("#sportGrid .card-sport").forEach(c => c.classList.remove("active"));
+  $$("#genereChips .chip, #regioneChips .chip, #campionatoChips .chip").forEach(c => c.classList.remove("active"));
+  show("home");
+}
