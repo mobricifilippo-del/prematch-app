@@ -1,115 +1,97 @@
 :root{
-  --bg:#0f1115;
-  --surface:#151922;
-  --text:#e9f1ec;
-  --sub:#9fb3a7;
-  --brand:#22c55e;
-  --brand-900:#14532d;
-  --chip:#1e2430;
-  --chip-border:#2c3342;
+  --bg:#0f1215;
+  --card:#171b20;
+  --muted:#a9b4bf;
+  --text:#e9eef2;
+  --brand:#22c55e;      /* verde */
+  --brand-ink:#063e1e;
+  --ring:#2e7d32;
 }
 
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,"Helvetica Neue",Arial;
-  background:var(--bg);
-  color:var(--text);
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 }
 
-/* Layout */
-.container{width:100%;max-width:980px;margin:0 auto;padding:0 16px}
-.section{padding:20px 0 32px}
-.hidden{display:none}
-
-/* Header */
-.site-header{
-  position:sticky;top:0;z-index:10;
-  background:linear-gradient(180deg,#0f1115 0%, #0f1115ee 100%);
-  border-bottom:1px solid #1c2330;
+/* HEADER */
+.header{
+  display:flex; align-items:center; gap:.75rem;
+  padding:.6rem .9rem; background:#0c0f12; position:sticky; top:0; z-index:10;
+  border-bottom:1px solid #1a1f24;
 }
-.header-row{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex; align-items:center; gap:.55rem; text-decoration:none; color:var(--text)}
+.brand img{height:28px; width:auto; display:block}
+.brand-text{font-weight:700}
+.nav{display:flex; align-items:center; gap:1rem; width:100%}
+.nav .grow{flex:1}
+.link{color:var(--text); text-decoration:none; opacity:.85}
+.link:hover{opacity:1}
+.btn{display:inline-block; padding:.6rem .95rem; border-radius:.9rem; text-decoration:none}
+.btn.primary{background:var(--brand); color:#08210e; font-weight:700}
 
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
-.brand img{width:28px;height:28px;object-fit:contain}
-.brand-title{font-weight:700}
-
-.topnav{display:flex;align-items:center;gap:14px}
-.link{
-  background:none;border:1px solid #2b3444;color:var(--text);
-  padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:600
+/* LAYOUT PAGINE */
+main{max-width:1024px; margin:0 auto; padding:1rem .9rem 2rem}
+.page-head h1,.page-head h2{margin:.2rem 0 0}
+.sub{color:var(--muted); margin:.25rem 0 1rem}
+.page{display:none}
+.page.active{display:block}
+.hidden{display:none!important}
+.back{
+  background:#151a1f; color:var(--text); border:1px solid #232a31;
+  border-radius:.7rem; padding:.45rem .8rem; margin:.5rem 0 1rem; cursor:pointer;
 }
-.btn.primary{
-  background:var(--brand);color:#062510;border:0;border-radius:14px;
-  padding:10px 16px;font-weight:800
-}
 
-/* Titles */
-.page-title{font-size:34px;line-height:1.2;margin:8px 0 8px}
-.subtitle{margin:0 0 18px;color:var(--sub)}
-
-/* Sport grid */
+/* GRID SPORT */
 .grid-sport{
-  display:grid;gap:16px;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  display:grid; gap:1rem;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
 }
 .card-sport{
-  background:var(--surface);border:1px solid #212836;border-radius:18px;
-  overflow:hidden;display:flex;flex-direction:column;padding:0;cursor:pointer;
-  transition:border-color .18s, box-shadow .18s;
+  border:1px solid #232a31; border-radius:1rem; overflow:hidden; background:var(--card);
+  padding:0; text-align:left; cursor:pointer; position:relative;
+  outline:none;
 }
-.card-sport .img-wrap{aspect-ratio:16/9;background:#0b0e12}
-.card-sport img{width:100%;height:100%;object-fit:cover;display:block}
-.card-sport .card-title{
-  padding:14px 16px;font-size:22px;font-weight:800;color:#8af3ba;
-}
-.card-sport.active{border-color:var(--brand);box-shadow:0 0 0 3px #14532d66}
+.card-sport img{display:block; width:100%; height:170px; object-fit:cover}
+.card-title{padding:.8rem; font-weight:800; color:#9AF5B5}
+.card-sport.active{box-shadow:0 0 0 3px var(--brand); border-color:var(--ring)}
 
-/* Pills / chips */
-.segmented{display:flex;gap:10px;margin:10px 0 16px}
-.pill{
-  background:var(--chip);border:1px solid var(--chip-border);color:var(--text);
-  padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer
-}
-.pill.active{background:var(--brand-900);border-color:var(--brand);color:#c8ffdd}
-
-.panel{background:var(--surface);border:1px solid #212836;border-radius:16px;margin:16px 0;padding:12px}
-.panel-title{color:#9fe0b8;font-weight:800;margin:6px 4px 10px}
-
-.chip-row{display:flex;flex-wrap:wrap;gap:10px}
-.scroll-x{overflow-x:auto;scrollbar-width:none}
-.scroll-x::-webkit-scrollbar{display:none}
+/* BLOCCHI FILTRI */
+.block{background:var(--card); border:1px solid #232a31; border-radius:1rem; padding:1rem; margin:1rem 0}
+.block-title{font-weight:700; margin-bottom:.6rem}
+.chips{display:flex; gap:.5rem; flex-wrap:wrap}
+.scroll-x{overflow-x:auto; padding-bottom:.3rem}
 .chip{
-  background:var(--chip);border:1px solid var(--chip-border);color:var(--text);
-  padding:8px 12px;border-radius:999px;font-weight:700;white-space:nowrap;cursor:pointer
+  background:#12161b; border:1px solid #2a323a; color:var(--text);
+  padding:.55rem .9rem; border-radius:999px; cursor:pointer; white-space:nowrap;
 }
-.chip.active{background:var(--brand-900);border-color:var(--brand);color:#c8ffdd}
+.chip.active{background:var(--brand); color:#06160c; border-color:transparent; font-weight:700}
 
-/* List società */
-.list{display:flex;flex-direction:column;gap:12px;margin-top:12px}
-.soc-card{
-  background:var(--surface);border:1px solid #212836;border-radius:16px;
-  padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer
+/* LISTA SOCIETÀ */
+.stack{display:flex; flex-direction:column; gap:.8rem}
+.card{
+  background:var(--card); border:1px solid #222a32; border-radius:1rem; padding:.9rem;
+  display:flex; align-items:center; justify-content:space-between; gap:.8rem;
 }
+.card .left{display:flex; align-items:center; gap:.8rem}
 .badge{
-  width:44px;height:44px;border-radius:50%;
-  background:var(--brand-900);border:1px solid var(--brand);
-  display:grid;place-items:center;font-weight:900;color:#c8ffdd;flex:0 0 auto;
+  width:44px; height:44px; border-radius:50%; background:#1e8f4f; color:#03150b;
+  display:grid; place-items:center; font-weight:800;
 }
-.soc-title{font-size:18px;font-weight:800;margin:0}
-.soc-sub{margin:4px 0 0;color:var(--sub);font-size:14px}
+.card .title{font-weight:800}
+.card .meta{color:var(--muted); font-size:.95rem}
 
-/* Profile */
-.card.profile{
-  background:var(--surface);border:1px solid #212836;border-radius:18px;padding:16px;margin:12px 0
+/* DETTAGLIO SOCIETÀ */
+.societa-card{
+  background:var(--card); border:1px solid #222a32; border-radius:1.2rem; padding:1.2rem;
 }
-.profile-head{display:flex;align-items:center;gap:12px}
-.profile-badge{width:56px;height:56px;border-radius:50%;background:var(--brand-900);border:1px solid var(--brand);display:grid;place-items:center;font-weight:900;color:#c8ffdd}
-.profile-title{font-size:28px;font-weight:900;margin:0}
-.profile-meta{color:var(--sub);margin:8px 0 0}
+.avatar{
+  width:60px; height:60px; border-radius:14px; background:var(--brand); color:var(--brand-ink);
+  font-weight:900; display:grid; place-items:center; margin-bottom:.5rem;
+}
+.pillbar{display:flex; gap:.6rem; margin-top:.8rem}
+.pill{background:#12161b; border:1px solid #2a323a; color:var(--text); padding:.55rem .9rem; border-radius:999px}
 
-.actions{display:flex;gap:10px;margin-top:10px}
-
-/* Footer */
-.site-footer{border-top:1px solid #1c2330;padding:16px 0;color:var(--sub);text-align:center}
+/* FOOTER */
+.site-foot{color:#98a4b1; text-align:center; padding:2rem 1rem 4.5rem}
