@@ -2,38 +2,33 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PreMatch</title>
-
-  <!-- Favicons -->
-  <link rel="icon" href="./images/logo-icon.png" sizes="32x32" />
-  <link rel="apple-touch-icon" href="./images/logo-icon.png" />
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="./style.css?v=7" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Header -->
   <header class="topbar">
     <nav class="topnav">
-      <!-- Logo brand -->
       <a class="brand">
-        <img src="images/logo-light.png" alt="PreMatch" />
+        <img src="images/logo-light.png" alt="PreMatch" id="brandLogo"/>
       </a>
-
-      <!-- BLOCCO AUTH AGGIUNTO -->
-      <div id="auth" class="auth-block">
+      <div id="auth"> <!-- BLOCCO AUTH: serve per Login/Registrazione -->
         <a class="link" href="#" id="loginLink">Login</a>
         <a class="btn primary" href="#" id="signupLink">Registrazione</a>
       </div>
     </nav>
   </header>
 
+  <!-- Contenuto principale -->
   <main id="app"></main>
 
+  <!-- Footer -->
   <footer class="footer">
     <div>© PreMatch — semplice, pulita, veloce. Privacy by design.</div>
   </footer>
 
-  <script src="./app.js?v=7"></script>
+  <!-- Script -->
+  <script src="app.js"></script>
 </body>
 </html>
