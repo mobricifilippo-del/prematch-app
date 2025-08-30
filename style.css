@@ -1,97 +1,197 @@
-:root{
-  --bg:#0f1215;
-  --card:#171b20;
-  --muted:#a9b4bf;
-  --text:#e9eef2;
-  --brand:#22c55e;      /* verde */
-  --brand-ink:#063e1e;
-  --ring:#2e7d32;
+:root {
+  --bg: #0f1216;
+  --card: #171b21;
+  --muted: #8a94a6;
+  --text: #eaf0ff;
+  --accent: #41d27b;
+  --accent-strong: #21c063;
+  --border: #252b35;
+  --light: #f7f9fc;
+  --dark: #0b1115;
 }
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0; background:var(--bg); color:var(--text);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* HEADER */
-.header{
-  display:flex; align-items:center; gap:.75rem;
-  padding:.6rem .9rem; background:#0c0f12; position:sticky; top:0; z-index:10;
-  border-bottom:1px solid #1a1f24;
+/* Header */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(180deg, rgba(15,18,22,.95), rgba(15,18,22,.7));
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border);
 }
-.brand{display:flex; align-items:center; gap:.55rem; text-decoration:none; color:var(--text)}
-.brand img{height:28px; width:auto; display:block}
-.brand-text{font-weight:700}
-.nav{display:flex; align-items:center; gap:1rem; width:100%}
-.nav .grow{flex:1}
-.link{color:var(--text); text-decoration:none; opacity:.85}
-.link:hover{opacity:1}
-.btn{display:inline-block; padding:.6rem .95rem; border-radius:.9rem; text-decoration:none}
-.btn.primary{background:var(--brand); color:#08210e; font-weight:700}
+.topnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .8rem 1rem;
+}
+.brand img {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+#auth {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+}
+.link {
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn {
+  border: 1px solid var(--border);
+  background: #141922;
+  color: var(--text);
+  padding: .55rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.btn.primary {
+  border-color: transparent;
+  background: var(--accent);
+  color: #0b1115;
+}
+.btn.primary:hover { background: var(--accent-strong); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
 
-/* LAYOUT PAGINE */
-main{max-width:1024px; margin:0 auto; padding:1rem .9rem 2rem}
-.page-head h1,.page-head h2{margin:.2rem 0 0}
-.sub{color:var(--muted); margin:.25rem 0 1rem}
-.page{display:none}
-.page.active{display:block}
-.hidden{display:none!important}
-.back{
-  background:#151a1f; color:var(--text); border:1px solid #232a31;
-  border-radius:.7rem; padding:.45rem .8rem; margin:.5rem 0 1rem; cursor:pointer;
+/* Footer */
+.footer {
+  padding: 1.2rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: .9rem;
+  text-align: center;
 }
 
-/* GRID SPORT */
-.grid-sport{
-  display:grid; gap:1rem;
-  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-}
-.card-sport{
-  border:1px solid #232a31; border-radius:1rem; overflow:hidden; background:var(--card);
-  padding:0; text-align:left; cursor:pointer; position:relative;
-  outline:none;
-}
-.card-sport img{display:block; width:100%; height:170px; object-fit:cover}
-.card-title{padding:.8rem; font-weight:800; color:#9AF5B5}
-.card-sport.active{box-shadow:0 0 0 3px var(--brand); border-color:var(--ring)}
+/* Containers */
+.container { max-width: 1000px; margin: 0 auto; padding: 1.2rem; }
+.h1 { font-size: 1.9rem; font-weight: 800; margin: .6rem 0 0; }
+.sub { color: var(--muted); margin: .2rem 0 1.4rem; }
 
-/* BLOCCHI FILTRI */
-.block{background:var(--card); border:1px solid #232a31; border-radius:1rem; padding:1rem; margin:1rem 0}
-.block-title{font-weight:700; margin-bottom:.6rem}
-.chips{display:flex; gap:.5rem; flex-wrap:wrap}
-.scroll-x{overflow-x:auto; padding-bottom:.3rem}
-.chip{
-  background:#12161b; border:1px solid #2a323a; color:var(--text);
-  padding:.55rem .9rem; border-radius:999px; cursor:pointer; white-space:nowrap;
+/* Grid sport */
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
 }
-.chip.active{background:var(--brand); color:#06160c; border-color:transparent; font-weight:700}
+@media(min-width:900px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  border-color: #2f3745;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+}
+.card.selected { outline: 2px solid var(--accent); }
+.card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+  background: #0b0f14;
+}
+.card .title {
+  padding: .85rem 1rem;
+  font-weight: 800;
+  color: var(--accent);
+}
 
-/* LISTA SOCIETÀ */
-.stack{display:flex; flex-direction:column; gap:.8rem}
-.card{
-  background:var(--card); border:1px solid #222a32; border-radius:1rem; padding:.9rem;
-  display:flex; align-items:center; justify-content:space-between; gap:.8rem;
+/* Chips */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin: .5rem 0 1.2rem;
 }
-.card .left{display:flex; align-items:center; gap:.8rem}
-.badge{
-  width:44px; height:44px; border-radius:50%; background:#1e8f4f; color:#03150b;
-  display:grid; place-items:center; font-weight:800;
+.chip {
+  padding: .5rem .8rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  background: #12161c;
+  color: var(--text);
+  font-weight: 600;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
 }
-.card .title{font-weight:800}
-.card .meta{color:var(--muted); font-size:.95rem}
+.chip:hover { border-color: #30394a; }
+.chip.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(65,210,123,.12);
+  box-shadow: 0 0 0 2px rgba(65,210,123,.15) inset;
+}
 
-/* DETTAGLIO SOCIETÀ */
-.societa-card{
-  background:var(--card); border:1px solid #222a32; border-radius:1.2rem; padding:1.2rem;
+/* Panel & rows */
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem;
 }
-.avatar{
-  width:60px; height:60px; border-radius:14px; background:var(--brand); color:var(--brand-ink);
-  font-weight:900; display:grid; place-items:center; margin-bottom:.5rem;
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px dashed var(--border);
+  padding: .8rem 0;
 }
-.pillbar{display:flex; gap:.6rem; margin-top:.8rem}
-.pill{background:#12161b; border:1px solid #2a323a; color:var(--text); padding:.55rem .9rem; border-radius:999px}
+.row:last-child { border-bottom: none; }
+.row .team { font-weight: 700; }
+.row .meta { color: var(--muted); font-size: .95rem; }
 
-/* FOOTER */
-.site-foot{color:#98a4b1; text-align:center; padding:2rem 1rem 4.5rem}
+/* Actions */
+.actions {
+  display: flex;
+  gap: .6rem;
+  margin: 1rem 0;
+}
+
+/* Società */
+#societa-detail img.logo {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: #0b0f14;
+  padding: 10px;
+  object-fit: contain;
+}
+#societa-detail .prematch-btn {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+#societa-detail .prematch-btn img {
+  width: 42px;
+  height: 42px;
+}
